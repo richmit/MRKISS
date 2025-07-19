@@ -1,0 +1,13 @@
+*.obj
+*.o
+*.so
+*.dll
+*.a
+*.exe
+a.out
+*~
+*.mod
+/examples/*.csv
+/examples/*.png
+/resources/
+
