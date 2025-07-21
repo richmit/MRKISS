@@ -35,7 +35,7 @@
 AR := ar
 FC := gfortran
 FFLAGS := -O3 -Wsurprising -W -std=f2023
-FSHFLG = -o $(MRFFL_SHARED_LIB_FILE) -shared $(MRFFL_OBJ_FILES)
+FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
 
 # -Wall -- Removed for bug in gfortran 15
 # Should work with: -fdefault-integer-8
