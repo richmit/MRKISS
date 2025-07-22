@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_dormand_prince_7_8.f90
+!! @file      mrkiss_eerk_dormand_prince_7_8.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Dormand & Prince's 13 stage, Order (7,8) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -40,7 +40,7 @@
 !!  Prince & Dormand(1981); High Order Embedded Runge-Kutta Formulae; J. of Comp. and Appl. Math. 7 (1); p67-75; zotero://select/items/0_N9KVWVST
 !!  Peter Stone (2011); "The 'Classical' Prince-Dormand 13 Stage Combined Order 7 and 8 Runge-Kutta Scheme"; http://www.peterstone.name/Maplepgs/RKcoeff.html; zotero://select/items/0_LTA7NCAS
 !!
-module mrkiss_m_dormand_prince_7_8
+module mrkiss_eerk_dormand_prince_7_8
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -63,4 +63,4 @@ module mrkiss_m_dormand_prince_7_8
   real(kind=rk),    parameter :: b1(s)  = [        0.0417474911415302462220000000000000000_rk, 0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk,   0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk,  -0.0554523286112393089620000000000000000_rk,  0.2393128072011800970500000000000000000_rk,  0.7035106694034430230600000000000000000_rk,  -0.7597596138144609298800000000000000000_rk,  0.6605630309222863414600000000000000000_rk, 0.1581874825101233355300000000000000000_rk, -0.2381095387528628044700000000000000000_rk, 0.2500000000000000000000000000000000000_rk]
   integer(kind=ik), parameter :: p2     = 8
   real(kind=rk),    parameter :: b2(s)  = [        0.0295532136763534969820000000000000000_rk, 0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk,   0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk,  -0.8286062764877970397700000000000000000_rk,  0.3112409000511183279300000000000000000_rk,  2.4673451905998869820000000000000000000_rk,  -2.5469416518419087391000000000000000000_rk,  1.4435485836767752403000000000000000000_rk, 0.0794155958811272872710000000000000000_rk,  0.0444444444444444444440000000000000000_rk, 0.0000000000000000000000000000000000000_rk]
-end module mrkiss_m_dormand_prince_7_8
+end module mrkiss_eerk_dormand_prince_7_8

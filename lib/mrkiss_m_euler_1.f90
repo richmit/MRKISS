@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_euler_1.f90
+!! @file      mrkiss_erk_euler_1.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Euler 1 step, order (1) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -46,7 +46,7 @@
 !!   Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p35"
 !!   Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p98
 !!
-module mrkiss_m_euler_1
+module mrkiss_erk_euler_1
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -55,4 +55,4 @@ module mrkiss_m_euler_1
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk]
   integer(kind=ik), parameter :: p      = 1
   real(kind=rk),    parameter :: b(s)   = [          1.0_rk]
-end module mrkiss_m_euler_1
+end module mrkiss_erk_euler_1

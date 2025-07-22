@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_dormand_prince_5_4.f90
+!! @file      mrkiss_eerk_dormand_prince_5_4.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Dormand & Prince's 7 stage, Order (5,4) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -46,7 +46,7 @@
 !!  Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p178
 !!  Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p224
 !!
-module mrkiss_m_dormand_prince_5_4
+module mrkiss_eerk_dormand_prince_5_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -63,4 +63,4 @@ module mrkiss_m_dormand_prince_5_4
   real(kind=rk),    parameter :: b1(s)  = [              12985.0_rk,             0.0_rk,        64000.0_rk,       92750.0_rk,      -45927.0_rk,      18656.0_rk,      0.0_rk]          /      142464.0_rk
   integer(kind=ik), parameter :: p2     = 4
   real(kind=rk),    parameter :: b2(s)  = [            1921409.0_rk,             0.0_rk,      9690880.0_rk,    13122270.0_rk,    -5802111.0_rk,    1902912.0_rk, 534240.0_rk]          /    21369600.0_rk
-end module mrkiss_m_dormand_prince_5_4
+end module mrkiss_eerk_dormand_prince_5_4

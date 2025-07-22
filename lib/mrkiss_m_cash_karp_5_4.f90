@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_cash_karp_5_4.f90
+!! @file      mrkiss_eerk_cash_karp_5_4.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Cash & Karp's 4 step, order (5,4) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -45,7 +45,7 @@
 !! References:
 !!   Cash & Karp(1990);  A variable order Runge-Kutta method for initial value problems with rapidly varying right-hand sides; TOMS 16; zotero://select/items/0_2YSGGWSD
 !!
-module mrkiss_m_cash_karp_5_4
+module mrkiss_eerk_cash_karp_5_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -68,4 +68,4 @@ module mrkiss_m_cash_karp_5_4
   integer(kind=ik), parameter :: p5     = 1
   real(kind=rk),    parameter :: b5(s)  = [              1.0_rk,       0.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk]          /      1.0_rk
 
-end module mrkiss_m_cash_karp_5_4
+end module mrkiss_eerk_cash_karp_5_4

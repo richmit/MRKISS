@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_verner_2010_6_5.f90
+!! @file      mrkiss_eerk_verner_2010_6_5.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Verner's 9 stage, Order (6,5) Runge-Kutta method (2010).@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -43,7 +43,7 @@
 !! References:
 !!   Verner (2010); Numerically Optimal Runge-Kutta Pairs with Interpolants; Num. Alg. 53 (2-3); p383-396; zotero://select/items/0_24ANPMLC
 !!
-module mrkiss_m_verner_2010_6_5
+module mrkiss_eerk_verner_2010_6_5
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -62,7 +62,7 @@ module mrkiss_m_verner_2010_6_5
   real(kind=rk),    parameter :: b1(s)  = [          0.0343895786835703600927882012472832239_rk, 0.0000000000000000000000000000000000000_rk,   0.0000000000000000000000000000000000000_rk,    0.2582624555633503404659558098586120859_rk, 0.4209371189673537150642551514069801967_rk,  4.4053964696693101701488368161970956649_rk, -176.4831190242986576151740942499002125029_rk, 172.3641334014150730294022582711902413315_rk, 0.0000000000000000000000000000000000000_rk]
   integer(kind=ik), parameter :: p2     = 5                                                                                                                                                                                                                                            
   real(kind=rk),    parameter :: b2(s)  = [          0.0490996764838248973090685492797122584_rk, 0.0000000000000000000000000000000000000_rk,   0.0000000000000000000000000000000000000_rk,    0.2251112229516524153401395320539875329_rk, 0.4694682253029562039431948525047387413_rk,  0.8065792249988867707634161808995217981_rk,    0.0000000000000000000000000000000000000_rk,  -0.6071194891777959797672951465256217122_rk, 0.0568611394404756924114760317876613815_rk]
-end module mrkiss_m_verner_2010_6_5
+end module mrkiss_eerk_verner_2010_6_5
 
 
 

@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_fehlberg_7_8.f90
+!! @file      mrkiss_eerk_fehlberg_7_8.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Fehlberg's 13 stage, Order (7,8) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -46,7 +46,7 @@
 !!   Butcher (2016); Numerical Methods for Ordinary Differential Equations; p222
 !!   Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p180
 !!
-module mrkiss_m_fehlberg_7_8
+module mrkiss_eerk_fehlberg_7_8
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -69,4 +69,4 @@ module mrkiss_m_fehlberg_7_8
   real(kind=rk),    parameter :: b1(s)  = [              41.0_rk,    0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,  41.0_rk,      0.0_rk,   0.0_rk]          /    840.0_rk
   integer(kind=ik), parameter :: p2     = 8
   real(kind=rk),    parameter :: b2(s)  = [              0.0_rk,     0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,   0.0_rk,     41.0_rk,  41.0_rk]          /    840.0_rk
-end module mrkiss_m_fehlberg_7_8
+end module mrkiss_eerk_fehlberg_7_8

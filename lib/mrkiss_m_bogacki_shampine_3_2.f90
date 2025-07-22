@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_bogacki_shampine_3_2.f90
+!! @file      mrkiss_eerk_bogacki_shampine_3_2.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Bogacki Shampine's 4 step, order (3,2) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -41,7 +41,7 @@
 !! References:
 !!   Bogacki & Shampine (1989); A 3(2) pair of Runge-Kutta formulas; Applied Mathematics Letters; zotero://select/items/0_66MV7TIP
 !!
-module mrkiss_m_bogacki_shampine_3_2
+module mrkiss_eerk_bogacki_shampine_3_2
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -55,4 +55,4 @@ module mrkiss_m_bogacki_shampine_3_2
   real(kind=rk),    parameter :: b1(s)  = [          2.0_rk,  3.0_rk,  4.0_rk, 0.0_rk]          /  9.0_rk
   integer(kind=ik), parameter :: p2     = 2
   real(kind=rk),    parameter :: b2(s)  = [          7.0_rk,  6.0_rk,  8.0_rk, 3.0_rk]          / 24.0_rk
-end module mrkiss_m_bogacki_shampine_3_2
+end module mrkiss_eerk_bogacki_shampine_3_2

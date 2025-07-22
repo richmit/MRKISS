@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_ralston_4.f90
+!! @file      mrkiss_erk_ralston_4.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for ralston's 4 stage order (4) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -42,7 +42,7 @@
 !! References:
 !!   Ralston (1962); Runge-Kutta Methods with Minimum Error Bounds; Math. of Comp. 16 (80); p431-437; zotero://select/items/0_2FK7F4J3
 !!
-module mrkiss_m_ralston_4
+module mrkiss_erk_ralston_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -54,7 +54,7 @@ module mrkiss_m_ralston_4
   real(kind=rk),    parameter :: c(s)   = [         0.0000000000000000000000000000000000000_rk,  0.4000000000000000000000000000000000000_rk, 0.4557372542187894319232799371128857059_rk, 1.0000000000000000000000000000000000000_rk]                 
   integer(kind=ik), parameter :: p      = 4
   real(kind=rk),    parameter :: b(s)   = [         0.1747602822626903712548676424114517824_rk, -0.5514806628787329405457611464815246174_rk, 1.2055355993965235350277772006141793793_rk, 0.1711847812195190342631163034558934558_rk]                 
-end module mrkiss_m_ralston_4
+end module mrkiss_erk_ralston_4
 
 
 

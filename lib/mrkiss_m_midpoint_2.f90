@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_midpoint_2.f90
+!! @file      mrkiss_erk_midpoint_2.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for midpoint 2 step, order (2) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -43,7 +43,7 @@
 !! References:
 !!   Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p98-99
 !!
-module mrkiss_m_midpoint_2
+module mrkiss_erk_midpoint_2
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -53,4 +53,4 @@ module mrkiss_m_midpoint_2
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  1.0_rk]         / 2.0_rk
   integer(kind=ik), parameter :: p      = 2
   real(kind=rk),    parameter :: b(s)   = [          0.0_rk,  1.0_rk]         / 1.0_rk
-end module mrkiss_m_midpoint_2
+end module mrkiss_erk_midpoint_2

@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_heun_euler_2_1.f90
+!! @file      mrkiss_eerk_heun_euler_2_1.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Heun & Euler 2 step, order (2,1) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -40,12 +40,12 @@
 !!
 !! Known Aliases: 'RK21' (Butcher), 'ARKODE_HEUN_EULER_2_1_2' (SUNDIALS)
 !! Known Aliases p1: 'the trapezoidal rule', 'explicit trapezoidal rule'
-!! Known Aliases p2: 'mrkiss_m_euler_1' (MRKISS)
+!! Known Aliases p2: 'mrkiss_erk_euler_1' (MRKISS)
 !!
 !! References:
 !!   Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p98-99
 !!
-module mrkiss_m_heun_euler_2_1
+module mrkiss_eerk_heun_euler_2_1
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -57,4 +57,4 @@ module mrkiss_m_heun_euler_2_1
   real(kind=rk),    parameter :: b1(s)  = [          1.0_rk,  1.0_rk]          / 2.0_rk
   integer(kind=ik), parameter :: p2     = 1
   real(kind=rk),    parameter :: b2(s)  = [          1.0_rk,  0.0_rk]          / 1.0_rk
-end module mrkiss_m_heun_euler_2_1
+end module mrkiss_eerk_heun_euler_2_1

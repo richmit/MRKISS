@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_knoth_wolke_3.f90
+!! @file      mrkiss_erk_knoth_wolke_3.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Knoth & wolke's 3 stage Runge-Kutta method of O(3).@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -43,7 +43,7 @@
 !! References:
 !!   Knoth & Wolke (1988); Implicit-explicit runge-kutta methods for computiong atmospheric reactive flows; Appl. Num. Anal. 28(2-4); p327-341
 !!
-module mrkiss_m_knoth_wolke_3
+module mrkiss_erk_knoth_wolke_3
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -54,4 +54,4 @@ module mrkiss_m_knoth_wolke_3
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk, 4.0_rk, 9.0_rk]           / 12.0_rk
   integer(kind=ik), parameter :: p      = 3
   real(kind=rk),    parameter :: b(s)   = [          5.0_rk, 9.0_rk, 16.0_rk]          / 30.0_rk
-end module mrkiss_m_knoth_wolke_3
+end module mrkiss_erk_knoth_wolke_3

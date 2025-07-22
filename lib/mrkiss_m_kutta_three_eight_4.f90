@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_kutta_three_eight_4.f90
+!! @file      mrkiss_erk_kutta_three_eight_4.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for the three eights rule.  A 4 step, order (4) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -46,7 +46,7 @@
 !!   Kutta (1901), Beitrag zur n\"herungsweisen Integration totaler Differentialgleichungen; Z. Math. Phys. 46; p435-453.
 !!   Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
 !!
-module mrkiss_m_kutta_three_eight_4
+module mrkiss_erk_kutta_three_eight_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -58,4 +58,4 @@ module mrkiss_m_kutta_three_eight_4
   real(kind=rk),    parameter :: c(s)   = [         0.0_rk,  1.0_rk, 2.0_rk, 3.0_rk]          / 3.0_rk
   integer(kind=ik), parameter :: p      = 4
   real(kind=rk),    parameter :: b(s)   = [         1.0_rk,  3.0_rk, 3.0_rk, 1.0_rk]          / 8.0_rk
-end module mrkiss_m_kutta_three_eight_4
+end module mrkiss_erk_kutta_three_eight_4

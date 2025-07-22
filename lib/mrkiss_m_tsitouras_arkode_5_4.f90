@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_tsitouras_arkode_5_4.f90
+!! @file      mrkiss_eerk_tsitouras_arkode_5_4.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for ARKODE's Tsitouras 7 stage Order (5,4) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -44,7 +44,7 @@
 !! References:
 !!  Tsitouras (2011); Runge-Kutta Pairs of Order 5(4) Satisfying Only the First Column Simplifying Assumption; Comp. & Math. w/ Appl. 62 (2); p770-775; zotero://select/items/0_WHVVHHDH
 !!
-module mrkiss_m_tsitouras_arkode_5_4
+module mrkiss_eerk_tsitouras_arkode_5_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -61,4 +61,4 @@ module mrkiss_m_tsitouras_arkode_5_4
   real(kind=rk),    parameter :: b1(s)  = [         0.096460766818065230_rk,   0.010000000000000000_rk, 0.479889650414499600_rk,  1.379008574103742000_rk, -3.290069515436081000_rk, 2.324710524099774000_rk, 0.000000000000000000_rk]
   integer(kind=ik), parameter :: p2     = 4
   real(kind=rk),    parameter :: b2(s)  = [         0.093523748581892710_rk,   0.008652883141566368_rk, 0.492893099131431900_rk,  1.140235412267858000_rk, -2.329180192439365000_rk, 1.568875049316616000_rk, 0.025000000000000000_rk]
-end module mrkiss_m_tsitouras_arkode_5_4
+end module mrkiss_eerk_tsitouras_arkode_5_4

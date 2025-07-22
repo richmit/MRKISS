@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_sofroniou_spaletta_4_3.f90
+!! @file      mrkiss_eerk_sofroniou_spaletta_4_3.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Sofroniou Spaletta's 5 step, order (4,3) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -44,7 +44,7 @@
 !! References:
 !!   Sofroniou & Spaletta (2004); Construction of Explicit Runge-Kutta Pairs with Stiffness Detection; Math. and Comp. Modelling 40 (11); p1157-1169; zotero://select/items/0_52X4WPJK
 !!
-module mrkiss_m_sofroniou_spaletta_4_3
+module mrkiss_eerk_sofroniou_spaletta_4_3
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -59,4 +59,4 @@ module mrkiss_m_sofroniou_spaletta_4_3
   real(kind=rk),    parameter :: b1(s)  = [            11.0_rk,       25.0_rk,      25.0_rk,   11.0_rk,        0.0_rk]          /      72.0_rk
   integer(kind=ik), parameter :: p2     = 3
   real(kind=rk),    parameter :: b2(s)  = [        1251515.0_rk, 3710105.0_rk, 2519695.0_rk, 61105.0_rk, 1428492.0_rk]          / 8970912.0_rk
-end module mrkiss_m_sofroniou_spaletta_4_3
+end module mrkiss_eerk_sofroniou_spaletta_4_3

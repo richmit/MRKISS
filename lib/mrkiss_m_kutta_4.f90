@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_kutta_4.f90
+!! @file      mrkiss_erk_kutta_4.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for the classic 4 stage Runge-Kutta method of O(4).@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -45,7 +45,7 @@
 !!   Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
 !!   Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
 !!
-module mrkiss_m_kutta_4
+module mrkiss_erk_kutta_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -57,4 +57,4 @@ module mrkiss_m_kutta_4
   real(kind=rk),    parameter :: c(s)   = [         0.0_rk, 1.0_rk, 1.0_rk, 2.0_rk]          / 2.0_rk
   integer(kind=ik), parameter :: p      = 4
   real(kind=rk),    parameter :: b(s)   = [         1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk]          / 6.0_rk
-end module mrkiss_m_kutta_4
+end module mrkiss_erk_kutta_4

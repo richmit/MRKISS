@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_bogacki_shampine_4_5.f90
+!! @file      mrkiss_eerk_bogacki_shampine_4_5.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Bogacki Shampine's 8 step, order (4,5) Runge-Kutta method.@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -44,7 +44,7 @@
 !!   Bogacki & Shampine (1996); An Efficient Runge-Kutta (4,5) Pair; Comp. & Math. with Appl. 32 (6); p15-28; zotero://select/items/0_3SDMHUHW
 !!   Peter Stone (2012); Bogacki-Shampine Combined 7 Stage, Order 4 and 5 Runge-Kutta Scheme with an Additional 8 Stage, Order 4 FSAL Embedded Scheme; zotero://select/items/0_AS3ZHL53
 !!
-module mrkiss_m_bogacki_shampine_4_5
+module mrkiss_eerk_bogacki_shampine_4_5
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -62,4 +62,4 @@ module mrkiss_m_bogacki_shampine_4_5
   real(kind=rk),    parameter :: b1(s)  = [                 50746150.0_rk,                 0.0_rk,         199815255.0_rk,         136035858.0_rk,            6022107.0_rk,         250664960.0_rk,         53848470.0_rk,   0.0_rk]          /         697132800.0_rk
   integer(kind=ik), parameter :: p2     = 5
   real(kind=rk),    parameter :: b2(s)  = [                104760110.0_rk,                 0.0_rk,         385163505.0_rk,         295063692.0_rk,          -14425047.0_rk,         516006400.0_rk,        107696940.0_rk,   0.0_rk]          /        1394265600.0_rk
-end module mrkiss_m_bogacki_shampine_4_5
+end module mrkiss_eerk_bogacki_shampine_4_5

@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_m_verner_1978_6_5.f90
+!! @file      mrkiss_eerk_verner_1978_6_5.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Butcher tableau for Verner's 8 stage, Order (6,5) Runge-Kutta method (1978).@EOL
 !! @keywords  ode ivp differential equation initial value problem rk
@@ -36,14 +36,14 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Verner's 8 stage, Order (6,5) Runge-Kutta method (1978)
 !!
-!! IMO: This is a good general method; however, I think mrkiss_m_verner_2010_6_5 should be preferred.
+!! IMO: This is a good general method; however, I think mrkiss_eerk_verner_2010_6_5 should be preferred.
 !!
 !! Known Aliases: 'ARKODE_VERNER_8_5_6' (SUNDIALS).
 !!
 !! References:
 !!   Verner (1978); Explicit Runge-Kutta methods with estimates of the local truncation error; SIAM J. Numer. Anal 15 (4)l p772-790; zotero://select/items/0_9HLA6P9B
 !!
-module mrkiss_m_verner_1978_6_5
+module mrkiss_eerk_verner_1978_6_5
   use mrkiss_config, only: rk, ik
   implicit none
   public
@@ -61,4 +61,4 @@ module mrkiss_m_verner_1978_6_5
   real(kind=rk),    parameter :: b1(s)  = [                2431.0_rk,             0.0_rk,         11875.0_rk,        9350.0_rk,       4224.0_rk, 2040.0_rk,          0.0_rk,      0.0_rk]          /       29920.0_rk
   integer(kind=ik), parameter :: p2     = 5
   real(kind=rk),    parameter :: b2(s)  = [              812889.0_rk,             0.0_rk,       4226250.0_rk,     3462305.0_rk,    1463616.0_rk,    0.0_rk,     116875.0_rk, 756585.0_rk]          /    10838520.0_rk
-end module mrkiss_m_verner_1978_6_5
+end module mrkiss_eerk_verner_1978_6_5
