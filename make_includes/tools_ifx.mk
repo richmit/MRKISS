@@ -35,9 +35,9 @@
 ifeq ($(OS),Windows_NT)
 	FC := ifx
 	FFLAGS := -stand:f23 -Qdiag-disable:5268
-	FSHFLG = -dll -Fe:$(MRFFL_SHARED_LIB_FILE) $(MRFFL_OBJ_FILES)
+	FSHFLG = -dll -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 else
 	FC := ifx
 	FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack
-	FSHFLG = -shared  -Fe:$(MRFFL_SHARED_LIB_FILE) $(MRFFL_OBJ_FILES)
+	FSHFLG = -shared  -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 endif

@@ -36,10 +36,10 @@ ifeq ($(OS),Windows_NT)
   AR := ar
   FC := flang
   FFLAGS := -pedantic -std=f2018
-  FSHFLG = -o $(MRFFL_SHARED_LIB_FILE) -shared $(MRFFL_OBJ_FILES)
+  FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
 else
   AR := ar
   FC := flang
   FFLAGS := -pedantic -std=f2018 -Wl,-z,execstack
-  FSHFLG = -o $(MRFFL_SHARED_LIB_FILE) -shared $(MRFFL_OBJ_FILES)
+  FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
 endif

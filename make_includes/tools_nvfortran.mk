@@ -35,4 +35,4 @@
 AR := ar
 FC := nvfortran
 FFLAGS := -O3 -Wall -W -Xlinker -z -Xlinker execstack
-FSHFLG = -o $(MRFFL_SHARED_LIB_FILE) -shared $(MRFFL_OBJ_FILES)
+FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
