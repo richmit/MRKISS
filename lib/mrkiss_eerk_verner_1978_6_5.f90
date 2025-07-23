@@ -58,7 +58,7 @@ module mrkiss_eerk_verner_1978_6_5
                                                     36960057000.0_rk, -126684000000.0_rk,  102559875000.0_rk, -2494580000.0_rk, 5198688000.0_rk,    0.0_rk, 2618000000.0_rk,      0.0_rk], [s, s]) / 18158040000.0_rk
   real(kind=rk),    parameter :: c(s)   = [                   0.0_rk,             5.0_rk,             8.0_rk,          20.0_rk,         25.0_rk,   30.0_rk,          2.0_rk,     30.0_rk]          /          30.0_rk
   integer(kind=ik), parameter :: p1     = 6
-  real(kind=rk),    parameter :: b1(s)  = [                2431.0_rk,             0.0_rk,         11875.0_rk,        9350.0_rk,       4224.0_rk, 2040.0_rk,          0.0_rk,      0.0_rk]          /       29920.0_rk
+  real(kind=rk),    parameter :: b1(s)  = [              812889.0_rk,             0.0_rk,       4226250.0_rk,     3462305.0_rk,    1463616.0_rk,    0.0_rk,     116875.0_rk, 756585.0_rk]          /    10838520.0_rk
   integer(kind=ik), parameter :: p2     = 5
-  real(kind=rk),    parameter :: b2(s)  = [              812889.0_rk,             0.0_rk,       4226250.0_rk,     3462305.0_rk,    1463616.0_rk,    0.0_rk,     116875.0_rk, 756585.0_rk]          /    10838520.0_rk
+  real(kind=rk),    parameter :: b2(s)  = [                2431.0_rk,             0.0_rk,         11875.0_rk,        9350.0_rk,       4224.0_rk, 2040.0_rk,          0.0_rk,      0.0_rk]          /       29920.0_rk
 end module mrkiss_eerk_verner_1978_6_5
