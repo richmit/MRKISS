@@ -4,6 +4,10 @@
 *.dll
 *.a
 *.exe
+*.out
+*.csv
+/examples/*.png
+/tests/*.png
 a.out
 *~
 *.mod
