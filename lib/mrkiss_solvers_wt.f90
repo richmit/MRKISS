@@ -496,8 +496,8 @@ contains
     t_y_sol(2:, 1) = y_cv
     istats(1) = istats(1) + 1
     do cur_pnt_idx=2,max_pts
+       ! Compute lower t_delta
        t_delta_min_tmp = t_delta_min
-       t_delta_max_tmp = t_delta_max
        call one_step_stab_wt(status, y_delta_min, deq, t_cv, y_cv, param, a, b, c, t_delta_min_tmp)
        istats(2) = istats(2) + 1
        if (status > 0) return
@@ -506,6 +506,8 @@ contains
        else
           y_delta_min_length = norm2(y_delta_min)
        end if
+       ! Compute upper t_delta
+       t_delta_max_tmp = t_delta_max
        call one_step_stab_wt(status, y_delta_max, deq, t_cv, y_cv, param, a, b, c, t_delta_max_tmp)
        istats(2) = istats(2) + 1
        if (status > 0) return
@@ -514,16 +516,17 @@ contains
        else
           y_delta_max_length = norm2(y_delta_max)
        end if
+       ! Bisect if required
        if ((y_delta_min_length < y_delta_len_targ) .and. (y_delta_max_length > y_delta_len_targ)) then
           t_delta_cur        = t_delta_max_tmp
           y_delta_cur_length = y_delta_max_length
+          y_delta_cur        = y_delta_max
           biter              = 1
-          do while (abs(y_delta_max_length - y_delta_min_length) > y_delta_tol)
+          do while (abs(y_delta_cur_length - y_delta_len_targ) > y_delta_tol)
              t_delta_cur = (t_delta_max_tmp + t_delta_min_tmp) / 2.0_rk
              call one_step_stab_wt(status, y_delta_cur, deq, t_cv, y_cv, param, a, b, c, t_delta_cur)
              istats(3) = istats(3) + 1
              if (status > 0) return
-             y_delta_cur_length = norm2(y_delta_cur)
              if (present(y_delta_len_idxs_o)) then
                 y_delta_cur_length = norm2(y_delta_cur(y_delta_len_idxs_o))
              else
