@@ -891,6 +891,7 @@ graphs.  None of these tools are required to compile and use the package because
     - Generates =mrkiss_solvers_nt.f90= from =mrkiss_solvers_wt.f90=.
   - ruby ::
     - Generates code and make files for testing
+    - My =float_diff.rb= script, used by the tests.
   - R ::
     - Used to visualize output files
   - GNUplot ::

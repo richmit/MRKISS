@@ -44,7 +44,7 @@ include $(MRKISS_PATH)/make_includes/include.mk
 
 IMG_VIEWER = nomacs
 
-FD = ~/world/my_prog/utils/float_diff.rb
+FD = ../scripts/float_diff.rb
 
 TESTS = test_rkf45_stab_5 test_rkf45_etab_5 test_rkf45_stab_4 test_rkf45_etab_4 test_rk4_stab test_rk4_ref test_rk4_ref_stab
 

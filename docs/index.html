@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-22 Tue 19:17 -->
+<!-- 2025-07-22 Tue 19:42 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-22 19:16:11</i></td>
+<td class="org-left"><i>2025-07-22 19:42:06</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-22 19:17:30</i></td>
+<td class="org-left"><i>2025-07-22 19:42:07</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org669425a">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#org1441884">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orgc4762a2">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org280eca5">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org49a7304">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org21b665f">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -486,8 +486,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-org669425a" class="outline-2">
-<h2 id="org669425a"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-org1441884" class="outline-2">
+<h2 id="org1441884"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -735,8 +735,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-orgc4762a2" class="outline-3">
-<h3 id="orgc4762a2"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org49a7304" class="outline-3">
+<h3 id="org49a7304"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -825,8 +825,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org280eca5" class="outline-3">
-<h3 id="org280eca5"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org21b665f" class="outline-3">
+<h3 id="org21b665f"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1187,7 +1187,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org66d7d42">
+<pre class="example" id="orgc8f7e10">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1207,7 +1207,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="orgae41c9b">
+<pre class="example" id="org8384991">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1225,7 +1225,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org255ccbc" class="figure">
+<div id="org5d99b83" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1417,7 +1417,7 @@ For a long time I have had a few annoyances related available packages:
 </ul>
 
 <p>
-The "last straw" was the frustration of spending four hours trying to get my normal technical computing environment deployed to new supercomputer with
+The "last straw" was the frustration of spending four hours trying to get my normal technical computing environment deployed to a new supercomputer with
 insufficient user privilege and a broken user space package manager.
 </p>
 
@@ -1525,6 +1525,7 @@ graphs.  None of these tools are required to compile and use the package because
 </ul></dd>
 <dt>ruby</dt><dd><ul class="org-ul">
 <li>Generates code and make files for testing</li>
+<li>My <code>float_diff.rb</code> script, used by the tests.</li>
 </ul></dd>
 <dt>R</dt><dd><ul class="org-ul">
 <li>Used to visualize output files</li>
