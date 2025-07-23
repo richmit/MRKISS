@@ -1,0 +1,1554 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-07-22 Tue 19:17 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=1024, initial-scale=1" />
+<title>MRKISS Library</title>
+<meta name="author" content="Mitch Richling" />
+<meta name="description" content="DESCRIPTION FIXME" />
+<meta name="keywords" content="KEYWORDS FIXME" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+<style>body { min-width: 500px; max-width: 1024px; }</style>
+<style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+<style>h1,h2,h3 { line-height: 1.4em; }</style>
+<style>h1.title { font-size: 3em; }</style>
+<style>.subtitle { font-size: 0.6em; }</style>
+<style>h4,h5,h6 { font-size: 1em; }</style>
+<style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+<style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+<style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+<style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+<style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+<style>#content { max-width: 60em; }</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="https://www.mitchr.me/FIXME"> UP </a>
+ |
+ <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">MRKISS Library
+<br />
+<span class="subtitle">MR RK (Runge-Kutta) KISS (Keep It Super Simple)</span>
+</h1>
+<table border="2 solid #ccc" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right"><b>Author:</b></td>
+<td class="org-left"><i>Mitch Richling</i></td>
+</tr>
+
+<tr>
+<td class="org-right"><b>Updated:</b></td>
+<td class="org-left"><i>2025-07-22 19:16:11</i></td>
+</tr>
+
+<tr>
+<td class="org-right"><b>Generated:</b></td>
+<td class="org-left"><i>2025-07-22 19:17:30</i></td>
+</tr>
+</tbody>
+</table>
+<p align="center">
+Copyright &copy; 2025 Mitch Richling. All rights reserved.
+</p>
+
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#features">2. Features &amp; Requirements</a></li>
+<li><a href="#org669425a">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
+<ul>
+<li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
+<li><a href="#def-method-etab">4.2. Embedded Method</a></li>
+</ul>
+</li>
+<li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
+<ul>
+<li><a href="#orgc4762a2">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org280eca5">5.2. Predefined Embedded Methods</a></li>
+</ul>
+</li>
+<li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
+<li><a href="#ode-func">7. Providing ODE Equations For Solvers</a></li>
+<li><a href="#hi-solvers">8. High Level Solvers</a>
+<ul>
+<li><a href="#hi-solvers-args">8.1. High Level Solver Common Arguments</a></li>
+</ul>
+</li>
+<li><a href="#lo-solvers">9. Low Level, One Step Solvers</a></li>
+<li><a href="#qs-min">10. Quick Start &#x2013; The Absolute Minimum</a>
+<ul>
+<li><a href="#qs-min-download">10.1. Getting <code>MRKISS</code></a></li>
+<li><a href="#qs-min-examples">10.2. Check Out The Examples</a></li>
+</ul>
+</li>
+<li><a href="#use-mrkiss">11. Using <code>MRKISS</code> In Your Projects</a>
+<ul>
+<li><a href="#use-makeinc">11.1. Notes about <code>include.mk</code></a></li>
+</ul>
+</li>
+<li><a href="#faq">12. FAQ</a>
+<ul>
+<li><a href="#faq-name">12.1. What's with the name?</a></li>
+<li><a href="#faq-fortran">12.2. Why Fortran</a></li>
+<li><a href="#faq-why">12.3. Why did you write another ODE solver when so many good options exist?</a></li>
+<li><a href="#faq-others">12.4. Why don't you use package XYZ?</a></li>
+<li><a href="#faq-zotero">12.5. What are those zotero links in the references?</a></li>
+<li><a href="#faq-samethods">12.6. Are high order RK methods overkill for strange attractors?</a></li>
+<li><a href="#faq-need-more">12.7. I need a more comprehensive solution.  Do you have advice?</a></li>
+<li><a href="#faq-need-fast">12.8. I need something faster.  Do you have advice?</a></li>
+<li><a href="#faq-deps">12.9. It seems like things are used other than Fortran.  Are there really no external dependencies?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-introduction" class="outline-2">
+<h2 id="introduction"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-introduction">
+<p>
+<b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> is a <b>simple</b>, <b>tiny</b> library with <b>zero dependencies</b><a href="#faq-deps">[*</a>] that aims to make it easy to <b>use</b>
+and <b>experiment with</b> explicit Runge-Kutta methods.
+</p>
+
+
+
+<p>
+From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like SUNDIALS or DifferentialEquations.jl; however,
+it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and code with others others without
+asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things up and and running quickly when
+moving to a new supercomputer, cloud, or HPC cluster.
+</p>
+
+<p>
+Here is a complete example in 24 lines that solves <a href="https://www.mitchr.me/SS/lorenz/index.html">Lorenz's system</a> and generates a CSV file of the results.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90">
+<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
+<span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">minimal</span>
+
+  <span style="color: #00ffff;">use</span> :: mrkiss_config,     <span style="color: #00ffff;">only</span>: rk, ik
+  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt, <span style="color: #00ffff;">only</span>: steps_fixed_stab_nt
+  <span style="color: #00ffff;">use</span> :: mrkiss_utils,      <span style="color: #00ffff;">only</span>: print_t_y_sol
+  <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4,  <span style="color: #00ffff;">only</span>: a, b, c
+
+  <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
+
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_iv(3)  = [1.0_rk, 0.0_rk, 0.0_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end    = 50.0_rk</span>
+
+  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> t_y_sol(4, 10000)</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(16)</span>
+
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"minimal.csv"</span>)
+
+<span style="color: #00ffff;">contains</span>
+
+  <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, y, param)
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
+    dydt(1) = param(1)*(y(2)-y(1))       <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">a(y-x)</span>
+    dydt(2) = y(1)*(param(2)-y(3))-y(2)  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">x(b-z)-y</span>
+    dydt(3) = y(1)*y(2)-param(3)*y(3)    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">xy-cy</span>
+    status = 0
+  <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
+
+<span style="color: #00ffff;">end program</span> <span style="color: #00fa9a; font-weight: bold;">minimal</span>
+</pre>
+</div>
+
+<p>
+If you just want to jump in, then take a look at the <a href="#qs-min">Quick Start</a> section.
+</p>
+</div>
+</div>
+<div id="outline-container-features" class="outline-2">
+<h2 id="features"><span class="section-number-2">2.</span> Features &amp; Requirements</h2>
+<div class="outline-text-2" id="text-features">
+<p>
+The IVPs I work with are generally pretty well behavied:
+</p>
+
+<ul class="org-ul">
+<li>Generally non-stiff</li>
+<li>Time forward (\(\Delta{t} \ge 0\))</li>
+<li>Defined by a small (&lt;50) set of equations expressable in closed form.</li>
+</ul>
+
+<p>
+Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
+chemical reactions, and electronic circuits.
+</p>
+
+<p>
+My motivation for solving IVPs generally revolve around <i>generative art</i> and <i>visualization</i>.  You will actually see this in the code and feature set of the
+library.
+</p>
+
+<p>
+Things I care about:
+</p>
+
+<ul class="org-ul">
+<li>Simple to use for simple problems.</li>
+<li>Easily create custom solvers for the, admittedly bizarre, demands of generative art.</li>
+<li>Graceful response to evaluation failure in derivative functions</li>
+<li>A good selection of predefined RK methods</li>
+<li>Easy to use, hardwired methods for <i>fixed step size</i> visualization use cases:
+<ul class="org-ul">
+<li>Fixed \(t\) step size solvers</li>
+<li>Fixed \(\mathbf{y}\) space step size solvers</li>
+</ul></li>
+<li>Programmable step processing.  Examples:
+<ul class="org-ul">
+<li>Stop the routine if the solution curve is too long in y-space</li>
+<li>Stop the routine if the step delta, or some components of it, are too long in y-space</li>
+<li>Stop the routine if the solution has returned to the IV</li>
+<li>Stop the routine if the solution intersects itself</li>
+<li>Provide an alternate y-delta and redo the step based on some condition.</li>
+<li>Trigger a bisection search for a t_delta fitting some condition based on t-space and/or y-space.  Examples:
+<ul class="org-ul">
+<li>Find t_delta so that y-delta, or some components of it, are the perfect length.</li>
+<li>Find where a step crosses over a boundary in space  (ex: root finding)</li>
+<li>Find where a step approaches closest to a point (ex: like the problem's IV)</li>
+</ul></li>
+</ul></li>
+<li>Runge-Kutta Research
+<ul class="org-ul">
+<li>Try out new RK methods by simply feeding the solvers a Butcher tableau.</li>
+<li>Directly accessible one step routines for assembling custom solvers.</li>
+<li>Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.</li>
+<li>Individual access to each method in an embedded tableau, and control over how each is used.</li>
+<li>Maple worksheets rational values, variable floating point approximations, and stability graphs for every Tableau.</li>
+<li>I have included a few RK methods more for research interests than practical usefulness.</li>
+</ul></li>
+<li>Easy deployment &amp; sharing
+<ul class="org-ul">
+<li>Easy to compile and tune for a new architecture.</li>
+<li>Zero external dependencies<a href="#faq-deps">[*</a>] except a Fortran compiler.</li>
+<li>100% standard Fortran that works with various compilers (Intel, Cray, NAG, gfortran, clang fortran, Nvidia, etc&#x2026;).</li>
+<li>Simple text output that can be compressed and sent back home or shared with others.</li>
+</ul></li>
+</ul>
+
+<p>
+Things I don't care about:
+</p>
+
+<ul class="org-ul">
+<li>Usage error checking.  For example, the code makes no attempt to check that the user has supplied consistent Butcher tableau arguments, or that <code>t_delta</code>
+values are positive, etc&#x2026;</li>
+<li>Performance.  I can generally perform hundreds of thousands of RK steps in a few milliseconds for the problems I work with.  This gives me a lot of
+performance headroom allowing me to not worry about sophisticated techniques to avoid RK steps.  In fact, this library diverges from best practices in a
+couple significant ways:
+<ul class="org-ul">
+<li>I don't use interpolating polynomials for intrastep approximations.  I even have a bisection routine that takes an RK step for every bisection!</li>
+<li>I use generic loops to compute RK steps over the Butcher tableau instead of optimized formulas.</li>
+<li>Butcher tableau arrays are not sparse.  In fact, I even include the top and final row full of zeros!</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org669425a" class="outline-2">
+<h2 id="org669425a"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Within the confines of this software, we define a system of ODEs as:
+</p>
+
+<p>
+\[ \frac{\mathrm{d}\mathbf{y}}{\mathrm{d}t} =  \mathbf{f}(t, \mathbf{y}) =
+  \left[\begin{array}{c}
+   \frac{\mathrm{d}y_1}{\mathrm{d}t} \\
+   \vdots                            \\
+   \frac{\mathrm{d}y_n}{\mathrm{d}t} \\
+  \end{array}\right]                                                           =
+  \left[\begin{array}{c}
+   f_1(t, \mathbf{y}) \\
+   \vdots             \\
+   f_n(t, \mathbf{y}) \\
+  \end{array}\right]                                                           =
+  \left[\begin{array}{c}
+   f_1(t, [y_1, \cdots, y_n]^\mathrm{T}) \\
+   \vdots                                \\
+   f_n(t, [y_1, \cdots, y_n]^\mathrm{T}) \\
+  \end{array}\right] \]
+</p>
+
+<p>
+The goal is to find numerical values for the unknown function \(\mathbf{y}:\mathbb{R}\rightarrow\mathbb{R}^{n}\).
+</p>
+
+<p>
+We define an embedded explicit Runge-Kutta method via a set of coefficients organized into a <i>Butcher tableau</i>:
+</p>
+
+<p>
+\[ \begin{array}{l|llll}
+     c_1              & a_{11}      & a_{12}      & \dots  & a_{1s}      \\
+     c_2              & a_{21}      & a_{22}      & \dots  & a_{2s}      \\
+     c_3              & a_{31}      & a_{32}      & \dots  & a_{3s}      \\
+     \vdots           & \vdots      & \vdots      & \ddots & \vdots      \\
+     c_s              & a_{s1}      & a_{s2}      & \dots  & a_{ss}      \\
+     \hline                                       
+     \rule{0pt}{12pt} & \check{b}_1 & \check{b}_2 & \dots  & \check{b}_s \\
+                      &   \hat{b}_1 &   \hat{b}_2 & \dots  &   \hat{b}_s \\
+   \end{array} \]
+</p>
+
+<p>
+Explicit methods, which are the focus of <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>, have \(c_1=0\) and \(a_{ij}=0\) for \(i\le j\).  
+</p>
+
+<p>
+The word <i>embedded</i> indicates that we actually have two explicit Runge-Kutta methods using the same \(\mathbf{a}\) matrix and \(\mathbf{c}\) vector.  That is
+to say each \(\mathbf{b}\) vector defines a unique, explicit Runge-Kutta method.  <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> supports both embedded and
+non-embedded (no \(\mathbf{\hat{b}}\) vector defined) methods.
+</p>
+
+<p>
+Given \(\Delta{t}\) and initial conditions (\(t_0\) and \(\mathbf{y_0}\)), we may form an approximation of \(\mathbf{y}(t_0+\Delta{t})\) as:
+</p>
+
+<p>
+\[ \mathbf{y}(t_0+\Delta{t}) \approx \mathbf{y_0}+\mathbf{\Delta\check{y}} \] 
+</p>
+
+<p>
+and, for embedded methods, an estimate of this approximation's error from:
+</p>
+
+<p>
+\[\vert\mathbf{\Delta\check{y}} - \mathbf{\Delta\hat{y}} \vert\]
+</p>
+
+<p>
+With \(\mathbf{\Delta\check{y}}\) and \(\mathbf{\Delta\hat{y}}\) (we only have \(\mathbf{\Delta\hat{y}}\) for embedded methods) computed as follows:
+</p>
+
+<p>
+\[ \begin{array}{l}
+        \mathbf{\Delta\check{y}} = \Delta{t}\sum_{i=1}^s \check{b}_i \mathbf{k}_i    \\
+        \mathbf{\Delta\hat{y}}   = \Delta{t}\sum_{i=1}^s \hat{b}_i   \mathbf{k}_i    \\
+   \end{array} \]
+</p>
+
+<p>
+and the \(\mathbf{k}_i\) defined as:
+</p>
+
+<p>
+\[ \mathbf{k}_i = \mathbf{f}\left(t + c_i \Delta{t},\, \mathbf{y} + \Delta{t} \sum_{j=1}^{i-1} a_{ij} \mathbf{k}_j\right) \]
+</p>
+</div>
+</div>
+<div id="outline-container-def-method" class="outline-2">
+<h2 id="def-method"><span class="section-number-2">4.</span> Defining Runge-Kutta Methods in <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></h2>
+<div class="outline-text-2" id="text-def-method">
+<p>
+In <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> an explicit Runge-Kutta method is specified by directly providing the Butcher tableau via arguments to
+subroutines.
+</p>
+</div>
+<div id="outline-container-def-method-stab" class="outline-3">
+<h3 id="def-method-stab"><span class="section-number-3">4.1.</span> Non-embedded Methods</h3>
+<div class="outline-text-3" id="text-def-method-stab">
+<ul class="org-ul">
+<li><code>a</code>  &#x2013; The \(\mathbf{a}\) matrix.</li>
+<li><code>c</code>  &#x2013; The \(\mathbf{c}\) vector.</li>
+<li><code>p</code>  &#x2013; The order of the method</li>
+<li><code>b</code>  &#x2013; The \(\mathbf{\check{b}}\) vector.</li>
+</ul>
+
+<p>
+Wherever arguments <code>a</code>, <code>c</code>, or <code>b</code> appear together, they must have consistent sizes:
+</p>
+
+<ul class="org-ul">
+<li><code>size(a, 1) &gt; 0</code></li>
+<li><code>size(a, 1) == size(a, 2)</code></li>
+<li><code>size(b, 1) == size(a, 1)</code></li>
+<li><code>size(c, 1) == size(a, 1)</code></li>
+</ul>
+
+<p>
+The value of <code>p</code> must be a positive integer.
+</p>
+</div>
+</div>
+<div id="outline-container-def-method-etab" class="outline-3">
+<h3 id="def-method-etab"><span class="section-number-3">4.2.</span> Embedded Method</h3>
+<div class="outline-text-3" id="text-def-method-etab">
+<p>
+Instead of a single <code>b</code> and <code>p</code> argument, we have <code>b1</code>, <code>p1</code>, <code>b2</code>, and <code>p2</code>.
+</p>
+
+<ul class="org-ul">
+<li><code>a</code>  &#x2013; The \(\mathbf{a}\) matrix.</li>
+<li><code>c</code>  &#x2013; The \(\mathbf{c}\) vector.</li>
+<li><code>p1</code> &#x2013; The order of the method associated with \(\mathbf{\check{b}}\) vector.</li>
+<li><code>b1</code> &#x2013; The \(\mathbf{\check{b}}\) vector.</li>
+<li><code>p2</code> &#x2013; The order of the method associated with the \(\mathbf{\hat{b}}\) vector (only for embedded methods).</li>
+<li><code>b2</code> &#x2013; The \(\mathbf{\hat{b}}\) vector (only for embedded methods).</li>
+</ul>
+
+<p>
+Wherever arguments <code>a</code>, <code>c</code>, or <code>b</code> appear together, they must have consistent sizes:
+</p>
+
+<ul class="org-ul">
+<li><code>size(a, 1) &gt; 0</code></li>
+<li><code>size(a, 1) == size(a, 2)</code></li>
+<li><code>size(b1, 1) == size(a, 1)</code></li>
+<li><code>size(b2, 1) == size(a, 1)</code></li>
+<li><code>size(c, 1) == size(a, 1)</code></li>
+</ul>
+
+<p>
+The values of <code>p1</code> and <code>p2</code> must be a positive integers.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-predefinedrk" class="outline-2">
+<h2 id="predefinedrk"><span class="section-number-2">5.</span> Predefined Runge-Kutta Methods in <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></h2>
+<div class="outline-text-2" id="text-predefinedrk">
+<p>
+<b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides several predefined methods in modules found in the
+"<a href="https://github.com/richmit/MRKISS/blob/master/lib"><code>lib/</code></a>" directory.  Each module defines a single tableau via parameters with names mirroring the
+Butcher Tableau arguments documented in the <a href="#def-method">previous section</a>.  In addition, these modules also have a parameter containing the number of
+steps for the method.
+</p>
+
+<ul class="org-ul">
+<li><code>s</code>  &#x2013; The number of stages for the entire method.</li>
+</ul>
+
+<p>
+The modules follow a simple naming conventions:
+</p>
+<ul class="org-ul">
+<li>They have one of two prefixes:
+<dl class="org-dl">
+<dt><code>mrkiss_eerk_</code></dt><dd>The module contains an <i>embedded explicit Runge Kutta method</i>.</dd>
+<dt><code>mrkiss_erk_</code> </dt><dd>The module contains an <i>explicit Runge Kutta method</i>  &#x2013; i.e. it is <b>not</b> embedded.</dd>
+</dl></li>
+<li>The names end with numbers indicating the orders of the <code>b1</code> and <code>b2</code> methods.  These numbers are separated from the rest of the name by an underscore.</li>
+</ul>
+
+<p>
+In addition to the parameters, the comments in these files normally include at least the following three sections:
+</p>
+<dl class="org-dl">
+<dt><code>IMO</code></dt><dd>Personal commentary about the method in question.  Please note this material is simply my personal opinion.</dd>
+<dt><code>Known Aliases</code></dt><dd>These include names used in the literature as well as names in some common ODE software.</dd>
+<dt><code>References</code></dt><dd>I try to include the original reference if I have it.  I also frequently include discussions found in other texts.</dd>
+</dl>
+
+<p>
+To make all this concrete, here is what one of these modules looks like (<code>mrkiss_erk_kutta_4.f90</code>):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90">
+<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-----------------------------------------------------------------------------------------------------------------------</span>
+<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; Butcher tableau for the classic 4 stage Runge-Kutta method of O(4)</span>
+<span style="color: #ffa500;">!!</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">IMO: Useful for low accuracy applications; however, I find I rarely use it.</span>
+<span style="color: #ffa500;">!!</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), &amp; 'The Runge-Kutta Method'.</span>
+<span style="color: #ffa500;">!!</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">References:</span>
+<span style="color: #ffa500;">!!   </span><span style="color: #ff7f24;">Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53</span>
+<span style="color: #ffa500;">!!   </span><span style="color: #ff7f24;">Hairer, Norsett &amp; Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138</span>
+<span style="color: #ffa500;">!!   </span><span style="color: #ff7f24;">Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102</span>
+<span style="color: #ffa500;">!!</span>
+<span style="color: #00ffff;">module</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_erk_kutta_4</span>
+  <span style="color: #00ffff;">use</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_config</span>, <span style="color: #00ffff;">only</span>: rk, ik
+  <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
+  <span style="color: #00ffff;">public</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> s      = 4</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> a(s,s) = reshape([ 0.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
+<span style="color: #7fffd4;">                                                    1.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
+<span style="color: #7fffd4;">                                                    0.0_rk, 1.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
+<span style="color: #7fffd4;">                                                    0.0_rk, 0.0_rk, 2.0_rk, 0.0_rk], [s, s]) / 2.0_rk</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> c(s)   = [         0.0_rk, 1.0_rk, 1.0_rk, 2.0_rk]          / 2.0_rk</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> p      = 4</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> b(s)   = [         1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk]          / 6.0_rk</span>
+<span style="color: #00ffff;">end module</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_erk_kutta_4</span>
+</pre>
+</div>
+
+
+<p>
+Also note all the zeros.  KISS!  Seriously, it takes up a tiny bit of extra space and simplifies the code considerably&#x2026;
+</p>
+
+<p>
+Each embedded method defines two Runge-Kutta methods.  Normally these two methods are used in conjunction to simultaneously estimate the solution and the
+error.  In this library, the <code>p1</code> &amp; <code>b1</code> method is recommended for approximating the solution while the <code>p2</code> &amp; <code>b2</code> method should be used to estimate error.
+This is a recommendation, and is in no way enforced by the library.  When the higher order method is used for the solution, we say we are using <i>local
+extrapolation</i>.  Note that each of the methods in an embedded Butcher tableau may be used individually as a non-embedded method.
+</p>
+
+<p>
+In addition to the module files, several maple worksheets may be found in the
+"<a href="https://github.com/richmit/MRKISS/blob/master/rk_methods_maple"><code>rk_methods_maple/</code></a>" directory.  The filenames mirror the names of the modules.  These
+worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the method's
+stability region.
+</p>
+</div>
+<div id="outline-container-orgc4762a2" class="outline-3">
+<h3 id="orgc4762a2"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div class="outline-text-3" id="text-5-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-center" />
+
+<col  class="org-center" />
+
+<col  class="org-center" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Module Name</th>
+<th scope="col" class="org-center">Order</th>
+<th scope="col" class="org-center">Stages</th>
+<th scope="col" class="org-center">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>mrkiss_erk_euler_1</code></td>
+<td class="org-center">1</td>
+<td class="org-center">1</td>
+<td class="org-center">BOO</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erk_midpoint_2</code></td>
+<td class="org-center">2</td>
+<td class="org-center">2</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erk_ralston_2</code></td>
+<td class="org-center">2</td>
+<td class="org-center">2</td>
+<td class="org-center">BOO</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erk_ralston_3</code></td>
+<td class="org-center">3</td>
+<td class="org-center">3</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erkknoth_wolke_3</code></td>
+<td class="org-center">3</td>
+<td class="org-center">3</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erk_ralston_4</code></td>
+<td class="org-center">4</td>
+<td class="org-center">4</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erk_kutta_4</code></td>
+<td class="org-center">4</td>
+<td class="org-center">4</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erk_kutta_three_eight_4</code></td>
+<td class="org-center">4</td>
+<td class="org-center">4</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_erk_feagin_10</code></td>
+<td class="org-center">10</td>
+<td class="org-center">17</td>
+<td class="org-center">EXP</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org280eca5" class="outline-3">
+<h3 id="org280eca5"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div class="outline-text-3" id="text-5-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-center" />
+
+<col  class="org-center" />
+
+<col  class="org-center" />
+
+<col  class="org-center" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Module Name</th>
+<th scope="col" class="org-center">Ord_1</th>
+<th scope="col" class="org-center">Ord_2</th>
+<th scope="col" class="org-center">Stages</th>
+<th scope="col" class="org-center">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>mrkiss_eerk_heun_euler_2_1</code></td>
+<td class="org-center">2</td>
+<td class="org-center">1</td>
+<td class="org-center">2</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_bogacki_shampine_3_2</code></td>
+<td class="org-center">3</td>
+<td class="org-center">2</td>
+<td class="org-center">4</td>
+<td class="org-center">BOO</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_fehlberg_4_5</code></td>
+<td class="org-center">4</td>
+<td class="org-center">5</td>
+<td class="org-center">6</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_sofroniou_spaletta_4_3</code></td>
+<td class="org-center">4</td>
+<td class="org-center">3</td>
+<td class="org-center">5</td>
+<td class="org-center">BOO</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_cash_karp_5_4</code></td>
+<td class="org-center">5</td>
+<td class="org-center">4</td>
+<td class="org-center">6</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_bogacki_shampine_4_5</code></td>
+<td class="org-center">4</td>
+<td class="org-center">5</td>
+<td class="org-center">7</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_dormand_prince_5_4</code></td>
+<td class="org-center">5</td>
+<td class="org-center">4</td>
+<td class="org-center">7</td>
+<td class="org-center">BOO</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_fehlberg_7_8</code></td>
+<td class="org-center">7</td>
+<td class="org-center">8</td>
+<td class="org-center">13</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_dormand_prince_7_8</code></td>
+<td class="org-center">7</td>
+<td class="org-center">8</td>
+<td class="org-center">13</td>
+<td class="org-center">BOO</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_verner_9_8</code></td>
+<td class="org-center">9</td>
+<td class="org-center">8</td>
+<td class="org-center">16</td>
+<td class="org-center">BOO</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="outline-container-codecon-homo" class="outline-2">
+<h2 id="codecon-homo"><span class="section-number-2">6.</span> Homogeneous vs Non-Homogeneous IVPs Naming Conventions</h2>
+<div class="outline-text-2" id="text-codecon-homo">
+<p>
+Throughout the code you will see subroutines, functions, and types suffixed with "<code>_nt</code>" or "<code>_wt</code>":
+</p>
+<ul class="org-ul">
+<li><code>_nt</code> stands for "No T" &#x2013; homogeneous problems.</li>
+<li><code>_wt</code> stands for "With T" &#x2013; non-homogeneous problems.</li>
+</ul>
+
+<p>
+In the documentation below you will see "<code>_*t</code>" in subroutine names as shorthand to indicate both the "<code>_nt</code>" and "<code>_wt</code>" versions.
+</p>
+</div>
+</div>
+<div id="outline-container-ode-func" class="outline-2">
+<h2 id="ode-func"><span class="section-number-2">7.</span> Providing ODE Equations For Solvers</h2>
+<div class="outline-text-2" id="text-ode-func">
+<p>
+The equation to be solved is implimented in a user provided subroutine with one of the following two signatures:
+</p>
+
+<p>
+For Non-Homogeneous (with t) problems:
+</p>
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">deq_iface_wt</span>(status, dydt, t, y, param) <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Non-Homogeneous Case (with t)</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
+</pre>
+</div>
+
+<p>
+For Homogeneous (no t) problems:
+</p>
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">deq_iface_nt</span>(status, dydt, y, param)    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Homogeneous Case (no t)</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
+</pre>
+</div>
+
+<p>
+The arguments are as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-text">status ........ A status code. A positive value indicates failure.
+                Do not return a value larger than 255!
+dydt .......... The value of for f(t, y) is returned in this argument
+t ............. The time (only for deq_iface_wt)
+y ............. Values for the dependent variables
+param ......... Constant parameters
+</pre>
+</div>
+
+<p>
+This function should return the value for \( \mathbf{f}(t, \mathbf{y}) \) in <code>dydt</code>.  The value of <code>status</code> should be non-positive, \((-\infty, 0]\), if
+everything worked, and a value between 1 and 255 inclusive, \([1, 255]\), if something went wrong.  This value will be passed back via the <code>status</code> argument
+of higher level routines to indicate an error condition.
+</p>
+</div>
+</div>
+<div id="outline-container-hi-solvers" class="outline-2">
+<h2 id="hi-solvers"><span class="section-number-2">8.</span> High Level Solvers</h2>
+<div class="outline-text-2" id="text-hi-solvers">
+<dl class="org-dl">
+<dt><code>steps_adapt_etab_*t()</code> uses traditional adaptive step size</dt><dd><ul class="org-ul">
+<li>This solver is <i>very similar</i> to solvers found in other ODE packages.</li>
+<li>Programmable step processing</li>
+<li>A programmable bisection option to solve for interesting t_delta values</li>
+<li>Sophisticated curve length computations, and exit options when a maximum length is reached</li>
+<li>It can end precisely on a time value, or it can simply quit when a step goes beyond a maximum time value.</li>
+<li>These last two could be achieved with the programmable step processing and bisection features, but these requirements are so common that is convenient
+to have them directly available.</li>
+</ul></dd>
+<dt><code>steps_fixed_stab_*t()</code> uses fixed time steps</dt><dd><ul class="org-ul">
+<li>Solution points separated by fixed time steps allow animations of the solution to naturally display velocity.</li>
+<li>This is a good place to start when writing a custom solver.</li>
+<li>With most modern ODE packages, this would be done with interpolation.</li>
+<li>This routine has the option to use Richardson extrapolation.</li>
+</ul></dd>
+<dt><code>steps_condy_stab_*t()</code> uses fixed (y-space) steps</dt><dd><ul class="org-ul">
+<li>Produce solution points separated by fixed deltas in y-space, or some subset of y-space.</li>
+<li>This is a good place to start when writing a custom solver with a bisection step.</li>
+<li>A parametric plot of the first two components of a solution looks better when the points are uniformly separated.</li>
+<li>With most modern ODE packages, this would be done with interpolation.</li>
+</ul></dd>
+</dl>
+</div>
+<div id="outline-container-hi-solvers-args" class="outline-3">
+<h3 id="hi-solvers-args"><span class="section-number-3">8.1.</span> High Level Solver Common Arguments</h3>
+<div class="outline-text-3" id="text-hi-solvers-args">
+<p>
+The first several arguments are common across the higher level solvers.
+</p>
+</div>
+<div id="outline-container-hi-solvers-args-out" class="outline-4">
+<h4 id="hi-solvers-args-out"><span class="section-number-4">8.1.1.</span> Results (first three arguments):</h4>
+<div class="outline-text-4" id="text-hi-solvers-args-out">
+<dl class="org-dl">
+<dt><code>status</code></dt><dd>This is an integer return code.  A positive value means failure &#x2013; see the documentation for each routine for details.</dd>
+<dt><code>istats</code></dt><dd>Statistics regarding the solver run.                
+<ul class="org-ul">
+<li><code>istats(1)</code>: number of computed solution points</li>
+<li><code>istats(2)</code>: number of one_step_* calls</li>
+<li><code>istats(3)</code>: number of one_step_* calls triggered by y_delta length constraint</li>
+<li><code>istats(4)</code>: number of one_step_* calls triggered by y_delta error constraint</li>
+<li><code>istats(5)</code>: number of one_step_* calls triggered by step processing with new t_delta</li>
+<li><code>istats(6)</code>: number of one_step_* calls triggered by SDF bisection</li>
+</ul></dd>
+<dt><code>t_y_sol</code></dt><dd>Array for solution.  Each <b>column</b> is a solution with the first element being \(t\) and the remaining elements containing \(\mathbf{y}\).  The
+number of columns determines the maximum number of solution points.</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-hi-solvers-args-ivp" class="outline-4">
+<h4 id="hi-solvers-args-ivp"><span class="section-number-4">8.1.2.</span> The IVP</h4>
+<div class="outline-text-4" id="text-hi-solvers-args-ivp">
+<dl class="org-dl">
+<dt><code>deq</code>  </dt><dd>The subroutine used to evaluate the derivative function</dd>
+<dt><code>t</code>    </dt><dd>The initial value for \(t\).</dd>
+<dt><code>y</code>    </dt><dd>The initial value for \(\mathbf{y}\).</dd>
+<dt><code>param</code></dt><dd>A set of real values passed to <code>deq()</code>.  These are usually constants in the defining equation.</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-hi-solvers-args-tab" class="outline-4">
+<h4 id="hi-solvers-args-tab"><span class="section-number-4">8.1.3.</span> The Butcher Tableau</h4>
+<div class="outline-text-4" id="text-hi-solvers-args-tab">
+<p>
+These arguments vary a bit, but mirror the names documented in the <a href="#def-method">section on predefined Runge-Kutta methods</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-lo-solvers" class="outline-2">
+<h2 id="lo-solvers"><span class="section-number-2">9.</span> Low Level, One Step Solvers</h2>
+<div class="outline-text-2" id="text-lo-solvers">
+<p>
+Behind all of the above high level solvers are single step routines to carry out the step calculations.  These are handy for creating DIY solvers.  
+</p>
+
+<ul class="org-ul">
+<li><code>one_step_stab_*t()</code>  non-embedded RK methods</li>
+<li><code>one_richardson_step_stab_*t()</code> uses Richardson extrapolation with non-embedded RK methods</li>
+<li><code>one_step_etab_*t()</code> embedded RK methods</li>
+<li><code>one_step_rk4_*t()</code> hardwired RK4 for unit tests</li>
+<li><code>one_step_rkf45_*t()</code> hardwired RKF45 for unit tests</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-qs-min" class="outline-2">
+<h2 id="qs-min"><span class="section-number-2">10.</span> Quick Start &#x2013; The Absolute Minimum</h2>
+<div class="outline-text-2" id="text-qs-min">
+<p>
+If you are interested playing around with <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> as quickly as possible, then this section is for you.
+</p>
+</div>
+<div id="outline-container-qs-min-download" class="outline-3">
+<h3 id="qs-min-download"><span class="section-number-3">10.1.</span> Getting <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></h3>
+<div class="outline-text-3" id="text-qs-min-download">
+<p>
+The first step is to download <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  The easiest way is to clone them with git:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">git clone <span style="color: #fa8072;">'https://github.com/richmit/MRKISS.git'</span>
+</pre>
+</div>
+
+<p>
+Alternatly, you could download the zip file: <a href="https://github.com/richmit/MRKISS/archive/refs/heads/master.zip">MRKISS</a>
+</p>
+</div>
+</div>
+<div id="outline-container-qs-min-examples" class="outline-3">
+<h3 id="qs-min-examples"><span class="section-number-3">10.2.</span> Check Out The Examples</h3>
+<div class="outline-text-3" id="text-qs-min-examples">
+<p>
+The newly cloned repository will contain a directory called "<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a>".  
+Change into the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory.  
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #b0c4de;">cd</span> MRKISS/examples
+</pre>
+</div>
+</div>
+<div id="outline-container-qs-min-makefile" class="outline-4">
+<h4 id="qs-min-makefile"><span class="section-number-4">10.2.1.</span> Using something other than <code>gfortran</code></h4>
+<div class="outline-text-4" id="text-qs-min-makefile">
+<p>
+This directory contains a <code>makefile</code> used to build all the examples.  This <code>makefile</code> may require modification if you are not using <code>gfortran</code>.  At the top of
+each makefile you will find something like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #ffa500;">###############################################################</span>
+<span style="color: #7fffd4;">MRKISS_PATH</span> = ..
+
+ <span style="color: #00ffff;">include</span> $(<span style="color: #7fffd4;">MRKISS_PATH</span>)/make_includes/tools_gfortran.mk
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">include $(</span><span style="color: #7fffd4;">MRKISS_PATH</span><span style="color: #ff7f24;">)/make_includes/tools_flang.mk</span>
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">include $(</span><span style="color: #7fffd4;">MRKISS_PATH</span><span style="color: #ff7f24;">)/make_includes/tools_ifx.mk</span>
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">include $(</span><span style="color: #7fffd4;">MRKISS_PATH</span><span style="color: #ff7f24;">)/make_includes/tools_lfortran.mk</span>
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">include $(</span><span style="color: #7fffd4;">MRKISS_PATH</span><span style="color: #ff7f24;">)/make_includes/tools_nvfortran.mk</span>
+
+<span style="color: #00ffff;">include</span> $(<span style="color: #7fffd4;">MRKISS_PATH</span>)/make_includes/include.mk
+<span style="color: #ffa500;">###############################################################</span>
+</pre>
+</div>
+
+<p>
+If you want to use a different compiler, then you may be able to simply uncomment the appropriate line if your system is similarly configured to mine.  If you
+are unlucky, then you may need to set some variables.  In particular, you might need to comment out the <code>gfortran</code> include and add something like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #7fffd4;">AR</span> := ar
+<span style="color: #7fffd4;">FC</span> := nvfortran
+<span style="color: #7fffd4;">FFLAGS</span> := -O3 -Wall -W -Xlinker -z -Xlinker execstack
+<span style="color: #7fffd4;">FSHFLG</span> = -o $(<span style="color: #7fffd4;">MRFFL_SHARED_LIB_FILE</span>) -shared $(<span style="color: #7fffd4;">MRFFL_OBJ_FILES</span>)
+</pre>
+</div>
+
+<p>
+The only tricky one is the <code>FSHFLG</code> variable.  Luckily you only need the <code>FSHFLG</code> variable if you plan on building a shared library.  The shared library is
+completely unnecessary for making full use of the modules, so you you can safely ignore that one unless you really, really want to use a shared library. <code>;)</code>
+</p>
+</div>
+</div>
+<div id="outline-container-qs-min-examples-build" class="outline-4">
+<h4 id="qs-min-examples-build"><span class="section-number-4">10.2.2.</span> Build An Example</h4>
+<div class="outline-text-4" id="text-qs-min-examples-build">
+<p>
+Once you have the <code>makefile</code> worked out, pick an example to build.  For example, we might try the one called
+<a href="https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90"><code>lorenz.f90</code></a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">make lorenz
+ls
+</pre>
+</div>
+
+<pre class="example" id="org66d7d42">
+rm -f mrkiss_config.obj mrkiss_config.mod
+gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
+rm -f mrkiss_utils.obj mrkiss_utils.mod
+gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_utils.f90 -o mrkiss_utils.obj
+rm -f mrkiss_solvers_wt.obj mrkiss_solvers_wt.mod
+......
+gfortran -O3 -Wsurprising -W -std=f2023 lorenz.f90 ....
+</pre>
+
+<p>
+Assuming the build worked, we can now run the code.  On UNIX systems the binary will be called <code>lorenz</code> and on Windows it will be called <code>lorenz.exe</code>.  On
+Windows running it looks like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">./lorenz.exe
+</pre>
+</div>
+
+<pre class="example" id="orgae41c9b">
+             Milliseconds:      0.000
+          Solution Points:      10000
+     Total one_step calls:       9999
+Adjustment one_step calls:          0
+</pre>
+
+<p>
+That's not very interesting.  The fun part is what it did in the background.  The program should produce a file called <code>lorenz.csv</code> that has the solution
+curve.  If you have GNU Plot, you can graph it with something like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">gnuplot -p &lt; lorenz.gplt
+</pre>
+</div>
+
+
+<div id="org255ccbc" class="figure">
+<p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-use-mrkiss" class="outline-2">
+<h2 id="use-mrkiss"><span class="section-number-2">11.</span> Using <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> In Your Projects</h2>
+<div class="outline-text-2" id="text-use-mrkiss">
+<p>
+All of the code is in the module source files with no external dependencies at all.  So you just need to call the modules from your code, and then
+compile/link everything together.
+</p>
+
+<p>
+You can do that by just listing all the source files on the command line with most Fortran compilers.  For example, we could compile the
+<a href="https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90"><code>lorenz.f90</code></a> example in the
+<a href="https://github.com/richmit/MRKISS/blob/master/examples/"><code>examples/</code></a> directly like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #b0c4de;">cd</span> examples
+gfortran.exe lorenz.f90 ../src/*.f90
+</pre>
+</div>
+
+<p>
+That said, most people will probably want to use a build system.  If GNU Make is your thing, then the files in the
+<a href="https://github.com/richmit/MRKISS/blob/master/make_include/"><code>make_include/</code></a> directory may be of help.  In particular the makefile fragment
+<a href="https://github.com/richmit/MRKISS/blob/master/make_include/include.mk"><code>include.mk</code></a> provides useful targets and variables.  The makefile in the
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory is a good guide on how to use
+<a href="https://github.com/richmit/MRKISS/blob/master/include.mk"><code>include.mk</code></a>.  In essence you do the following in your makefile:
+</p>
+
+<ol class="org-ol">
+<li>Set MRKISS_PATH in your makefile to the path of the <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> source directory &#x2013; that's the one with the <code>include.mk</code> file.</li>
+<li>Set FC, FFLAGS, &amp; AR if necessary &#x2013; most of the time you can use the defaults.</li>
+<li>Include the "<a href="https://github.com/richmit/MRKISS/blob/master/make_include/include.mk"><code>include.mk</code></a>" file in the <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> source directory.</li>
+<li>Add a build rule for your program.</li>
+</ol>
+
+<p>
+Your makefile will look something like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #7fffd4;">MRKISS_PATH</span> = ../MRKISS
+
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">Set FC, FFLAGS, &amp; AR here.  The include below has the settings I use on my system.</span>
+<span style="color: #00ffff;">include</span> $(<span style="color: #7fffd4;">MRKISS_PATH</span>)/tools_gfortran.mk
+
+<span style="color: #00ffff;">include</span> $(<span style="color: #7fffd4;">MRKISS_PATH</span>)/include.mk
+
+<span style="color: #00fa9a; font-weight: bold;">your_program</span> : your_program.f90 $(<span style="color: #7fffd4;">MRKISS_OBJ_FILES</span>)
+    $(<span style="color: #7fffd4;">FC</span>) $(<span style="color: #7fffd4;">FFLAGS</span>) $<span style="color: #8470ff; font-weight: bold;">^</span> -o <span style="color: #00fa9a; font-weight: bold;">$</span><span style="color: #8470ff; font-weight: bold;">@</span>
+</pre>
+</div>
+
+<p>
+Note the rule for <code>your_program</code> in the makefile above takes the lazy approach of adding every <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> module as a
+dependency regardless of if your program actually needs them all.  This is how most people use the modules because it's simple.  The cost might be a couple
+seconds of extra compile time.  You can explicitly list out the modules in the makefile if you wish.  Such a rule might look like the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #00fa9a; font-weight: bold;">your_program</span> : your_program.f90 mrkiss_config$(<span style="color: #7fffd4;">OBJ_SUFFIX</span>) mrkiss_solvers_wt(OBJ_SUFFIX) mrkiss_utils$(<span style="color: #7fffd4;">OBJ_SUFFIX</span>)
+    $(<span style="color: #7fffd4;">FC</span>) $(<span style="color: #7fffd4;">FFLAGS</span>) $<span style="color: #8470ff; font-weight: bold;">^</span> -o <span style="color: #00fa9a; font-weight: bold;">$</span><span style="color: #8470ff; font-weight: bold;">@</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-use-makeinc" class="outline-3">
+<h3 id="use-makeinc"><span class="section-number-3">11.1.</span> Notes about <code>include.mk</code></h3>
+<div class="outline-text-3" id="text-use-makeinc">
+</div>
+<div id="outline-container-makeinc-names" class="outline-4">
+<h4 id="makeinc-names"><span class="section-number-4">11.1.1.</span> Names of files</h4>
+<div class="outline-text-4" id="text-makeinc-names">
+<dl class="org-dl">
+<dt>File extensions on Windows (outside of WSL)</dt><dd><ul class="org-ul">
+<li>Executable files use <code>.exe</code></li>
+<li>Shared libraries use <code>.dll</code></li>
+<li>Object files will <code>.obj</code></li>
+</ul></dd>
+<dt>On UNIX systems (not including MSYS2)</dt><dd><ul class="org-ul">
+<li>Executable files have no extension</li>
+<li>Shared libraries use <code>.so</code></li>
+<li>Object files will use <code>.o</code></li>
+</ul></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-makeinc-vars" class="outline-4">
+<h4 id="makeinc-vars"><span class="section-number-4">11.1.2.</span> Useful Variables</h4>
+<div class="outline-text-4" id="text-makeinc-vars">
+<dl class="org-dl">
+<dt><code>MRKISS_MOD_FILES</code>      </dt><dd>All the module (<code>.mod</code>) files.  These will appear in your build directory.</dd>
+<dt><code>MRKISS_OBJ_FILES</code>      </dt><dd>All the object (<code>.obj</code> or <code>.o</code>) files.  These will appear in your build directory.</dd>
+<dt><code>MRKISS_STATIC_LIB_FILE</code></dt><dd>The name of the static library file.  It's not created by default.  It will appear in your build directory if it is listed as a dependency on one of your targets.</dd>
+<dt><code>MRKISS_SHARED_LIB_FILE</code></dt><dd>The name of the shared library file.  It's not created by default.  It will appear in your build directory if it is listed as a dependency on one of your targets.</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-makeinc-target" class="outline-4">
+<h4 id="makeinc-target"><span class="section-number-4">11.1.3.</span> Useful Targets</h4>
+<div class="outline-text-4" id="text-makeinc-target">
+<dl class="org-dl">
+<dt><code>all_mrkiss_lib</code>    </dt><dd>Builds the library files.</dd>
+<dt><code>all_mrkiss_mod</code>    </dt><dd>Builds the module (<code>.mod</code>) files</dd>
+<dt><code>all_mrkiss_obj</code>    </dt><dd>Builds the object (<code>.obj</code> or <code>.o</code>) files</dd>
+<dt><code>clean_mrkiss_mod</code>  </dt><dd>Deletes all the <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> module (<code>.mod</code>) files in the build directory.</dd>
+<dt><code>clean_mrkiss_obj</code>  </dt><dd>Deletes all the <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> object (<code>.obj</code> or <code>.o</code>) files in the build directory.</dd>
+<dt><code>clean_mrkiss_lib</code>  </dt><dd>Deletes all the library files in the build directory.</dd>
+<dt><code>clean_mrkiss</code>      </dt><dd>Simply calls the following targets: <code>clean_mrkiss_mod</code>, <code>clean_mrkiss_obj</code>, &amp; <code>clean_mrkiss_lib</code></dd>
+<dt><code>clean_multi_mrkiss</code></dt><dd>The previous clean targets will only remove products from the current platform.  For example, the <code>clean_mrkiss_obj</code> target will
+delete object files with an extension of <code>.obj</code> on windows and an extension of <code>.o</code> on UNIX'ish platforms.  I use the same directories to
+build for all platforms, so I sometimes want to clean up the build products from all platforms at once.  That's what this target will do.</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-makeinc-stlib" class="outline-4">
+<h4 id="makeinc-stlib"><span class="section-number-4">11.1.4.</span> Static Library</h4>
+<div class="outline-text-4" id="text-makeinc-stlib">
+<p>
+A rule to make a static library is included in <code>include.mk</code>.  A build rule like the following should build that library and link it to your executable.  Note
+I'm just including the library file on the command line instead of linker like options (i.e. <code>-L</code> and <code>-l</code> for GNU compilers).  That's because simply including
+the library on the command line is broadly supported across more compilers &#x2013; this way I don't have to document how to do the same thing for each one. ;)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #00fa9a; font-weight: bold;">your_program</span> : your_program.f90 $(<span style="color: #7fffd4;">MRKISS_STATIC_LIB_FILE</span>)
+    $(<span style="color: #7fffd4;">FC</span>) $(<span style="color: #7fffd4;">FFLAGS</span>) $<span style="color: #8470ff; font-weight: bold;">^</span> $(<span style="color: #7fffd4;">MRKISS_STATIC_LIB_FILE</span>) -o <span style="color: #00fa9a; font-weight: bold;">$</span><span style="color: #8470ff; font-weight: bold;">@</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-makeinc-dylib" class="outline-4">
+<h4 id="makeinc-dylib"><span class="section-number-4">11.1.5.</span> Dynamic Library (<code>.so</code> and <code>.dll</code> files)</h4>
+<div class="outline-text-4" id="text-makeinc-dylib">
+<p>
+A rule to make a static library is included in <code>include.mk</code>.  You can build it with the target <code>clean_mrkiss_lib</code>, or by using <code>$(MRKISS_SHARED_LIB_FILE)</code> as a
+dependency in your build rule.  As the options to link to a shared library differ wildly across platforms and compilers/linkers, I don't provide an example of
+how to do that.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-faq" class="outline-2">
+<h2 id="faq"><span class="section-number-2">12.</span> FAQ</h2>
+<div class="outline-text-2" id="text-faq">
+</div>
+<div id="outline-container-faq-name" class="outline-3">
+<h3 id="faq-name"><span class="section-number-3">12.1.</span> What's with the name?</h3>
+<div class="outline-text-3" id="text-faq-name">
+<p>
+It's an overlapping acronym
+</p>
+
+<p>
+MRKISS =&gt; MR RK KISS =&gt; Mitch Richling's Runge-Kutta Keep It Super Simple
+</p>
+
+<p>
+It amuses me, perhaps more than it should, having such a complex name for a super simple library.
+</p>
+</div>
+</div>
+<div id="outline-container-faq-fortran" class="outline-3">
+<h3 id="faq-fortran"><span class="section-number-3">12.2.</span> Why Fortran</h3>
+<div class="outline-text-3" id="text-faq-fortran">
+<p>
+I do most of my programming in other languages, but I really like Fortran specifically for this kind of work.  It's just good at math.  Especially when
+vectors and matrices are involved.
+</p>
+</div>
+</div>
+<div id="outline-container-faq-why" class="outline-3">
+<h3 id="faq-why"><span class="section-number-3">12.3.</span> Why did you write another ODE solver when so many good options exist?</h3>
+<div class="outline-text-3" id="text-faq-why">
+<p>
+For a long time I have had a few annoyances related available packages:
+</p>
+
+<ul class="org-ul">
+<li>Sharing results and code required others to install and learn a complex tool chain.</li>
+<li>Some generative art use cases drive some odd requirements that can be frustratingly difficult to do with some packages.</li>
+<li>Getting tools installed on new supercomputers and HPC clusters can be a challenge.  It can even be annoying in the cloud.</li>
+</ul>
+
+<p>
+The "last straw" was the frustration of spending four hours trying to get my normal technical computing environment deployed to new supercomputer with
+insufficient user privilege and a broken user space package manager.
+</p>
+
+<p>
+In short, sometimes I just want something to work without downloading and installing gigabytes of stuff.
+</p>
+
+<p>
+Oh.  And lastly, I enjoy writing this kind of code..
+</p>
+</div>
+</div>
+<div id="outline-container-faq-others" class="outline-3">
+<h3 id="faq-others"><span class="section-number-3">12.4.</span> Why don't you use package XYZ?</h3>
+<div class="outline-text-3" id="text-faq-others">
+<p>
+Don't get me wrong, I <b>do</b> use other packages!
+</p>
+
+<p>
+One of my favorites is <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia &amp; DifferentialEquations.jl</a>.  For bare-metal, I'm quite fond of
+SUNDIALS.  I also find myself using higher level tools like <a href="https://www.mitchr.me/SS/tools/index.html#stats">R</a>,
+<a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">MATLAB/Octave</a>, and <a href="https://www.mitchr.me/SS/tools/index.html#imath-gcas">Maple/Maxima</a>.
+</p>
+</div>
+</div>
+<div id="outline-container-faq-zotero" class="outline-3">
+<h3 id="faq-zotero"><span class="section-number-3">12.5.</span> What are those zotero links in the references?</h3>
+<div class="outline-text-3" id="text-faq-zotero">
+<p>
+Zotero is a bibliography tool.  On my computer, those links take me to the Zotero application with the reference in question highlighted.  This allows
+me to see the full bibliography entry and related documents (like personal notes, etc&#x2026;).
+</p>
+
+<p>
+Unfortunately they are not of much use to anyone but me.
+</p>
+</div>
+</div>
+<div id="outline-container-faq-samethods" class="outline-3">
+<h3 id="faq-samethods"><span class="section-number-3">12.6.</span> Are high order RK methods overkill for strange attractors?</h3>
+<div class="outline-text-3" id="text-faq-samethods">
+<p>
+Yes.  In fact, Euler's method is normally good enough for strange attractors.
+</p>
+</div>
+</div>
+<div id="outline-container-faq-need-more" class="outline-3">
+<h3 id="faq-need-more"><span class="section-number-3">12.7.</span> I need a more comprehensive solution.  Do you have advice?</h3>
+<div class="outline-text-3" id="text-faq-need-more">
+<p>
+My favorite is DifferentialEquations.jl.  It is
+comprehensive, well designed, fast, and pretty easy to use.  
+</p>
+
+<p>
+If you are looking for something you can call from C, C++, or Fortran then my first choice is SUNDIALS.  
+</p>
+
+<p>
+The <code>ode*</code> set of commands in <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">MATLAB/Octave</a> are easy to use, work well, and are extensively
+documented.  In addition, Octave has <code>lsode</code> built-in which is pretty cool.
+</p>
+
+<p>
+<a href="https://www.mitchr.me/SS/tools/index.html#imath-gcas">Maple</a> has a good selection of numerical solvers, a well designed interface, and rich ODE related
+graphics.  It also has some of the best symbolic ODE capabilities available.
+</p>
+
+<p>
+If you are doing statistics in combination with ODEs, then <a href="https://www.mitchr.me/SS/tools/index.html#stats">R</a> is a fantastic choice.
+</p>
+</div>
+</div>
+<div id="outline-container-faq-need-fast" class="outline-3">
+<h3 id="faq-need-fast"><span class="section-number-3">12.8.</span> I need something faster.  Do you have advice?</h3>
+<div class="outline-text-3" id="text-faq-need-fast">
+<p>
+All of the options listed for the question "<a href="#faq-need-more">I need a more comprehensive solution.  Do you have advice?</a>" are faster than
+<b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  In particular DifferentialEquations.jl and SUNDIALS.
+</p>
+
+<p>
+If you are looking for something small without a lot of dependencies, then you might like <a href="https://www.unige.ch/~hairer/software.html">Hairer's classic
+codes</a> &#x2013; they are faster than <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.
+</p>
+</div>
+</div>
+<div id="outline-container-faq-deps" class="outline-3">
+<h3 id="faq-deps"><span class="section-number-3">12.9.</span> It seems like things are used other than Fortran.  Are there really no external dependencies?</h3>
+<div class="outline-text-3" id="text-faq-deps">
+<p>
+I use several tools in the <b>development</b> of <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  In addition several of the examples use external tools to draw
+graphs.  None of these tools are required to compile and use the package because I have included all the generated code in the repository.  Here is a summary:
+</p>
+
+<dl class="org-dl">
+<dt>POSIX shell (<code>sh</code>)</dt><dd><ul class="org-ul">
+<li>Used to generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Used in some makefile constructs for code generation, plotting, testing, etc&#x2026;</li>
+</ul></dd>
+<dt>sed</dt><dd><ul class="org-ul">
+<li>Used to generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Generates <code>mrkiss_solvers_nt.f90</code> from <code>mrkiss_solvers_wt.f90</code>.</li>
+</ul></dd>
+<dt>ruby</dt><dd><ul class="org-ul">
+<li>Generates code and make files for testing</li>
+</ul></dd>
+<dt>R</dt><dd><ul class="org-ul">
+<li>Used to visualize output files</li>
+</ul></dd>
+<dt>GNUplot</dt><dd><ul class="org-ul">
+<li>Used to visualize output files</li>
+</ul></dd>
+<dt>Maple</dt><dd><ul class="org-ul">
+<li>Used for Butcher tableau computations.</li>
+</ul></dd>
+<dt>nomacs</dt><dd><ul class="org-ul">
+<li>Used to display images</li>
+</ul></dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+</div>
+</body>
+</html>

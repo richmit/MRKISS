@@ -1,0 +1,901 @@
+# -*- Mode:Org; Coding:utf-8; fill-column:158 -*-
+# ######################################################################################################################################################.H.S.##
+# FILE:        index.org
+#+TITLE:       MRKISS Library
+#+SUBTITLE:    MR RK (Runge-Kutta) KISS (Keep It Super Simple)
+#+AUTHOR:      Mitch Richling
+#+EMAIL:       http://www.mitchr.me/
+#+DATE:        2025-07-11 FIXME
+#+DESCRIPTION: DESCRIPTION FIXME
+#+KEYWORDS:    KEYWORDS FIXME
+#+LANGUAGE:    en
+#+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil 
+# FIXME: When uncommented the following line will render latex equations as images embedded into exported HTML, when commented MathJax will be used
+# #+OPTIONS:     tex:dvipng
+# FIXME: Select ONE of the three TODO lines below
+# #+SEQ_TODO:    ACTION:NEW(t!) ACTION:ASSIGNED(a!@) ACTION:WORK(w!) ACTION:HOLD(h@) | ACTION:FUTURE(f) ACTION:DONE(d!) ACTION:CANCELED(c!)
+# #+SEQ_TODO:    TODO:NEW(T!)                        TODO:WORK(W!)   TODO:HOLD(H@)   |                  TODO:DONE(D!)   TODO:CANCELED(C!)
+#+SEQ_TODO:    TODO:NEW(t)                         TODO:WORK(w)    TODO:HOLD(h)    | TODO:FUTURE(f)   TODO:DONE(d)    TODO:CANCELED(c)
+#+PROPERTY: header-args :eval never-export
+#+HTML_HEAD: <style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+# Change max-width to get wider output -- also note #content style below
+#+HTML_HEAD: <style>body { min-width: 500px; max-width: 1024px; }</style>
+#+HTML_HEAD: <style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+#+HTML_HEAD: <style>h1,h2,h3 { line-height: 1.4em; }</style>
+#+HTML_HEAD: <style>h1.title { font-size: 3em; }</style>
+#+HTML_HEAD: <style>.subtitle { font-size: 0.6em; }</style>
+#+HTML_HEAD: <style>h4,h5,h6 { font-size: 1em; }</style>
+#+HTML_HEAD: <style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+#+HTML_HEAD: <style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+#+HTML_HEAD: <style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+# Change the following to get wider output -- also note body style above
+#+HTML_HEAD: <style>#content { max-width: 60em; }</style>
+#+HTML_LINK_HOME: https://www.mitchr.me/
+#+HTML_LINK_UP: https://www.mitchr.me/FIXME
+# ######################################################################################################################################################.H.E.##
+
+#+ATTR_HTML: :border 2 solid #ccc :frame hsides :align center
+|          <r> | <l>                                          |
+|    *Author:* | /{{{author}}}/                               |
+|   *Updated:* | /{{{modification-time(%Y-%m-%d %H:%M:%S)}}}/ |
+| *Generated:* | /{{{time(%Y-%m-%d %H:%M:%S)}}}/              |
+#+ATTR_HTML: :align center
+Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
+
+#+TOC: headlines 2
+
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#   010  #    020  #    030  #    040  #    050  #    060  #    070  #    080  #    090  #    100  #    110  #    120  #    130  #    140  #    150  #    160  #    170  #    180  #    190  #    200  #    210  #    220  #    230  #    240  #    250  #    260  #    270  #    280  #    290  #
+# 345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: introduction
+:END:
+
+*[[https://github.com/richmit/MRKISS][~MRKISS~]]* is a *simple*, *tiny* library with *zero dependencies*[[#faq-deps][[*]]] that aims to make it easy to *use*
+and *experiment with* explicit Runge-Kutta methods.
+
+
+
+From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like SUNDIALS or DifferentialEquations.jl; however,
+it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and code with others others without
+asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things up and and running quickly when
+moving to a new supercomputer, cloud, or HPC cluster.
+
+Here is a complete example in 24 lines that solves [[https://www.mitchr.me/SS/lorenz/index.html][Lorenz's system]] and generates a CSV file of the results.
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/minimal.f90 | sed 's/; zotero.*$//; s/---------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+
+!-------------------------------------------------------------------------------------------------
+program minimal
+
+  use :: mrkiss_config,     only: rk, ik
+  use :: mrkiss_solvers_nt, only: steps_fixed_stab_nt
+  use :: mrkiss_utils,      only: print_t_y_sol
+  use :: mrkiss_erk_kutta_4,  only: a, b, c
+
+  implicit none
+
+  real(kind=rk),    parameter :: y_iv(3)  = [1.0_rk, 0.0_rk, 0.0_rk]
+  real(kind=rk),    parameter :: param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
+  real(kind=rk),    parameter :: t_end    = 50.0_rk
+
+  real(kind=rk)               :: t_y_sol(4, 10000)
+  integer(kind=ik)            :: status, istats(16)
+
+  call steps_fixed_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  call print_t_y_sol(status, t_y_sol, filename_o="minimal.csv")
+
+contains
+  
+  subroutine eq(status, dydt, y, param)
+    integer(kind=ik), intent(out) :: status
+    real(kind=rk),    intent(out) :: dydt(:)
+    real(kind=rk),    intent(in)  :: y(:)
+    real(kind=rk),    intent(in)  :: param(:)
+    dydt(1) = param(1)*(y(2)-y(1))       ! a(y-x)
+    dydt(2) = y(1)*(param(2)-y(3))-y(2)  ! x(b-z)-y
+    dydt(3) = y(1)*y(2)-param(3)*y(3)    ! xy-cy
+    status = 0
+  end subroutine eq
+
+end program minimal
+#+end_src
+
+If you just want to jump in, then take a look at the [[#qs-min][Quick Start]] section.
+
+
+* Features & Requirements
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
+
+The IVPs I work with are generally pretty well behavied:
+
+ - Generally non-stiff
+ - Time forward (\(\Delta{t} \ge 0\))
+ - Defined by a small (<50) set of equations expressable in closed form.
+
+Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
+chemical reactions, and electronic circuits.
+
+My motivation for solving IVPs generally revolve around /generative art/ and /visualization/.  You will actually see this in the code and feature set of the
+library.
+
+Things I care about:
+
+ - Simple to use for simple problems.
+ - Easily create custom solvers for the, admittedly bizarre, demands of generative art.
+ - Graceful response to evaluation failure in derivative functions
+ - A good selection of predefined RK methods
+ - Easy to use, hardwired methods for /fixed step size/ visualization use cases:
+   - Fixed \(t\) step size solvers
+   - Fixed \(\mathbf{y}\) space step size solvers
+ - Programmable step processing.  Examples:
+   - Stop the routine if the solution curve is too long in y-space
+   - Stop the routine if the step delta, or some components of it, are too long in y-space
+   - Stop the routine if the solution has returned to the IV
+   - Stop the routine if the solution intersects itself
+   - Provide an alternate y-delta and redo the step based on some condition.
+   - Trigger a bisection search for a t_delta fitting some condition based on t-space and/or y-space.  Examples:
+     - Find t_delta so that y-delta, or some components of it, are the perfect length.
+     - Find where a step crosses over a boundary in space  (ex: root finding)
+     - Find where a step approaches closest to a point (ex: like the problem's IV)
+ - Runge-Kutta Research
+   - Try out new RK methods by simply feeding the solvers a Butcher tableau.
+   - Directly accessible one step routines for assembling custom solvers.
+   - Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.
+   - Individual access to each method in an embedded tableau, and control over how each is used.
+   - Maple worksheets rational values, variable floating point approximations, and stability graphs for every Tableau.
+   - I have included a few RK methods more for research interests than practical usefulness.
+ - Easy deployment & sharing
+   - Easy to compile and tune for a new architecture.
+   - Zero external dependencies[[#faq-deps][[*]]] except a Fortran compiler.
+   - 100% standard Fortran that works with various compilers (Intel, Cray, NAG, gfortran, clang fortran, Nvidia, etc...).
+   - Simple text output that can be compressed and sent back home or shared with others.
+
+Things I don't care about:
+
+ - Usage error checking.  For example, the code makes no attempt to check that the user has supplied consistent Butcher tableau arguments, or that ~t_delta~
+   values are positive, etc...
+ - Performance.  I can generally perform hundreds of thousands of RK steps in a few milliseconds for the problems I work with.  This gives me a lot of
+   performance headroom allowing me to not worry about sophisticated techniques to avoid RK steps.  In fact, this library diverges from best practices in a
+   couple significant ways:
+    - I don't use interpolating polynomials for intrastep approximations.  I even have a bisection routine that takes an RK step for every bisection!
+    - I use generic loops to compute RK steps over the Butcher tableau instead of optimized formulas.
+    - Butcher tableau arrays are not sparse.  In fact, I even include the top and final row full of zeros!
+
+* Vocabulary & Definitions
+
+Within the confines of this software, we define a system of ODEs as:
+
+\[ \frac{\mathrm{d}\mathbf{y}}{\mathrm{d}t} =  \mathbf{f}(t, \mathbf{y}) =
+  \left[\begin{array}{c}
+   \frac{\mathrm{d}y_1}{\mathrm{d}t} \\
+   \vdots                            \\
+   \frac{\mathrm{d}y_n}{\mathrm{d}t} \\
+  \end{array}\right]                                                           =
+  \left[\begin{array}{c}
+   f_1(t, \mathbf{y}) \\
+   \vdots             \\
+   f_n(t, \mathbf{y}) \\
+  \end{array}\right]                                                           =
+  \left[\begin{array}{c}
+   f_1(t, [y_1, \cdots, y_n]^\mathrm{T}) \\
+   \vdots                                \\
+   f_n(t, [y_1, \cdots, y_n]^\mathrm{T}) \\
+  \end{array}\right] \]
+
+The goal is to find numerical values for the unknown function \(\mathbf{y}:\mathbb{R}\rightarrow\mathbb{R}^{n}\).
+
+We define an embedded explicit Runge-Kutta method via a set of coefficients organized into a /Butcher tableau/:
+
+\[ \begin{array}{l|llll}
+     c_1              & a_{11}      & a_{12}      & \dots  & a_{1s}      \\
+     c_2              & a_{21}      & a_{22}      & \dots  & a_{2s}      \\
+     c_3              & a_{31}      & a_{32}      & \dots  & a_{3s}      \\
+     \vdots           & \vdots      & \vdots      & \ddots & \vdots      \\
+     c_s              & a_{s1}      & a_{s2}      & \dots  & a_{ss}      \\
+     \hline                                       
+     \rule{0pt}{12pt} & \check{b}_1 & \check{b}_2 & \dots  & \check{b}_s \\
+                      &   \hat{b}_1 &   \hat{b}_2 & \dots  &   \hat{b}_s \\
+   \end{array} \]
+
+Explicit methods, which are the focus of *[[https://github.com/richmit/MRKISS][~MRKISS~]]*, have \(c_1=0\) and \(a_{ij}=0\) for \(i\le j\).  
+
+The word /embedded/ indicates that we actually have two explicit Runge-Kutta methods using the same \(\mathbf{a}\) matrix and \(\mathbf{c}\) vector.  That is
+to say each \(\mathbf{b}\) vector defines a unique, explicit Runge-Kutta method.  *[[https://github.com/richmit/MRKISS][~MRKISS~]]* supports both embedded and
+non-embedded (no \(\mathbf{\hat{b}}\) vector defined) methods.
+
+Given \(\Delta{t}\) and initial conditions (\(t_0\) and \(\mathbf{y_0}\)), we may form an approximation of \(\mathbf{y}(t_0+\Delta{t})\) as:
+
+\[ \mathbf{y}(t_0+\Delta{t}) \approx \mathbf{y_0}+\mathbf{\Delta\check{y}} \] 
+
+and, for embedded methods, an estimate of this approximation's error from:
+
+\[\vert\mathbf{\Delta\check{y}} - \mathbf{\Delta\hat{y}} \vert\]
+
+With \(\mathbf{\Delta\check{y}}\) and \(\mathbf{\Delta\hat{y}}\) (we only have \(\mathbf{\Delta\hat{y}}\) for embedded methods) computed as follows:
+
+\[ \begin{array}{l}
+        \mathbf{\Delta\check{y}} = \Delta{t}\sum_{i=1}^s \check{b}_i \mathbf{k}_i    \\
+        \mathbf{\Delta\hat{y}}   = \Delta{t}\sum_{i=1}^s \hat{b}_i   \mathbf{k}_i    \\
+   \end{array} \]
+
+and the \(\mathbf{k}_i\) defined as:
+
+\[ \mathbf{k}_i = \mathbf{f}\left(t + c_i \Delta{t},\, \mathbf{y} + \Delta{t} \sum_{j=1}^{i-1} a_{ij} \mathbf{k}_j\right) \]
+
+* Defining Runge-Kutta Methods in [[https://github.com/richmit/MRKISS][~MRKISS~]]
+:PROPERTIES:
+:CUSTOM_ID: def-method
+:END:
+
+In *[[https://github.com/richmit/MRKISS][~MRKISS~]]* an explicit Runge-Kutta method is specified by directly providing the Butcher tableau via arguments to
+subroutines.
+
+** Non-embedded Methods
+:PROPERTIES:
+:CUSTOM_ID: def-method-stab
+:END:
+
+ - ~a~  -- The \(\mathbf{a}\) matrix.
+ - ~c~  -- The \(\mathbf{c}\) vector.
+ - ~p~  -- The order of the method
+ - ~b~  -- The \(\mathbf{\check{b}}\) vector.
+
+Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes:
+
+ - ~size(a, 1) > 0~
+ - ~size(a, 1) == size(a, 2)~
+ - ~size(b, 1) == size(a, 1)~
+ - ~size(c, 1) == size(a, 1)~
+
+The value of ~p~ must be a positive integer.
+
+** Embedded Method
+:PROPERTIES:
+:CUSTOM_ID: def-method-etab
+:END:
+
+Instead of a single ~b~ and ~p~ argument, we have ~b1~, ~p1~, ~b2~, and ~p2~.
+
+ - ~a~  -- The \(\mathbf{a}\) matrix.
+ - ~c~  -- The \(\mathbf{c}\) vector.
+ - ~p1~ -- The order of the method associated with \(\mathbf{\check{b}}\) vector.
+ - ~b1~ -- The \(\mathbf{\check{b}}\) vector.
+ - ~p2~ -- The order of the method associated with the \(\mathbf{\hat{b}}\) vector (only for embedded methods).
+ - ~b2~ -- The \(\mathbf{\hat{b}}\) vector (only for embedded methods).
+
+Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes:
+
+ - ~size(a, 1) > 0~
+ - ~size(a, 1) == size(a, 2)~
+ - ~size(b1, 1) == size(a, 1)~
+ - ~size(b2, 1) == size(a, 1)~
+ - ~size(c, 1) == size(a, 1)~
+
+The values of ~p1~ and ~p2~ must be a positive integers.
+
+* Predefined Runge-Kutta Methods in [[https://github.com/richmit/MRKISS][~MRKISS~]]
+:PROPERTIES:
+:CUSTOM_ID: predefinedrk
+:END:
+
+*[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides several predefined methods in modules found in the
+"[[https://github.com/richmit/MRKISS/blob/master/lib][~lib/~]]" directory.  Each module defines a single tableau via parameters with names mirroring the
+Butcher Tableau arguments documented in the [[#def-method][previous section]].  In addition, these modules also have a parameter containing the number of
+steps for the method.
+
+ - ~s~  -- The number of stages for the entire method.
+
+The modules follow a simple naming conventions:
+  - They have one of two prefixes:
+    - ~mrkiss_eerk_~ :: The module contains an /embedded explicit Runge Kutta method/.
+    - ~mrkiss_erk_~  :: The module contains an /explicit Runge Kutta method/  -- i.e. it is *not* embedded.
+  - The names end with numbers indicating the orders of the ~b1~ and ~b2~ methods.  These numbers are separated from the rest of the name by an underscore.
+
+In addition to the parameters, the comments in these files normally include at least the following three sections:
+ - ~IMO~ :: Personal commentary about the method in question.  Please note this material is simply my personal opinion.
+ - ~Known Aliases~ :: These include names used in the literature as well as names in some common ODE software.
+ - ~References~ :: I try to include the original reference if I have it.  I also frequently include discussions found in other texts.
+
+To make all this concrete, here is what one of these modules looks like (~mrkiss_erk_kutta_4.f90~):
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../lib/mrkiss_erk_kutta_4.f90 | sed 's/; zotero.*$//; s/-----------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+
+!-----------------------------------------------------------------------------------------------------------------------
+!> Butcher tableau for the classic 4 stage Runge-Kutta method of O(4)
+!!
+!! IMO: Useful for low accuracy applications; however, I find I rarely use it.
+!!
+!! Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), & 'The Runge-Kutta Method'.
+!!
+!! References:
+!!   Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
+!!   Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
+!!   Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
+!!
+module mrkiss_erk_kutta_4
+  use mrkiss_config, only: rk, ik
+  implicit none
+  public
+  integer(kind=ik), parameter :: s      = 4
+  real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  &
+                                                    1.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  &
+                                                    0.0_rk, 1.0_rk, 0.0_rk, 0.0_rk,  &
+                                                    0.0_rk, 0.0_rk, 2.0_rk, 0.0_rk], [s, s]) / 2.0_rk
+  real(kind=rk),    parameter :: c(s)   = [         0.0_rk, 1.0_rk, 1.0_rk, 2.0_rk]          / 2.0_rk
+  integer(kind=ik), parameter :: p      = 4
+  real(kind=rk),    parameter :: b(s)   = [         1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk]          / 6.0_rk
+end module mrkiss_erk_kutta_4
+#+end_src
+
+
+Also note all the zeros.  KISS!  Seriously, it takes up a tiny bit of extra space and simplifies the code considerably...
+
+Each embedded method defines two Runge-Kutta methods.  Normally these two methods are used in conjunction to simultaneously estimate the solution and the
+error.  In this library, the ~p1~ & ~b1~ method is recommended for approximating the solution while the ~p2~ & ~b2~ method should be used to estimate error.
+This is a recommendation, and is in no way enforced by the library.  When the higher order method is used for the solution, we say we are using /local
+extrapolation/.  Note that each of the methods in an embedded Butcher tableau may be used individually as a non-embedded method.
+
+In addition to the module files, several maple worksheets may be found in the
+"[[https://github.com/richmit/MRKISS/blob/master/rk_methods_maple][~rk_methods_maple/~]]" directory.  The filenames mirror the names of the modules.  These
+worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the method's
+stability region.
+
+** Predefined Non-embedded Methods
+
+#+ATTR_HTML: :align center
+| Module Name                      | Order | Stages | Status |
+|                                  |  <c>  |  <c>   |  <c>   |
+|----------------------------------+-------+--------+--------|
+| ~mrkiss_erk_euler_1~             |   1   |   1    |  BOO   |
+| ~mrkiss_erk_midpoint_2~          |   2   |   2    |        |
+| ~mrkiss_erk_ralston_2~           |   2   |   2    |  BOO   |
+| ~mrkiss_erk_ralston_3~           |   3   |   3    |        |
+| ~mrkiss_erkknoth_wolke_3~        |   3   |   3    |        |
+| ~mrkiss_erk_ralston_4~           |   4   |   4    |        |
+| ~mrkiss_erk_kutta_4~             |   4   |   4    |        |
+| ~mrkiss_erk_kutta_three_eight_4~ |   4   |   4    |        |
+| ~mrkiss_erk_feagin_10~           |  10   |   17   |  EXP   |
+
+** Predefined Embedded Methods
+
+#+ATTR_HTML: :align center
+| Module Name                          | Ord_1 | Ord_2 | Stages | Status |
+|                                      |  <c>  |  <c>  |  <c>   |  <c>   |
+|--------------------------------------+-------+-------+--------+--------|
+| ~mrkiss_eerk_heun_euler_2_1~         |   2   |   1   |   2    |        |
+| ~mrkiss_eerk_bogacki_shampine_3_2~   |   3   |   2   |   4    |  BOO   |
+| ~mrkiss_eerk_fehlberg_4_5~           |   4   |   5   |   6    |        |
+| ~mrkiss_eerk_sofroniou_spaletta_4_3~ |   4   |   3   |   5    |  BOO   |
+| ~mrkiss_eerk_cash_karp_5_4~          |   5   |   4   |   6    |        |
+| ~mrkiss_eerk_bogacki_shampine_4_5~   |   4   |   5   |   7    |        |
+| ~mrkiss_eerk_dormand_prince_5_4~     |   5   |   4   |   7    |  BOO   |
+| ~mrkiss_eerk_fehlberg_7_8~           |   7   |   8   |   13   |        |
+| ~mrkiss_eerk_dormand_prince_7_8~     |   7   |   8   |   13   |  BOO   |
+| ~mrkiss_eerk_verner_9_8~             |   9   |   8   |   16   |  BOO   |
+
+* Homogeneous vs Non-Homogeneous IVPs Naming Conventions
+:PROPERTIES:
+:CUSTOM_ID: codecon-homo
+:END:
+
+Throughout the code you will see subroutines, functions, and types suffixed with "~_nt~" or "~_wt~":
+  - ~_nt~ stands for "No T" -- homogeneous problems.
+  - ~_wt~ stands for "With T" -- non-homogeneous problems.
+
+In the documentation below you will see "~_*t~" in subroutine names as shorthand to indicate both the "~_nt~" and "~_wt~" versions.
+
+* Providing ODE Equations For Solvers
+:PROPERTIES:
+:CUSTOM_ID: ode-func
+:END:
+
+The equation to be solved is implimented in a user provided subroutine with one of the following two signatures:
+
+For Non-Homogeneous (with t) problems:
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d' | sed 's/param) *$/param) ! Non-Homogeneous Case (with t)/;'
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+     subroutine deq_iface_wt(status, dydt, t, y, param) ! Non-Homogeneous Case (with t)
+       integer(kind=ik), intent(out) :: status
+       real(kind=rk),    intent(out) :: dydt(:)
+       real(kind=rk),    intent(in)  :: t
+       real(kind=rk),    intent(in)  :: y(:)
+       real(kind=rk),    intent(in)  :: param(:)
+#+end_src
+
+For Homogeneous (no t) problems:
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d;' | sed 's/t, //; s/_wt/_nt/g; /t *$/d;' | sed 's/param) *$/param)    ! Homogeneous Case (no t)/;'
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+     subroutine deq_iface_nt(status, dydt, y, param)    ! Homogeneous Case (no t)
+       integer(kind=ik), intent(out) :: status
+       real(kind=rk),    intent(out) :: dydt(:)
+       real(kind=rk),    intent(in)  :: y(:)
+       real(kind=rk),    intent(in)  :: param(:)
+#+end_src
+
+The arguments are as follows:
+#+begin_src text
+              status ........ A status code. A positive value indicates failure.
+                              Do not return a value larger than 255!
+              dydt .......... The value of for f(t, y) is returned in this argument
+              t ............. The time (only for deq_iface_wt)
+              y ............. Values for the dependent variables
+              param ......... Constant parameters
+#+end_src
+
+This function should return the value for \( \mathbf{f}(t, \mathbf{y}) \) in ~dydt~.  The value of ~status~ should be non-positive, \((-\infty, 0]\), if
+everything worked, and a value between 1 and 255 inclusive, \([1, 255]\), if something went wrong.  This value will be passed back via the ~status~ argument
+of higher level routines to indicate an error condition.
+
+* High Level Solvers
+:PROPERTIES:
+:CUSTOM_ID: hi-solvers
+:END:
+
+  - ~steps_adapt_etab_*t()~ uses traditional adaptive step size ::
+    - This solver is /very similar/ to solvers found in other ODE packages.
+    - Programmable step processing
+    - A programmable bisection option to solve for interesting t_delta values
+    - Sophisticated curve length computations, and exit options when a maximum length is reached
+    - It can end precisely on a time value, or it can simply quit when a step goes beyond a maximum time value.
+    - These last two could be achieved with the programmable step processing and bisection features, but these requirements are so common that is convenient
+      to have them directly available.
+  - ~steps_fixed_stab_*t()~ uses fixed time steps ::
+    - Solution points separated by fixed time steps allow animations of the solution to naturally display velocity.
+    - This is a good place to start when writing a custom solver.
+    - With most modern ODE packages, this would be done with interpolation.
+    - This routine has the option to use Richardson extrapolation.
+  - ~steps_condy_stab_*t()~ uses fixed (y-space) steps ::
+    - Produce solution points separated by fixed deltas in y-space, or some subset of y-space.
+    - This is a good place to start when writing a custom solver with a bisection step.
+    - A parametric plot of the first two components of a solution looks better when the points are uniformly separated.
+    - With most modern ODE packages, this would be done with interpolation.
+
+** High Level Solver Common Arguments
+:PROPERTIES:
+:CUSTOM_ID: hi-solvers-args
+:END:
+
+The first several arguments are common across the higher level solvers.
+
+*** Results (first three arguments):
+:PROPERTIES:
+:CUSTOM_ID: hi-solvers-args-out
+:END:
+
+  - ~status~ :: This is an integer return code.  A positive value means failure -- see the documentation for each routine for details.
+  - ~istats~ :: Statistics regarding the solver run.                
+    - ~istats(1)~: number of computed solution points
+    - ~istats(2)~: number of one_step_* calls
+    - ~istats(3)~: number of one_step_* calls triggered by y_delta length constraint
+    - ~istats(4)~: number of one_step_* calls triggered by y_delta error constraint
+    - ~istats(5)~: number of one_step_* calls triggered by step processing with new t_delta
+    - ~istats(6)~: number of one_step_* calls triggered by SDF bisection
+  - ~t_y_sol~ :: Array for solution.  Each *column* is a solution with the first element being \(t\) and the remaining elements containing \(\mathbf{y}\).  The
+     number of columns determines the maximum number of solution points.
+
+*** The IVP
+:PROPERTIES:
+:CUSTOM_ID: hi-solvers-args-ivp
+:END:
+
+  - ~deq~   :: The subroutine used to evaluate the derivative function
+  - ~t~     :: The initial value for \(t\).
+  - ~y~     :: The initial value for \(\mathbf{y}\).
+  - ~param~ :: A set of real values passed to ~deq()~.  These are usually constants in the defining equation.
+
+*** The Butcher Tableau
+:PROPERTIES:
+:CUSTOM_ID: hi-solvers-args-tab
+:END:
+
+These arguments vary a bit, but mirror the names documented in the [[#def-method][section on predefined Runge-Kutta methods]].
+
+* Low Level, One Step Solvers
+:PROPERTIES:
+:CUSTOM_ID: lo-solvers
+:END:
+
+Behind all of the above high level solvers are single step routines to carry out the step calculations.  These are handy for creating DIY solvers.  
+
+  - ~one_step_stab_*t()~  non-embedded RK methods
+  - ~one_richardson_step_stab_*t()~ uses Richardson extrapolation with non-embedded RK methods
+  - ~one_step_etab_*t()~ embedded RK methods
+  - ~one_step_rk4_*t()~ hardwired RK4 for unit tests
+  - ~one_step_rkf45_*t()~ hardwired RKF45 for unit tests
+
+* Quick Start -- The Absolute Minimum
+:PROPERTIES:
+:CUSTOM_ID: qs-min
+:END:
+
+If you are interested playing around with *[[https://github.com/richmit/MRKISS][~MRKISS~]]* as quickly as possible, then this section is for you.
+
+** Getting [[https://github.com/richmit/MRKISS][~MRKISS~]]
+:PROPERTIES:
+:CUSTOM_ID: qs-min-download
+:END:
+
+The first step is to download *[[https://github.com/richmit/MRKISS][~MRKISS~]]*.  The easiest way is to clone them with git:
+
+#+begin_src sh :exports code
+git clone 'https://github.com/richmit/MRKISS.git'
+#+end_src
+
+Alternatly, you could download the zip file: [[https://github.com/richmit/MRKISS/archive/refs/heads/master.zip][MRKISS]]
+
+** Check Out The Examples
+:PROPERTIES:
+:CUSTOM_ID: qs-min-examples
+:END:
+
+The newly cloned repository will contain a directory called "[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]]".  
+Change into the [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory.  
+
+#+begin_src sh :results output verbatum :exports code
+cd MRKISS/examples
+#+end_src
+
+*** Using something other than ~gfortran~
+:PROPERTIES:
+:CUSTOM_ID: qs-min-makefile
+:END:
+
+This directory contains a ~makefile~ used to build all the examples.  This ~makefile~ may require modification if you are not using ~gfortran~.  At the top of
+each makefile you will find something like this:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src makefile :eval never :tangle no"
+cat ../examples/makefile | grep -B 20 '^###*#$' | grep -A 20 '^###*##$' | sed -E 's/^####*/###############################################################/'
+#+end_src
+
+#+RESULTS:
+#+begin_src makefile :eval never :tangle no
+###############################################################
+MRKISS_PATH = ..
+
+ include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
+# include $(MRKISS_PATH)/make_includes/tools_flang.mk
+# include $(MRKISS_PATH)/make_includes/tools_ifx.mk
+# include $(MRKISS_PATH)/make_includes/tools_lfortran.mk
+# include $(MRKISS_PATH)/make_includes/tools_nvfortran.mk
+
+include $(MRKISS_PATH)/make_includes/include.mk
+###############################################################
+#+end_src
+
+If you want to use a different compiler, then you may be able to simply uncomment the appropriate line if your system is similarly configured to mine.  If you
+are unlucky, then you may need to set some variables.  In particular, you might need to comment out the ~gfortran~ include and add something like this:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src makefile :eval never :tangle no"
+~/core/codeBits/bin/src2orgListing ../make_includes/tools_nvfortran.mk
+#+end_src
+
+#+RESULTS:
+#+begin_src makefile :eval never :tangle no
+AR := ar
+FC := nvfortran
+FFLAGS := -O3 -Wall -W -Xlinker -z -Xlinker execstack
+FSHFLG = -o $(MRFFL_SHARED_LIB_FILE) -shared $(MRFFL_OBJ_FILES)
+#+end_src
+
+The only tricky one is the ~FSHFLG~ variable.  Luckily you only need the ~FSHFLG~ variable if you plan on building a shared library.  The shared library is
+completely unnecessary for making full use of the modules, so you you can safely ignore that one unless you really, really want to use a shared library. ~;)~
+
+*** Build An Example
+:PROPERTIES:
+:CUSTOM_ID: qs-min-examples-build
+:END:
+
+Once you have the ~makefile~ worked out, pick an example to build.  For example, we might try the one called
+[[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~lorenz.f90~]]:
+
+#+begin_src sh :results output verbatum :exports both
+make lorenz
+ls
+#+end_src
+
+#+RESULTS:
+#+begin_example
+rm -f mrkiss_config.obj mrkiss_config.mod
+gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
+rm -f mrkiss_utils.obj mrkiss_utils.mod
+gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_utils.f90 -o mrkiss_utils.obj
+rm -f mrkiss_solvers_wt.obj mrkiss_solvers_wt.mod
+......
+gfortran -O3 -Wsurprising -W -std=f2023 lorenz.f90 ....
+#+end_example
+
+Assuming the build worked, we can now run the code.  On UNIX systems the binary will be called ~lorenz~ and on Windows it will be called ~lorenz.exe~.  On
+Windows running it looks like this:
+
+#+begin_src sh :results output verbatum :exports both
+./lorenz.exe
+#+end_src
+
+#+RESULTS:
+#+begin_example
+             Milliseconds:      0.000
+          Solution Points:      10000
+     Total one_step calls:       9999
+Adjustment one_step calls:          0
+#+end_example
+
+That's not very interesting.  The fun part is what it did in the background.  The program should produce a file called ~lorenz.csv~ that has the solution
+curve.  If you have GNU Plot, you can graph it with something like this:
+
+#+begin_src sh
+gnuplot -p < lorenz.gplt
+#+end_src
+
+#+ATTR_HTML: :width 90% :align center
+[[file:pics/lorenz.png][file:pics/lorenz.png]]
+
+* Using [[https://github.com/richmit/MRKISS][~MRKISS~]] In Your Projects
+:PROPERTIES:
+:CUSTOM_ID: use-mrkiss
+:END:
+
+All of the code is in the module source files with no external dependencies at all.  So you just need to call the modules from your code, and then
+compile/link everything together.
+
+You can do that by just listing all the source files on the command line with most Fortran compilers.  For example, we could compile the
+[[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~lorenz.f90~]] example in the
+[[https://github.com/richmit/MRKISS/blob/master/examples/][~examples/~]] directly like this:
+
+#+begin_src sh :results output verbatum :exports code
+cd examples
+gfortran.exe lorenz.f90 ../src/*.f90
+#+end_src
+
+That said, most people will probably want to use a build system.  If GNU Make is your thing, then the files in the
+[[https://github.com/richmit/MRKISS/blob/master/make_include/][~make_include/~]] directory may be of help.  In particular the makefile fragment
+[[https://github.com/richmit/MRKISS/blob/master/make_include/include.mk][~include.mk~]] provides useful targets and variables.  The makefile in the
+[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory is a good guide on how to use
+[[https://github.com/richmit/MRKISS/blob/master/include.mk][~include.mk~]].  In essence you do the following in your makefile:
+
+  1) Set MRKISS_PATH in your makefile to the path of the *[[https://github.com/richmit/MRKISS][~MRKISS~]]* source directory -- that's the one with the ~include.mk~ file.
+  2) Set FC, FFLAGS, & AR if necessary -- most of the time you can use the defaults.
+  3) Include the "[[https://github.com/richmit/MRKISS/blob/master/make_include/include.mk][~include.mk~]]" file in the *[[https://github.com/richmit/MRKISS][~MRKISS~]]* source directory.
+  4) Add a build rule for your program.
+
+Your makefile will look something like this:
+
+#+begin_src makefile
+MRKISS_PATH = ../MRKISS
+
+# Set FC, FFLAGS, & AR here.  The include below has the settings I use on my system.
+include $(MRKISS_PATH)/tools_gfortran.mk
+
+include $(MRKISS_PATH)/include.mk
+
+your_program : your_program.f90 $(MRKISS_OBJ_FILES)
+    $(FC) $(FFLAGS) $^ -o $@
+#+end_src
+
+Note the rule for ~your_program~ in the makefile above takes the lazy approach of adding every *[[https://github.com/richmit/MRKISS][~MRKISS~]]* module as a
+dependency regardless of if your program actually needs them all.  This is how most people use the modules because it's simple.  The cost might be a couple
+seconds of extra compile time.  You can explicitly list out the modules in the makefile if you wish.  Such a rule might look like the following:
+
+#+begin_src makefile
+your_program : your_program.f90 mrkiss_config$(OBJ_SUFFIX) mrkiss_solvers_wt(OBJ_SUFFIX) mrkiss_utils$(OBJ_SUFFIX)
+    $(FC) $(FFLAGS) $^ -o $@
+#+end_src
+
+** Notes about ~include.mk~
+:PROPERTIES:
+:CUSTOM_ID: use-makeinc
+:END:
+
+*** Names of files
+:PROPERTIES:
+:CUSTOM_ID: makeinc-names
+:END:
+
+  - File extensions on Windows (outside of WSL) ::
+   - Executable files use ~.exe~
+   - Shared libraries use ~.dll~
+   - Object files will ~.obj~
+  - On UNIX systems (not including MSYS2) ::
+   - Executable files have no extension
+   - Shared libraries use ~.so~
+   - Object files will use ~.o~
+
+*** Useful Variables
+:PROPERTIES:
+:CUSTOM_ID: makeinc-vars
+:END:
+
+  - ~MRKISS_MOD_FILES~       :: All the module (~.mod~) files.  These will appear in your build directory.
+  - ~MRKISS_OBJ_FILES~       :: All the object (~.obj~ or ~.o~) files.  These will appear in your build directory.
+  - ~MRKISS_STATIC_LIB_FILE~ :: The name of the static library file.  It's not created by default.  It will appear in your build directory if it is listed as a dependency on one of your targets.
+  - ~MRKISS_SHARED_LIB_FILE~ :: The name of the shared library file.  It's not created by default.  It will appear in your build directory if it is listed as a dependency on one of your targets.
+
+*** Useful Targets
+:PROPERTIES:
+:CUSTOM_ID: makeinc-target
+:END:
+
+  - ~all_mrkiss_lib~     :: Builds the library files.
+  - ~all_mrkiss_mod~     :: Builds the module (~.mod~) files
+  - ~all_mrkiss_obj~     :: Builds the object (~.obj~ or ~.o~) files
+  - ~clean_mrkiss_mod~   :: Deletes all the *[[https://github.com/richmit/MRKISS][~MRKISS~]]* module (~.mod~) files in the build directory.
+  - ~clean_mrkiss_obj~   :: Deletes all the *[[https://github.com/richmit/MRKISS][~MRKISS~]]* object (~.obj~ or ~.o~) files in the build directory.
+  - ~clean_mrkiss_lib~   :: Deletes all the library files in the build directory.
+  - ~clean_mrkiss~       :: Simply calls the following targets: ~clean_mrkiss_mod~, ~clean_mrkiss_obj~, & ~clean_mrkiss_lib~
+  - ~clean_multi_mrkiss~ :: The previous clean targets will only remove products from the current platform.  For example, the ~clean_mrkiss_obj~ target will
+                           delete object files with an extension of ~.obj~ on windows and an extension of ~.o~ on UNIX'ish platforms.  I use the same directories to
+                           build for all platforms, so I sometimes want to clean up the build products from all platforms at once.  That's what this target will do.
+
+*** Static Library
+:PROPERTIES:
+:CUSTOM_ID: makeinc-stlib
+:END:
+
+A rule to make a static library is included in ~include.mk~.  A build rule like the following should build that library and link it to your executable.  Note
+I'm just including the library file on the command line instead of linker like options (i.e. ~-L~ and ~-l~ for GNU compilers).  That's because simply including
+the library on the command line is broadly supported across more compilers -- this way I don't have to document how to do the same thing for each one. ;)
+
+#+begin_src makefile
+your_program : your_program.f90 $(MRKISS_STATIC_LIB_FILE)
+    $(FC) $(FFLAGS) $^ $(MRKISS_STATIC_LIB_FILE) -o $@
+#+end_src
+
+*** Dynamic Library (~.so~ and ~.dll~ files)
+:PROPERTIES:
+:CUSTOM_ID: makeinc-dylib
+:END:
+
+A rule to make a static library is included in ~include.mk~.  You can build it with the target ~clean_mrkiss_lib~, or by using ~$(MRKISS_SHARED_LIB_FILE)~ as a
+dependency in your build rule.  As the options to link to a shared library differ wildly across platforms and compilers/linkers, I don't provide an example of
+how to do that.
+
+* FAQ
+:PROPERTIES:
+:CUSTOM_ID: faq
+:END:
+
+** What's with the name?
+:PROPERTIES:
+:CUSTOM_ID: faq-name
+:END:
+
+It's an overlapping acronym
+
+MRKISS => MR RK KISS => Mitch Richling's Runge-Kutta Keep It Super Simple
+
+It amuses me, perhaps more than it should, having such a complex name for a super simple library.
+
+** Why Fortran
+:PROPERTIES:
+:CUSTOM_ID: faq-fortran
+:END:
+
+I do most of my programming in other languages, but I really like Fortran specifically for this kind of work.  It's just good at math.  Especially when
+vectors and matrices are involved.
+
+** Why did you write another ODE solver when so many good options exist? 
+:PROPERTIES:
+:CUSTOM_ID: faq-why
+:END:
+
+For a long time I have had a few annoyances related available packages:
+
+  - Sharing results and code required others to install and learn a complex tool chain.
+  - Some generative art use cases drive some odd requirements that can be frustratingly difficult to do with some packages.
+  - Getting tools installed on new supercomputers and HPC clusters can be a challenge.  It can even be annoying in the cloud.
+
+The "last straw" was the frustration of spending four hours trying to get my normal technical computing environment deployed to a new supercomputer with
+insufficient user privilege and a broken user space package manager.
+
+In short, sometimes I just want something to work without downloading and installing gigabytes of stuff.
+
+Oh.  And lastly, I enjoy writing this kind of code..
+
+** Why don't you use package XYZ?
+:PROPERTIES:
+:CUSTOM_ID: faq-others
+:END:
+
+Don't get me wrong, I *do* use other packages!
+
+One of my favorites is [[https://www.mitchr.me/SS/tools/index.html#imath-inla][Julia & DifferentialEquations.jl]].  For bare-metal, I'm quite fond of
+SUNDIALS.  I also find myself using higher level tools like [[https://www.mitchr.me/SS/tools/index.html#stats][R]],
+[[https://www.mitchr.me/SS/tools/index.html#imath-inla][MATLAB/Octave]], and [[https://www.mitchr.me/SS/tools/index.html#imath-gcas][Maple/Maxima]].
+
+** What are those zotero links in the references?
+:PROPERTIES:
+:CUSTOM_ID: faq-zotero
+:END:
+
+Zotero is a bibliography tool.  On my computer, those links take me to the Zotero application with the reference in question highlighted.  This allows
+me to see the full bibliography entry and related documents (like personal notes, etc...).
+
+Unfortunately they are not of much use to anyone but me.
+
+** Are high order RK methods overkill for strange attractors?
+:PROPERTIES:
+:CUSTOM_ID: faq-samethods
+:END:
+
+Yes.  In fact, Euler's method is normally good enough for strange attractors.
+
+** I need a more comprehensive solution.  Do you have advice?
+:PROPERTIES:
+:CUSTOM_ID: faq-need-more
+:END:
+
+My favorite is DifferentialEquations.jl.  It is
+comprehensive, well designed, fast, and pretty easy to use.  
+
+If you are looking for something you can call from C, C++, or Fortran then my first choice is SUNDIALS.  
+
+The ~ode*~ set of commands in [[https://www.mitchr.me/SS/tools/index.html#imath-inla][MATLAB/Octave]] are easy to use, work well, and are extensively
+documented.  In addition, Octave has ~lsode~ built-in which is pretty cool.
+
+[[https://www.mitchr.me/SS/tools/index.html#imath-gcas][Maple]] has a good selection of numerical solvers, a well designed interface, and rich ODE related
+graphics.  It also has some of the best symbolic ODE capabilities available.
+
+If you are doing statistics in combination with ODEs, then [[https://www.mitchr.me/SS/tools/index.html#stats][R]] is a fantastic choice.
+
+** I need something faster.  Do you have advice?
+:PROPERTIES:
+:CUSTOM_ID: faq-need-fast
+:END:
+
+All of the options listed for the question "[[I need a more comprehensive solution.  Do you have advice?][I need a more comprehensive solution.  Do you have advice?]]" are faster than
+*[[https://github.com/richmit/MRKISS][~MRKISS~]]*.  In particular DifferentialEquations.jl and SUNDIALS.
+
+If you are looking for something small without a lot of dependencies, then you might like [[https://www.unige.ch/~hairer/software.html][Hairer's classic
+codes]] -- they are faster than *[[https://github.com/richmit/MRKISS][~MRKISS~]]*.
+
+** It seems like things are used other than Fortran.  Are there really no external dependencies?
+:PROPERTIES:
+:CUSTOM_ID: faq-deps
+:END:
+
+I use several tools in the *development* of *[[https://github.com/richmit/MRKISS][~MRKISS~]]*.  In addition several of the examples use external tools to draw
+graphs.  None of these tools are required to compile and use the package because I have included all the generated code in the repository.  Here is a summary:
+
+  - POSIX shell (~sh~) ::
+    - Used to generate ~one_step_stab_wt~ from ~one_step_etab_wt~ in =mrkiss_solvers_wt.f90=.
+    - Used in some makefile constructs for code generation, plotting, testing, etc...
+  - sed ::
+    - Used to generate ~one_step_stab_wt~ from ~one_step_etab_wt~ in =mrkiss_solvers_wt.f90=.
+    - Generates =mrkiss_solvers_nt.f90= from =mrkiss_solvers_wt.f90=.
+  - ruby ::
+    - Generates code and make files for testing
+  - R ::
+    - Used to visualize output files
+  - GNUplot ::
+    - Used to visualize output files
+  - Maple ::
+    - Used for Butcher tableau computations.
+  - nomacs ::
+    - Used to display images
