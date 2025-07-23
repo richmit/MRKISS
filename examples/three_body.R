@@ -89,3 +89,28 @@ gp <- ggplot() +
   labs(title='Restricted Three Body Problem', x='x', y='y', col='', subtitle='Moon orbit intersection') +
   coord_fixed()
 ggsave(filename='three_body_moon.png', plot=gp, width=1024, height=1024, units='px', dpi=150)
+
+gp <- ggplot() + 
+  geom_point(data=ftDat %>% filter(t<0.15), aes(x=y1, y=y2-0.02, col='Fixed Time Steps')) + 
+  geom_path( data=ftDat %>% filter(t<0.15), aes(x=y1, y=y2-0.02, col='Fixed Time Steps')) +
+  geom_point(data=fyDat %>% filter(t<0.15), aes(x=y1, y=y2, col='Fixed Position Steps')) +
+  geom_path( data=fyDat %>% filter(t<0.15), aes(x=y1, y=y2, col='Fixed Position Steps')) +
+  labs(title='Restricted Three Body Problem', x='x', y='y', col='', subtitle='Fixed Position Steps vs Fixed Time Steps (position)') +
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
+        axis.title.y=element_blank(), axis.text.y=element_blank(),
+        legend.position = c(0.2, 0.7)) +
+  coord_fixed()
+ggsave(filename='three_body_fixed_pos.png', plot=gp, width=1024, height=1024, units='px', dpi=150)
+
+gp <- ggplot() + 
+  geom_point(data=ftDat %>% filter(t<0.15), aes(x=y4-0.12, y=y3-0.12, col='Fixed Time Steps')) + 
+  geom_path( data=ftDat %>% filter(t<0.15), aes(x=y4-0.12, y=y3-0.12, col='Fixed Time Steps')) +
+  geom_point(data=fyDat %>% filter(t<0.15), aes(x=y4, y=y3, col='Fixed Position Steps')) +
+  geom_path( data=fyDat %>% filter(t<0.15), aes(x=y4, y=y3, col='Fixed Position Steps')) +
+  labs(title='Restricted Three Body Problem', x='x', y='y', col='', subtitle='Fixed Position Steps vs Fixed Time Steps (velocity)') +
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
+        axis.title.y=element_blank(), axis.text.y=element_blank(),
+        legend.position = c(0.7, 0.7)) +
+  coord_fixed()
+ggsave(filename='three_body_fixed_vel.png', plot=gp, width=1024, height=1024, units='px', dpi=150)
+

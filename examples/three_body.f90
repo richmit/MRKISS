@@ -98,7 +98,8 @@ program three_body
   call print_t_y_sol(status, t_y_sol, filename_o="three_body_fixed_t.csv", end_o=istats(1))
 
   call system_clock(c_beg)
-  call steps_condy_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
+  call steps_condy_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+                           y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   call system_clock(c_end)
   print '(a)',       "Fixed y_delta run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)

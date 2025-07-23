@@ -53,9 +53,9 @@ three_body_adaptive_ylen.csv three_body_adaptive_maxt.csv three_body_adaptive_mo
 	./three_body$(EXE_SUFFIX)
 	ls -l three_body_*.csv
 
-three_body.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png &: three_body_adaptive_ylen.csv three_body_adaptive_maxt.csv three_body_adaptive_moon.csv three_body_adaptive.csv three_body_fixed_y.csv three_body_fixed_t.csv three_body.R
+three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png &: three_body_adaptive_ylen.csv three_body_adaptive_maxt.csv three_body_adaptive_moon.csv three_body_adaptive.csv three_body_fixed_y.csv three_body_fixed_t.csv three_body.R
 	R --no-save --no-echo -q -f three_body.R
-	$(IMG_VIEWER) three_body.png three_body_adaptive_maxt.csv three_body_ylen.png three_body_moon.png &
+	$(IMG_VIEWER) three_body.png three_body_adaptive_maxt.csv three_body_ylen.png three_body_moon.png three_body_fixed_pos.png three_body_fixed_vel.png &
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
