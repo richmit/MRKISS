@@ -6,8 +6,8 @@
 #+AUTHOR:      Mitch Richling
 #+EMAIL:       http://www.mitchr.me/
 #+DATE:        2025-07-11 FIXME
-#+DESCRIPTION: DESCRIPTION FIXME
-#+KEYWORDS:    KEYWORDS FIXME
+#+DESCRIPTION: MRKISS Documentation
+#+KEYWORDS:    RK runge kutta ode ivp
 #+LANGUAGE:    en
 #+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil 
 # FIXME: When uncommented the following line will render latex equations as images embedded into exported HTML, when commented MathJax will be used
@@ -33,7 +33,7 @@
 # Change the following to get wider output -- also note body style above
 #+HTML_HEAD: <style>#content { max-width: 60em; }</style>
 #+HTML_LINK_HOME: https://www.mitchr.me/
-#+HTML_LINK_UP: https://www.mitchr.me/FIXME
+#+HTML_LINK_UP: https://github.com/richmit/MRKISS/
 # ######################################################################################################################################################.H.E.##
 
 #+ATTR_HTML: :border 2 solid #ccc :frame hsides :align center

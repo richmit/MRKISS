@@ -3,13 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-22 Tue 23:44 -->
+<!-- 2025-07-23 Wed 14:53 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
 <meta name="author" content="Mitch Richling" />
-<meta name="description" content="DESCRIPTION FIXME" />
-<meta name="keywords" content="KEYWORDS FIXME" />
+<meta name="description" content="MRKISS Documentation" />
+<meta name="keywords" content="RK runge kutta ode ivp" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -243,7 +243,7 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="https://www.mitchr.me/FIXME"> UP </a>
+ <a accesskey="h" href="https://github.com/richmit/MRKISS/"> UP </a>
  |
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-22 23:44:36</i></td>
+<td class="org-left"><i>2025-07-23 14:53:03</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-22 23:44:50</i></td>
+<td class="org-left"><i>2025-07-23 14:53:06</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orgd063964">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orgd335f2d">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#org1dc5cd4">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org917c7bb">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org358348d">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org673a082">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -484,8 +484,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd063964" class="outline-2">
-<h2 id="orgd063964"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orgd335f2d" class="outline-2">
+<h2 id="orgd335f2d"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -733,8 +733,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-org1dc5cd4" class="outline-3">
-<h3 id="org1dc5cd4"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org358348d" class="outline-3">
+<h3 id="org358348d"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -823,8 +823,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org917c7bb" class="outline-3">
-<h3 id="org917c7bb"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org673a082" class="outline-3">
+<h3 id="org673a082"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1185,7 +1185,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org42395bc">
+<pre class="example" id="orgd85ace3">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1205,7 +1205,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="org8ef6f8b">
+<pre class="example" id="orgfc71412">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1223,7 +1223,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org9b6d5f4" class="figure">
+<div id="orgeb7fdfb" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
