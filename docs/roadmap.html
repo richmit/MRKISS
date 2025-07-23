@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-23 Wed 14:59 -->
+<!-- 2025-07-23 Wed 16:43 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -216,21 +216,19 @@
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">MRKISS Roadmap</h1>
-<div id="outline-container-orga60ebb3" class="outline-2">
-<h2 id="orga60ebb3"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-org2b94c87" class="outline-2">
+<h2 id="org2b94c87"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work; however, I have pretty poor test coverage for the high level solvers.  The examples work, but are not
 well documented yet and don't cover all the use cases I want to cover.  I have several functionality improvements I want to implement.
 </p>
-</div>
-</div>
-<div id="outline-container-orga6c8c43" class="outline-2">
-<h2 id="orga6c8c43"><span class="section-number-2">2.</span> Add "multi-solver"</h2>
-<div class="outline-text-2" id="text-2">
+
+<ul class="org-ul">
+<li>Add "multi-solver" option for steps_fixed_stab_*t()
 <ul class="org-ul">
 <li>Give multiple IVs or parameters.  Get multiple curves.</li>
-<li>Put answer in larger t_y_sol() array
+<li>Put answer in larger t_y_sol array
 <ul class="org-ul">
 <li>Only one t row</li>
 </ul></li>
@@ -238,48 +236,31 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 <ul class="org-ul">
 <li>y_dim_o &#x2013; give the number of components in y</li>
 <li>Option to print multiple files or one big one</li>
+<li>Option to select which solution sets to print</li>
 </ul></li>
 <li>Should be easy to use OpenMP for this.</li>
 <li>Think about how to do this with coarrays.</li>
-</ul>
-</div>
-</div>
-<div id="outline-container-orgceed22a" class="outline-2">
-<h2 id="orgceed22a"><span class="section-number-2">3.</span> Add ARKODE_VERNER_10_6_7 &amp; ARKODE_VERNER_13_7_8</h2>
-<div class="outline-text-2" id="text-3">
+<li>utility: Add a t_y_sol array to a multi-t_y_sol</li>
+</ul></li>
+<li>Add ARKODE_VERNER_10_6_7 &amp; ARKODE_VERNER_13_7_8
 <ul class="org-ul">
 <li>BT: <a href="https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7">https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7</a></li>
 <li>BT: <a href="https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8">https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8</a></li>
 <li>Check to see if they are on Stone's or Verner's site.</li>
-</ul>
-</div>
-</div>
-<div id="outline-container-org40879de" class="outline-2">
-<h2 id="org40879de"><span class="section-number-2">4.</span> Add diagonally implicit methods</h2>
-</div>
-
-<div id="outline-container-org0e33e3f" class="outline-2">
-<h2 id="org0e33e3f"><span class="section-number-2">5.</span> Add example documentation page</h2>
-<div class="outline-text-2" id="text-5">
+</ul></li>
+<li>Add example documentation page
 <ul class="org-ul">
 <li>Document examples</li>
 <li>Show pictures</li>
-</ul>
-</div>
-</div>
-<div id="outline-container-orgd4cf411" class="outline-2">
-<h2 id="orgd4cf411"><span class="section-number-2">6.</span> Make sure examples are comprehensive and useful</h2>
-</div>
-
-<div id="outline-container-org7b038ad" class="outline-2">
-<h2 id="org7b038ad"><span class="section-number-2">7.</span> Add "sloppy" option to steps_condy_stab_wt</h2>
-</div>
-
-<div id="outline-container-org29038ca" class="outline-2">
-<h2 id="org29038ca"><span class="section-number-2">8.</span> Add tests for high level solvers</h2>
-<div class="outline-text-2" id="text-8">
+</ul></li>
+<li>Make sure examples are comprehensive and useful</li>
+<li>Add "sloppy" option to steps_condy_stab_*t</li>
+<li>Add option to not error out steps_condy_stab_*t()</li>
+<li>Add option to print diagnostics to steps_condy_stab_*t()</li>
+<li>Consider "verbosity" options for high level solvers.</li>
+<li>Add tests for high level solvers
 <ul class="org-ul">
-<li>steps_fixed_stab_wt
+<li>steps_fixed_stab_*t()
 <ul class="org-ul">
 <li>with richardson</li>
 <li>without richardson</li>
@@ -287,7 +268,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 <li>t_delta_o</li>
 <li>t_end_o</li>
 </ul></li>
-<li>steps_condy_stab_wt
+<li>steps_condy_stab_*t()
 <ul class="org-ul">
 <li>t_delta_min_o</li>
 <li>y_delta_len_tol_o</li>
@@ -297,7 +278,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 <li>y_sol_len_max_o</li>
 <li>t_max_o</li>
 </ul></li>
-<li>steps_adapt_etab_wt
+<li>steps_adapt_etab_*t()
 <ul class="org-ul">
 <li>t_max_o</li>
 <li>t_end_o</li>
@@ -320,6 +301,33 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 <li>new_t_delta</li>
 <li>sdf_flags</li>
 </ul></li>
+</ul></li>
+</ul></li>
+<li>Finalize step-size and error computation in steps_adapt_etab_*t()</li>
+<li>Double Check Order Values
+<ul class="org-ul">
+<li><del>mrkiss_eerk_bogacki_shampine_3_2.f90</del></li>
+<li>mrkiss_eerk_bogacki_shampine_4_5.f90</li>
+<li><del>mrkiss_eerk_cash_karp_5_4.f90</del></li>
+<li><del>mrkiss_eerk_dormand_prince_5_4.f90</del></li>
+<li>mrkiss_eerk_dormand_prince_7_8.f90</li>
+<li><del>mrkiss_eerk_fehlberg_4_5.f90</del></li>
+<li><del>mrkiss_eerk_fehlberg_7_8.f90</del></li>
+<li><del>mrkiss_eerk_heun_euler_2_1.f90</del></li>
+<li><del>mrkiss_eerk_sofroniou_spaletta_4_3.f90</del></li>
+<li><del>mrkiss_eerk_tsitouras_arkode_5_4.f90</del></li>
+<li><del>mrkiss_eerk_verner_1978_6_5.f90</del></li>
+<li><del>mrkiss_eerk_verner_2010_6_5.f90</del></li>
+<li><del>mrkiss_eerk_verner_9_8.f90</del></li>
+<li><del>mrkiss_erk_euler_1.f90</del></li>
+<li><del>mrkiss_erk_feagin_10.f90</del></li>
+<li><del>mrkiss_erk_knoth_wolke_3.f90</del></li>
+<li><del>mrkiss_erk_kutta_4.f90</del></li>
+<li><del>mrkiss_erk_kutta_three_eight_4.f90</del></li>
+<li><del>mrkiss_erk_midpoint_2.f90</del></li>
+<li><del>mrkiss_erk_ralston_2.f90</del></li>
+<li><del>mrkiss_erk_ralston_3.f90</del></li>
+<li><del>mrkiss_erk_ralston_4.f90</del></li>
 </ul></li>
 </ul>
 </div>

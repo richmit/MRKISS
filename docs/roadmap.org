@@ -7,7 +7,7 @@
 #+DESCRIPTION: Roadmap & TODO list for MRKISS
 #+KEYWORDS:    MRKISS
 #+LANGUAGE:    en
-#+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil 
+#+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil
 # FIXME: When uncommented the following line will render latex equations as images embedded into exported HTML, when commented MathJax will be used
 # #+OPTIONS:     tex:dvipng
 # FIXME: Select ONE of the three TODO lines below
@@ -39,68 +39,85 @@
 Right now everything that is implemented seems to work; however, I have pretty poor test coverage for the high level solvers.  The examples work, but are not
 well documented yet and don't cover all the use cases I want to cover.  I have several functionality improvements I want to implement.
 
-* Add "multi-solver"
-
- - Give multiple IVs or parameters.  Get multiple curves.
- - Put answer in larger t_y_sol() array
-   - Only one t row
- - print_t_y_sol() needs to understand multi-solutions
-   - y_dim_o -- give the number of components in y
-   - Option to print multiple files or one big one
- - Should be easy to use OpenMP for this.
- - Think about how to do this with coarrays.
-
-* Add ARKODE_VERNER_10_6_7 & ARKODE_VERNER_13_7_8
-  - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7
-  - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8
-  - Check to see if they are on Stone's or Verner's site.
-
-* Add diagonally implicit methods
-
-* Add example documentation page
-
- - Document examples
- - Show pictures
-
-* Make sure examples are comprehensive and useful
-
-* Add "sloppy" option to steps_condy_stab_wt
-
-* Add tests for high level solvers
-
- - steps_fixed_stab_wt
-   - with richardson
-   - without richardson
-   - max_pts_o
-   - t_delta_o
-   - t_end_o
- - steps_condy_stab_wt
-   - t_delta_min_o
-   - y_delta_len_tol_o
-   - max_bisections_o
-   - y_delta_len_idxs_o
-   - max_pts_o
-   - y_sol_len_max_o
-   - t_max_o
- - steps_adapt_etab_wt
-   - t_max_o
-   - t_end_o
-   - t_delta_ini_o
-   - t_delta_min_o
-   - t_delta_max_o
-   - t_delta_fac_min_o
-   - t_delta_fac_max_o
-   - t_delta_fac_fdg_o
-   - error_tol_abs_o
-   - error_tol_rel_o
-   - max_pts_o
-   - max_bisections_o
-   - sdf_o
-   - sdf_tol_o
-   - stepp_o
-     - status
-     - end_run
-     - new_t_delta
-     - sdf_flags
-
-
+ - Add "multi-solver" option for steps_fixed_stab_*t()
+   - Give multiple IVs or parameters.  Get multiple curves.
+   - Put answer in larger t_y_sol array
+     - Only one t row
+   - print_t_y_sol() needs to understand multi-solutions
+     - y_dim_o -- give the number of components in y
+     - Option to print multiple files or one big one
+     - Option to select which solution sets to print
+   - Should be easy to use OpenMP for this.
+   - Think about how to do this with coarrays.
+   - utility: Add a t_y_sol array to a multi-t_y_sol
+ - Add ARKODE_VERNER_10_6_7 & ARKODE_VERNER_13_7_8
+   - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7
+   - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8
+   - Check to see if they are on Stone's or Verner's site.
+ - Add example documentation page
+  - Document examples
+  - Show pictures
+ - Make sure examples are comprehensive and useful
+ - Add "sloppy" option to steps_condy_stab_*t
+ - Add option to not error out steps_condy_stab_*t()
+ - Add option to print diagnostics to steps_condy_stab_*t()
+ - Consider "verbosity" options for high level solvers.
+ - Add tests for high level solvers
+   - steps_fixed_stab_*t()
+     - with richardson
+     - without richardson
+     - max_pts_o
+     - t_delta_o
+     - t_end_o
+   - steps_condy_stab_*t()
+     - t_delta_min_o
+     - y_delta_len_tol_o
+     - max_bisections_o
+     - y_delta_len_idxs_o
+     - max_pts_o
+     - y_sol_len_max_o
+     - t_max_o
+   - steps_adapt_etab_*t()
+     - t_max_o
+     - t_end_o
+     - t_delta_ini_o
+     - t_delta_min_o
+     - t_delta_max_o
+     - t_delta_fac_min_o
+     - t_delta_fac_max_o
+     - t_delta_fac_fdg_o
+     - error_tol_abs_o
+     - error_tol_rel_o
+     - max_pts_o
+     - max_bisections_o
+     - sdf_o
+     - sdf_tol_o
+     - stepp_o
+       - status
+       - end_run
+       - new_t_delta
+       - sdf_flags
+ - Finalize step-size and error computation in steps_adapt_etab_*t()
+ - +Double Check Order Values+
+   - +mrkiss_eerk_bogacki_shampine_3_2.f90+
+   - +mrkiss_eerk_bogacki_shampine_4_5.f90+
+   - +mrkiss_eerk_cash_karp_5_4.f90+
+   - +mrkiss_eerk_dormand_prince_5_4.f90+
+   - +mrkiss_eerk_dormand_prince_7_8.f90+
+   - +mrkiss_eerk_fehlberg_4_5.f90+
+   - +mrkiss_eerk_fehlberg_7_8.f90+
+   - +mrkiss_eerk_heun_euler_2_1.f90+
+   - +mrkiss_eerk_sofroniou_spaletta_4_3.f90+
+   - +mrkiss_eerk_tsitouras_arkode_5_4.f90+
+   - +mrkiss_eerk_verner_1978_6_5.f90+
+   - +mrkiss_eerk_verner_2010_6_5.f90+
+   - +mrkiss_eerk_verner_9_8.f90+
+   - +mrkiss_erk_euler_1.f90+
+   - +mrkiss_erk_feagin_10.f90+
+   - +mrkiss_erk_knoth_wolke_3.f90+
+   - +mrkiss_erk_kutta_4.f90+
+   - +mrkiss_erk_kutta_three_eight_4.f90+
+   - +mrkiss_erk_midpoint_2.f90+
+   - +mrkiss_erk_ralston_2.f90+
+   - +mrkiss_erk_ralston_3.f90+
+   - +mrkiss_erk_ralston_4.f90+
