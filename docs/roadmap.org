@@ -58,6 +58,8 @@ I have lot of stuff in the works.  This page has my personal notes on the subjec
  - Document examples
  - Show pictures
 
+* Make sure examples are comprehensive and useful
+
 * Add "sloppy" option to steps_condy_stab_wt
 
 * Add tests for high level solvers
