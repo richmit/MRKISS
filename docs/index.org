@@ -68,7 +68,7 @@ it has the rather charming feature of being super simple and self contained.  Th
 asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things up and and running quickly when
 moving to a new supercomputer, cloud, or HPC cluster.
 
-Here is a complete example in 24 lines that solves [[https://www.mitchr.me/SS/lorenz/index.html][Lorenz's system]] and generates a CSV file of the results.
+Here is a complete example in 23 lines that solves [[https://www.mitchr.me/SS/lorenz/index.html][Lorenz's system]] and generates a CSV file of the results.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
 ~/core/codeBits/bin/src2noHeader ../examples/minimal.f90 | sed 's/; zotero.*$//; s/---------------------------------$//;'
@@ -80,10 +80,10 @@ Here is a complete example in 24 lines that solves [[https://www.mitchr.me/SS/lo
 !-------------------------------------------------------------------------------------------------
 program minimal
 
-  use :: mrkiss_config,     only: rk, ik
-  use :: mrkiss_solvers_nt, only: steps_fixed_stab_nt
-  use :: mrkiss_utils,      only: print_t_y_sol
-  use :: mrkiss_erk_kutta_4,  only: a, b, c
+  use :: mrkiss_config,      only: rk, ik
+  use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
+  use :: mrkiss_utils,       only: print_t_y_sol
+  use :: mrkiss_erk_kutta_4, only: a, b, c
 
   implicit none
 
@@ -104,9 +104,7 @@ contains
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)
-    dydt(1) = param(1)*(y(2)-y(1))       ! a(y-x)
-    dydt(2) = y(1)*(param(2)-y(3))-y(2)  ! x(b-z)-y
-    dydt(3) = y(1)*y(2)-param(3)*y(3)    ! xy-cy
+    dydt = [ param(1)*(y(2)-y(1)), y(1)*(param(2)-y(3))-y(2), y(1)*y(2)-param(3)*y(3) ]
     status = 0
   end subroutine eq
 

@@ -59,14 +59,7 @@ contains
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)
-    ! dydt(1) = param(1)*(y(2)-y(1))       ! a(y-x)
-    ! dydt(2) = y(1)*(param(2)-y(3))-y(2)  ! x(b-z)-y
-    ! dydt(3) = y(1)*y(2)-param(3)*y(3)    ! xy-cy
-
-
     dydt = [ param(1)*(y(2)-y(1)), y(1)*(param(2)-y(3))-y(2), y(1)*y(2)-param(3)*y(3) ]
-
-
     status = 0
   end subroutine eq
 
