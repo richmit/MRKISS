@@ -3,4 +3,6 @@
 [[https://github.com/richmit/MRKISS][MRKISS]] is a *tiny* library with *zero dependencies* that aims to make it easy to
 *use* and *experiment with* explicit Runge-Kutta methods.
 
+[[https://richmit.github.io/MRKISS/][The docs]]
+
 * This project is under construction
