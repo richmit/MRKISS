@@ -1,7 +1,6 @@
 * This project is under construction
 
-*[[https://github.com/richmit/MRKISS][~MRKISS~]]* is a *simple*,
-*tiny* library with *zero dependencies* that aims to make it easy to
-*use* *and *experiment with* explicit Runge-Kutta methods.
+*~[[https://github.com/richmit/MRKISS][MRKISS]]~* is a *tiny* library with *zero dependencies* that aims to make it easy to
+*use* and *experiment with* explicit Runge-Kutta methods.
 
 * This project is under construction
