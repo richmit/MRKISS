@@ -39,7 +39,7 @@
 !! IMO: This is an interesting method in that one of the goals was to detect stiffness.  That said, it's a very good general
 !!      purpose method of order 4.  This is my recommendation for methods of order 4.
 !!
-!! Known Aliases: 'ARKODE_BOGACKI_SHAMPINE_4_2_3' (SUNDIALS)
+!! Known Aliases: 'ARKODE_SOFRONIOU_SPALETTA_5_3_4' (SUNDIALS)
 !!
 !! References:
 !!   Sofroniou & Spaletta (2004); Construction of Explicit Runge-Kutta Pairs with Stiffness Detection; Math. and Comp. Modelling 40 (11); p1157-1169; zotero://select/items/0_52X4WPJK
