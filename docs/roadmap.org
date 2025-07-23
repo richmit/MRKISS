@@ -47,9 +47,10 @@ I have lot of stuff in the works.  This page has my personal notes on the subjec
  - Should be easy to use OpenMP for this.
  - Think about how to do this with coarrays.
 
-* Add ARKODE_VERNER_10_6_7
+* Add ARKODE_VERNER_10_6_7 & ARKODE_VERNER_13_7_8
   - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7
-  - Check to see if it is on Stone's or Verner's site.
+  - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8
+  - Check to see if they are on Stone's or Verner's site.
 
 * Add diagonally implicit methods
 
