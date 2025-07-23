@@ -34,7 +34,10 @@
 #+HTML_LINK_UP: https://github.com/richmit/MRKISS/
 # ######################################################################################################################################################.H.E.##
 
-I have lot of stuff in the works.  This page has my personal notes on the subject.
+* Summary
+
+Right now everything that is implemented seems to work; however, I have pretty poor test coverage for the high level solvers.  The examples work, but are not
+well documented yet and don't cover all the use cases I want to cover.  I have several functionality improvements I want to implement.
 
 * Add "multi-solver"
 
