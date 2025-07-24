@@ -501,6 +501,8 @@ The first several arguments are common across the higher level solvers.
     - ~istats(4)~: number of one_step_* calls triggered by y_delta error constraint
     - ~istats(5)~: number of one_step_* calls triggered by step processing with new t_delta
     - ~istats(6)~: number of one_step_* calls triggered by SDF bisection
+    - ~istats(7)~: number of times bisection failed because of max_bisect_o
+    - ~istats(8)~: number of times bisection failed because target was not contained
   - ~t_y_sol~ :: Array for solution.  Each *column* is a solution with the first element being \(t\) and the remaining elements containing \(\mathbf{y}\).  The
      number of columns determines the maximum number of solution points.
 
