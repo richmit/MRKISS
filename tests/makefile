@@ -132,9 +132,7 @@ tc2_plot_error.png tc2_plot_sol.png &: tc2.R data_tc2
 
 ####################################################################################################
 .PHONY: tests
-tests : $(TESTS) 
-
-#test_tc1 test_tc2
+tests : $(TESTS) test_tc1 test_tc2
 
 .PHONY: clean
 clean : clean_multi_mrkiss clean_tc1 clean_tc2
