@@ -34,6 +34,7 @@
 adDat <- fread('three_body_adaptive.csv')
 ftDat <- fread('three_body_fixed_t.csv')
 fyDat <- fread('three_body_fixed_y.csv')
+fuDat <- fread('three_body_unfixed_y.csv')
 
 erDat <- data.table(b=c('Earth'), x=c(0), y=c(0))
 moDat <- data.table(x=cos(seq(0, 2*pi, 0.01)), y=sin(seq(0, 2*pi, 0.01)))
@@ -114,3 +115,14 @@ gp <- ggplot() +
   coord_fixed()
 ggsave(filename='three_body_fixed_vel.png', plot=gp, width=1024, height=1024, units='px', dpi=150)
 
+gp <- ggplot() + 
+  geom_point(data=fuDat %>% filter(t<0.15), aes(x=y1, y=y2-0.02, col='Fixed Position Steps With Limited Bisections')) + 
+  geom_path( data=fuDat %>% filter(t<0.15), aes(x=y1, y=y2-0.02, col='Fixed Position Steps With Limited Bisections')) +
+  geom_point(data=fyDat %>% filter(t<0.15), aes(x=y1, y=y2, col='Fixed Position Steps')) +
+  geom_path( data=fyDat %>% filter(t<0.15), aes(x=y1, y=y2, col='Fixed Position Steps')) +
+  labs(title='Restricted Three Body Problem', x='x', y='y', col='', subtitle='Fixed Position Steps With And Without Limited Bisections (position)') +
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
+        axis.title.y=element_blank(), axis.text.y=element_blank(),
+        legend.position = c(0.2, 0.7)) +
+  coord_fixed()
+ggsave(filename='three_body_unfixed_pos.png', plot=gp, width=1024, height=1024, units='px', dpi=150)

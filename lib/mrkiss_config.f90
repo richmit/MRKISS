@@ -52,7 +52,7 @@ module mrkiss_config
   real(kind=rk),    parameter, public    :: t_delta_ai         = 1.0e-4_rk                       !< t_delta ai default
   real(kind=rk),    parameter, public    :: error_tol_abs_ai   = 1.0e-5_rk                       !< error_tol_abs ai default
   real(kind=rk),    parameter, public    :: error_tol_rel_ai   = 1.0e-3_rk                       !< error_tol_rel ai default
-  integer(kind=ik), parameter, public    :: max_bisections_ai  = 1000                            !< max_bisections ai default
+  integer(kind=ik), parameter, public    :: max_bisect_ai      = 1000                            !< max_bisect ai default
   real(kind=rk),    parameter, public    :: t_delta_fac_min_ai = 0.5_rk                          !< t_delta_fac_min ai default
   real(kind=rk),    parameter, public    :: t_delta_fac_max_ai = 2.0_rk                          !< t_delta_fac_max ai default
   real(kind=rk),    parameter, public    :: t_delta_fac_fdg_ai = 0.5_rk                          !< t_delta_fac_fdg ai default

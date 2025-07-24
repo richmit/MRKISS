@@ -465,14 +465,16 @@ contains
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
-  !!                        - 1024-1055 .. Error in this routine
+  !!                        - 1024-1055 .. Error in this routine (no_bisect_error_o is not present)
   !!                                        - 1024 .. t_delta_min yielded a longer step than t_delta_max
-  !!                                        - 1025 .. More than max_bisections were performed during a step
+  !!                                        - 1025 .. no_bisect_error_o not present and max_bisect_o violated
   !!                        - others ..... Other values are not allowed
   !! istats(:) ........... Integer statistics for run
   !!                        istats(1): number of computed solution points
   !!                        istats(2): number of one_step_* calls not triggerd by an event
   !!                        istats(3): number of one_step_* calls triggered by y_delta length constraint
+  !!                        istats(7): number of times bisection failed because of max_bisect_o
+  !!                        istats(8): number of times bisection failed because target was not contained
   !! t_y_sol ............. Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
   !!                        Each COLUMN is a solution.  
   !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
@@ -487,12 +489,13 @@ contains
   !! y_delta_len_tol_o ... How close we have to get to y_delta_len_targ.  Default is y_delta_len_targ/100
   !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
   !! max_pts_o ........... Maximum number of solutions to put in t_y_sol.
-  !! max_bisections_o .... Maximum number of bisection iterations to perform for each step.  Default: max_bisections_ai
+  !! max_bisect_o ........ Maximum number of bisection iterations to perform for each step.  Default: max_bisect_ai
+  !! no_bisect_error_o ... If present, do not exit on bisection errors
   !! y_sol_len_max_o ..... Maximum length of the solution curve
   !! t_max_o ............. Maximum value for t
   !!
-  subroutine steps_condy_stab_wt(status, istats, t_y_sol, deq, t, y, param, a, b, c, y_delta_len_targ, t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisections_o, y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
-    use mrkiss_config, only: rk, ik, t_delta_tiny, max_bisections_ai
+  subroutine steps_condy_stab_wt(status, istats, t_y_sol, deq, t, y, param, a, b, c, y_delta_len_targ, t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
+    use mrkiss_config, only: rk, ik, t_delta_tiny, max_bisect_ai
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(16)
@@ -501,21 +504,21 @@ contains
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_max
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o
-    integer(kind=ik), optional, intent(in)  :: max_pts_o, max_bisections_o, y_delta_len_idxs_o(:)
+    integer(kind=ik), optional, intent(in)  :: max_pts_o, max_bisect_o, no_bisect_error_o, y_delta_len_idxs_o(:)
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
-    integer(kind=ik)                        :: max_bisections
+    integer(kind=ik)                        :: max_bisect
     integer                                 :: max_pts, cur_pnt_idx, biter
     real(kind=rk)                           :: y_delta_tol, t_delta_min, y_sol_len
-    real(kind=rk)                           :: t_cv, t_delta_min_tmp, t_delta_max_tmp, y_delta_min_length, y_delta_max_length, y_delta_cur_length, t_delta_cur
-    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), y_delta_min(size(y, 1)), y_delta_max(size(y, 1)), y_delta_cur(size(y, 1))
+    real(kind=rk)                           :: t_cv, bs_tmp1_t_delta, bs_tmp2_t_delta, bs_tmp1_y_delta_len, bs_tmp2_y_delta_len, bs_tmpc_y_delta_len, bs_tmpc_t_delta
+    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), bs_tmp1_y_delta(size(y, 1)), bs_tmp2_y_delta(size(y, 1)), bs_tmpc_y_delta(size(y, 1))
     ! Process arguments
     max_pts = size(t_y_sol, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
     t_delta_min = t_delta_tiny
     if (present(t_delta_min_o)) t_delta_min = t_delta_min_o
-    max_bisections = max_bisections_ai
-    if (present(max_bisections_o)) max_bisections = max_bisections_o
+    max_bisect = max_bisect_ai
+    if (present(max_bisect_o)) max_bisect = max_bisect_o
     y_delta_tol = y_delta_len_targ / 100.0_rk
     if (present(y_delta_len_tol_o)) y_delta_tol = y_delta_len_tol_o
     ! Compute Solution
@@ -527,76 +530,97 @@ contains
     t_y_sol(2:, 1) = y_cv
     istats(1) = istats(1) + 1
     do cur_pnt_idx=2,max_pts
-       ! Compute lower t_delta
-       t_delta_min_tmp = t_delta_min
-       call one_step_stab_wt(status, y_delta_min, deq, t_cv, y_cv, param, a, b, c, t_delta_min_tmp)
+       ! Compute t_delta 1
+       bs_tmp1_t_delta = t_delta_min
+       call one_step_stab_wt(status, bs_tmp1_y_delta, deq, t_cv, y_cv, param, a, b, c, bs_tmp1_t_delta)
        istats(2) = istats(2) + 1
        if (status > 0) return
        if (present(y_delta_len_idxs_o)) then
-          y_delta_min_length = norm2(y_delta_min(y_delta_len_idxs_o))
+          bs_tmp1_y_delta_len = norm2(bs_tmp1_y_delta(y_delta_len_idxs_o))
        else
-          y_delta_min_length = norm2(y_delta_min)
+          bs_tmp1_y_delta_len = norm2(bs_tmp1_y_delta)
        end if
        ! Compute upper t_delta
-       t_delta_max_tmp = t_delta_max
-       call one_step_stab_wt(status, y_delta_max, deq, t_cv, y_cv, param, a, b, c, t_delta_max_tmp)
+       bs_tmp2_t_delta = t_delta_max
+       call one_step_stab_wt(status, bs_tmp2_y_delta, deq, t_cv, y_cv, param, a, b, c, bs_tmp2_t_delta)
        istats(2) = istats(2) + 1
        if (status > 0) return
        if (present(y_delta_len_idxs_o)) then
-          y_delta_max_length = norm2(y_delta_max(y_delta_len_idxs_o))
+          bs_tmp2_y_delta_len = norm2(bs_tmp2_y_delta(y_delta_len_idxs_o))
        else
-          y_delta_max_length = norm2(y_delta_max)
+          bs_tmp2_y_delta_len = norm2(bs_tmp2_y_delta)
        end if
+       ! Swap if required
+       if (bs_tmp2_y_delta_len < bs_tmp1_y_delta_len) then
+          bs_tmpc_t_delta     = bs_tmp1_t_delta
+          bs_tmp1_t_delta     = bs_tmp2_t_delta
+          bs_tmp2_t_delta     = bs_tmpc_t_delta
+          bs_tmpc_y_delta_len = bs_tmp1_y_delta_len
+          bs_tmp1_y_delta_len = bs_tmp2_y_delta_len
+          bs_tmp2_y_delta_len = bs_tmpc_y_delta_len
+          bs_tmpc_y_delta     = bs_tmp1_y_delta
+          bs_tmp1_y_delta     = bs_tmp2_y_delta
+          bs_tmp2_y_delta     = bs_tmpc_y_delta
+       end if
+       ! Initial "current" values for bisection and no-bisection
+       bs_tmpc_t_delta     = bs_tmp2_t_delta
+       bs_tmpc_y_delta_len = bs_tmp2_y_delta_len
+       bs_tmpc_y_delta     = bs_tmp2_y_delta
        ! Bisect if required
-       if ((y_delta_min_length < y_delta_len_targ) .and. (y_delta_max_length > y_delta_len_targ)) then
-          t_delta_cur        = t_delta_max_tmp
-          y_delta_cur_length = y_delta_max_length
-          y_delta_cur        = y_delta_max
-          biter              = 1
-          do while (abs(y_delta_cur_length - y_delta_len_targ) > y_delta_tol)
-             t_delta_cur = (t_delta_max_tmp + t_delta_min_tmp) / 2.0_rk
-             call one_step_stab_wt(status, y_delta_cur, deq, t_cv, y_cv, param, a, b, c, t_delta_cur)
+       if ((bs_tmp1_y_delta_len < y_delta_len_targ) .and. (bs_tmp2_y_delta_len > y_delta_len_targ)) then
+          biter = 1
+          do while (abs(bs_tmpc_y_delta_len - y_delta_len_targ) > y_delta_tol)
+             if (biter >  max_bisect) then
+                istats(7) = istats(7) + 1
+                if (present(no_bisect_error_o)) then
+                   exit
+                else
+                   status = 1025
+                   return
+                end if
+             end if
+             bs_tmpc_t_delta = (bs_tmp2_t_delta + bs_tmp1_t_delta) / 2.0_rk
+             call one_step_stab_wt(status, bs_tmpc_y_delta, deq, t_cv, y_cv, param, a, b, c, bs_tmpc_t_delta)
              istats(3) = istats(3) + 1
              if (status > 0) return
              if (present(y_delta_len_idxs_o)) then
-                y_delta_cur_length = norm2(y_delta_cur(y_delta_len_idxs_o))
+                bs_tmpc_y_delta_len = norm2(bs_tmpc_y_delta(y_delta_len_idxs_o))
              else
-                y_delta_cur_length = norm2(y_delta_cur)
+                bs_tmpc_y_delta_len = norm2(bs_tmpc_y_delta)
              end if
-             if (y_delta_cur_length < y_delta_len_targ) then
-                y_delta_min_length = y_delta_cur_length
-                t_delta_min_tmp = t_delta_cur
+             if (bs_tmpc_y_delta_len < y_delta_len_targ) then
+                bs_tmp1_y_delta_len = bs_tmpc_y_delta_len
+                bs_tmp1_t_delta = bs_tmpc_t_delta
              else
-                y_delta_max_length = y_delta_cur_length
-                t_delta_max_tmp = t_delta_cur
-             end if
-             if (biter >  max_bisections) then
-                status = 1025
-                return
+                bs_tmp2_y_delta_len = bs_tmpc_y_delta_len
+                bs_tmp2_t_delta = bs_tmpc_t_delta
              end if
              biter = biter + 1;
           end do
-          y_cv = y_cv + y_delta_cur
-          t_cv = t_cv + t_delta_cur
-          t_y_sol(1, cur_pnt_idx) = t_cv
-          t_y_sol(2:, cur_pnt_idx) = y_cv
-          istats(1) = istats(1) + 1
-          y_sol_len = y_sol_len + y_delta_cur_length
-          if (present(y_sol_len_max_o)) then
-             if (y_sol_len > y_sol_len_max_o) then
-                status = 0
-                return
-             end if
-          end if
-          if (present(t_max_o)) then
-             if (t_cv > t_max_o) then
-                status = 0
-                return
-             end if
-          end if
        else
-          status = 1024
-          return
+          istats(8) = istats(8) + 1
+          if (.not. (present(no_bisect_error_o))) then
+             status = 1024
+             return
+          end if
+       end if
+       y_cv = y_cv + bs_tmpc_y_delta
+       t_cv = t_cv + bs_tmpc_t_delta
+       t_y_sol(1, cur_pnt_idx) = t_cv
+       t_y_sol(2:, cur_pnt_idx) = y_cv
+       istats(1) = istats(1) + 1
+       y_sol_len = y_sol_len + bs_tmpc_y_delta_len
+       if (present(y_sol_len_max_o)) then
+          if (y_sol_len > y_sol_len_max_o) then
+             status = 0
+             return
+          end if
+       end if
+       if (present(t_max_o)) then
+          if (t_cv > t_max_o) then
+             status = 0
+             return
+          end if
        end if
     end do
     status = 0
@@ -605,25 +629,22 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple adaptive steps with an embedded RK method using a relatively traditional step size controls.
   !!
-  !! Modes:
-  !!  - Always adpat on every step
-  !!  - Never adapt -- like steps_fixed_stab_wt()
-  !!  - Adapt for fixed size y_delta -- like steps_condy_stab_wt()
-  !!
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 256-511 .... Error in stepp_o
   !!                                - 512-767 .... Error in sdf_o
   !!                                - 1056-1119 .. Error in this routine
+  !!                                               - 1056 .... no_bisect_error_o not present and max_bisect_o violated
   !!                                - others ..... Other values are not allowed
   !! istats(:) ................... Integer statstics for run
   !!                                istats(1): number of computed solution points
   !!                                istats(2): number of one_step_* calls not triggerd by an event
-  !!                                istats(3): number of one_step_* calls triggered by y_delta length constraint
   !!                                istats(4): number of one_step_* calls triggered by y_delta error constraint
   !!                                istats(5): number of one_step_* calls triggered by step processing with new t_delta
   !!                                istats(6): number of one_step_* calls triggered by SDF bisection
+  !!                                istats(7): number of times bisection failed because of max_bisect_o
+  !!                                istats(8): number of times bisection failed because target was not contained
   !! t_y_sol(:,:) ................ Array for solution.
   !!                                Each COLUMN is a solution.
   !!                                The first element of each solution is the t variable with rest the elements of y.
@@ -644,7 +665,8 @@ contains
   !! error_tol_abs_o(:) .......... Absolute error tolerance. Default: error_tol_abs_ai
   !! error_tol_rel_o(:) .......... Relative error tolerance. Default: error_tol_rel_ai
   !! max_pts_o ................... Maximum number of solutions to put in t_y_sol.
-  !! max_bisections_o ............ Maximum number of bisection iterations to perform for each step. Default: max_bisections_ai
+  !! max_bisect_o ................ Maximum number of bisection iterations to perform for each step. Default: max_bisect_ai
+  !! no_bisect_error_o ........... If present, do not exit on bisection errors
   !! sdf_o ....................... SDF function.  Used to set new t_delta for a step.  This subroutine may trigger one or
   !!                               more of the follwoing actions:
   !!                                - status>0      => Immediately returns without doing anything else propagating status to caller.
@@ -657,7 +679,7 @@ contains
   !! 
   subroutine steps_adapt_etab_wt(status, istats, t_y_sol, deq, t, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, t_delta_ini_o, &
                                  t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o,            &
-                                 error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisections_o, sdf_o, sdf_tol_o, stepp_o)
+                                 error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o, no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
     use mrkiss_config
     implicit none
     ! Arguments
@@ -670,7 +692,7 @@ contains
     real(kind=rk),             optional, intent(in)  :: t_max_o, t_end_o, t_delta_ini_o, t_delta_min_o, t_delta_max_o
     real(kind=rk),             optional, intent(in)  :: t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o
     real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
-    integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisections_o
+    integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisect_o, no_bisect_error_o
     procedure(sdf_iface_wt),   optional              :: sdf_o
     real(kind=rk),             optional, intent(in)  :: sdf_tol_o
     procedure(stepp_iface_wt), optional              :: stepp_o
@@ -684,7 +706,7 @@ contains
     real(kind=rk)                                    :: sp_new_t_delta, bs_tmp1_t_delta, bs_tmp2_t_delta, bs_tmp_t_delta
     real(kind=rk)                                    :: bs_tmp_y_delta(size(y, 1)), bs_tmp1_dist, bs_tmp2_dist, bs_tmp_dist
     logical                                          :: t_delta_end_p
-    integer(kind=ik)                                 :: max_bisections, sp_end_run, sp_sdf_flags, bs_itr
+    integer(kind=ik)                                 :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
     ! Process arguments
     error_tol_abs = error_tol_abs_ai
     if (present(error_tol_abs_o)) then
@@ -706,8 +728,8 @@ contains
     if (present(sdf_tol_o)) sdf_tol = sdf_tol_o
     t_delta_fac_fdg = t_delta_fac_fdg_ai
     if (present(t_delta_fac_fdg_o))  t_delta_fac_fdg = t_delta_fac_fdg_o
-    max_bisections = max_bisections_ai
-    if (present(max_bisections_o)) max_bisections = max_bisections_o
+    max_bisect = max_bisect_ai
+    if (present(max_bisect_o)) max_bisect = max_bisect_o
     t_delta_fac_max = t_delta_fac_max_ai
     if (present(t_delta_fac_max_o)) t_delta_fac_max = t_delta_fac_max_o
     t_delta_fac_min = t_delta_fac_min_ai
@@ -827,13 +849,21 @@ contains
                       bs_tmp2_dist    = bs_tmp_dist
                    end if
                    bs_itr = bs_itr + 1;
-                   if (bs_itr > max_bisections) then
-                      status = 1025
-                      return
+                   if (bs_itr > max_bisect) then
+
+                      istats(7) = istats(7) + 1
+                      if (present(no_bisect_error_o)) then
+                         exit
+                      else
+                         status = 1025
+                         return
+                      end if
                    end if
                 end do
                 t_delta  = bs_tmp_t_delta
                 y1_delta = bs_tmp_y_delta
+             else
+                istats(8) = istats(8) + 1
              end if
           end if
        end if

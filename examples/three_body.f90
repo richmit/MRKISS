@@ -94,8 +94,6 @@ program three_body
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
-  print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   call print_t_y_sol(status, t_y_sol, filename_o="three_body_fixed_t.csv", end_o=istats(1))
 
   call system_clock(c_beg)
@@ -108,8 +106,24 @@ program three_body
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
   print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
-  print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
+  print '(a,i10)',   "              bisection limits: ", istats(7)
+  print '(a,i10)',   "           bad bisection start: ", istats(8)
   call print_t_y_sol(status, t_y_sol, filename_o="three_body_fixed_y.csv", end_o=istats(1))
+
+  call system_clock(c_beg)
+  call steps_condy_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+                           y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk, &
+                           max_bisect_o=2, no_bisect_error_o=1)
+  call system_clock(c_end)
+  print '(a)',       "Fixed y_delta with limited bisections run: "
+  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "                        Status: ", status
+  print '(a,i10)',   "               Solution Points: ", istats(1)
+  print '(a,i10)',   "          Total one_step calls: ", istats(2)
+  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
+  print '(a,i10)',   "              bisection limits: ", istats(7)
+  print '(a,i10)',   "           bad bisection start: ", istats(8)
+  call print_t_y_sol(status, t_y_sol, filename_o="three_body_unfixed_y.csv", end_o=istats(1))
 
   call system_clock(c_beg)
   call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
@@ -121,7 +135,6 @@ program three_body
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   call print_t_y_sol(status, t_y_sol, filename_o="three_body_adaptive.csv", end_o=istats(1))
 
@@ -136,7 +149,6 @@ program three_body
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   call print_t_y_sol(status, t_y_sol, filename_o="three_body_adaptive_ylen.csv", end_o=istats(1))
 
@@ -151,7 +163,6 @@ program three_body
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   call print_t_y_sol(status, t_y_sol, filename_o="three_body_adaptive_maxt.csv", end_o=istats(1))
 
@@ -166,8 +177,9 @@ program three_body
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
+  print '(a,i10)',   "              bisection limits: ", istats(7)
+  print '(a,i10)',   "           bad bisection start: ", istats(8)
   call print_t_y_sol(status, t_y_sol, filename_o="three_body_adaptive_moon.csv", end_o=istats(1))
 
 contains

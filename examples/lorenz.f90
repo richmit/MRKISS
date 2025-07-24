@@ -37,7 +37,7 @@
 program lorenz
   use, intrinsic :: iso_fortran_env,    only: output_unit, error_unit
   use            :: mrkiss_config,      only: rk, ik, t_delta_tiny
-  use            :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt, steps_condy_stab_nt, steps_adapt_etab_nt
+  use            :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt, steps_condy_stab_nt
   use            :: mrkiss_utils,       only: print_t_y_sol
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
