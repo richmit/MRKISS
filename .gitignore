@@ -6,6 +6,7 @@
 *.exe
 /examples/*.out
 /tests/*.out
+/tests/*.tmp
 *.csv
 /examples/*.png
 /tests/*.png

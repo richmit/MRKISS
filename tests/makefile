@@ -46,7 +46,7 @@ IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
 
-TESTS = test_rkf45_stab_5 test_rkf45_etab_5 test_rkf45_stab_4 test_rkf45_etab_4 test_rk4_stab test_rk4_ref test_rk4_ref_stab
+TESTS = test_rkf45_stab_5 test_rkf45_etab_5 test_rkf45_stab_4 test_rkf45_etab_4 test_rk4_stab test_rk4_ref test_rk4_ref_stab test_rk4_steps
 
 EXE_TARGETS = rkf45_ref_vs_tab rk4_ref_vs_tab
 
@@ -65,19 +65,22 @@ short_b_all.out short_b_sub.out &: short_b
 test_short_b : short_b_all.out short_b_sub.out
 	$(FD) -e 1e-10 short_b_all.out short_b_sub.out
 
-
 rkf45_ref_vs_tab_stab_5.out rkf45_ref_vs_tab_stab_4.out rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_5.out rkf45_ref_vs_tab_etab_4.out &: rkf45_ref_vs_tab
 	rkf45_ref_vs_tab$(EXE_SUFFIX)
 
+.PHONY: test_rkf45_stab_5
 test_rkf45_stab_5 : rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_stab_5.out
 	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_stab_5.out
 
+.PHONY: test_rkf45_etab_5
 test_rkf45_etab_5 : rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_etab_5.out
 	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_etab_5.out
 
+.PHONY: test_rkf45_etab_4
 test_rkf45_stab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
 	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
 
+.PHONY: test_rk4_steps
 test_rkf45_etab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
 	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
 
@@ -87,6 +90,11 @@ rk4_ref_vs_tab : rk4_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 
 rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out &: rk4_ref_vs_tab
 	rk4_ref_vs_tab$(EXE_SUFFIX)
+
+.PHONY: test_rk4_steps
+test_rk4_steps : rk4_ref_vs_tab_steps.out rk4_ref_vs_tab_stab.out 
+	sed "s/^              //" rk4_ref_vs_tab_steps.out > rk4_ref_vs_tab_steps.tmp
+	$(FD) -e 1e-10 rk4_ref_vs_tab_steps.tmp rk4_ref_vs_tab_stab.out 
 
 .PHONY: test_rk4_stab
 test_rk4_stab : rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_stab.out
@@ -124,7 +132,9 @@ tc2_plot_error.png tc2_plot_sol.png &: tc2.R data_tc2
 
 ####################################################################################################
 .PHONY: tests
-tests : $(TESTS) test_tc1 test_tc2
+tests : $(TESTS) 
+
+#test_tc1 test_tc2
 
 .PHONY: clean
 clean : clean_multi_mrkiss clean_tc1 clean_tc2

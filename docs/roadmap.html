@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-23 Wed 23:55 -->
+<!-- 2025-07-24 Thu 00:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -216,8 +216,8 @@
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">MRKISS Roadmap</h1>
-<div id="outline-container-org80e58a3" class="outline-2">
-<h2 id="org80e58a3"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-org0d94b2d" class="outline-2">
+<h2 id="org0d94b2d"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work; however, I have pretty poor test coverage for the high level solvers.  The examples work, but are not
@@ -254,7 +254,6 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 <li>Show pictures</li>
 </ul></li>
 <li>Make sure examples are comprehensive and useful</li>
-<li>Use <code>b1</code> for stage count in <code>one_step_etab_wt()</code>, and <code>b</code> in <code>in one_step_stab_wt()</code></li>
 <li>Add "sloppy" option to <code>steps_condy_stab_*t</code></li>
 <li>Add option to not error out <code>steps_condy_stab_*t()</code></li>
 <li>Add option to print diagnostics to <code>steps_condy_stab_*t()</code></li>
@@ -305,7 +304,8 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 </ul></li>
 </ul></li>
 <li>Finalize step-size and error computation in <code>steps_adapt_etab_*t()</code></li>
-<li>Compare <code>steps_fixed_stab_wt()</code> to other files in <code>rk4_ref_vs_tab.f90</code></li>
+<li><del>Compare <code>steps_fixed_stab_wt()</code> to other files in <code>rk4_ref_vs_tab.f90</code></del></li>
+<li><del>Use <code>b1</code> for stage count in <code>one_step_etab_wt()</code>, and <code>b</code> in <code>in one_step_stab_wt()</code></del></li>
 <li><del>Think about how to document b vectors that require fewer stages than in b</del>
 <ul class="org-ul">
 <li><del><code>mrkiss_eerk_bogacki_shampine_3_2.f90 ..... sd1 1</code></del></li>

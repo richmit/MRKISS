@@ -58,7 +58,6 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
    - Document examples
    - Show pictures
  - Make sure examples are comprehensive and useful
- - Use ~b1~ for stage count in ~one_step_etab_wt()~, and ~b~ in ~in one_step_stab_wt()~
  - Add "sloppy" option to ~steps_condy_stab_*t~
  - Add option to not error out ~steps_condy_stab_*t()~
  - Add option to print diagnostics to ~steps_condy_stab_*t()~
@@ -99,7 +98,8 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
        - ~new_t_delta~
        - ~sdf_flags~
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
- - Compare ~steps_fixed_stab_wt()~ to other files in ~rk4_ref_vs_tab.f90~
+ - +Compare ~steps_fixed_stab_wt()~ to other files in ~rk4_ref_vs_tab.f90~+
+ - +Use ~b1~ for stage count in ~one_step_etab_wt()~, and ~b~ in ~in one_step_stab_wt()~+
  - +Think about how to document b vectors that require fewer stages than in b+
    - +~mrkiss_eerk_bogacki_shampine_3_2.f90 ..... sd1 1~+
    - +~mrkiss_eerk_dormand_prince_5_4.f90 ....... sd1 1~+
