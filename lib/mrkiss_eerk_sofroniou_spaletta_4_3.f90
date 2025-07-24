@@ -56,6 +56,7 @@ module mrkiss_eerk_sofroniou_spaletta_4_3
                                                       605.0_rk,     1375.0_rk,    1375.0_rk,  605.0_rk,        0.0_rk], [s, s]) /    3960.0_rk
   real(kind=rk),    parameter :: c(s)   = [             0.0_rk,        2.0_rk,       3.0_rk,    5.0_rk,        5.0_rk]          /       5.0_rk
   integer(kind=ik), parameter :: p1     = 4
+  integer(kind=ik), parameter :: s1     = 4
   real(kind=rk),    parameter :: b1(s)  = [            11.0_rk,       25.0_rk,      25.0_rk,   11.0_rk,        0.0_rk]          /      72.0_rk
   integer(kind=ik), parameter :: p2     = 3
   real(kind=rk),    parameter :: b2(s)  = [        1251515.0_rk, 3710105.0_rk, 2519695.0_rk, 61105.0_rk, 1428492.0_rk]          / 8970912.0_rk

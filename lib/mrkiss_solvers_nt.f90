@@ -144,6 +144,7 @@ contains
   !!                              - 1232-1247 .. Error in this routine
   !!                              - others ..... Other values are not allowed
   !!
+  !!
   subroutine one_step_etab_nt(status, y1_delta, y2_delta, deq, y, param, a, b1, b2, c, t_delta)
     use mrkiss_config, only: rk, ik
     implicit none
@@ -154,11 +155,11 @@ contains
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b1(:), c(:), t_delta, b2(:)
     ! Variables
     integer                       :: i, stage
-    real(kind=rk)                 :: k(size(y, 1),size(a, 1)+1)
+    real(kind=rk)                 :: k(size(y, 1),size(b1, 1)+1)
     real(kind=rk)                 :: stage_t_delta
     real(kind=rk)                 :: y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
     ! Compute k vectors
-    do stage=1,size(a, 1)
+    do stage=1,size(b1, 1)
        stage_y_delta = 0.0_rk
        if (stage > 1) then
           do i=1,(stage-1)
@@ -173,7 +174,7 @@ contains
     ! Compute y_delta
     y1_delta = 0.0_rk
     y2_delta = 0.0_rk
-    do i=1,size(a, 1)
+    do i=1,size(b1, 1)
        y1_delta = y1_delta + k(:,i) * b1(i)
        y2_delta = y2_delta + k(:,i) * b2(i)
     end do
@@ -191,6 +192,10 @@ contains
   !!                              - 1248-1263 .. Error in this routine
   !!                              - others ..... Other values are not allowed
   !!
+  !! The number of stages is determined based on the length of b.  All of the methods in an EERK need not be the same number of
+  !! stages.  When this occurs, the b1 or b2 pulled from the module can be shortened when passing it to this function.  This will
+  !! improve performance by not executing an unnecessary stage.  See $MRKISS/tests/short_b.f90 for an example.
+  !! 
   ! SHELLO: sed -n '/^  *subroutine one_step_etab_nt(/,/end subroutine one_step_etab_nt *$/p' mrkiss_solvers_nt.f90 | sed 's/, y2_delta[^,]*//; s/,]*//; s/_etab/_stab/; s/b1/b/g; s/y1/y/g; /y2_delta/d;'
   subroutine one_step_stab_nt(status, y_delta, deq, y, param, a, b, c, t_delta)
     use mrkiss_config, only: rk, ik
@@ -202,11 +207,11 @@ contains
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), t_delta
     ! Variables
     integer                       :: i, stage
-    real(kind=rk)                 :: k(size(y, 1),size(a, 1)+1)
+    real(kind=rk)                 :: k(size(y, 1),size(b, 1)+1)
     real(kind=rk)                 :: stage_t_delta
     real(kind=rk)                 :: y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
     ! Compute k vectors
-    do stage=1,size(a, 1)
+    do stage=1,size(b, 1)
        stage_y_delta = 0.0_rk
        if (stage > 1) then
           do i=1,(stage-1)
@@ -220,7 +225,7 @@ contains
     end do
     ! Compute y_delta
     y_delta = 0.0_rk
-    do i=1,size(a, 1)
+    do i=1,size(b, 1)
        y_delta = y_delta + k(:,i) * b(i)
     end do
     status = 0

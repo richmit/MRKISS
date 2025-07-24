@@ -294,9 +294,14 @@ The values of ~p1~ and ~p2~ must be a positive integers.
 *[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides several predefined methods in modules found in the
 "[[https://github.com/richmit/MRKISS/blob/master/lib][~lib/~]]" directory.  Each module defines a single tableau via parameters with names mirroring the
 Butcher Tableau arguments documented in the [[#def-method][previous section]].  In addition, these modules also have a parameter containing the number of
-steps for the method.
+stages for the overall method and the number of stages for any embedded method that differs from the overall method.
 
- - ~s~  -- The number of stages for the entire method.
+ - ~s~   -- The number of stages for the entire method.
+ - ~s1~  -- The number of stages for the ~b1~ method if it differs from ~s~.
+ - ~s2~  -- The number of stages for the ~b2~ method if it differs from ~s~.
+
+In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same
+naming conventions.  See [[https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90][~mrkiss_eerk_cash_karp_5_4.f90~]] for an example.
 
 The modules follow a simple naming conventions:
   - They have one of two prefixes:

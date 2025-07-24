@@ -60,5 +60,6 @@ module mrkiss_eerk_verner_1978_6_5
   integer(kind=ik), parameter :: p1     = 6
   real(kind=rk),    parameter :: b1(s)  = [              812889.0_rk,             0.0_rk,       4226250.0_rk,     3462305.0_rk,    1463616.0_rk,    0.0_rk,     116875.0_rk, 756585.0_rk]          /    10838520.0_rk
   integer(kind=ik), parameter :: p2     = 5
+  integer(kind=ik), parameter :: s2     = 6
   real(kind=rk),    parameter :: b2(s)  = [                2431.0_rk,             0.0_rk,         11875.0_rk,        9350.0_rk,       4224.0_rk, 2040.0_rk,          0.0_rk,      0.0_rk]          /       29920.0_rk
 end module mrkiss_eerk_verner_1978_6_5

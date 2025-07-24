@@ -1,28 +1,27 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      mrkiss_eerk_heun_euler_2_1.f90
+!! @file      short_b.f90
 !! @author    Mitch Richling http://www.mitchr.me/
-!! @brief     Butcher tableau for Heun & Euler 2 step, order (2,1) Runge-Kutta method.@EOL
-!! @keywords  ode ivp differential equation initial value problem rk
+!! @brief     Test reduced stage count when b is smaller a.@EOL
 !! @std       F2023
-!! @see       https://github.com/richmit/MRKISS
-!! @copyright
+!! @see       https://github.com/richmit/MRKISS/
+!! @copyright 
 !!  @parblock
 !!  Copyright (c) 2025, Mitchell Jay Richling <http://www.mitchr.me/> All rights reserved.
-!!
+!!  
 !!  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following
 !!  conditions are met:
-!!
+!!  
 !!  1. Redistributions of source code must retain the above copyright notice, this list of conditions, and the following
 !!     disclaimer.
-!!
+!!  
 !!  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following
 !!     disclaimer in the documentation and/or other materials provided with the distribution.
-!!
+!!  
 !!  3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
 !!     derived from this software without specific prior written permission.
-!!
+!!  
 !!  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 !!  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 !!  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
@@ -34,28 +33,41 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
-!> Butcher tableau for Heun & Euler 2 step, order (2,1) Runge-Kutta method
-!!
-!! IMO: Included for historical reasons.
-!!
-!! Known Aliases: 'RK21' (Butcher), 'ARKODE_HEUN_EULER_2_1_2' (SUNDIALS)
-!! Known Aliases p1: 'the trapezoidal rule', 'explicit trapezoidal rule'
-!! Known Aliases p2: 'mrkiss_erk_euler_1' (MRKISS)
-!!
-!! References:
-!!   Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p98-99
-!!
-module mrkiss_eerk_heun_euler_2_1
-  use mrkiss_config, only: rk, ik
+program short_b
+  use, intrinsic :: iso_fortran_env,                  only: output_unit, error_unit
+  use            :: mrkiss_config,                    only: rk, ik
+  use            :: mrkiss_solvers_wt,                only: steps_fixed_stab_wt
+  use            :: mrkiss_utils,                     only: print_t_y_sol
+  use            :: mrkiss_eerk_bogacki_shampine_3_2, only: a, b=>b1, c, s1
+
   implicit none
-  public
-  integer(kind=ik), parameter :: s      = 2
-  real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk,  0.0_rk, &
-                                                     1.0_rk,  0.0_rk], [s, s]) / 1.0_rk
-  real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  1.0_rk]          / 1.0_rk
-  integer(kind=ik), parameter :: p1     = 2
-  real(kind=rk),    parameter :: b1(s)  = [          1.0_rk,  1.0_rk]          / 2.0_rk
-  integer(kind=ik), parameter :: p2     = 1
-  integer(kind=ik), parameter :: s2     = 1
-  real(kind=rk),    parameter :: b2(s)  = [          1.0_rk,  0.0_rk]          / 1.0_rk
-end module mrkiss_eerk_heun_euler_2_1
+  integer(kind=ik),  parameter :: num_points = 11
+  integer(kind=ik),  parameter :: deq_dim  = 1
+  real(kind=rk),     parameter :: param(1) = [1.0_rk]
+  real(kind=rk),     parameter :: t_iv = 0.0_rk
+  real(kind=rk),     parameter :: t_delta = 0.1_rk
+  real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
+  real(kind=rk)                :: t_y_sol(1+deq_dim, num_points)
+  integer(kind=ik)             :: status, istats(16)
+
+  character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
+
+  call steps_fixed_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
+  call print_t_y_sol(status, t_y_sol, filename_o="short_b_all.out", end_o=istats(1))
+
+  call steps_fixed_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b(1:s1), c, t_delta_o=t_delta)
+  call print_t_y_sol(status, t_y_sol, filename_o="short_b_sub.out", end_o=istats(1))
+
+contains
+
+  subroutine eq(status, dydt, t, y, param)
+    integer(kind=ik), intent(out) :: status
+    real(kind=rk),    intent(out) :: dydt(:)
+    real(kind=rk),    intent(in)  :: t
+    real(kind=rk),    intent(in)  :: y(:)
+    real(kind=rk),    intent(in)  :: param(:)
+    dydt(1) = (5*t**2-y(1))/exp(t+y(1))
+    status = 0
+  end subroutine eq
+
+end program short_b

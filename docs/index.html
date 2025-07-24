@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-23 Wed 14:53 -->
+<!-- 2025-07-24 Thu 00:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-23 14:53:03</i></td>
+<td class="org-left"><i>2025-07-24 00:01:53</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-23 14:53:06</i></td>
+<td class="org-left"><i>2025-07-24 00:01:55</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orgd335f2d">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orgd229105">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#org358348d">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org673a082">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orgea1a803">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org8fa305d">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -484,8 +484,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd335f2d" class="outline-2">
-<h2 id="orgd335f2d"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orgd229105" class="outline-2">
+<h2 id="orgd229105"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -652,12 +652,19 @@ The values of <code>p1</code> and <code>p2</code> must be a positive integers.
 <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides several predefined methods in modules found in the
 "<a href="https://github.com/richmit/MRKISS/blob/master/lib"><code>lib/</code></a>" directory.  Each module defines a single tableau via parameters with names mirroring the
 Butcher Tableau arguments documented in the <a href="#def-method">previous section</a>.  In addition, these modules also have a parameter containing the number of
-steps for the method.
+stages for the overall method and the number of stages for any embedded method that differs from the overall method.
 </p>
 
 <ul class="org-ul">
-<li><code>s</code>  &#x2013; The number of stages for the entire method.</li>
+<li><code>s</code>   &#x2013; The number of stages for the entire method.</li>
+<li><code>s1</code>  &#x2013; The number of stages for the <code>b1</code> method if it differs from <code>s</code>.</li>
+<li><code>s2</code>  &#x2013; The number of stages for the <code>b2</code> method if it differs from <code>s</code>.</li>
 </ul>
+
+<p>
+In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same
+naming conventions.  See <a href="https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90"><code>mrkiss_eerk_cash_karp_5_4.f90</code></a> for an example.
+</p>
 
 <p>
 The modules follow a simple naming conventions:
@@ -733,8 +740,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-org358348d" class="outline-3">
-<h3 id="org358348d"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orgea1a803" class="outline-3">
+<h3 id="orgea1a803"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -823,8 +830,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org673a082" class="outline-3">
-<h3 id="org673a082"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org8fa305d" class="outline-3">
+<h3 id="org8fa305d"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1185,7 +1192,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="orgd85ace3">
+<pre class="example" id="orgdc9ae10">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1205,7 +1212,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="orgfc71412">
+<pre class="example" id="org5dd0d32">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1223,7 +1230,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgeb7fdfb" class="figure">
+<div id="org56b5afc" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>

@@ -4,7 +4,8 @@
 *.dll
 *.a
 *.exe
-*.out
+/examples/*.out
+/tests/*.out
 *.csv
 /examples/*.png
 /tests/*.png

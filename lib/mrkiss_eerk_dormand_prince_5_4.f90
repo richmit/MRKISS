@@ -60,6 +60,7 @@ module mrkiss_eerk_dormand_prince_5_4
                                                     1561900725.0_rk,             0.0_rk,   7698240000.0_rk, 11156433750.0_rk, -5524329195.0_rk, 2244036960.0_rk,      0.0_rk], [s, s]) / 17136282240.0_rk
   real(kind=rk),    parameter :: c(s)   = [                  0.0_rk,            18.0_rk,           27.0_rk,          72.0_rk,          80.0_rk,         90.0_rk,     90.0_rk]          /          90.0_rk
   integer(kind=ik), parameter :: p1     = 5
+  integer(kind=ik), parameter :: s1     = 6
   real(kind=rk),    parameter :: b1(s)  = [              12985.0_rk,             0.0_rk,        64000.0_rk,       92750.0_rk,      -45927.0_rk,      18656.0_rk,      0.0_rk]          /      142464.0_rk
   integer(kind=ik), parameter :: p2     = 4
   real(kind=rk),    parameter :: b2(s)  = [            1921409.0_rk,             0.0_rk,      9690880.0_rk,    13122270.0_rk,    -5802111.0_rk,    1902912.0_rk, 534240.0_rk]          /    21369600.0_rk

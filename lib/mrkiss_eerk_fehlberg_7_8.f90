@@ -66,6 +66,7 @@ module mrkiss_eerk_fehlberg_7_8
                                                    -191916.0_rk,     0.0_rk,       0.0_rk,  -920700.0_rk,  1942272.0_rk, -1560600.0_rk,  236844.0_rk,  275400.0_rk,  89100.0_rk, 129600.0_rk,   0.0_rk, 442800.0_rk,   0.0_rk], [s, s]) / 442800.0_rk
   real(kind=rk),    parameter :: c(s)   = [              0.0_rk,     8.0_rk,      12.0_rk,       18.0_rk,       45.0_rk,       54.0_rk,      90.0_rk,      18.0_rk,     72.0_rk,     36.0_rk, 108.0_rk,      0.0_rk, 108.0_rk]          /    108.0_rk
   integer(kind=ik), parameter :: p1     = 7
+  integer(kind=ik), parameter :: s1     = 11
   real(kind=rk),    parameter :: b1(s)  = [              41.0_rk,    0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,  41.0_rk,      0.0_rk,   0.0_rk]          /    840.0_rk
   integer(kind=ik), parameter :: p2     = 8
   real(kind=rk),    parameter :: b2(s)  = [              0.0_rk,     0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,   0.0_rk,     41.0_rk,  41.0_rk]          /    840.0_rk

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-23 Wed 16:43 -->
+<!-- 2025-07-23 Wed 23:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -216,8 +216,8 @@
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">MRKISS Roadmap</h1>
-<div id="outline-container-org2b94c87" class="outline-2">
-<h2 id="org2b94c87"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-org80e58a3" class="outline-2">
+<h2 id="org80e58a3"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work; however, I have pretty poor test coverage for the high level solvers.  The examples work, but are not
@@ -225,22 +225,22 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 </p>
 
 <ul class="org-ul">
-<li>Add "multi-solver" option for steps_fixed_stab_*t()
+<li>Add "multi-solver" option for <code>steps_fixed_stab_*t()</code>
 <ul class="org-ul">
 <li>Give multiple IVs or parameters.  Get multiple curves.</li>
-<li>Put answer in larger t_y_sol array
+<li>Put answer in larger <code>t_y_sol</code> array
 <ul class="org-ul">
 <li>Only one t row</li>
 </ul></li>
-<li>print_t_y_sol() needs to understand multi-solutions
+<li><code>print_t_y_sol()</code> needs to understand multi-solutions
 <ul class="org-ul">
-<li>y_dim_o &#x2013; give the number of components in y</li>
+<li><code>y_dim_o</code> &#x2013; give the number of components in y</li>
 <li>Option to print multiple files or one big one</li>
 <li>Option to select which solution sets to print</li>
 </ul></li>
 <li>Should be easy to use OpenMP for this.</li>
 <li>Think about how to do this with coarrays.</li>
-<li>utility: Add a t_y_sol array to a multi-t_y_sol</li>
+<li>utility: Add a <code>t_y_sol</code> array to a <code>multi-t_y_sol</code></li>
 </ul></li>
 <li>Add ARKODE_VERNER_10_6_7 &amp; ARKODE_VERNER_13_7_8
 <ul class="org-ul">
@@ -254,80 +254,91 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 <li>Show pictures</li>
 </ul></li>
 <li>Make sure examples are comprehensive and useful</li>
-<li>Add "sloppy" option to steps_condy_stab_*t</li>
-<li>Add option to not error out steps_condy_stab_*t()</li>
-<li>Add option to print diagnostics to steps_condy_stab_*t()</li>
+<li>Use <code>b1</code> for stage count in <code>one_step_etab_wt()</code>, and <code>b</code> in <code>in one_step_stab_wt()</code></li>
+<li>Add "sloppy" option to <code>steps_condy_stab_*t</code></li>
+<li>Add option to not error out <code>steps_condy_stab_*t()</code></li>
+<li>Add option to print diagnostics to <code>steps_condy_stab_*t()</code></li>
 <li>Consider "verbosity" options for high level solvers.</li>
 <li>Add tests for high level solvers
 <ul class="org-ul">
-<li>steps_fixed_stab_*t()
+<li><code>steps_fixed_stab_*t()</code>
 <ul class="org-ul">
-<li>with richardson</li>
-<li>without richardson</li>
-<li>max_pts_o</li>
-<li>t_delta_o</li>
-<li>t_end_o</li>
+<li><code>with richardson</code></li>
+<li><code>without richardson</code></li>
+<li><code>max_pts_o</code></li>
+<li><code>t_delta_o</code></li>
+<li><code>t_end_o</code></li>
 </ul></li>
-<li>steps_condy_stab_*t()
+<li><code>steps_condy_stab_*t()</code>
 <ul class="org-ul">
-<li>t_delta_min_o</li>
-<li>y_delta_len_tol_o</li>
-<li>max_bisections_o</li>
-<li>y_delta_len_idxs_o</li>
-<li>max_pts_o</li>
-<li>y_sol_len_max_o</li>
-<li>t_max_o</li>
+<li><code>t_delta_min_o</code></li>
+<li><code>y_delta_len_tol_o</code></li>
+<li><code>max_bisections_o</code></li>
+<li><code>y_delta_len_idxs_o</code></li>
+<li><code>max_pts_o</code></li>
+<li><code>y_sol_len_max_o</code></li>
+<li><code>t_max_o</code></li>
 </ul></li>
-<li>steps_adapt_etab_*t()
+<li><code>steps_adapt_etab_*t()</code>
 <ul class="org-ul">
-<li>t_max_o</li>
-<li>t_end_o</li>
-<li>t_delta_ini_o</li>
-<li>t_delta_min_o</li>
-<li>t_delta_max_o</li>
-<li>t_delta_fac_min_o</li>
-<li>t_delta_fac_max_o</li>
-<li>t_delta_fac_fdg_o</li>
-<li>error_tol_abs_o</li>
-<li>error_tol_rel_o</li>
-<li>max_pts_o</li>
-<li>max_bisections_o</li>
-<li>sdf_o</li>
-<li>sdf_tol_o</li>
-<li>stepp_o
+<li><code>t_max_o</code></li>
+<li><code>t_end_o</code></li>
+<li><code>t_delta_ini_o</code></li>
+<li><code>t_delta_min_o</code></li>
+<li><code>t_delta_max_o</code></li>
+<li><code>t_delta_fac_min_o</code></li>
+<li><code>t_delta_fac_max_o</code></li>
+<li><code>t_delta_fac_fdg_o</code></li>
+<li><code>error_tol_abs_o</code></li>
+<li><code>error_tol_rel_o</code></li>
+<li><code>max_pts_o</code></li>
+<li><code>max_bisections_o</code></li>
+<li><code>sdf_o</code></li>
+<li><code>sdf_tol_o</code></li>
+<li><code>stepp_o</code>
 <ul class="org-ul">
-<li>status</li>
-<li>end_run</li>
-<li>new_t_delta</li>
-<li>sdf_flags</li>
+<li><code>status</code></li>
+<li><code>end_run</code></li>
+<li><code>new_t_delta</code></li>
+<li><code>sdf_flags</code></li>
 </ul></li>
 </ul></li>
 </ul></li>
-<li>Finalize step-size and error computation in steps_adapt_etab_*t()</li>
-<li>Double Check Order Values
+<li>Finalize step-size and error computation in <code>steps_adapt_etab_*t()</code></li>
+<li>Compare <code>steps_fixed_stab_wt()</code> to other files in <code>rk4_ref_vs_tab.f90</code></li>
+<li><del>Think about how to document b vectors that require fewer stages than in b</del>
 <ul class="org-ul">
-<li><del>mrkiss_eerk_bogacki_shampine_3_2.f90</del></li>
-<li>mrkiss_eerk_bogacki_shampine_4_5.f90</li>
-<li><del>mrkiss_eerk_cash_karp_5_4.f90</del></li>
-<li><del>mrkiss_eerk_dormand_prince_5_4.f90</del></li>
-<li>mrkiss_eerk_dormand_prince_7_8.f90</li>
-<li><del>mrkiss_eerk_fehlberg_4_5.f90</del></li>
-<li><del>mrkiss_eerk_fehlberg_7_8.f90</del></li>
-<li><del>mrkiss_eerk_heun_euler_2_1.f90</del></li>
-<li><del>mrkiss_eerk_sofroniou_spaletta_4_3.f90</del></li>
-<li><del>mrkiss_eerk_tsitouras_arkode_5_4.f90</del></li>
-<li><del>mrkiss_eerk_verner_1978_6_5.f90</del></li>
-<li><del>mrkiss_eerk_verner_2010_6_5.f90</del></li>
-<li><del>mrkiss_eerk_verner_9_8.f90</del></li>
-<li><del>mrkiss_erk_euler_1.f90</del></li>
-<li><del>mrkiss_erk_feagin_10.f90</del></li>
-<li><del>mrkiss_erk_knoth_wolke_3.f90</del></li>
-<li><del>mrkiss_erk_kutta_4.f90</del></li>
-<li><del>mrkiss_erk_kutta_three_eight_4.f90</del></li>
-<li><del>mrkiss_erk_midpoint_2.f90</del></li>
-<li><del>mrkiss_erk_ralston_2.f90</del></li>
-<li><del>mrkiss_erk_ralston_3.f90</del></li>
-<li><del>mrkiss_erk_ralston_4.f90</del></li>
+<li><del><code>mrkiss_eerk_bogacki_shampine_3_2.f90 ..... sd1 1</code></del></li>
+<li><del><code>mrkiss_eerk_dormand_prince_5_4.f90 ....... sd1 1</code></del></li>
+<li><del><code>mrkiss_eerk_fehlberg_7_8.f90 ............. sd1 2</code></del></li>
+<li><del><code>mrkiss_eerk_heun_euler_2_1.f90 ........... sd2 1</code></del></li>
+<li><del><code>mrkiss_eerk_sofroniou_spaletta_4_3.f90 ... sd2 1</code></del></li>
+<li><del><code>mrkiss_eerk_verner_1978_6_5.f90 .......... sd2 2</code></del></li>
+</ul></li>
+<li><del>Double Check Order Values</del>
+<ul class="org-ul">
+<li><del><code>mrkiss_eerk_bogacki_shampine_3_2.f90</code></del></li>
+<li><del><code>mrkiss_eerk_bogacki_shampine_4_5.f90</code></del></li>
+<li><del><code>mrkiss_eerk_cash_karp_5_4.f90</code></del></li>
+<li><del><code>mrkiss_eerk_dormand_prince_5_4.f90</code></del></li>
+<li><del><code>mrkiss_eerk_dormand_prince_7_8.f90</code></del></li>
+<li><del><code>mrkiss_eerk_fehlberg_4_5.f90</code></del></li>
+<li><del><code>mrkiss_eerk_fehlberg_7_8.f90</code></del></li>
+<li><del><code>mrkiss_eerk_heun_euler_2_1.f90</code></del></li>
+<li><del><code>mrkiss_eerk_sofroniou_spaletta_4_3.f90</code></del></li>
+<li><del><code>mrkiss_eerk_tsitouras_arkode_5_4.f90</code></del></li>
+<li><del><code>mrkiss_eerk_verner_1978_6_5.f90</code></del></li>
+<li><del><code>mrkiss_eerk_verner_2010_6_5.f90</code></del></li>
+<li><del><code>mrkiss_eerk_verner_9_8.f90</code></del></li>
+<li><del><code>mrkiss_erk_euler_1.f90</code></del></li>
+<li><del><code>mrkiss_erk_feagin_10.f90</code></del></li>
+<li><del><code>mrkiss_erk_knoth_wolke_3.f90</code></del></li>
+<li><del><code>mrkiss_erk_kutta_4.f90</code></del></li>
+<li><del><code>mrkiss_erk_kutta_three_eight_4.f90</code></del></li>
+<li><del><code>mrkiss_erk_midpoint_2.f90</code></del></li>
+<li><del><code>mrkiss_erk_ralston_2.f90</code></del></li>
+<li><del><code>mrkiss_erk_ralston_3.f90</code></del></li>
+<li><del><code>mrkiss_erk_ralston_4.f90</code></del></li>
 </ul></li>
 </ul>
 </div>

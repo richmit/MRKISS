@@ -52,6 +52,7 @@ module mrkiss_eerk_bogacki_shampine_3_2
                                                      8.0_rk, 12.0_rk, 16.0_rk, 0.0_rk], [s, s]) / 36.0_rk
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  2.0_rk,  3.0_rk, 4.0_rk]          /  4.0_rk
   integer(kind=ik), parameter :: p1     = 3
+  integer(kind=ik), parameter :: s1     = 3
   real(kind=rk),    parameter :: b1(s)  = [          2.0_rk,  3.0_rk,  4.0_rk, 0.0_rk]          /  9.0_rk
   integer(kind=ik), parameter :: p2     = 2
   real(kind=rk),    parameter :: b2(s)  = [          7.0_rk,  6.0_rk,  8.0_rk, 3.0_rk]          / 24.0_rk

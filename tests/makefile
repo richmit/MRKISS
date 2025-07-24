@@ -56,6 +56,16 @@ all : $(EXE_TARGETS)
 rkf45_ref_vs_tab : rkf45_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rkf45_ref_vs_tab.f90 $(MRKISS_OBJ_FILES) -o $@
 
+short_b : short_b.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) short_b.f90 $(MRKISS_OBJ_FILES) -o $@
+
+short_b_all.out short_b_sub.out &: short_b
+	short_b$(EXE_SUFFIX)
+
+test_short_b : short_b_all.out short_b_sub.out
+	$(FD) -e 1e-10 short_b_all.out short_b_sub.out
+
+
 rkf45_ref_vs_tab_stab_5.out rkf45_ref_vs_tab_stab_4.out rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_5.out rkf45_ref_vs_tab_etab_4.out &: rkf45_ref_vs_tab
 	rkf45_ref_vs_tab$(EXE_SUFFIX)
 
