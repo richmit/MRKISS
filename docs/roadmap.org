@@ -50,10 +50,12 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
    - Should be easy to use OpenMP for this.
    - Think about how to do this with coarrays.
    - utility: Add a ~t_y_sol~ array to a ~multi-t_y_sol~
- - Add ARKODE_VERNER_10_6_7 & ARKODE_VERNER_13_7_8
+ - Add ARKODE_VERNER_10_6_7
    - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7
+   - Check to see if it is on Stone's or Verner's site.
+ - Add ARKODE_VERNER_13_7_8
    - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8
-   - Check to see if they are on Stone's or Verner's site.
+   - Check to see if it is on Stone's or Verner's site.
  - Add example documentation page
    - Document examples
    - Show pictures
