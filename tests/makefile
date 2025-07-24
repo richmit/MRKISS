@@ -136,7 +136,7 @@ tests : $(TESTS) test_tc1 test_tc2
 
 .PHONY: clean
 clean : clean_multi_mrkiss clean_tc1 clean_tc2
-	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.out
+	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.out *.tmp
 
 .PHONY: clean_gen_source
 clean_src : clean_src_tc1 clean_src_tc2

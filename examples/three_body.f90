@@ -79,6 +79,7 @@ program three_body
   real(kind=rk),    parameter :: y_iv(deq_dim) = [0.994_rk, 0.0_rk, 0.0_rk, -2.0015851063790825224_rk]
   real(kind=rk),    parameter :: param(1)      = [0.0_rk]
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
+
   real(kind=rk)               :: t_y_sol(1+deq_dim, num_points)
   integer(kind=ik)            :: status, istats(16)
   integer                     :: c_beg, c_end, c_rate
@@ -112,7 +113,8 @@ program three_body
 
   call system_clock(c_beg)
   call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
-                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   call system_clock(c_end)
   print '(a)',       "Adaptive run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
@@ -125,7 +127,8 @@ program three_body
 
   call system_clock(c_beg)
   call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
-                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_sloppy_y_delta_len_max);
   call system_clock(c_end)
   print '(a)',       "Adaptive run w max y_delta length: "
@@ -139,7 +142,8 @@ program three_body
 
   call system_clock(c_beg)
   call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
-                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_max_t);
   call system_clock(c_end)
   print '(a)',       "Adaptive run w max t: "
@@ -153,7 +157,8 @@ program three_body
 
   call system_clock(c_beg)
   call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
-                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
   call system_clock(c_end)
   print '(a)',       "Adaptive run w moon orbit hit: "
@@ -245,7 +250,8 @@ contains
     end if
   end subroutine sp_sloppy_y_delta_len_max
 
-  ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works in conjunction with sdf_cross_moon().
+  ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works in conjunction with
+  ! sdf_cross_moon().
   subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
     integer(kind=ik), intent(out) :: status, end_run
     real(kind=rk),    intent(out) :: new_t_delta

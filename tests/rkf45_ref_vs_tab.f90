@@ -34,12 +34,13 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program rkf45_ref_vs_tab
-  use, intrinsic :: iso_fortran_env,       only: output_unit, error_unit
-  use            :: mrkiss_config,         only: rk, ik
-  use            :: mrkiss_solvers_wt,     only: one_step_rkf45_wt, one_step_etab_wt, one_step_stab_wt
+  use, intrinsic :: iso_fortran_env,          only: output_unit, error_unit
+  use            :: mrkiss_config,            only: rk, ik
+  use            :: mrkiss_solvers_wt,        only: one_step_rkf45_wt, one_step_etab_wt, one_step_stab_wt
   use            :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, p1, p2, c
 
   implicit none
+
   integer(kind=ik),  parameter :: max_step = 11
   integer(kind=ik),  parameter :: deq_dim  = 1
   real(kind=rk),     parameter :: param(1) = [1.0_rk]
@@ -132,8 +133,3 @@ contains
   end subroutine eq
 
 end program rkf45_ref_vs_tab
-
-
-!  a<-fread('rkf45_ref_vs_tab.csv')
-! > ggplot(data=a) + geom_line(aes(x=t, y=y, col=case))
-! > 

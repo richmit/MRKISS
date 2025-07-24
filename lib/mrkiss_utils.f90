@@ -53,22 +53,22 @@ contains
   !! Example 2: For columnar output we just need to add a width
   !!   print_t_y_sol(t_y_sol, width_o=30)
   !! 
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 1152-1183 .. Error in this routine
-  !!                                              - 1152 .. Could not open file for write
-  !!                                              - 1153 .. Could not close file         
-  !!                              - others ..... Other values are not allowed
-  !! t_y_sol ................... Matrix with solution values
-  !! filename_o ................ Filename to which we print.  Default: NONE
-  !!                             If not present, then output will be to output_unit (STDOUT).  
-  !! digits_o .................. Number of digits for floating point numbers.  Default: 15
-  !! width_o ................... Width of print format for all entities. Default: 0
-  !! start_o ................... Starting index to print in t_y_sol. Default: 1
-  !! end_o ..................... Ending index to print in t_y_sol.  Default: Number of columns in t_y_sol.
-  !! step_o .................... Print only every step_o'th value in t_y_sol. Default: 1
-  !! no_titles_o ............... If present, don't print titles.
-  !! separator_o ............... String to place between fields.  Default: ',' if width_o missing, and ' ' otherwise.
+  !! status ....... Exit status
+  !!                 - -inf-0 ..... Everything worked
+  !!                 - 1152-1183 .. Error in this routine
+  !!                                 - 1152 .. Could not open file for write
+  !!                                 - 1153 .. Could not close file         
+  !!                 - others ..... Other values are not allowed
+  !! t_y_sol ...... Matrix with solution values
+  !! filename_o ... Filename to which we print.  Default: NONE
+  !!                If not present, then output will be to output_unit (STDOUT).  
+  !! digits_o ..... Number of digits for floating point numbers.  Default: 15
+  !! width_o ...... Width of print format for all entities. Default: 0
+  !! start_o ...... Starting index to print in t_y_sol. Default: 1
+  !! end_o ........ Ending index to print in t_y_sol.  Default: Number of columns in t_y_sol.
+  !! step_o ....... Print only every step_o'th value in t_y_sol. Default: 1
+  !! no_titles_o .. If present, don't print titles.
+  !! separator_o .. String to place between fields.  Default: ',' if width_o missing, and ' ' otherwise.
   !! 
   subroutine print_t_y_sol(status, t_y_sol, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
@@ -136,7 +136,8 @@ contains
        write(out_io_unit, fmt='()')
     end if
     ! Create numeric line print format
-    fmt = '(i' // width_str // ',"' // separator // '",' // repeat('f' // width_str // '.' // trim(digits_str) // ',"' // separator // '"', size(t_y_sol, 1)-1) // ',f' // width_str // '.' // trim(digits_str) // ')'
+    fmt = '(i' // width_str // ',"' // separator // '",' // repeat('f' // width_str // '.' // trim(digits_str) &
+          // ',"' // separator // '"', size(t_y_sol, 1)-1) // ',f' // width_str // '.' // trim(digits_str) // ')'
     ! Print numbers
     do i=start_idx,end_idx,step
        write (out_io_unit, fmt=fmt) i, t_y_sol(:,i)

@@ -43,14 +43,14 @@ module mrkiss_solvers_wt
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type for ODE dydt functions.
   !!
-  !! status .................... Exit status
-  !! status .................... Exit status
-  !!                              - -inf-0 .... Everything worked
-  !!                              - 1-255 ..... Error in this routine
-  !!                              - others .... Other values are not allowed
-  !! t ......................... Value for t.
-  !! y(:) ...................... Value for y.
-  !! param(:) .................. Data payload usually used for constants.
+  !! status .... Exit status
+  !! status .... Exit status
+  !!              - -inf-0 .... Everything worked
+  !!              - 1-255 ..... Error in this routine
+  !!              - others .... Other values are not allowed
+  !! t ......... Value for t.
+  !! y(:) ...... Value for y.
+  !! param(:) .. Data payload usually used for constants.
   !!
   abstract interface
      subroutine deq_iface_wt(status, dydt, t, y, param)
@@ -67,13 +67,13 @@ module mrkiss_solvers_wt
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type step processing subroutine.
   !!
-  !! status .................... Exit status
-  !!                              - -inf-0 .... Everything worked
-  !!                              - 256-511 ... Error in this routine
-  !!                              - others .... Other values are not allowed
-  !! t ......................... Value for t.
-  !! y(:) ...................... Value for y.
-  !! param(:) .................. Data payload usually used for constants.
+  !! status .... Exit status
+  !!              - -inf-0 .... Everything worked
+  !!              - 256-511 ... Error in this routine
+  !!              - others .... Other values are not allowed
+  !! t ......... Value for t.
+  !! y(:) ...... Value for y.
+  !! param(:) .. Data payload usually used for constants.
   !!
   abstract interface
      subroutine stepp_iface_wt(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
@@ -91,15 +91,15 @@ module mrkiss_solvers_wt
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type SDF function on a solution point.
   !!
-  !! status .................... Exit status
-  !!                              - -inf-0 .... Everything worked
-  !!                              - 512-767 ... Error in this routine
-  !!                              - others .... Other values are not allowed
-  !! dist ...................... The distance value of the SDF funciton
-  !! sdf_flags ................. Flags passed from a stepp_iface_wt routine
-  !! t ......................... The t value.
-  !! y(:) ...................... The y value.
-  !! param(:) .................. Data payload usually used for constants.
+  !! status ..... Exit status
+  !!               - -inf-0 .... Everything worked
+  !!               - 512-767 ... Error in this routine
+  !!               - others .... Other values are not allowed
+  !! dist ....... The distance value of the SDF funciton
+  !! sdf_flags .. Flags passed from a stepp_iface_wt routine
+  !! t .......... The t value.
+  !! y(:) ....... The y value.
+  !! param(:) ... Data payload usually used for constants.
   !!
   abstract interface
      subroutine sdf_iface_wt(status, dist, sdf_flags, t, y)
@@ -114,23 +114,25 @@ module mrkiss_solvers_wt
 
   public :: one_step_etab_wt, one_step_stab_wt, one_richardson_step_stab_wt
   public :: one_step_rk4_wt, one_step_rkf45_wt
-  public :: steps_fixed_stab_wt
-  public :: steps_condy_stab_wt
-  public :: steps_adapt_etab_wt
+  public :: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt
 
 contains
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of a embedded RK method expressed as a Butcher Tableau.
   !!
-  !! Warning: No error checking on array sizes or bounds!  See: https://DOCURL/index.html#def-method
-  !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 1232-1247 .. Error in this routine
-  !!                              - others ..... Other values are not allowed
-  !!
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
+  !!                                - 1232-1247 .. Error in this routine
+  !!                                - others ..... Other values are not allowed
+  !! y1_delta .................... Returned delta for b1 method
+  !! y2_delta .................... Returned delta for b2 method
+  !! deq ......................... Equation subroutine
+  !! t, y(:) ..................... Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b1(:), b2(:), c(:) .. The butcher tableau
+  !! t_delta ..................... Delta t to use for the step.
   !!
   subroutine one_step_etab_wt(status, y1_delta, y2_delta, deq, t, y, param, a, b1, b2, c, t_delta)
     use mrkiss_config, only: rk, ik
@@ -172,13 +174,17 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of a non-embedded RK method expressed as a Butcher Tableau.
   !!
-  !! Warning: No error checking on array sizes or bounds!  See: https://DOCURL/index.html#def-method
-  !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 1248-1263 .. Error in this routine
-  !!                              - others ..... Other values are not allowed
+  !! status .............. Exit status
+  !!                        - -inf-0 ..... Everything worked
+  !!                        - 0-255 ...... Evaluation of deq failed
+  !!                        - 1248-1263 .. Error in this routine
+  !!                        - others ..... Other values are not allowed
+  !! y_delta ............. Returned delta for the method
+  !! deq ................. Equation subroutine
+  !! t, y(:) ............. Initial conditions.  y is a column vector!
+  !! param(:) ............ Data payload passed to deq
+  !! a(:,:), b(:), c(:) .. The butcher tableau
+  !! t_delta ............. Delta t to use for the step.
   !!
   !! The number of stages is determined based on the length of b.  All of the methods in an EERK need not be the same number of
   !! stages.  When this occurs, the b1 or b2 pulled from the module can be shortened when passing it to this function.  This will
@@ -223,13 +229,18 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one Richardson Extrapolation Step.
   !!
-  !! Warning: No error checking on array sizes or bounds!  See: https://DOCURL/index.html#def-method
-  !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 1216-1231 .. Error in this routine
-  !!                              - others ..... Other values are not allowed
+  !! status .............. Exit status
+  !!                        - -inf-0 ..... Everything worked
+  !!                        - 0-255 ...... Evaluation of deq failed
+  !!                        - 1216-1231 .. Error in this routine
+  !!                        - others ..... Other values are not allowed
+  !! y_delta ............. Returned delta for the method
+  !! deq ................. Equation subroutine
+  !! t, y(:) ............. Initial conditions.  y is a column vector!
+  !! param(:) ............ Data payload passed to deq
+  !! a(:,:), b(:), c(:) .. The butcher tableau
+  !! p ................... The order for the RK method in the butcher tableau
+  !! t_delta ............. Delta t to use for the step.
   !!
   subroutine one_richardson_step_stab_wt(status, y_delta, deq, t, y, param, a, b, c, p, t_delta)
     use mrkiss_config, only: rk, ik
@@ -266,11 +277,16 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of RK (mrkiss_erk_kutta_4)
   !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 1200-1215 .. Error in this routine
-  !!                              - others ..... Other values are not allowed
+  !! status .... Exit status
+  !!              - -inf-0 ..... Everything worked
+  !!              - 0-255 ...... Evaluation of deq failed
+  !!              - 1200-1215 .. Error in this routine
+  !!              - others ..... Other values are not allowed
+  !! y_delta ... Returned delta for the method
+  !! deq ....... Equation subroutine
+  !! t, y(:) ... Initial conditions.  y is a column vector!
+  !! param(:) .. Data payload passed to deq
+  !! t_delta ... Delta t to use for the step.
   !!
   subroutine one_step_rk4_wt(status, y_delta, deq, t, y, param, t_delta)
     use mrkiss_config, only: rk, ik
@@ -298,11 +314,16 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of RKF45 (mrkiss_eerk_fehlberg_4_5)
   !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 1184-1199 .. Error in this routine
-  !!                              - others ..... Other values are not allowed
+  !! status .... Exit status
+  !!              - -inf-0 ..... Everything worked
+  !!              - 0-255 ...... Evaluation of deq failed
+  !!              - 1184-1199 .. Error in this routine
+  !!              - others ..... Other values are not allowed
+  !! y_delta ... Returned delta for the method
+  !! deq ....... Equation subroutine
+  !! t, y(:) ... Initial conditions.  y is a column vector!
+  !! param(:) .. Data payload passed to deq
+  !! t_delta ... Delta t to use for the step.
   !!
   subroutine one_step_rkf45_wt(status, y1_delta, y2_delta, deq, t, y, param, t_delta)
     use mrkiss_config, only: rk, ik
@@ -341,26 +362,26 @@ contains
   !! non-zero status is returned, then the first element istats may be consulted to determine how many solutions t_y_sol
   !! contains.
   !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 1120-1151 .. Error in this routine
-  !!                              - others ..... Other values are not allowed
-  !! istats(:) ................. Integer statistics for run
-  !! t_y_sol(:,:) .............. Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
-  !!                              Each COLUMN is a solution.  
-  !!                              The first element of each solution is the t variable.  The remaining values are the elements of y.
-  !!                              The number of columns, and max_pts_o, determin the number of solution points.
-  !! deq ....................... Equation subroutine
-  !! t, y(:) ................... Initial conditions.  y is a column vector!
-  !! param(:) .................. Data payload passed to deq
-  !! a(:,:), b(:), c(:) ........ The butcher tableau
-  !! p_o ....................... The order for the RK method in the butcher tableau (if provided enables Richardson extrapolation)
-  !! max_pts_o ................. Maximum number of solutions to put in t_y_sol.
-  !! t_delta_o ................. Step size to use.  
-  !!                             If t_end_o is provided:  Default: (t_end - t) / (size(t_y_sol, 2) - 1)
-  !!                             If t_end_o not provided: Default: mrkiss_config::t_delta_ai
-  !! t_end_o ................... End point for last step.  Silently ignored if t_delta_o is provided.
+  !! status .............. Exit status
+  !!                        - -inf-0 ..... Everything worked
+  !!                        - 0-255 ...... Evaluation of deq failed
+  !!                        - 1120-1151 .. Error in this routine
+  !!                        - others ..... Other values are not allowed
+  !! istats(:) ........... Integer statistics for run
+  !! t_y_sol(:,:) ........ Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
+  !!                        Each COLUMN is a solution.  
+  !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
+  !!                        The number of columns, and max_pts_o, determin the number of solution points.
+  !! deq ................. Equation subroutine
+  !! t, y(:) ............. Initial conditions.  y is a column vector!
+  !! param(:) ............ Data payload passed to deq
+  !! a(:,:), b(:), c(:) .. The butcher tableau
+  !! p_o ................. The order for the RK method in the butcher tableau (if provided enables Richardson extrapolation)
+  !! max_pts_o ........... Maximum number of solutions to put in t_y_sol.
+  !! t_delta_o ........... Step size to use.  
+  !!                       If t_end_o is provided:  Default: (t_end - t) / (size(t_y_sol, 2) - 1)
+  !!                       If t_end_o not provided: Default: mrkiss_config::t_delta_ai
+  !! t_end_o ............. End point for last step.  Silently ignored if t_delta_o is provided.
   !!
   subroutine steps_fixed_stab_wt(status, istats, t_y_sol, deq, t, y, param, a, b, c, p_o, max_pts_o, t_delta_o, t_end_o)
     use mrkiss_config, only: rk, ik, t_delta_ai
@@ -439,31 +460,31 @@ contains
   !!
   !! My primary use case for this function is to create uniform sphere sweeps for constructive solid geometry applications.
   !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 1024-1055 .. Error in this routine
-  !!                                              - 1024 .. t_delta_min yielded a longer step than t_delta_max
-  !!                                              - 1025 .. More than max_bisections were performed during a step
-  !!                              - others ..... Other values are not allowed
-  !! istats(:) ................. Integer statistics for run
-  !! t_y_sol ................... Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
-  !!                              Each COLUMN is a solution.  
-  !!                              The first element of each solution is the t variable.  The remaining values are the elements of y.
-  !!                              The number of columns, and max_pts_o, determin the number of solution points.
-  !! deq ....................... Equation subroutine
-  !! t, y(:) ................... Initial conditions.  y is a column vector!
-  !! param(:) .................. Data payload passed to deq
-  !! a(:,:), b(:), c(:) ........ The butcher tableau
-  !! y_delta_len_targ .......... Attempt to make all steps this long
-  !! t_delta_max ............... Maximum t_delta
-  !! t_delta_min_o ............. Minimum t_delta
-  !! y_delta_len_tol_o ......... How close we have to get to y_delta_len_targ.  Default is y_delta_len_targ/100
-  !! y_delta_len_idxs_o ........ Components of y_delta to use for y_delta length computation
-  !! max_pts_o ................. Maximum number of solutions to put in t_y_sol.
-  !! max_bisections_o .......... Maximum number of bisection iterations to perform for each step.  Default: max_bisections_ai
-  !! y_sol_len_max_o ........... Maximum length of the solution curve
-  !! t_max_o ................... Maximum value for t
+  !! status .............. Exit status
+  !!                        - -inf-0 ..... Everything worked
+  !!                        - 0-255 ...... Evaluation of deq failed
+  !!                        - 1024-1055 .. Error in this routine
+  !!                                        - 1024 .. t_delta_min yielded a longer step than t_delta_max
+  !!                                        - 1025 .. More than max_bisections were performed during a step
+  !!                        - others ..... Other values are not allowed
+  !! istats(:) ........... Integer statistics for run
+  !! t_y_sol ............. Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
+  !!                        Each COLUMN is a solution.  
+  !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
+  !!                        The number of columns, and max_pts_o, determin the number of solution points.
+  !! deq ................. Equation subroutine
+  !! t, y(:) ............. Initial conditions.  y is a column vector!
+  !! param(:) ............ Data payload passed to deq
+  !! a(:,:), b(:), c(:) .. The butcher tableau
+  !! y_delta_len_targ .... Attempt to make all steps this long
+  !! t_delta_max ......... Maximum t_delta
+  !! t_delta_min_o ....... Minimum t_delta
+  !! y_delta_len_tol_o ... How close we have to get to y_delta_len_targ.  Default is y_delta_len_targ/100
+  !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
+  !! max_pts_o ........... Maximum number of solutions to put in t_y_sol.
+  !! max_bisections_o .... Maximum number of bisection iterations to perform for each step.  Default: max_bisections_ai
+  !! y_sol_len_max_o ..... Maximum length of the solution curve
+  !! t_max_o ............. Maximum value for t
   !!
   subroutine steps_condy_stab_wt(status, istats, t_y_sol, deq, t, y, param, a, b, c, y_delta_len_targ, t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisections_o, y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
     use mrkiss_config, only: rk, ik, t_delta_tiny, max_bisections_ai
@@ -584,44 +605,44 @@ contains
   !!  - Never adapt -- like steps_fixed_stab_wt()
   !!  - Adapt for fixed size y_delta -- like steps_condy_stab_wt()
   !!
-  !! status .................... Exit status
-  !!                              - -inf-0 ..... Everything worked
-  !!                              - 0-255 ...... Evaluation of deq failed
-  !!                              - 256-511 .... Error in stepp_o
-  !!                              - 512-767 .... Error in sdf_o
-  !!                              - 1056-1119 .. Error in this routine
-  !!                              - others ..... Other values are not allowed
-  !! istats(:) ................. Integer statstics for run
-  !! t_y_sol(:,:) .............. Array for solution.
-  !!                              Each COLUMN is a solution.
-  !!                              The first element of each solution is the t variable with rest the elements of y.
-  !!                              The number of columns, and max_pts_o, determin the number of solution points.
-  !! deq ....................... Equation subroutine
-  !! t, y(:) ................... Initial conditions.  y is a column vector!
-  !! param(:) .................. Data payload passed to deq
-  !! a(:), b1(:), b2(:), c(:) .. The butcher tableau
-  !! p1, p2 .................... The orders for the RK methods in the butcher tableaus
-  !! t_max_o ................... Stop if t>t_max_o.  Diffrent from t_end_o! Default: NONE
-  !! t_end_o ................... Try to stop integration at t_end. Default: NONE
-  !! t_delta_ini_o ............. Initial t_delta. Default: (t_delta_max_o+t_delta_min_o)/2 if t_delta_max_o is present, and t_delta_ai otherwise
-  !! t_delta_min_o ............. Minimum allowed t_delta. Default: t_delta_tiny
-  !! t_delta_max_o ............. Maximum allowed t_delta. Default: NONE
-  !! t_delta_fac_min_o ......... Minimum t_delta adaption factor for all but the first step.  Default:  t_delta_fac_min_ai
-  !! t_delta_fac_max_o ......... Maximum t_delta adaption factor.  Default:  2.0_rk
-  !! t_delta_fac_fdg_o ......... Extra t_delta adaption factor when shrinking interval. Default: t_delta_fac_fdg_ai
-  !! error_tol_abs_o(:) ........ Absolute error tolerance. Default: error_tol_abs_ai
-  !! error_tol_rel_o(:) ........ Relative error tolerance. Default: error_tol_rel_ai
-  !! max_pts_o ................. Maximum number of solutions to put in t_y_sol.
-  !! max_bisections_o .......... Maximum number of bisection iterations to perform for each step. Default: max_bisections_ai
-  !! sdf_o ..................... SDF function.  Used to set new t_delta for a step.  This subroutine may trigger one or
-  !!                             more of the follwoing actions:
-  !!                              - status>0      => Immediately returns without doing anything else propagating status to caller.
-  !!                                                 Positive status values must come from the interval [256, 511].
-  !!                              - new_t_delta>0 => Recompute y_delta using new_t_delta.
-  !!                              - sdf_flags>0   => Redo step with a t_delta derived from the sdf_o via bisection.
-  !!                              - end_run>0     => routine returns after this step is complete.
-  !! sdf_tol_o ................. How close we have to get to accept an sdf solution. Default: sdf_tol_ai
-  !! stepp_o ................... Step processing subroutine.  Called after each step.
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
+  !!                                - 256-511 .... Error in stepp_o
+  !!                                - 512-767 .... Error in sdf_o
+  !!                                - 1056-1119 .. Error in this routine
+  !!                                - others ..... Other values are not allowed
+  !! istats(:) ................... Integer statstics for run
+  !! t_y_sol(:,:) ................ Array for solution.
+  !!                                Each COLUMN is a solution.
+  !!                                The first element of each solution is the t variable with rest the elements of y.
+  !!                                The number of columns, and max_pts_o, determin the number of solution points.
+  !! deq ......................... Equation subroutine
+  !! t, y(:) ..................... Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b1(:), b2(:), c(:) .. The butcher tableau
+  !! p1, p2 ...................... The orders for the RK methods in the butcher tableaus
+  !! t_max_o ..................... Stop if t>t_max_o.  Diffrent from t_end_o! Default: NONE
+  !! t_end_o ..................... Try to stop integration at t_end. Default: NONE
+  !! t_delta_ini_o ............... Initial t_delta. Default: (t_delta_max_o+t_delta_min_o)/2 or t_delta_ai otherwise
+  !! t_delta_min_o ............... Minimum allowed t_delta. Default: t_delta_tiny
+  !! t_delta_max_o ............... Maximum allowed t_delta. Default: NONE
+  !! t_delta_fac_min_o ........... Minimum t_delta adaption factor for all but the first step.  Default:  t_delta_fac_min_ai
+  !! t_delta_fac_max_o ........... Maximum t_delta adaption factor.  Default:  2.0_rk
+  !! t_delta_fac_fdg_o ........... Extra t_delta adaption factor when shrinking interval. Default: t_delta_fac_fdg_ai
+  !! error_tol_abs_o(:) .......... Absolute error tolerance. Default: error_tol_abs_ai
+  !! error_tol_rel_o(:) .......... Relative error tolerance. Default: error_tol_rel_ai
+  !! max_pts_o ................... Maximum number of solutions to put in t_y_sol.
+  !! max_bisections_o ............ Maximum number of bisection iterations to perform for each step. Default: max_bisections_ai
+  !! sdf_o ....................... SDF function.  Used to set new t_delta for a step.  This subroutine may trigger one or
+  !!                               more of the follwoing actions:
+  !!                                - status>0      => Immediately returns without doing anything else propagating status to caller.
+  !!                                                   Positive status values must come from the interval [256, 511].
+  !!                                - new_t_delta>0 => Recompute y_delta using new_t_delta.
+  !!                                - sdf_flags>0   => Redo step with a t_delta derived from the sdf_o via bisection.
+  !!                                - end_run>0     => routine returns after this step is complete.
+  !! sdf_tol_o ................... How close we have to get to accept an sdf solution. Default: sdf_tol_ai
+  !! stepp_o ..................... Step processing subroutine.  Called after each step.
   !! 
   subroutine steps_adapt_etab_wt(status, istats, t_y_sol, deq, t, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, t_delta_ini_o, &
                                  t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o,            &

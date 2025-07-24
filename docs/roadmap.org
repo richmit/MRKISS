@@ -98,6 +98,8 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
        - ~new_t_delta~
        - ~sdf_flags~
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
+ - +Make comment formatting uniform+
+ - +Document all function arguments+
  - +Compare ~steps_fixed_stab_wt()~ to other files in ~rk4_ref_vs_tab.f90~+
  - +Use ~b1~ for stage count in ~one_step_etab_wt()~, and ~b~ in ~in one_step_stab_wt()~+
  - +Think about how to document b vectors that require fewer stages than in b+

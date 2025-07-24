@@ -41,12 +41,14 @@ program short_b
   use            :: mrkiss_eerk_bogacki_shampine_3_2, only: a, b=>b1, c, s1
 
   implicit none
+
   integer(kind=ik),  parameter :: num_points = 11
   integer(kind=ik),  parameter :: deq_dim  = 1
   real(kind=rk),     parameter :: param(1) = [1.0_rk]
   real(kind=rk),     parameter :: t_iv = 0.0_rk
   real(kind=rk),     parameter :: t_delta = 0.1_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
+
   real(kind=rk)                :: t_y_sol(1+deq_dim, num_points)
   integer(kind=ik)             :: status, istats(16)
 

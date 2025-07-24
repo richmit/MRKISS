@@ -35,12 +35,11 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program brusselator
-  use, intrinsic :: iso_fortran_env,   only: output_unit, error_unit
-  use            :: mrkiss_config,     only: rk, ik, t_delta_tiny
-  use            :: mrkiss_solvers_nt, only: steps_fixed_stab_nt, steps_condy_stab_nt, steps_adapt_etab_nt
-  use            :: mrkiss_utils,      only: print_t_y_sol
-  use            :: mrkiss_erk_kutta_4,  only: a, b, c
-!  use            :: mrkiss_eerk_dormand_prince_5_4,  only: a, b=>b1, c
+  use, intrinsic :: iso_fortran_env,                 only: output_unit, error_unit
+  use            :: mrkiss_config,                   only: rk, ik, t_delta_tiny
+  use            :: mrkiss_solvers_nt,               only: steps_fixed_stab_nt, steps_condy_stab_nt, steps_adapt_etab_nt
+  use            :: mrkiss_utils,                    only: print_t_y_sol
+  use            :: mrkiss_eerk_dormand_prince_5_4,  only: a, b=>b1, c
 
   implicit none
 
@@ -80,8 +79,7 @@ contains
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)
-    dydt(1) = 1+y(1)**2*y(2)-4*y(1)
-    dydt(2) = 3*y(1)-y(1)**2*y(2)
+    dydt = [ 1+y(1)**2*y(2)-4*y(1), 3*y(1)-y(1)**2*y(2) ]
     status = 0
   end subroutine eq
 
