@@ -376,6 +376,8 @@ contains
   !!                        - 1120-1151 .. Error in this routine
   !!                        - others ..... Other values are not allowed
   !! istats(:) ........... Integer statistics for run
+  !!                        istats(1): number of computed solution points
+  !!                        istats(2): number of one_step_* calls not triggerd by an event
   !! t_y_sol(:,:) ........ Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
   !!                        Each COLUMN is a solution.  
   !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
@@ -475,6 +477,9 @@ contains
   !!                                        - 1025 .. More than max_bisections were performed during a step
   !!                        - others ..... Other values are not allowed
   !! istats(:) ........... Integer statistics for run
+  !!                        istats(1): number of computed solution points
+  !!                        istats(2): number of one_step_* calls not triggerd by an event
+  !!                        istats(3): number of one_step_* calls triggered by y_delta length constraint
   !! t_y_sol ............. Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
   !!                        Each COLUMN is a solution.  
   !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
@@ -619,6 +624,12 @@ contains
   !!                                - 1056-1119 .. Error in this routine
   !!                                - others ..... Other values are not allowed
   !! istats(:) ................... Integer statstics for run
+  !!                                istats(1): number of computed solution points
+  !!                                istats(2): number of one_step_* calls not triggerd by an event
+  !!                                istats(3): number of one_step_* calls triggered by y_delta length constraint
+  !!                                istats(4): number of one_step_* calls triggered by y_delta error constraint
+  !!                                istats(5): number of one_step_* calls triggered by step processing with new t_delta
+  !!                                istats(6): number of one_step_* calls triggered by SDF bisection
   !! t_y_sol(:,:) ................ Array for solution.
   !!                                Each COLUMN is a solution.
   !!                                The first element of each solution is the t variable with rest the elements of y.

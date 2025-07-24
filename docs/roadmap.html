@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-24 Thu 10:27 -->
+<!-- 2025-07-24 Thu 10:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -216,8 +216,8 @@
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">MRKISS Roadmap</h1>
-<div id="outline-container-orgcc19da4" class="outline-2">
-<h2 id="orgcc19da4"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-org70bcd30" class="outline-2">
+<h2 id="org70bcd30"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work; however, I have pretty poor test coverage for the high level solvers.  The examples work, but are not
@@ -257,6 +257,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 <li>Add "sloppy" option to <code>steps_condy_stab_*t</code></li>
 <li>Add option to not error out <code>steps_condy_stab_*t()</code></li>
 <li>Add option to print diagnostics to <code>steps_condy_stab_*t()</code></li>
+<li>Add aspect ratio argument to <code>steps_condy_stab_*t()</code></li>
 <li>Consider "verbosity" options for high level solvers.</li>
 <li>Add tests for high level solvers
 <ul class="org-ul">
@@ -304,6 +305,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
 </ul></li>
 </ul></li>
 <li>Finalize step-size and error computation in <code>steps_adapt_etab_*t()</code></li>
+<li><del>Add <code>istats</code> docs to each solver with components used.</del></li>
 <li><del>Make comment formatting uniform</del></li>
 <li><del>Document all function arguments</del></li>
 <li><del>Compare <code>steps_fixed_stab_wt()</code> to other files in <code>rk4_ref_vs_tab.f90</code></del></li>

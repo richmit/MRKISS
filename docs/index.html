@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-24 Thu 00:01 -->
+<!-- 2025-07-24 Thu 10:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-24 00:01:53</i></td>
+<td class="org-left"><i>2025-07-24 10:40:32</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-24 00:01:55</i></td>
+<td class="org-left"><i>2025-07-24 10:51:27</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orgd229105">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orgc08c42e">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orgea1a803">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org8fa305d">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org0b80844">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#orgb9928e1">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -484,8 +484,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd229105" class="outline-2">
-<h2 id="orgd229105"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orgc08c42e" class="outline-2">
+<h2 id="orgc08c42e"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -740,8 +740,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-orgea1a803" class="outline-3">
-<h3 id="orgea1a803"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org0b80844" class="outline-3">
+<h3 id="org0b80844"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -830,8 +830,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org8fa305d" class="outline-3">
-<h3 id="org8fa305d"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-orgb9928e1" class="outline-3">
+<h3 id="orgb9928e1"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1051,7 +1051,7 @@ The first several arguments are common across the higher level solvers.
 <dt><code>istats</code></dt><dd>Statistics regarding the solver run.                
 <ul class="org-ul">
 <li><code>istats(1)</code>: number of computed solution points</li>
-<li><code>istats(2)</code>: number of one_step_* calls</li>
+<li><code>istats(2)</code>: number of one_step_* calls not triggerd by an event</li>
 <li><code>istats(3)</code>: number of one_step_* calls triggered by y_delta length constraint</li>
 <li><code>istats(4)</code>: number of one_step_* calls triggered by y_delta error constraint</li>
 <li><code>istats(5)</code>: number of one_step_* calls triggered by step processing with new t_delta</li>
@@ -1192,7 +1192,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="orgdc9ae10">
+<pre class="example" id="orgbb7f1c5">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1212,7 +1212,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="org5dd0d32">
+<pre class="example" id="org756d39b">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1230,7 +1230,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org56b5afc" class="figure">
+<div id="org44fd4d4" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>

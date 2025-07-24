@@ -496,7 +496,7 @@ The first several arguments are common across the higher level solvers.
   - ~status~ :: This is an integer return code.  A positive value means failure -- see the documentation for each routine for details.
   - ~istats~ :: Statistics regarding the solver run.                
     - ~istats(1)~: number of computed solution points
-    - ~istats(2)~: number of one_step_* calls
+    - ~istats(2)~: number of one_step_* calls not triggerd by an event
     - ~istats(3)~: number of one_step_* calls triggered by y_delta length constraint
     - ~istats(4)~: number of one_step_* calls triggered by y_delta error constraint
     - ~istats(5)~: number of one_step_* calls triggered by step processing with new t_delta

@@ -61,6 +61,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
  - Add "sloppy" option to ~steps_condy_stab_*t~
  - Add option to not error out ~steps_condy_stab_*t()~
  - Add option to print diagnostics to ~steps_condy_stab_*t()~
+ - Add aspect ratio argument to ~steps_condy_stab_*t()~
  - Consider "verbosity" options for high level solvers.
  - Add tests for high level solvers
    - ~steps_fixed_stab_*t()~
@@ -98,6 +99,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
        - ~new_t_delta~
        - ~sdf_flags~
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
+ - +Add ~istats~ docs to each solver with components used.+
  - +Make comment formatting uniform+
  - +Document all function arguments+
  - +Compare ~steps_fixed_stab_wt()~ to other files in ~rk4_ref_vs_tab.f90~+
