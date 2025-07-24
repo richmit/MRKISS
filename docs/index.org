@@ -905,3 +905,5 @@ graphs.  None of these tools are required to compile and use the package because
     - Used for Butcher tableau computations.
   - nomacs ::
     - Used to display images
+  - ImageMagick ::
+    - Used to process and/or convert image files

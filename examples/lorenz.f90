@@ -44,11 +44,11 @@ program lorenz
   implicit none
 
   integer,        parameter :: deq_dim       = 3
-  integer,        parameter :: num_points    = 10000
-  integer,        parameter :: skip_points   = 5000
+  integer,        parameter :: num_points    = 100000
+  integer,        parameter :: skip_points   = 50000
   real(kind=rk),  parameter :: y_iv(deq_dim) = [1.0_rk, 0.0_rk, 0.0_rk]
   real(kind=rk),  parameter :: param(3)      = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
-  real(kind=rk),  parameter :: t_delta       = 0.01
+  real(kind=rk),  parameter :: t_delta       = 0.001
 
   real(kind=rk)             :: t_y_sol(1+deq_dim, num_points)
   integer(kind=ik)          :: status, istats(16)

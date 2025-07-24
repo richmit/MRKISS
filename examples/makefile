@@ -68,6 +68,7 @@ lorenz.csv : lorenz
 
 lorenz.png : lorenz.csv lorenz.gplt
 	gnuplot -p < lorenz.gplt
+	magick -density 200 -background white lorenz.svg lorenz.png
 	$(IMG_VIEWER) lorenz.png
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------

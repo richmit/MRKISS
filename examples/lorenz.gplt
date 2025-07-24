@@ -42,6 +42,6 @@ set zlabel "z"
 set grid
 set margins 0, 0, 0, 0
 set view 60, 30
-set terminal png size 1024, 1024
-set output 'lorenz.png'
+set terminal svg
+set output 'lorenz.svg'
 splot 'lorenz.csv' using 3:4:5 with lines title ""

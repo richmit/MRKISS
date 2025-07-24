@@ -61,7 +61,6 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
    - Show pictures
  - Make sure examples are comprehensive and useful
  - Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~
- - Add aspect ratio argument to ~steps_condy_stab_*t()~
  - Add tests for high level solvers
    - ~steps_fixed_stab_*t()~
      - ~with richardson~
@@ -100,6 +99,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
        - ~new_t_delta~
        - ~sdf_flags~
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
+ - +Add aspect ratio argument to ~steps_condy_stab_*t()~+ *CANCELED**
  - +Add "sloppy" option to ~steps_condy_stab_*t~+ *CANCELED**
  - +Add option to not error out on bisection problems in ~steps_condy_stab_*t()~+ *DONE*
  - +Add option to not error out on bisection problems in ~steps_adapt_etab_*t()~+ *DONE*
