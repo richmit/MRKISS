@@ -1,0 +1,1213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-07-25 Fri 15:12 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=1024, initial-scale=1" />
+<title>MRKISS Library Example</title>
+<meta name="author" content="Mitch Richling" />
+<meta name="description" content="MRKISS Documentation Examples" />
+<meta name="keywords" content="RK runge kutta ode ivp" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+<style>body { min-width: 500px; max-width: 1024px; }</style>
+<style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+<style>h1,h2,h3 { line-height: 1.4em; }</style>
+<style>h1.title { font-size: 3em; }</style>
+<style>.subtitle { font-size: 0.6em; }</style>
+<style>h4,h5,h6 { font-size: 1em; }</style>
+<style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+<style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+<style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+<style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+<style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+<style>#content { max-width: 60em; }</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="https://github.com/richmit/MRKISS/"> UP </a>
+ |
+ <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">MRKISS Library Example
+<br />
+<span class="subtitle">The Three Body Problem</span>
+</h1>
+<table border="2 solid #ccc" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right"><b>Author:</b></td>
+<td class="org-left"><i>Mitch Richling</i></td>
+</tr>
+
+<tr>
+<td class="org-right"><b>Updated:</b></td>
+<td class="org-left"><i>2025-07-25 15:11:56</i></td>
+</tr>
+
+<tr>
+<td class="org-right"><b>Generated:</b></td>
+<td class="org-left"><i>2025-07-25 15:12:11</i></td>
+</tr>
+</tbody>
+</table>
+<p align="center">
+Copyright &copy; 2025 Mitch Richling. All rights reserved.
+</p>
+
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#classicalsol">2. Classical Solution</a></li>
+<li><a href="#fixedorder">3. Fixed Steps &amp; Method Order</a></li>
+<li><a href="#adaptiveylim">4. Adaptive Solution With More Steps For A Nice Plot</a></li>
+<li><a href="#fixedyspace">5. Truly Fixed Steps in y-space</a></li>
+<li><a href="#progstop">6. Knowing When To Stop</a></li>
+<li><a href="#moonsatorb">7. Satellite &amp; Moon Orbit Intersection</a></li>
+<li><a href="#full-code">8. Full Code Listing</a>
+<ul>
+<li><a href="#fortrancode">8.1. Fortran Code</a></li>
+<li><a href="#rcode">8.2. R Code</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-introduction" class="outline-2">
+<h2 id="introduction"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-introduction">
+<p>
+This is one of my favorite IVP example problems.
+</p>
+
+<p>
+This is a dimensionless, restricted three gravitational body problem.  The Earth is stationary at the origin.  The  Moon orbits the Earth at a radius
+of \(1\) and is at \((1,0)\) at \(t=0\).  The mass ratio is \(\frac{100}{8145}\).  The position, \((x_1,x_2)\), and velocity, \((v_1,v_2)\), are governed
+by the following differential equation:
+</p>
+
+<p>
+\[\begin{align*}
+     \frac{\mathrm{d}v_1}{\mathrm{d}t} & = v_1 \\
+     \frac{\mathrm{d}v_2}{\mathrm{d}t} & = v_2 \\
+     \frac{\mathrm{d}x_1}{\mathrm{d}t} & =   2  v_2 + x_1 - \frac{\mu (x_1 + \mu -1)}{D_1} - \frac{(1 - \mu)  (x_1 + \mu)}{D_2} \\
+     \frac{\mathrm{d}x_2}{\mathrm{d}t} & =  -2  v_1 + x_2 - \frac{\mu  x_2}{D_1} - \frac{(1 - \mu) x_2}{D_2} 
+ \end{align*}\]
+</p>
+
+<p>
+Where \(D_1\) and \(D_2\) are defined as:
+</p>
+
+<p>
+\[\begin{align*}
+     D_1 & = \sqrt{\left(x_2^2 + (x_1 + \mu - 1)^2\right)^3} \\
+     D_2 & = \sqrt{\left(x_2^2 + (x_1 + \mu)\right)^3}         
+ \end{align*}\]
+</p>
+
+<p>
+We solve the equations with the following initial values:
+</p>
+
+<p>
+\[\begin{align*}
+    (x_1,x_2) &=  (0.994, 0) \\
+    (v_1,v_2) & = (0, -2.0015851063790825224)  
+ \end{align*}\]
+</p>
+
+<p>
+Under these conditions the satellite will return to it's initial position after completing a three lobed orbit at \(t=17.06521656015796\).
+</p>
+
+<p>
+The code for this example is found in <a href="https://github.com/richmit/MRKISS/blob/master/examples/three_body.f90">~examples/three_body.f90</a>.  Additionally the
+code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
+</p>
+
+<p>
+This example makes several <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> high level solver calls each illustrating a different feature or technique.  In 
+the sections that follow we examine each of those calls in detail.
+</p>
+</div>
+</div>
+<div id="outline-container-classicalsol" class="outline-2">
+<h2 id="classicalsol"><span class="section-number-2">2.</span> Classical Solution</h2>
+<div class="outline-text-2" id="text-classicalsol">
+<p>
+In this section we produce the classical image of the solution.  
+</p>
+
+
+<div id="org8932cf2" class="figure">
+<p><img src="pics/three_body.png" alt="three_body.png" />
+</p>
+</div>
+
+<p>
+The solid pink curve is generated from 4000 points on the orbit generated with a fixed step size solver.  This is quite expensive computationally taking about
+16 milliseconds on my computer.  Still, it produces a very nice curve.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_fixed_stab_wt</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"tree_body_steps_fixed_stab_wt.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_fixed_stab_wt</span>
+</pre>
+</div>
+
+<p>
+The red dots on the solid pink curve are solution points generated using a classical, adaptive Runge-Kutta scheme.
+</p>
+
+<p>
+The algorithms involved in the adaptive solution are far more complex than in the fixed step solution above.  Yet the solver calls in these two code snippets
+are remarkably similar.  IMO, the real value in an adaptive solver is the reduction in computational needs by making the step sizes as large as possible
+without sacrificing accuracy.  As you can see the step size is much smaller near the singularities.  The fixed run above takes 16 milliseconds while the
+adaptive run takes less than one millisecond.
+</p>
+
+<p>
+More sophisticated libraries offer the ability to interpolate between solution points at pretty low cost while maintaining the accuracy of the overall method.
+For generative art and visualization we can use Hermite interpolation at an even lower cost.  Normally interpolation is achieved outside the ODE solver and
+directly inside a visualization software platform &#x2013; we simply provide the points and derivatives.
+</p>
+
+<p>
+Notice in the snippet above we only report <code>istats(1)</code> and <code>istats(2)</code> because these are the only two values in <code>istats</code> updated by <code>steps_fixed_stab_wt()</code>.
+In the code below we add <code>istats(4)</code> because <code>steps_adapt_etab_wt()</code> updates this value.  
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-std</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                         t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                         error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-std.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-std</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-fixedorder" class="outline-2">
+<h2 id="fixedorder"><span class="section-number-2">3.</span> Fixed Steps &amp; Method Order</h2>
+<div class="outline-text-2" id="text-fixedorder">
+<p>
+The pink curve in the <a href="#classicalsol">previous section</a> was the result of 4000 fixed steps with a 9th order Runge-Kutta method.  Why did we pick a 9th order
+solver?  Because it allowed us to use a step size small enough to be ascetically pleasing but large enough to not produce too many points for our simple
+plotting program.
+</p>
+
+<p>
+From the perspective of generative art and visualization, fixed time step solutions are important because they preserve "time" in animations.  We can achieve
+fixed steps via interpolation; however, it is frequently more convenient to simply use a fixed step size solver.  Method order for generative art and
+visualization is often thought of as a tool to allow for ascetic step sizes instead of a way to achieve a solution accuracy requirement.
+</p>
+
+<p>
+In the following image we see the unsatisfactory result of using a 5th order solver with the same step size:
+</p>
+
+
+<div id="org7b95a40" class="figure">
+<p><a href="pics/three_body-dp.png"><img src="pics/three_body-dp.png" alt="three_body-dp.png" /></a>
+</p>
+</div>
+
+<p>
+The code for the above solution is identical except for a change in Runge-Kutta method arguments:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_fixed_stab_wt-dp</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"steps_fixed_stab_wt-dp.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_fixed_stab_wt-dp</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-adaptiveylim" class="outline-2">
+<h2 id="adaptiveylim"><span class="section-number-2">4.</span> Adaptive Solution With More Steps For A Nice Plot</h2>
+<div class="outline-text-2" id="text-adaptiveylim">
+
+<div id="org7eb81f1" class="figure">
+<p><img src="pics/three_body_ylen.png" alt="three_body_ylen.png" />
+</p>
+</div>
+
+<p>
+If we wanted more points in the adaptive solution we could use <code>t_delta_max_o</code>.  This will get us more points, but it's not necessarily what we want for a
+nice graph.  What we really want for a nice graph is a fixed maximum distance between plotted points which a fixed \(\Delta{t}\) will not necessarily deliver.
+That said we still want the adaptive algorithm to produce points closer together when accuracy requires it.  One way to achieve that is with the step
+processing capability of <code>steps_adapt_etab_wt()</code> via the <code>stepp_o</code> argument.  Only the first two components of the solution are plotted (the position of the
+satellite).  What we want the <code>stepp_o</code> subroutine to do is shrink \(\Delta{t}\) if the distance between the first two components of the solution are too far
+away from the first two points of the previous solution.  The following subroutine will do the trick:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-fix-delta-stepp</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">It is sloppy because we assume t_delta is linearly proportional to y_delta_len</span>
+<span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_sloppy_y_delta_len_max</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status, end_run</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> new_t_delta</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> sdf_flags</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> pnt_idx</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t_y_sol(:,:), t_delta, y_delta(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),      <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_delta_len_max = 0.1_rk</span>
+  <span style="color: #63b8ff;">integer</span>,            <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_delta_len_idxs(2) = [1, 2]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk)                 ::<span style="color: #7fffd4;"> y_delta_len</span>
+  status    = 0_ik
+  end_run   = 0_ik
+  sdf_flags = 0_ik
+  y_delta_len = <span style="color: #00ffff;">norm2</span>(y_delta(y_delta_len_idxs))
+  <span style="color: #00ffff;">if</span> ( y_delta_len &gt; y_delta_len_max) <span style="color: #00ffff;">then</span>
+     new_t_delta = t_delta * y_delta_len_max / y_delta_len
+  <span style="color: #00ffff;">else</span>
+     new_t_delta = -1.0_rk
+  <span style="color: #00ffff;">end if</span>
+<span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_sloppy_y_delta_len_max</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-fix-delta-stepp</span>
+</pre>
+</div>
+
+<p>
+This isn't a perfect solution as we make the assumpiont that the length of the difference in y-space is proportional to \(\Delta{t}\), but it works pretty well
+in practice.  A more robust solution can be achieved by adding an <code>sdf_o</code> function and isolating a \(\Delta{t}\) that produces a precisely separated solution.  We touch
+on this topic <a href="#fixedyspace">later</a> when we consider the  <code>steps_condy_stab_*t()</code> solvers.
+</p>
+
+<p>
+We "wire up" the above subroutine into <code>steps_adapt_etab_wt()</code> via the <code>stepp_o</code> argument.  Also make note of the addition of <code>istats(5)</code> to our output
+report.  This value is the number of steps recomputed because <code>stepp_o</code> provided a new <code>t_delta</code> value.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-fix-delta-steps</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                         t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                         error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, <span style="color: #00ffff;">&amp;</span>
+                         stepp_o=sp_sloppy_y_delta_len_max);
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run w max y_delta length: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"  stepp t_delta one_step calls: "</span>, istats(5)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-fix-delta-steps.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-fix-delta-steps</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-fixedyspace" class="outline-2">
+<h2 id="fixedyspace"><span class="section-number-2">5.</span> Truly Fixed Steps in y-space</h2>
+<div class="outline-text-2" id="text-fixedyspace">
+<p>
+We can achieve truly fixed step sizes in \(\mathbf{y}\mathrm{-space}\) with the <code>steps_condy_stab_*t()</code> solvers. In the image below we see the difference
+between fixed steps in \(t\mathrm{-space}\) vs \(\mathbf{y}\mathrm{-space}\) &#x2013; remember the are only using the position components of the \(\mathbf{y}\)
+vector (the first two components) and not the velocity components (the last two components).
+</p>
+
+
+<div id="org6e9e150" class="figure">
+<p><img src="pics/three_body_fixed_pos.png" alt="three_body_fixed_pos.png" />
+</p>
+</div>
+
+<p>
+Below are the velocity components plotted in the same manner as the position components.  Notice the wildly differing distances between the solution points.  
+</p>
+
+
+<div id="orgbd515eb" class="figure">
+<p><img src="pics/three_body_fixed_vel.png" alt="three_body_fixed_vel.png" />
+</p>
+</div>
+
+<p>
+In the code below we set <code>y_delta_len_idxs_o</code> to <code>[1, 2]</code> in order to have <code>steps_condy_stab_wt()</code> only use the first two components of the solution vector in
+it's length computation.  This will produce steps that are <code>0.0034</code> long with an accuracy of <code>1.0e-5</code>.  Also note the addition of <code>istats(3)</code>, <code>istats(7)</code> and
+<code>istats(8)</code> to our output report.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90">  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_condy_stab_wt</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, <span style="color: #00ffff;">&amp;</span>
+                         y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed y_delta run: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-len Adjust one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"              bisection limits: "</span>, istats(7)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"           bad bisection start: "</span>, istats(8)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_condy_stab_wt.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_condy_stab_wt</span>
+</pre>
+</div>
+
+<p>
+We can also achieve a sloppy constant length \(\mathbf{y}\mathrm{-space}\) much like we did <a href="#adaptiveylim">previously</a> with <code>steps_adapt_etab_wt()</code> but
+with <code>steps_sloppy_condy_stab_wt()</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_sloppy_condy_stab_wt</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, <span style="color: #00ffff;">&amp;</span>
+                                y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Sloppy Fixed y_delta run: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-len Adjust one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"steps_sloppy_condy_stab_wt.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_sloppy_condy_stab_wt</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-progstop" class="outline-2">
+<h2 id="progstop"><span class="section-number-2">6.</span> Knowing When To Stop</h2>
+<div class="outline-text-2" id="text-progstop">
+<p>
+Sometimes you don't know beforehand when you want the solver to stop.  This is another place where <code>stepp_o</code> can help by providing a way to tell the solver
+when it's time to stop.  For this example we simply tell the solver to stop when we get past a particular value of \(t\).  Of course we could have done this
+with the <code>t_max_o</code> argument.  The <a href="#moonsatorb">next section</a> will explore a more realistic example, but it is complicated by the addition of an SDF
+function.  In this example we keep it simple, and just use the 
+</p>
+
+
+<div id="orgf4d3f18" class="figure">
+<p><img src="pics/three_body_maxt.png" alt="three_body_maxt.png" />
+</p>
+</div>
+
+<p>
+The idea is to use a subroutine for <code>stepp_o</code> that will tell <code>steps_adapt_etab_wt()</code> to quit when we hit a maximum value for \(t\).  The following code will
+do the trick:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-pho-t-max-stepp</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab_wt().</span>
+<span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_max_t</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> end_run</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> new_t_delta</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> sdf_flags</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> pnt_idx</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t_y_sol(:,:), t_delta, y_delta(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span>   ::<span style="color: #7fffd4;"> t_max = 6.2_rk</span>
+  status    = 0_ik
+  sdf_flags = 0_ik
+  new_t_delta = -1.0_rk
+  <span style="color: #00ffff;">if</span> ( t_y_sol(1, pnt_idx-1) + t_delta &gt; t_max) <span style="color: #00ffff;">then</span>
+     end_run = 1_ik
+  <span style="color: #00ffff;">else</span>
+     end_run = 0_ik
+  <span style="color: #00ffff;">end if</span>
+<span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_max_t</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-pho-t-max-stepp</span>
+</pre>
+</div>
+
+<p>
+We wire up this subroutine to <code>steps_adapt_etab_wt()</code> via the <code>stepp_o</code> argument like so:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-pho-t-max</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                         t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                         error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, <span style="color: #00ffff;">&amp;</span>
+                         stepp_o=sp_max_t);
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run w max t: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-pho-t-max.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-pho-t-max</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-moonsatorb" class="outline-2">
+<h2 id="moonsatorb"><span class="section-number-2">7.</span> Satellite &amp; Moon Orbit Intersection</h2>
+<div class="outline-text-2" id="text-moonsatorb">
+
+<div id="orgae7148e" class="figure">
+<p><img src="pics/three_body_moon.png" alt="three_body_moon.png" />
+</p>
+</div>
+
+<p>
+In the image above note the last adaptive point is precisely on the intersection of the satellite and moon orbit.  We could easily stop with a <code>stepp_o</code>
+routine after we cross the moon orbit &#x2013; much like we did in the <a href="#progstop">previous section</a>.  If we did that we would have a final solution segment that
+straddled the orbit, but it is unlikely that the final end point would be precisely on the orbit.  What we need here is a way to find a \(\Delta{t}\) for our
+last interval that leads to a solution that precisely hits the moon's orbit.  We can do that by adding and <code>sdf_o</code> subroutine and having our <code>stepp_o</code>
+subroutine tell <code>steps_adapt_etab_wt()</code> when to use it.
+</p>
+
+<p>
+Lets take a look at the <code>stepp_o</code> subroutine first.  This routine first checks to see if the solution point is on the moon's orbit, and tells
+<code>steps_adapt_etab_wt()</code> to quit if it is.  This is very unlikely to happen, but we check anyhow.  Next it checks to see if the solution segment straddles the
+moons orbit &#x2013; i.e. if the previous solution was on one side of the orbit while the current on is on the other.  If this occurs the <code>stepp_o</code> tells
+<code>steps_adapt_etab_wt()</code> two things: 1) Solve for the final \(\Delta{t}\) with <code>sdf_o</code>, and 2) quit after this solution.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-isct-stepp</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works in conjunction with</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">sdf_cross_moon().</span>
+<span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_cross_moon</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status, end_run</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> new_t_delta</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> sdf_flags</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> pnt_idx</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t_y_sol(:,:), t_delta, y_delta(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span>   ::<span style="color: #7fffd4;"> eps = 0.0001_rk</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk)                 ::<span style="color: #7fffd4;"> lp_d, cp_d    </span>
+  status      = 0_ik
+  sdf_flags   = 0_ik
+  end_run     = 0_ik
+  new_t_delta = -1.0_rk
+  <span style="color: #00ffff;">if</span> (t_y_sol(1, pnt_idx-1) &gt; 0.2_rk) <span style="color: #00ffff;">then</span>
+     cp_d = <span style="color: #00ffff;">norm2</span>(t_y_sol(2:3, pnt_idx-1)+y_delta(1:2))
+     <span style="color: #00ffff;">if</span> ( <span style="color: #00ffff;">abs</span>(cp_d-1.0_rk)  &lt; eps) <span style="color: #00ffff;">then</span>
+        end_run   = 1_ik
+     <span style="color: #00ffff;">else</span>
+        lp_d = <span style="color: #00ffff;">norm2</span>(t_y_sol(2:3, pnt_idx-1))
+        <span style="color: #00ffff;">if</span> ((<span style="color: #00ffff;">min</span>(lp_d, cp_d) &lt; 1.0_rk) <span style="color: #00ffff;">.and.</span> (<span style="color: #00ffff;">max</span>(lp_d, cp_d) &gt; 1.0_rk)) <span style="color: #00ffff;">then</span>
+           sdf_flags = 1_ik
+           end_run   = 1_ik
+        <span style="color: #00ffff;">end if</span>
+     <span style="color: #00ffff;">end if</span>
+  <span style="color: #00ffff;">end if</span>
+<span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_cross_moon</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-isct-stepp</span>
+</pre>
+</div>
+
+<p>
+The magical SDF function is pretty simple in this case.  The moon's orbit in this scaled problem is the unit circle, so we just have to subtract the norm of
+the solution's position from 1!
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-isct-sdf</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example SDF subroutine to isolate a point on a solution segment that crosses the unit circle.</span>
+<span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sdf_cross_moon</span>(status, dist, sdf_flags, t, y)
+  <span style="color: #00ffff;">use</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_config</span>, <span style="color: #00ffff;">only</span>: rk, ik
+  <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dist</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> sdf_flags</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t, y(:)</span>
+  status = 0_ik
+  dist = 1.0_rk - <span style="color: #00ffff;">norm2</span>(y(1:2))
+<span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sdf_cross_moon</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-isct-sdf</span>
+</pre>
+</div>
+
+<p>
+As usual we wire these two functions up to <code>steps_adapt_etab_wt()</code> via the <code>stepp_o</code> and <code>sdf_o</code> arguments.
+Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the reporting.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-isct</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                         t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                         error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, <span style="color: #00ffff;">&amp;</span>
+                         stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run w moon orbit hit: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"              bisection limits: "</span>, istats(7)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"           bad bisection start: "</span>, istats(8)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-isct.csv"</span>, end_o=istats(1))
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-isct</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-full-code" class="outline-2">
+<h2 id="full-code"><span class="section-number-2">8.</span> Full Code Listing</h2>
+<div class="outline-text-2" id="text-full-code">
+</div>
+<div id="outline-container-fortrancode" class="outline-3">
+<h3 id="fortrancode"><span class="section-number-3">8.1.</span> Fortran Code</h3>
+<div class="outline-text-3" id="text-fortrancode">
+<div class="org-src-container">
+<pre class="src src-f90">
+<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
+<span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">three_body</span>
+  <span style="color: #00ffff;">use</span>, <span style="color: #00ffff;">intrinsic</span> :: <span style="color: #00fa9a; font-weight: bold;">iso_fortran_env</span>,                <span style="color: #00ffff;">only</span>: <span style="color: #8470ff; font-weight: bold;">output_unit</span>, <span style="color: #8470ff; font-weight: bold;">error_unit</span>
+  <span style="color: #00ffff;">use</span>            :: mrkiss_config,                  <span style="color: #00ffff;">only</span>: rk, ik, t_delta_tiny
+  <span style="color: #00ffff;">use</span>            :: mrkiss_solvers_wt,              <span style="color: #00ffff;">only</span>: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
+  <span style="color: #00ffff;">use</span>            :: mrkiss_utils,                   <span style="color: #00ffff;">only</span>: print_t_y_sol
+  <span style="color: #00ffff;">use</span>            :: mrkiss_eerk_verner_9_8,         <span style="color: #00ffff;">only</span>: a, b1, b2, c, p1, p2
+  <span style="color: #00ffff;">use</span>            :: mrkiss_eerk_dormand_prince_5_4, <span style="color: #00ffff;">only</span>: dpa=&gt;a, dpb=&gt;b1, dpc=&gt;c
+
+  <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
+
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> deq_dim       = 4</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> num_points    = 4000</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_iv          = 0.0_rk</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end         = 17.06521656015796_rk</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> path_length   = 10.7068_rk </span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_iv(deq_dim) = [0.994_rk, 0.0_rk, 0.0_rk, -2.0015851063790825224_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(1)      = [1.0_rk / 81.45_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_delta       = 17.06521656015796d0 / (num_points - 1 )</span>
+
+  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> t_y_sol(1+deq_dim, num_points)</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(16)</span>
+  <span style="color: #63b8ff;">integer</span>                     ::<span style="color: #7fffd4;"> c_beg, c_end, c_rate</span>
+
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_fixed_stab_wt</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"tree_body_steps_fixed_stab_wt.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_fixed_stab_wt</span>
+
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_fixed_stab_wt-dp</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"steps_fixed_stab_wt-dp.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_fixed_stab_wt-dp</span>
+
+    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_condy_stab_wt</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, <span style="color: #00ffff;">&amp;</span>
+                           y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed y_delta run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-len Adjust one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"              bisection limits: "</span>, istats(7)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"           bad bisection start: "</span>, istats(8)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_condy_stab_wt.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_condy_stab_wt</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_sloppy_condy_stab_wt</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, <span style="color: #00ffff;">&amp;</span>
+                                  y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Sloppy Fixed y_delta run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-len Adjust one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"steps_sloppy_condy_stab_wt.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_sloppy_condy_stab_wt</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-std</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-std.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-std</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-fix-delta-steps</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, <span style="color: #00ffff;">&amp;</span>
+                           stepp_o=sp_sloppy_y_delta_len_max);
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run w max y_delta length: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"  stepp t_delta one_step calls: "</span>, istats(5)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-fix-delta-steps.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-fix-delta-steps</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-pho-t-max</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, <span style="color: #00ffff;">&amp;</span>
+                           stepp_o=sp_max_t);
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run w max t: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-pho-t-max.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-pho-t-max</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-isct</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_adapt_etab_wt</span>(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, <span style="color: #00ffff;">&amp;</span>
+                           t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], <span style="color: #00ffff;">&amp;</span>
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, <span style="color: #00ffff;">&amp;</span>
+                           stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive run w moon orbit hit: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Total one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"              bisection limits: "</span>, istats(7)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"           bad bisection start: "</span>, istats(8)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-isct.csv"</span>, end_o=istats(1))
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-isct</span>
+
+<span style="color: #00ffff;">contains</span>
+
+  <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, t, y, param)
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
+    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Vars</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk)<span style="color: #7fffd4;"> x1,x2,v1,v2,mu,s1,s2,s3,x22,s12,s32,bf1,bf2</span>
+    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Compute dydt</span>
+    x1  = y(1)                   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">y(1)     = Position x coordinate</span>
+    x2  = y(2)                   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">y(2)     = Position y coordinate</span>
+    v1  = y(3)                   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">y(3)     = Velocity x coordinate</span>
+    v2  = y(4)                   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">y(3)     = Velocity y coordinate</span>
+    s1  = x1 + param(1) - 1.0_rk <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">param(1) = mu</span>
+    s2  = 1.0_rk - param(1)
+    s3  = x1 + param(1)
+    x22 = x2**2
+    s12 = s1**2
+    s32 = s3**2
+    bf1 = (x22 + s12)**(3.0_rk/2.0_rk)
+    bf2 = (x22 + s32)**(3.0_rk/2.0_rk)
+    <span style="color: #00ffff;">if</span> (<span style="color: #00ffff;">abs</span>(bf1) &lt; 0.0e-15) <span style="color: #00ffff;">then</span>
+       status = 1
+       <span style="color: #00ffff;">return</span>
+    <span style="color: #00ffff;">end if</span>
+    <span style="color: #00ffff;">if</span> (<span style="color: #00ffff;">abs</span>(bf2) &lt; 0.0e-15) <span style="color: #00ffff;">then</span>
+       status = 2
+       <span style="color: #00ffff;">return</span>
+    <span style="color: #00ffff;">end if</span>
+    dydt(1) = v1
+    dydt(2) = v2
+    dydt(3) =   2 * v2 + x1 - (param(1) * s1) / bf1 - (s2 * s3) / bf2
+    dydt(4) =  -2 * v1 + x2 - (param(1) * x2) / bf1 - (s2 * x2) / bf2
+    status = 0
+  <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-pho-t-max-stepp</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab_wt().</span>
+  <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_max_t</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> end_run</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> new_t_delta</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> sdf_flags</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> pnt_idx</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t_y_sol(:,:), t_delta, y_delta(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span>   ::<span style="color: #7fffd4;"> t_max = 6.2_rk</span>
+    status    = 0_ik
+    sdf_flags = 0_ik
+    new_t_delta = -1.0_rk
+    <span style="color: #00ffff;">if</span> ( t_y_sol(1, pnt_idx-1) + t_delta &gt; t_max) <span style="color: #00ffff;">then</span>
+       end_run = 1_ik
+    <span style="color: #00ffff;">else</span>
+       end_run = 0_ik
+    <span style="color: #00ffff;">end if</span>
+  <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_max_t</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-pho-t-max-stepp</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-fix-delta-stepp</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">It is sloppy because we assume t_delta is linearly proportional to y_delta_len</span>
+  <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_sloppy_y_delta_len_max</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status, end_run</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> new_t_delta</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> sdf_flags</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> pnt_idx</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t_y_sol(:,:), t_delta, y_delta(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),      <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_delta_len_max = 0.1_rk</span>
+    <span style="color: #63b8ff;">integer</span>,            <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_delta_len_idxs(2) = [1, 2]</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk)                 ::<span style="color: #7fffd4;"> y_delta_len</span>
+    status    = 0_ik
+    end_run   = 0_ik
+    sdf_flags = 0_ik
+    y_delta_len = <span style="color: #00ffff;">norm2</span>(y_delta(y_delta_len_idxs))
+    <span style="color: #00ffff;">if</span> ( y_delta_len &gt; y_delta_len_max) <span style="color: #00ffff;">then</span>
+       new_t_delta = t_delta * y_delta_len_max / y_delta_len
+    <span style="color: #00ffff;">else</span>
+       new_t_delta = -1.0_rk
+    <span style="color: #00ffff;">end if</span>
+  <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_sloppy_y_delta_len_max</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-fix-delta-stepp</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-isct-stepp</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works in conjunction with</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">sdf_cross_moon().</span>
+  <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_cross_moon</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status, end_run</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> new_t_delta</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> sdf_flags</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> pnt_idx</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t_y_sol(:,:), t_delta, y_delta(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span>   ::<span style="color: #7fffd4;"> eps = 0.0001_rk</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk)                 ::<span style="color: #7fffd4;"> lp_d, cp_d    </span>
+    status      = 0_ik
+    sdf_flags   = 0_ik
+    end_run     = 0_ik
+    new_t_delta = -1.0_rk
+    <span style="color: #00ffff;">if</span> (t_y_sol(1, pnt_idx-1) &gt; 0.2_rk) <span style="color: #00ffff;">then</span>
+       cp_d = <span style="color: #00ffff;">norm2</span>(t_y_sol(2:3, pnt_idx-1)+y_delta(1:2))
+       <span style="color: #00ffff;">if</span> ( <span style="color: #00ffff;">abs</span>(cp_d-1.0_rk)  &lt; eps) <span style="color: #00ffff;">then</span>
+          end_run   = 1_ik
+       <span style="color: #00ffff;">else</span>
+          lp_d = <span style="color: #00ffff;">norm2</span>(t_y_sol(2:3, pnt_idx-1))
+          <span style="color: #00ffff;">if</span> ((<span style="color: #00ffff;">min</span>(lp_d, cp_d) &lt; 1.0_rk) <span style="color: #00ffff;">.and.</span> (<span style="color: #00ffff;">max</span>(lp_d, cp_d) &gt; 1.0_rk)) <span style="color: #00ffff;">then</span>
+             sdf_flags = 1_ik
+             end_run   = 1_ik
+          <span style="color: #00ffff;">end if</span>
+       <span style="color: #00ffff;">end if</span>
+    <span style="color: #00ffff;">end if</span>
+  <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_cross_moon</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-isct-stepp</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-isct-sdf</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example SDF subroutine to isolate a point on a solution segment that crosses the unit circle.</span>
+  <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sdf_cross_moon</span>(status, dist, sdf_flags, t, y)
+    <span style="color: #00ffff;">use</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_config</span>, <span style="color: #00ffff;">only</span>: rk, ik
+    <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dist</span>
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> sdf_flags</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t, y(:)</span>
+    status = 0_ik
+    dist = 1.0_rk - <span style="color: #00ffff;">norm2</span>(y(1:2))
+  <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sdf_cross_moon</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-isct-sdf</span>
+
+<span style="color: #00ffff;">end program</span> <span style="color: #00fa9a; font-weight: bold;">three_body</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-rcode" class="outline-3">
+<h3 id="rcode"><span class="section-number-3">8.2.</span> R Code</h3>
+<div class="outline-text-3" id="text-rcode">
+<p>
+The images were produced with R.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
+adDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_etab_wt-std.csv'</span>)
+ftDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'tree_body_steps_fixed_stab_wt.csv'</span>)
+fyDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_condy_stab_wt.csv'</span>)
+loDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'steps_fixed_stab_wt-dp.csv'</span>)
+loDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'steps_fixed_stab_wt-dp.csv'</span>)
+slDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'steps_sloppy_condy_stab_wt.csv'</span>)
+a2Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_etab_wt-fix-delta-steps.csv'</span>)
+a3Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_etab_wt-pho-t-max.csv'</span>)
+a4Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_etab_wt-isct.csv'</span>)
+
+erDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(b=c(<span style="color: #fa8072;">'Earth'</span>), x=c(0), y=c(0))
+moDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(x=cos(seq(0, 2*pi, 0.01)), y=sin(seq(0, 2*pi, 0.01)))
+ivDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(x=0.994, y=0.0)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_point(data=erDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Earth'</span>)) +
+  geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
+  geom_point(data=adDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
+  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'No stepp_o'</span>) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_point(data=erDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Earth'</span>)) +
+  geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'High Order Fixed Steps'</span>))  +
+  geom_path(data=loDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Low Order Fixed Steps'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"High Order Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Low Order Fixed Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'High vs. Low Order Fixed Steps'</span>) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body-dp.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_point(data=erDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Earth'</span>)) +
+  geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
+  geom_point(data=a2Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
+  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'y_delta_length via stepp_o'</span>) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body_ylen.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_point(data=erDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Earth'</span>)) +
+  geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
+  geom_point(data=a3Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
+  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'max_t via stepp_o'</span>) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body_maxt.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_point(data=erDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Earth'</span>)) +
+  geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
+  geom_point(data=a4Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
+  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'Moon orbit intersection'</span>) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body_moon.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_point(data=ftDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2-0.01, col=<span style="color: #fa8072;">'Fixed Time Steps'</span>)) + 
+  geom_path( data=ftDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2-0.01, col=<span style="color: #fa8072;">'Fixed Time Steps'</span>)) +
+  geom_point(data=slDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2-0.02, col=<span style="color: #fa8072;">'Sloppy Fixed Time Steps'</span>)) + 
+  geom_path( data=slDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2-0.02, col=<span style="color: #fa8072;">'Sloppy Fixed Time Steps'</span>)) +
+  geom_point(data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
+  geom_path( data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'Fixed Position Steps vs Fixed Time Steps (position)'</span>) +
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
+        axis.title.y=element_blank(), axis.text.y=element_blank(),
+        legend.position = c(0.2, 0.7)) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body_fixed_pos.png'</span>, plot=gp, width=1024, height=600, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_point(data=ftDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4-0.12, y=y3-0.15, col=<span style="color: #fa8072;">'Fixed Time Steps'</span>)) + 
+  geom_path( data=ftDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4-0.12, y=y3-0.15, col=<span style="color: #fa8072;">'Fixed Time Steps'</span>)) +
+  geom_point(data=slDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4-0.12, y=y3-0.22, col=<span style="color: #fa8072;">'Sldat Fixed Time Steps'</span>)) + 
+  geom_path( data=slDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4-0.12, y=y3-0.22, col=<span style="color: #fa8072;">'Sldat Fixed Time Steps'</span>)) +
+  geom_point(data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4, y=y3, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
+  geom_path( data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4, y=y3, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'Fixed Position Steps vs Fixed Time Steps (velocity)'</span>) +
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
+        axis.title.y=element_blank(), axis.text.y=element_blank(),
+        legend.position = c(0.7, 0.7)) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body_fixed_vel.png'</span>, plot=gp, width=1024, height=600, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+</div>
+</body>
+</html>

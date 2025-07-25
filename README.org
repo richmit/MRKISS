@@ -4,6 +4,7 @@
 *use* and *experiment with* explicit Runge-Kutta methods.
 
  - [[https://richmit.github.io/MRKISS/index.html][Draft Documentation]]
+ - [[https://richmit.github.io/MRKISS/ex_three_body.html][An Example]]
  - [[https://richmit.github.io/MRKISS/roadmap.html][Work In Progress]]
 
 * This project is under construction

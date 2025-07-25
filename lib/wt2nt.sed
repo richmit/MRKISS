@@ -64,6 +64,8 @@ s/\(steps_fixed_stab_nt(\([^,]\+,\)\{4\}\)[^,]\+,/\1/;
 
 s/\(steps_condy_stab_nt(\([^,]\+,\)\{4\}\)[^,]\+,/\1/; 
 
+s/\(steps_sloppy_condy_stab_nt(\([^,]\+,\)\{4\}\)[^,]\+,/\1/; 
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Remove variable declarations with just a t -- I have left these on lines by themselves to make this easy. 
 

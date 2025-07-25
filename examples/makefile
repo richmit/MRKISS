@@ -49,13 +49,13 @@ EXE_TARGETS = three_body lorenz minimal brusselator
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) three_body.f90 $(MRKISS_OBJ_FILES) -o $@
 
-three_body_adaptive_ylen.csv three_body_adaptive_maxt.csv three_body_adaptive_moon.csv three_body_adaptive.csv three_body_fixed_y.csv three_body_fixed_t.csv &: three_body
+three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_condy_stab_wt.csv tree_body_steps_fixed_stab_wt.csv &: three_body
 	./three_body$(EXE_SUFFIX)
 	ls -l three_body_*.csv
 
-three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png &: three_body_adaptive_ylen.csv three_body_adaptive_maxt.csv three_body_adaptive_moon.csv three_body_adaptive.csv three_body_fixed_y.csv three_body_fixed_t.csv three_body.R
+three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png &: three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_condy_stab_wt.csv tree_body_steps_fixed_stab_wt.csv three_body.R
 	R --no-save --no-echo -q -f three_body.R
-	$(IMG_VIEWER) three_body.png three_body_adaptive_maxt.csv three_body_ylen.png three_body_moon.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_unfixed_pos.png &
+	$(IMG_VIEWER) three_body.png three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_ylen.png three_body_moon.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_unfixed_pos.png &
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)

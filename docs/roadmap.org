@@ -56,11 +56,8 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
  - Add ARKODE_VERNER_13_7_8
    - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8
    - Check to see if it is on Stone's or Verner's site.
- - Add example documentation page
-   - Document examples
-   - Show pictures
- - Make sure examples are comprehensive and useful
  - Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~
+ - Consider how to use examples as consistency tests
  - Add tests for high level solvers
    - ~steps_fixed_stab_*t()~
      - ~with richardson~
@@ -99,6 +96,9 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
        - ~new_t_delta~
        - ~sdf_flags~
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
+ - Add example documentation pages
+   - +~three_body~+
+   - ~lorenz~
  - +Add aspect ratio argument to ~steps_condy_stab_*t()~+ *CANCELED**
  - +Add "sloppy" option to ~steps_condy_stab_*t~+ *CANCELED**
  - +Add option to not error out on bisection problems in ~steps_condy_stab_*t()~+ *DONE*
