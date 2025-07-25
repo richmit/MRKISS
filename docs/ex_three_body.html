@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-25 Fri 15:20 -->
+<!-- 2025-07-25 Fri 15:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-25 15:20:27</i></td>
+<td class="org-left"><i>2025-07-25 15:31:59</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-25 15:20:27</i></td>
+<td class="org-left"><i>2025-07-25 15:32:00</i></td>
 </tr>
 </tbody>
 </table>
@@ -367,7 +367,7 @@ In this section we produce the classical image of the solution.
 </p>
 
 
-<div id="org02a2f27" class="figure">
+<div id="org9b4543b" class="figure">
 <p><img src="pics/three_body.png" alt="three_body.png" />
 </p>
 </div>
@@ -453,7 +453,7 @@ In the following image we see the unsatisfactory result of using a 5th order sol
 </p>
 
 
-<div id="org0fa9197" class="figure">
+<div id="orga50fc23" class="figure">
 <p><a href="pics/three_body-dp.png"><img src="pics/three_body-dp.png" alt="three_body-dp.png" /></a>
 </p>
 </div>
@@ -482,7 +482,7 @@ The code for the above solution is identical except for a change in Runge-Kutta 
 <h2 id="adaptiveylim"><span class="section-number-2">4.</span> Adaptive Solution With More Steps For A Nice Plot</h2>
 <div class="outline-text-2" id="text-adaptiveylim">
 
-<div id="orgc474b1c" class="figure">
+<div id="orgce527dc" class="figure">
 <p><img src="pics/three_body_ylen.png" alt="three_body_ylen.png" />
 </p>
 </div>
@@ -565,7 +565,7 @@ vector (the first two components) and not the velocity components (the last two 
 </p>
 
 
-<div id="orga054d94" class="figure">
+<div id="org8ce3a8e" class="figure">
 <p><img src="pics/three_body_fixed_pos.png" alt="three_body_fixed_pos.png" />
 </p>
 </div>
@@ -575,7 +575,7 @@ Below are the velocity components plotted in the same manner as the position com
 </p>
 
 
-<div id="org68819df" class="figure">
+<div id="org1214ad6" class="figure">
 <p><img src="pics/three_body_fixed_vel.png" alt="three_body_fixed_vel.png" />
 </p>
 </div>
@@ -639,7 +639,7 @@ function.  In this example we keep it simple, and just use the
 </p>
 
 
-<div id="orga874e7b" class="figure">
+<div id="org7dcb145" class="figure">
 <p><img src="pics/three_body_maxt.png" alt="three_body_maxt.png" />
 </p>
 </div>
@@ -701,7 +701,7 @@ We wire up this subroutine to <code>steps_adapt_etab_wt()</code> via the <code>s
 <h2 id="moonsatorb"><span class="section-number-2">7.</span> Satellite &amp; Moon Orbit Intersection</h2>
 <div class="outline-text-2" id="text-moonsatorb">
 
-<div id="org80a56ea" class="figure">
+<div id="org2bb4438" class="figure">
 <p><img src="pics/three_body_moon.png" alt="three_body_moon.png" />
 </p>
 </div>
@@ -1113,16 +1113,17 @@ a4Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span 
 
 erDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(b=c(<span style="color: #fa8072;">'Earth'</span>), x=c(0), y=c(0))
 moDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(x=cos(seq(0, 2*pi, 0.01)), y=sin(seq(0, 2*pi, 0.01)))
-ivDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(x=0.994, y=0.0)
+m0Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(x=1.0, y=0.0)
 
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
   geom_point(data=erDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Earth'</span>)) +
   geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
   geom_point(data=adDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
-  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
-  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'No stepp_o'</span>) +
+  geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
+       subtitle=<span style="color: #fa8072;">'No stepp_o'</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
@@ -1131,8 +1132,10 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'High Order Fixed Steps'</span>))  +
   geom_path(data=loDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Low Order Fixed Steps'</span>)) +
+  geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"High Order Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Low Order Fixed Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'High vs. Low Order Fixed Steps'</span>) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
+       subtitle=<span style="color: #fa8072;">'High vs. Low Order Fixed Steps'</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body-dp.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
@@ -1141,9 +1144,10 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
   geom_point(data=a2Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
-  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
-  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'y_delta_length via stepp_o'</span>) +
+  geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
+       subtitle=<span style="color: #fa8072;">'y_delta_length via stepp_o'</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body_ylen.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
@@ -1152,9 +1156,10 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
   geom_point(data=a3Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
-  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
-  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'max_t via stepp_o'</span>) +
+  geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
+       subtitle=<span style="color: #fa8072;">'max_t via stepp_o'</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body_maxt.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
@@ -1163,9 +1168,10 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_path(data=moDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   geom_path(data=ftDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Steps'</span>))  +
   geom_point(data=a4Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
-  geom_point(data=ivDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'IV'</span>)) +
-  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>, <span style="color: #fa8072;">"IV"</span>=<span style="color: #fa8072;">"black"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'Moon orbit intersection'</span>) +
+  geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
+       subtitle=<span style="color: #fa8072;">'Moon orbit intersection'</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body_moon.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
@@ -1176,9 +1182,10 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_path( data=slDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2-0.02, col=<span style="color: #fa8072;">'Sloppy Fixed Time Steps'</span>)) +
   geom_point(data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
   geom_path( data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'Fixed Position Steps vs Fixed Time Steps (position)'</span>) +
-  theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
-        axis.title.y=element_blank(), axis.text.y=element_blank(),
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
+       subtitle=<span style="color: #fa8072;">'Fixed Position Steps vs Fixed Time Steps (position)'</span>) +
+  theme(axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
         legend.position = c(0.2, 0.7)) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body_fixed_pos.png'</span>, plot=gp, width=1024, height=600, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
@@ -1190,9 +1197,10 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_path( data=slDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4-0.12, y=y3-0.22, col=<span style="color: #fa8072;">'Sldat Fixed Time Steps'</span>)) +
   geom_point(data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4, y=y3, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
   geom_path( data=fyDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(t&lt;0.15), aes(x=y4, y=y3, col=<span style="color: #fa8072;">'Fixed Position Steps'</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=<span style="color: #fa8072;">'x'</span>, y=<span style="color: #fa8072;">'y'</span>, col=<span style="color: #fa8072;">''</span>, subtitle=<span style="color: #fa8072;">'Fixed Position Steps vs Fixed Time Steps (velocity)'</span>) +
-  theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
-        axis.title.y=element_blank(), axis.text.y=element_blank(),
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(v[1]), y=expression(v[2]), col=<span style="color: #fa8072;">''</span>, 
+       subtitle=<span style="color: #fa8072;">'Fixed Position Steps vs Fixed Time Steps (velocity)'</span>) +
+  theme(axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
         legend.position = c(0.7, 0.7)) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body_fixed_vel.png'</span>, plot=gp, width=1024, height=600, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
