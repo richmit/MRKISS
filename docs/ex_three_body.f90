@@ -80,7 +80,7 @@ Where \(D_1\) and \(D_2\) are defined as:
 We solve the equations with the following initial values:
 
  \[\begin{align*}
-    (x_1,x_2) &=  (0.994, 0) \\
+    (x_1,x_2) &=  \left(\frac{497}{500}, 0\right) \\
     (v_1,v_2) & = (0, -2.0015851063790825224)  
  \end{align*}\]
 
