@@ -104,4 +104,4 @@ minimal : minimal.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 clean : clean_multi_mrkiss
-	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe
+	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.svg
