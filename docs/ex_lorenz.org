@@ -2,7 +2,7 @@
 # ######################################################################################################################################################.H.S.##
 # FILE:        ex_lorenz.f90
 #+TITLE:       MRKISS Library Example
-#+SUBTITLE:    The Lornez Problem
+#+SUBTITLE:    Strange Attractors
 #+AUTHOR:      Mitch Richling
 #+EMAIL:       http://www.mitchr.me/
 #+DESCRIPTION: MRKISS Documentation Examples

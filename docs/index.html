@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-24 Thu 16:44 -->
+<!-- 2025-07-26 Sat 14:46 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-24 16:43:42</i></td>
+<td class="org-left"><i>2025-07-26 14:46:34</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-24 16:44:21</i></td>
+<td class="org-left"><i>2025-07-26 14:46:43</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orga0eabf5">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orgf3c12e1">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#org6b185f9">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org71a0b21">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org43fbe90">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#orgcb806b1">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -341,8 +341,6 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> is a <b>simple</b>, <b>tiny</b> library with <b>zero dependencies</b><a href="#faq-deps">[*</a>] that aims to make it easy to <b>use</b>
 and <b>experiment with</b> explicit Runge-Kutta methods.
 </p>
-
-
 
 <p>
 From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like SUNDIALS or DifferentialEquations.jl; however,
@@ -393,7 +391,15 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
 </div>
 
 <p>
-If you just want to jump in, then take a look at the <a href="#qs-min">Quick Start</a> section.
+You can check out a couple larger examples:
+</p>
+<ul class="org-ul">
+<li><a href="ex_three_body.html">Three Body Problem</a></li>
+<li><a href="ex_lorenz.html">Lornez Attracter</a></li>
+</ul>
+
+<p>
+If you just want to jump in, then take a look at the <a href="#qs-min">Quick Start</a> section.  
 </p>
 </div>
 </div>
@@ -484,8 +490,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orga0eabf5" class="outline-2">
-<h2 id="orga0eabf5"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orgf3c12e1" class="outline-2">
+<h2 id="orgf3c12e1"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -740,8 +746,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-org6b185f9" class="outline-3">
-<h3 id="org6b185f9"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org43fbe90" class="outline-3">
+<h3 id="org43fbe90"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -830,8 +836,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org71a0b21" class="outline-3">
-<h3 id="org71a0b21"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-orgcb806b1" class="outline-3">
+<h3 id="orgcb806b1"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1194,7 +1200,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org24b1b0f">
+<pre class="example" id="org0d8b715">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1214,7 +1220,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="org2953ec0">
+<pre class="example" id="org6aacb1e">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1232,7 +1238,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org0f43adc" class="figure">
+<div id="orgd0b7b80" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>

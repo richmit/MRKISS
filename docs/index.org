@@ -61,8 +61,6 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 *[[https://github.com/richmit/MRKISS][~MRKISS~]]* is a *simple*, *tiny* library with *zero dependencies*[[#faq-deps][[*]]] that aims to make it easy to *use*
 and *experiment with* explicit Runge-Kutta methods.
 
-
-
 From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like SUNDIALS or DifferentialEquations.jl; however,
 it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and code with others others without
 asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things up and and running quickly when
@@ -111,8 +109,11 @@ contains
 end program minimal
 #+end_src
 
-If you just want to jump in, then take a look at the [[#qs-min][Quick Start]] section.
+You can check out a couple larger examples:
+   - [[file:ex_three_body.html][Three Body Problem]]
+   - [[file:ex_lorenz.html][Lornez Attracter]]
 
+If you just want to jump in, then take a look at the [[#qs-min][Quick Start]] section.  
 
 * Features & Requirements
 :PROPERTIES:
