@@ -56,7 +56,6 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
  - Add ARKODE_VERNER_13_7_8
    - BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8
    - Check to see if it is on Stone's or Verner's site.
- - Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~
  - Consider how to use examples as consistency tests
  - Add tests for high level solvers
    - ~steps_fixed_stab_*t()~
@@ -96,6 +95,8 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
        - ~new_t_delta~
        - ~sdf_flags~
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
+ - +Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~+
+ - +Update comments on ~steps_*~ solvers to reflect all options and algorithm.+
  - +Add ~t_min_o~ and ~t_max_o~ options to ~print_t_y_sol()~+
  - Add example documentation pages
    - +~three_body~+

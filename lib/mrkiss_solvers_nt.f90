@@ -364,11 +364,7 @@ contains
   end subroutine one_step_rkf45_nt
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple fixed steps.
-  !!
-  !! Computes fixed steps and stores solutions in t_y_sol.  In the absence of errors, t_y_sol will be completely filled.  If a
-  !! non-zero status is returned, then the first element istats may be consulted to determine how many solutions t_y_sol
-  !! contains.
+  !> Take multiple fixed time steps with a simple RK method and store solutions in t_y_sol.  
   !!
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
@@ -376,7 +372,7 @@ contains
   !!                        - 1120-1151 .. Error in this routine
   !!                        - others ..... Other values are not allowed
   !! istats(:) ........... Integer statistics for run
-  !!                        istats(1): number of computed solution points
+  !!                        istats(1): number of computed solution points stored in t_y_sol.
   !!                        istats(2): number of one_step_* calls not triggerd by an event
   !! t_y_sol(:,:) ........ Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
   !!                        Each COLUMN is a solution.  
@@ -452,14 +448,7 @@ contains
   end subroutine steps_fixed_stab_nt
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps with a simple RK method to achieve constant length y_delta steps.
-  !!
-  !! The t_y_sol matrix might not be completely filled upon return:
-  !!   - A step failed because a t_delta couldn't be found that produces the required y_delta_len_targ.
-  !!   - A step failed because deq returned an error.
-  !!   - The routine ended because the length of the solution has grown longer than y_sol_len_max_o
-  !! Note the first two conditions will generate an error, non-zero status; however, the third item is a clean exit with status
-  !! equal to zero.  Therefore the value of istats(1) should always be consulted to determine the number of solutions in t_y_sol.
+  !> Take multiple adaptive steps with constant length y_delta using a simple RK method storing the solutions in t_y_sol.  
   !!
   !! The adaptive step size is controlled to result in steps that achieve a constant "length".  The "length" is defined to be the
   !! Euclidean norm of the subset of the solution vector specified by y_delta_len_idxs_o.  For each solution the routine will
@@ -470,9 +459,6 @@ contains
   !! bracket y_delta_len_targ.  That said, for well behaved functions a t_delta_min_o and t_delta_max may always be found that
   !! work.  In practice finding good values are t_delta_min_o and t_delta_max isn't normally difficult.  One approach for harder
   !! problems is to use fixed step sizes over the interval in question, and then examine the y_delta lengths in the solution.
-  !!
-  !! With some care and effort, fixed y step size can be achieved via steps_adapt_etab_nt.  This function is both easier to use
-  !! and faster.
   !!
   !! My primary use case for this function is to create uniform sphere sweeps for constructive solid geometry applications.
   !!
@@ -508,7 +494,9 @@ contains
   !! y_sol_len_max_o ..... Maximum length of the solution curve
   !! t_max_o ............. Maximum value for t
   !!
-  subroutine steps_condy_stab_nt(status, istats, t_y_sol, deq, y, param, a, b, c, y_delta_len_targ, t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
+  subroutine steps_condy_stab_nt(status, istats, t_y_sol, deq, y, param, a, b, c, y_delta_len_targ, &
+                                 t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
+                                 y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
     use mrkiss_config, only: rk, ik, t_delta_tiny, max_bisect_ai
     implicit none
     ! Arguments
@@ -522,9 +510,11 @@ contains
     ! Variables
     integer(kind=ik)                        :: max_bisect
     integer                                 :: max_pts, cur_pnt_idx, biter
-    real(kind=rk)                           :: y_delta_len_tol, t_delta_min, y_sol_len
-    real(kind=rk)                           :: t_cv, bs_tmp1_t_delta, bs_tmp2_t_delta, bs_tmp1_y_delta_len, bs_tmp2_y_delta_len, bs_tmpc_y_delta_len, bs_tmpc_t_delta
-    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), bs_tmp1_y_delta(size(y, 1)), bs_tmp2_y_delta(size(y, 1)), bs_tmpc_y_delta(size(y, 1))
+    real(kind=rk)                           :: y_delta_len_tol, t_delta_min, y_sol_len, bs_tmp1_y_delta_len
+    real(kind=rk)                           :: bs_tmp1_t_delta, bs_tmp2_t_delta, t_cv
+    real(kind=rk)                           :: bs_tmp2_y_delta_len, bs_tmpc_y_delta_len, bs_tmpc_t_delta
+    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), bs_tmp1_y_delta(size(y, 1)) 
+    real(kind=rk)                           :: bs_tmp2_y_delta(size(y, 1)), bs_tmpc_y_delta(size(y, 1))
     ! Process arguments
     max_pts = size(t_y_sol, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
@@ -640,31 +630,19 @@ contains
     status = 0
   end subroutine steps_condy_stab_nt
 
-
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps with a simple RK method to achieve constant length y_delta steps.
+  !> Take multiple adaptive steps adjusting for the length of y_delta using a simple RK method storing the solutions in t_y_sol.  
   !!
-  !! The t_y_sol matrix might not be completely filled upon return:
-  !!   - A step failed because a t_delta couldn't be found that produces the required y_delta_len_targ.
-  !!   - A step failed because deq returned an error.
-  !!   - The routine ended because the length of the solution has grown longer than y_sol_len_max_o
-  !! Note the first two conditions will generate an error, non-zero status; however, the third item is a clean exit with status
-  !! equal to zero.  Therefore the value of istats(1) should always be consulted to determine the number of solutions in t_y_sol.
+  !! This method attempts to control the length of y_delta.  At each solution step it takes a probing step at t_delta_ini and
+  !! then takes another step with t_delta = t_delta_ini * y_delta_len_targ / y_delta_len.  If which will result in a y_delta
+  !! approximately y_delta_len_targ when t_delta is proportional to y_delta.  By default this second step is only taken when the
+  !! y_delta of the probe step is greater than y_delta_len_targ; however, it will be performed on shorter steps when adj_short_o
+  !! is present -- in this mode it approximates the behavior steps_condy_stab_nt() but is *much* faster.
   !!
-  !! The adaptive step size is controlled to result in steps that achieve a constant "length".  The "length" is defined to be the
-  !! Euclidean norm of the subset of the solution vector specified by y_delta_len_idxs_o.  For each solution the routine will
-  !! make two one_step_stab_* calls with t_delta_min_o and t_delta_max, and then use bisection (with additional calls to
-  !! one_step_stab_*) to isolate a t_delta value that leads to a a length within y_delta_len_tol_o of y_delta_len_targ.
-  !!     
-  !! Note there is no mathematical guarantee that a RK step of size t_delta_min_o and t_delta_max will produce solutions that
-  !! bracket y_delta_len_targ.  That said, for well behaved functions a t_delta_min_o and t_delta_max may always be found that
-  !! work.  In practice finding good values are t_delta_min_o and t_delta_max isn't normally difficult.  One approach for harder
-  !! problems is to use fixed step sizes over the interval in question, and then examine the y_delta lengths in the solution.
+  !! Note the assumption that t_delta is proportional to y_delta.  We have no mathematical guarantee for this assumption; however,
+  !! it generally works in practice with well behaved functions when t_delta_ini is small and the.
   !!
-  !! With some care and effort, fixed y step size can be achieved via steps_adapt_etab_nt.  This function is both easier to use
-  !! and faster.
-  !!
-  !! My primary use case for this function is to create uniform sphere sweeps for constructive solid geometry applications.
+  !! My primary use case for this function is to shrink down long steps for smoother curves/tubes in visualizations.
   !!
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
@@ -694,7 +672,8 @@ contains
   !! t_max_o ............. Maximum value for t
   !!
   subroutine steps_sloppy_condy_stab_nt(status, istats, t_y_sol, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
-                                        t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o, y_sol_len_max_o, t_max_o)
+                                        t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o, &
+                                        y_sol_len_max_o, t_max_o)
     use mrkiss_config, only: rk, ik, t_delta_tiny
     implicit none
     ! Arguments
@@ -775,7 +754,9 @@ contains
   end subroutine steps_sloppy_condy_stab_nt
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps with an embedded RK method using a relatively traditional step size controls.
+  !> Take multiple adaptive steps with an embedded RK method using relatively traditional step size controls.
+  !!
+  !! WARNING: I have not yet finalized the error estimate method.  /0 is possible when error_tol_abs_o = 0.
   !!
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
@@ -817,7 +798,7 @@ contains
   !! no_bisect_error_o ........... If present, do not exit on bisection errors
   !! sdf_o ....................... SDF function.  Used to set new t_delta for a step.  This subroutine may trigger one or
   !!                               more of the follwoing actions:
-  !!                                - status>0      => Immediately returns without doing anything else propagating status to caller.
+  !!                                - status>0      => Immediately returns doing nothing else propagating status to caller.
   !!                                                   Positive status values must come from the interval [256, 511].
   !!                                - new_t_delta>0 => Recompute y_delta using new_t_delta.
   !!                                - sdf_flags>0   => Redo step with a t_delta derived from the sdf_o via bisection.
@@ -825,9 +806,10 @@ contains
   !! sdf_tol_o ................... How close we have to get to accept an sdf solution. Default: sdf_tol_ai
   !! stepp_o ..................... Step processing subroutine.  Called after each step.
   !! 
-  subroutine steps_adapt_etab_nt(status, istats, t_y_sol, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, t_delta_ini_o, &
-                                 t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o,            &
-                                 error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o, no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
+  subroutine steps_adapt_etab_nt(status, istats, t_y_sol, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
+                                 t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
+                                 t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,      &
+                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
     use mrkiss_config
     implicit none
     ! Arguments
@@ -997,7 +979,6 @@ contains
                    end if
                    bs_itr = bs_itr + 1;
                    if (bs_itr > max_bisect) then
-
                       istats(7) = istats(7) + 1
                       if (present(no_bisect_error_o)) then
                          exit
