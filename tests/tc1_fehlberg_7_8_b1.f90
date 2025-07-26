@@ -60,6 +60,10 @@ program tc1_fehlberg_7_8_b1
 ! use :: mrkiss_eerk_verner_1978_6_5,        only: a, b=>b2, c   ! TCASE_COM: verner_1978_6_5_b2
 ! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b=>b1, c   ! TCASE_COM: verner_2010_6_5_b1
 ! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b=>b2, c   ! TCASE_COM: verner_2010_6_5_b2
+! use :: mrkiss_eerk_verner_7_6,             only: a, b=>b1, c   ! TCASE_COM: verner_7_6_b1
+! use :: mrkiss_eerk_verner_7_6,             only: a, b=>b2, c   ! TCASE_COM: verner_7_6_b2
+! use :: mrkiss_eerk_verner_8_7,             only: a, b=>b1, c   ! TCASE_COM: verner_8_7_b1
+! use :: mrkiss_eerk_verner_8_7,             only: a, b=>b2, c   ! TCASE_COM: verner_8_7_b2
 ! use :: mrkiss_eerk_verner_9_8,             only: a, b=>b1, c   ! TCASE_COM: verner_9_8_b1
 ! use :: mrkiss_eerk_verner_9_8,             only: a, b=>b2, c   ! TCASE_COM: verner_9_8_b2
 ! use :: mrkiss_erk_euler_1,                 only: a, b, c       ! TCASE_COM: euler_1

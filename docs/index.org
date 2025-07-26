@@ -393,8 +393,10 @@ stability region.
 | ~mrkiss_eerk_cash_karp_5_4~          |   5   |   4   |   6    |        |
 | ~mrkiss_eerk_bogacki_shampine_4_5~   |   4   |   5   |   7    |        |
 | ~mrkiss_eerk_dormand_prince_5_4~     |   5   |   4   |   7    |  BOO   |
+| ~mrkiss_eerk_verner_7_6~             |   7   |   6   |   10   |        |
 | ~mrkiss_eerk_fehlberg_7_8~           |   7   |   8   |   13   |        |
 | ~mrkiss_eerk_dormand_prince_7_8~     |   7   |   8   |   13   |  BOO   |
+| ~mrkiss_eerk_verner_8_7~             |   8   |   7   |   13   |        |
 | ~mrkiss_eerk_verner_9_8~             |   9   |   8   |   16   |  BOO   |
 
 * Homogeneous vs Non-Homogeneous IVPs Naming Conventions
