@@ -96,6 +96,7 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
        - ~new_t_delta~
        - ~sdf_flags~
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
+ - +Add ~t_min_o~ and ~t_max_o~ options to ~print_t_y_sol()~+
  - Add example documentation pages
    - +~three_body~+
    - ~lorenz~

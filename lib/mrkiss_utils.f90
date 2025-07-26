@@ -69,8 +69,11 @@ contains
   !! step_o ....... Print only every step_o'th value in t_y_sol. Default: 1
   !! no_titles_o .. If present, don't print titles.
   !! separator_o .. String to place between fields.  Default: ',' if width_o missing, and ' ' otherwise.
+  !! t_min_o ...... Print only solutions with time values >= t_min_o
+  !! t_max_o ...... Print only solutions with time values <= t_min_o
   !! 
-  subroutine print_t_y_sol(status, t_y_sol, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o)
+  subroutine print_t_y_sol(status, t_y_sol, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o, &
+                           t_min_o, t_max_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik
     implicit none
@@ -79,6 +82,7 @@ contains
     real(kind=rk),    intent(in)           :: t_y_sol(:,:)
     character(len=*), intent(in), optional :: filename_o, separator_o
     integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o, no_titles_o
+    real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
     ! Local variables
     integer(kind=ik)                       :: digits, width, start_idx, end_idx, step
     character(len=:), allocatable          :: fmt, separator
@@ -140,6 +144,12 @@ contains
           // ',"' // separator // '"', size(t_y_sol, 1)-1) // ',f' // width_str // '.' // trim(digits_str) // ')'
     ! Print numbers
     do i=start_idx,end_idx,step
+       if (present(t_min_o)) then
+          if (t_y_sol(1, i) < t_min_o) cycle
+       end if
+       if (present(t_max_o)) then
+          if (t_y_sol(1, i) > t_max_o) cycle
+       end if
        write (out_io_unit, fmt=fmt) i, t_y_sol(:,i)
     end do
     ! Close file
