@@ -240,6 +240,8 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one Richardson Extrapolation Step.
   !!
+  !! Uses Richardson extrapolation to produce an estimate of order one greater than the provided Runge-Kutta method.
+  !!
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
