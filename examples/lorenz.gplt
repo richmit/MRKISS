@@ -35,13 +35,35 @@
 set encoding utf8
 set termoption noenhanced
 set datafile separator ','
-set title "Lorenz"
-set xlabel "x"
-set ylabel "y"
-set zlabel "z"
-set grid
+# set xlabel "x"
+# set ylabel "y"
+# set zlabel "z"
+#set grid
 set margins 0, 0, 0, 0
-set view 60, 30
+set view 70, 40, 1.3, 1.4
+set xyplane at 0
+unset border
+unset ytics
+unset ztics
+unset xtics
 set terminal svg
-set output 'lorenz.svg'
-splot 'lorenz.csv' using 3:4:5 with lines title ""
+set pointsize 0.2
+
+set title "Lorenz (fixed)"
+set output "lorenz_fixed.svg"
+splot 'lorenz_fixed.csv' using 3:4:5 with linespoints pt 7 title ""
+
+set title "Lorenz (sloppy condy)"
+set terminal svg
+set output "lorenz_sloppy_condy.svg"
+splot 'lorenz_sloppy_condy.csv' using 3:4:5 with linespoints pt 7 title ""
+
+set title "Lorenz (sloppy condy short)"
+set terminal svg
+set output "lorenz_sloppy_condy_short.svg"
+splot 'lorenz_sloppy_condy_short.csv' using 3:4:5 with linespoints pt 7 title ""
+
+set title "Lorenz (condy)"
+set terminal svg
+set output "lorenz_condy.svg"
+splot 'lorenz_condy.csv' using 3:4:5 with linespoints pt 7 title ""

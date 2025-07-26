@@ -1,0 +1,393 @@
+# -*- Mode:Org; Coding:utf-8; fill-column:158 -*-
+# ######################################################################################################################################################.H.S.##
+# FILE:        ex_lorenz.f90
+#+TITLE:       MRKISS Library Example
+#+SUBTITLE:    The Lornez Problem
+#+AUTHOR:      Mitch Richling
+#+EMAIL:       http://www.mitchr.me/
+#+DESCRIPTION: MRKISS Documentation Examples
+#+KEYWORDS:    RK runge kutta ode ivp
+#+LANGUAGE:    en
+#+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil 
+# FIXME: When uncommented the following line will render latex equations as images embedded into exported HTML, when commented MathJax will be used
+# #+OPTIONS:     tex:dvipng
+# FIXME: Select ONE of the three TODO lines below
+# #+SEQ_TODO:    ACTION:NEW(t!) ACTION:ASSIGNED(a!@) ACTION:WORK(w!) ACTION:HOLD(h@) | ACTION:FUTURE(f) ACTION:DONE(d!) ACTION:CANCELED(c!)
+# #+SEQ_TODO:    TODO:NEW(T!)                        TODO:WORK(W!)   TODO:HOLD(H@)   |                  TODO:DONE(D!)   TODO:CANCELED(C!)
+#+SEQ_TODO:    TODO:NEW(t)                         TODO:WORK(w)    TODO:HOLD(h)    | TODO:FUTURE(f)   TODO:DONE(d)    TODO:CANCELED(c)
+#+PROPERTY: header-args :eval never-export
+#+HTML_HEAD: <style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+# Change max-width to get wider output -- also note #content style below
+#+HTML_HEAD: <style>body { min-width: 500px; max-width: 1024px; }</style>
+#+HTML_HEAD: <style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+#+HTML_HEAD: <style>h1,h2,h3 { line-height: 1.4em; }</style>
+#+HTML_HEAD: <style>h1.title { font-size: 3em; }</style>
+#+HTML_HEAD: <style>.subtitle { font-size: 0.6em; }</style>
+#+HTML_HEAD: <style>h4,h5,h6 { font-size: 1em; }</style>
+#+HTML_HEAD: <style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+#+HTML_HEAD: <style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+#+HTML_HEAD: <style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+# Change the following to get wider output -- also note body style above
+#+HTML_HEAD: <style>#content { max-width: 60em; }</style>
+#+HTML_LINK_HOME: https://www.mitchr.me/
+#+HTML_LINK_UP: https://github.com/richmit/MRKISS/
+# ######################################################################################################################################################.H.E.##
+
+#+ATTR_HTML: :border 2 solid #ccc :frame hsides :align center
+|          <r> | <l>                                          |
+|    *Author:* | /{{{author}}}/                               |
+|   *Updated:* | /{{{modification-time(%Y-%m-%d %H:%M:%S)}}}/ |
+| *Generated:* | /{{{time(%Y-%m-%d %H:%M:%S)}}}/              |
+#+ATTR_HTML: :align center
+Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
+
+#+TOC: headlines 2
+
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#   010  #    020  #    030  #    040  #    050  #    060  #    070  #    080  #    090  #    100  #    110  #    120  #    130  #    140  #    150  #    160  #    170  #    180  #    190  #    200  #    210  #    220  #    230  #    240  #    250  #    260  #    270  #    280  #    290  #
+# 345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+
+* Introduction
+:PROPERTIES:
+:CUSTOM_ID: introduction
+:END:
+
+The code for this example is found in [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]].  Additionally the
+code may be found at the end of this document in the section [[#full-code][Full Code Listing]].
+
+One strange thing when visualizing strange attracters is that we are frequently less concerned with the absolute accuracy of the solution curves than we are
+with the spacing of the solution points.  This example uses the [[https://www.mitchr.me/SS/lorenz/index.html][Lorenz attractor]] to explore some of the tools
+*[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides for these kinds of problems.
+
+
+* Curve Evoluation Animation
+:PROPERTIES:
+:CUSTOM_ID: fixed-t
+:END:
+
+For animations of the evolution of the curve, we normally use a fixed \(\Delta{t}\) because this preserves time in the animation so we can see the point
+tracing the curve speed up and slow down as the dirivative changes.  We can produce such a solution with the ~steps_fixed_stab_*t()~ solvers. Here is an
+example of such a curve:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/lorenz_fixed.png
+
+Notice the way some of the steps are much longer than others.  This is especially apparnet in the upper right:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/lorenz_fixed-c.png
+
+Many path animation tools have teh ablity to interpolate nitermediate points on peiceweise curves.  SOme even have the ablty to use derviative information and
+do Hermite interpolation.  Having a few longer steps when using such a tool is no issue.  OTOH, when simply animating successve solution steps, large steps
+can make the animation jerkey.  When this happens, if you still want to preserve time in the animation, the only real solution is to decrease the value used
+for \(\Delta{t}\).
+
+THe solutions used in the images above were created by this snippit of [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]]:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+sed -n '/^  *! BEGIN: lorenz_fixed *$/,/^ *! END: lorenz_fixed *$/p' ../examples/lorenz.f90
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+  ! BEGIN: lorenz_fixed
+  ! This solution will have fixed t-delta, but no control over y-delta.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_fixed_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  call system_clock(c_end)
+  print '(a,f10.3)', "fixed                      "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
+  ! END: lorenz_fixed
+#+end_src
+
+* Sphere Sweeps
+:PROPERTIES:
+:CUSTOM_ID: fixed-y
+:END:
+
+Ray tracing tools can render seines made up of spheres orders of magnitude faster than they can deal with things like triangle.  Because of this fact it is
+common practice to represent curves in space as thousands, or millions, of spheres tightly packed along the curve -- this is called a "sphere sweep".  In
+order for this to work out the spheres need to be close together so that the angles of intersection are very small.  Still we don't want too many spheres as
+every sphere adds time to the overall render.  What we really want is to compute the optimal distance between the sphere centers, and then use this distance
+for /all/ the spheres.  That means we want steps of constant \(\mathbf{\Delta{y}}\).
+
+Solutions with constant \(\mathbf{\Delta{y}}\) steps are also used for /constant velocity/ animations of curve evolution.  These can be interesting when done
+with groups of stream lines.
+
+*[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides two solvers for this situation:
+  - ~steps_condy_stab_*t()~ ::
+    This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
+    minimum and maximum bounds for \(\Delta{t}\) which will bracket the correct value.  The resulting curves are perfect for high quality sphere sweep
+    renders.
+  - ~steps_sloppy_condy_stab_*t()~ ::
+    This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is /much/ faster than the previous option.  The
+    resulting solutions frequently good enough for a sphere sweep.
+
+Here are some representative samples:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/lorenz_condy.png
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/lorenz_sloppy_condy_short.png
+
+These images were created by the following snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]]:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+sed -n '/^  *! BEGIN: lorenz_fixed-y *$/,/^ *! END: lorenz_fixed-y *$/p' ../examples/lorenz.f90
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+  ! BEGIN: lorenz_fixed-y
+  ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_sloppy_condy_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  call system_clock(c_end)
+  print '(a,f10.3)', "sloppy_condy               "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
+
+  ! This solution will have y-delta approximately equal to 1.0 for all steps.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_sloppy_condy_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
+                                  adj_short_o=1)
+  call system_clock(c_end)
+  print '(a,f10.3)', "sloppy_condy short         "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
+  ! END: lorenz_fixed-y
+#+end_src
+
+* Limiting Step Length
+:PROPERTIES:
+:CUSTOM_ID: max-y
+:END:
+
+When drawing /line plots/ of curves we normally want them to be appear smooth which means we must avoid large values for \(\mathbf{\Delta{y}}\).  For curve
+line drawing we normally are not terribly concerned with having a /few/ short intervals because they don't have a huge impact on rendering speed.
+
+When rendering curves as tubes most tools render a sphere at each point and a cylinder connecting the points.  As with line drawings we want the curve to
+appear smooth, and so we wish to avoid large values for \(\mathbf{\Delta{y}}\).  When rendering tubes we /are/ more sensitive to excessive numbers of short
+intervals because every point impacts rendering speed.  In addition, with some tools, very short intervals can introduce rendering glitches.
+
+Of course we can use ~steps_condy_stab_*t()~ and ~steps_sloppy_condy_stab_*t(..., adj_short_o=1)~ as we did in the [[#fixed-y][previous section]]; however,
+~steps_sloppy_condy_stab_*t()~ without the ~adj_short_o=1~ argument that may be more useful.  Without this option only steps longer than the target are adjusted.
+
+Here is the result:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/lorenz_sloppy_condy.png
+
+The solution used in the image above was created by this snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]]:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+sed -n '/^  *! BEGIN: lorenz_clip-y *$/,/^ *! END: lorenz_clip-y *$/p' ../examples/lorenz.f90
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+  ! BEGIN: lorenz_clip-y
+  ! This solution will have y-delta equal to 1.0 for all steps.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_condy_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  call system_clock(c_end)
+  print '(a,f10.3)', "condy                      "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
+  ! END: lorenz_clip-y
+#+end_src
+
+
+
+* Full Code Listing
+:PROPERTIES:
+:CUSTOM_ID: full-code
+:END:
+
+** Fortran Code
+:PROPERTIES:
+:CUSTOM_ID: fortrancode
+:END:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/lorenz.f90 | sed 's/; zotero.*$//; s/---------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+
+!-------------------------------------------------------------------------------------------------
+program lorenz
+  use, intrinsic :: iso_fortran_env,    only: output_unit, error_unit
+  use            :: mrkiss_config,      only: rk, ik, t_delta_tiny
+  use            :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt, steps_sloppy_condy_stab_nt, steps_condy_stab_nt
+  use            :: mrkiss_utils,       only: print_t_y_sol
+  use            :: mrkiss_erk_kutta_4, only: a, b, c
+
+  implicit none
+
+  integer,        parameter :: deq_dim       = 3
+  integer,        parameter :: num_points    = 100000
+  real(kind=rk),  parameter :: y_iv(deq_dim) = [1.0_rk, 0.0_rk, 0.0_rk]
+  real(kind=rk),  parameter :: param(3)      = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
+  real(kind=rk),  parameter :: t_delta       = 0.01_rk
+  real(kind=rk),  parameter :: t_max         = 100.0_rk
+
+  real(kind=rk)             :: t_y_sol(1+deq_dim, num_points)
+  integer(kind=ik)          :: status, istats(16)
+  integer                   :: c_beg, c_end, c_rate
+
+  ! BEGIN: lorenz_fixed
+  ! This solution will have fixed t-delta, but no control over y-delta.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_fixed_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  call system_clock(c_end)
+  print '(a,f10.3)', "fixed                      "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
+  ! END: lorenz_fixed
+
+  ! BEGIN: lorenz_fixed-y
+  ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_sloppy_condy_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  call system_clock(c_end)
+  print '(a,f10.3)', "sloppy_condy               "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
+
+  ! This solution will have y-delta approximately equal to 1.0 for all steps.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_sloppy_condy_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
+                                  adj_short_o=1)
+  call system_clock(c_end)
+  print '(a,f10.3)', "sloppy_condy short         "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
+  ! END: lorenz_fixed-y
+
+  ! BEGIN: lorenz_clip-y
+  ! This solution will have y-delta equal to 1.0 for all steps.
+  call system_clock(count_rate=c_rate)
+  call system_clock(c_beg)
+  call steps_condy_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  call system_clock(c_end)
+  print '(a,f10.3)', "condy                      "
+  print '(a,i10)',   "                   Status: ", status
+  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "          Solution Points: ", istats(1)
+  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
+  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  call print_t_y_sol(status, t_y_sol, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
+  ! END: lorenz_clip-y
+
+contains
+  
+  subroutine eq(status, dydt, y, param)
+    integer(kind=ik), intent(out) :: status
+    real(kind=rk),    intent(out) :: dydt(:)
+    real(kind=rk),    intent(in)  :: y(:)
+    real(kind=rk),    intent(in)  :: param(:)
+    dydt(1) = param(1)*(y(2)-y(1))       ! a(y-x)
+    dydt(2) = y(1)*(param(2)-y(3))-y(2)  ! x(b-z)-y
+    dydt(3) = y(1)*y(2)-param(3)*y(3)    ! xy-cy
+    status = 0
+  end subroutine eq
+
+end program
+#+end_src
+
+** GNUplot Code
+:PROPERTIES:
+:CUSTOM_ID: gpcode
+:END:
+
+The images were produced with R.
+
+#+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/lorenz.gplt | sed 's/; zotero.*$//; s/---------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src R :eval never :tangle no
+
+#------------------------------------------------------------------------------------------------------------------------------
+set encoding utf8
+set termoption noenhanced
+set datafile separator ','
+# set xlabel "x"
+# set ylabel "y"
+# set zlabel "z"
+#set grid
+set margins 0, 0, 0, 0
+set view 70, 40, 1.3, 1.4
+set xyplane at 0
+unset border
+unset ytics
+unset ztics
+unset xtics
+set terminal svg
+set pointsize 0.2
+
+set title "Lorenz (fixed)"
+set output "lorenz_fixed.svg"
+splot 'lorenz_fixed.csv' using 3:4:5 with linespoints pt 7 title ""
+
+set title "Lorenz (sloppy condy)"
+set terminal svg
+set output "lorenz_sloppy_condy.svg"
+splot 'lorenz_sloppy_condy.csv' using 3:4:5 with linespoints pt 7 title ""
+
+set title "Lorenz (sloppy condy short)"
+set terminal svg
+set output "lorenz_sloppy_condy_short.svg"
+splot 'lorenz_sloppy_condy_short.csv' using 3:4:5 with linespoints pt 7 title ""
+
+set title "Lorenz (condy)"
+set terminal svg
+set output "lorenz_condy.svg"
+splot 'lorenz_condy.csv' using 3:4:5 with linespoints pt 7 title ""
+#+end_src
+

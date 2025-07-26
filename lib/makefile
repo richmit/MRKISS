@@ -53,6 +53,9 @@ MRKISS_PATH = ..
 include $(MRKISS_PATH)/make_includes/include.mk
 ################################################################################################################################################################
 
+TAGS : *.f90
+	etags *.f90
+
 clean : clean_multi_mrkiss
 	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe
 

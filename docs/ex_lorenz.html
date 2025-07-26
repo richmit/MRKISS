@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-07-26 Sat 13:43 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=1024, initial-scale=1" />
+<title>MRKISS Library Example</title>
+<meta name="author" content="Mitch Richling" />
+<meta name="description" content="MRKISS Documentation Examples" />
+<meta name="keywords" content="RK runge kutta ode ivp" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+<style>body { min-width: 500px; max-width: 1024px; }</style>
+<style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+<style>h1,h2,h3 { line-height: 1.4em; }</style>
+<style>h1.title { font-size: 3em; }</style>
+<style>.subtitle { font-size: 0.6em; }</style>
+<style>h4,h5,h6 { font-size: 1em; }</style>
+<style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+<style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+<style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+<style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+<style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+<style>#content { max-width: 60em; }</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="https://github.com/richmit/MRKISS/"> UP </a>
+ |
+ <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
+</div><div id="content" class="content">
+<h1 class="title">MRKISS Library Example
+<br />
+<span class="subtitle">The Lornez Problem</span>
+</h1>
+<table border="2 solid #ccc" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right"><b>Author:</b></td>
+<td class="org-left"><i>Mitch Richling</i></td>
+</tr>
+
+<tr>
+<td class="org-right"><b>Updated:</b></td>
+<td class="org-left"><i>2025-07-26 13:43:53</i></td>
+</tr>
+
+<tr>
+<td class="org-right"><b>Generated:</b></td>
+<td class="org-left"><i>2025-07-26 13:43:54</i></td>
+</tr>
+</tbody>
+</table>
+<p align="center">
+Copyright &copy; 2025 Mitch Richling. All rights reserved.
+</p>
+
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#fixed-t">2. Curve Evoluation Animation</a></li>
+<li><a href="#fixed-y">3. Sphere Sweeps</a></li>
+<li><a href="#max-y">4. Limiting Step Length</a></li>
+<li><a href="#full-code">5. Full Code Listing</a>
+<ul>
+<li><a href="#fortrancode">5.1. Fortran Code</a></li>
+<li><a href="#gpcode">5.2. GNUplot Code</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-introduction" class="outline-2">
+<h2 id="introduction"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-introduction">
+<p>
+The code for this example is found in <a href="https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90"><code>examples/lornez.f90</code></a>.  Additionally the
+code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
+</p>
+
+<p>
+One strange thing when visualizing strange attracters is that we are frequently less concerned with the absolute accuracy of the solution curves than we are
+with the spacing of the solution points.  This example uses the <a href="https://www.mitchr.me/SS/lorenz/index.html">Lorenz attractor</a> to explore some of the tools
+<b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides for these kinds of problems.
+</p>
+</div>
+</div>
+<div id="outline-container-fixed-t" class="outline-2">
+<h2 id="fixed-t"><span class="section-number-2">2.</span> Curve Evoluation Animation</h2>
+<div class="outline-text-2" id="text-fixed-t">
+<p>
+For animations of the evolution of the curve, we normally use a fixed \(\Delta{t}\) because this preserves time in the animation so we can see the point
+tracing the curve speed up and slow down as the dirivative changes.  We can produce such a solution with the <code>steps_fixed_stab_*t()</code> solvers. Here is an
+example of such a curve:
+</p>
+
+
+<div id="org3107d7f" class="figure">
+<p><img src="pics/lorenz_fixed.png" alt="lorenz_fixed.png" width="90%" align="center" />
+</p>
+</div>
+
+<p>
+Notice the way some of the steps are much longer than others.  This is especially apparnet in the upper right:
+</p>
+
+
+<div id="orgbcb4e67" class="figure">
+<p><img src="pics/lorenz_fixed-c.png" alt="lorenz_fixed-c.png" width="90%" align="center" />
+</p>
+</div>
+
+<p>
+Many path animation tools have teh ablity to interpolate nitermediate points on peiceweise curves.  SOme even have the ablty to use derviative information and
+do Hermite interpolation.  Having a few longer steps when using such a tool is no issue.  OTOH, when simply animating successve solution steps, large steps
+can make the animation jerkey.  When this happens, if you still want to preserve time in the animation, the only real solution is to decrease the value used
+for \(\Delta{t}\).
+</p>
+
+<p>
+THe solutions used in the images above were created by this snippit of <a href="https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90"><code>examples/lornez.f90</code></a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have fixed t-delta, but no control over y-delta.</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"fixed                      "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_fixed.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-fixed-y" class="outline-2">
+<h2 id="fixed-y"><span class="section-number-2">3.</span> Sphere Sweeps</h2>
+<div class="outline-text-2" id="text-fixed-y">
+<p>
+Ray tracing tools can render seines made up of spheres orders of magnitude faster than they can deal with things like triangle.  Because of this fact it is
+common practice to represent curves in space as thousands, or millions, of spheres tightly packed along the curve &#x2013; this is called a "sphere sweep".  In
+order for this to work out the spheres need to be close together so that the angles of intersection are very small.  Still we don't want too many spheres as
+every sphere adds time to the overall render.  What we really want is to compute the optimal distance between the sphere centers, and then use this distance
+for <i>all</i> the spheres.  That means we want steps of constant \(\mathbf{\Delta{y}}\).
+</p>
+
+<p>
+Solutions with constant \(\mathbf{\Delta{y}}\) steps are also used for <i>constant velocity</i> animations of curve evolution.  These can be interesting when done
+with groups of stream lines.
+</p>
+
+<p>
+<b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides two solvers for this situation:
+</p>
+<dl class="org-dl">
+<dt><code>steps_condy_stab_*t()</code></dt><dd>This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
+minimum and maximum bounds for \(\Delta{t}\) which will bracket the correct value.  The resulting curves are perfect for high quality sphere sweep
+renders.</dd>
+<dt><code>steps_sloppy_condy_stab_*t()</code></dt><dd>This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is <i>much</i> faster than the previous option.  The
+resulting solutions frequently good enough for a sphere sweep.</dd>
+</dl>
+
+<p>
+Here are some representative samples:
+</p>
+
+
+<div id="orgea71079" class="figure">
+<p><img src="pics/lorenz_condy.png" alt="lorenz_condy.png" width="90%" align="center" />
+</p>
+</div>
+
+
+<div id="org2ac60b1" class="figure">
+<p><img src="pics/lorenz_sloppy_condy_short.png" alt="lorenz_sloppy_condy_short.png" width="90%" align="center" />
+</p>
+</div>
+
+<p>
+These images were created by the following snippet of <a href="https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90"><code>examples/lornez.f90</code></a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed-y</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy               "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately equal to 1.0 for all steps.</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
+                                adj_short_o=1)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy short         "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy_short.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed-y</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-max-y" class="outline-2">
+<h2 id="max-y"><span class="section-number-2">4.</span> Limiting Step Length</h2>
+<div class="outline-text-2" id="text-max-y">
+<p>
+When drawing <i>line plots</i> of curves we normally want them to be appear smooth which means we must avoid large values for \(\mathbf{\Delta{y}}\).  For curve
+line drawing we normally are not terribly concerned with having a <i>few</i> short intervals because they don't have a huge impact on rendering speed.
+</p>
+
+<p>
+When rendering curves as tubes most tools render a sphere at each point and a cylinder connecting the points.  As with line drawings we want the curve to
+appear smooth, and so we wish to avoid large values for \(\mathbf{\Delta{y}}\).  When rendering tubes we <i>are</i> more sensitive to excessive numbers of short
+intervals because every point impacts rendering speed.  In addition, with some tools, very short intervals can introduce rendering glitches.
+</p>
+
+<p>
+Of course we can use <code>steps_condy_stab_*t()</code> and <code>steps_sloppy_condy_stab_*t(..., adj_short_o=1)</code> as we did in the <a href="#fixed-y">previous section</a>; however,
+<code>steps_sloppy_condy_stab_*t()</code> without the <code>adj_short_o=1</code> argument that may be more useful.  Without this option only steps longer than the target are adjusted.
+</p>
+
+<p>
+Here is the result:
+</p>
+
+
+<div id="org8f69ed6" class="figure">
+<p><img src="pics/lorenz_sloppy_condy.png" alt="lorenz_sloppy_condy.png" width="90%" align="center" />
+</p>
+</div>
+
+<p>
+The solution used in the image above was created by this snippet of <a href="https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90"><code>examples/lornez.f90</code></a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_clip-y</span>
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta equal to 1.0 for all steps.</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"condy                      "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_clip-y</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-full-code" class="outline-2">
+<h2 id="full-code"><span class="section-number-2">5.</span> Full Code Listing</h2>
+<div class="outline-text-2" id="text-full-code">
+</div>
+<div id="outline-container-fortrancode" class="outline-3">
+<h3 id="fortrancode"><span class="section-number-3">5.1.</span> Fortran Code</h3>
+<div class="outline-text-3" id="text-fortrancode">
+<div class="org-src-container">
+<pre class="src src-f90">
+<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
+<span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">lorenz</span>
+  <span style="color: #00ffff;">use</span>, <span style="color: #00ffff;">intrinsic</span> :: <span style="color: #00fa9a; font-weight: bold;">iso_fortran_env</span>,    <span style="color: #00ffff;">only</span>: <span style="color: #8470ff; font-weight: bold;">output_unit</span>, <span style="color: #8470ff; font-weight: bold;">error_unit</span>
+  <span style="color: #00ffff;">use</span>            :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, ik, t_delta_tiny
+  <span style="color: #00ffff;">use</span>            :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab_nt, steps_sloppy_condy_stab_nt, steps_condy_stab_nt
+  <span style="color: #00ffff;">use</span>            :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_t_y_sol
+  <span style="color: #00ffff;">use</span>            :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
+
+  <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
+
+  <span style="color: #63b8ff;">integer</span>,        <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> deq_dim       = 3</span>
+  <span style="color: #63b8ff;">integer</span>,        <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> num_points    = 100000</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),  <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_iv(deq_dim) = [1.0_rk, 0.0_rk, 0.0_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),  <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(3)      = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),  <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_delta       = 0.01_rk</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),  <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_max         = 100.0_rk</span>
+
+  <span style="color: #63b8ff;">real</span>(kind=rk)             ::<span style="color: #7fffd4;"> t_y_sol(1+deq_dim, num_points)</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik)          ::<span style="color: #7fffd4;"> status, istats(16)</span>
+  <span style="color: #63b8ff;">integer</span>                   ::<span style="color: #7fffd4;"> c_beg, c_end, c_rate</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have fixed t-delta, but no control over y-delta.</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"fixed                      "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_fixed.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed-y</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy               "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately equal to 1.0 for all steps.</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
+                                  adj_short_o=1)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy short         "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy_short.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed-y</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_clip-y</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta equal to 1.0 for all steps.</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"condy                      "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"lorenz_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_clip-y</span>
+
+<span style="color: #00ffff;">contains</span>
+
+  <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, y, param)
+    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
+    dydt(1) = param(1)*(y(2)-y(1))       <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">a(y-x)</span>
+    dydt(2) = y(1)*(param(2)-y(3))-y(2)  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">x(b-z)-y</span>
+    dydt(3) = y(1)*y(2)-param(3)*y(3)    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">xy-cy</span>
+    status = 0
+  <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
+
+<span style="color: #00ffff;">end program</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-gpcode" class="outline-3">
+<h3 id="gpcode"><span class="section-number-3">5.2.</span> GNUplot Code</h3>
+<div class="outline-text-3" id="text-gpcode">
+<p>
+The images were produced with R.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
+set encoding utf8
+set termoption noenhanced
+set datafile separator <span style="color: #fa8072;">','</span>
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">set xlabel "x"</span>
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">set ylabel "y"</span>
+<span style="color: #ffa500;"># </span><span style="color: #ff7f24;">set zlabel "z"</span>
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">set grid</span>
+set margins 0, 0, 0, 0
+set view 70, 40, 1.3, 1.4
+set xyplane at 0
+unset border
+unset ytics
+unset ztics
+unset xtics
+set terminal svg
+set pointsize 0.2
+
+set title <span style="color: #fa8072;">"Lorenz (fixed)"</span>
+set output <span style="color: #fa8072;">"lorenz_fixed.svg"</span>
+splot <span style="color: #fa8072;">'lorenz_fixed.csv'</span> using 3:4:5 with linespoints pt 7 title <span style="color: #fa8072;">""</span>
+
+set title <span style="color: #fa8072;">"Lorenz (sloppy condy)"</span>
+set terminal svg
+set output <span style="color: #fa8072;">"lorenz_sloppy_condy.svg"</span>
+splot <span style="color: #fa8072;">'lorenz_sloppy_condy.csv'</span> using 3:4:5 with linespoints pt 7 title <span style="color: #fa8072;">""</span>
+
+set title <span style="color: #fa8072;">"Lorenz (sloppy condy short)"</span>
+set terminal svg
+set output <span style="color: #fa8072;">"lorenz_sloppy_condy_short.svg"</span>
+splot <span style="color: #fa8072;">'lorenz_sloppy_condy_short.csv'</span> using 3:4:5 with linespoints pt 7 title <span style="color: #fa8072;">""</span>
+
+set title <span style="color: #fa8072;">"Lorenz (condy)"</span>
+set terminal svg
+set output <span style="color: #fa8072;">"lorenz_condy.svg"</span>
+splot <span style="color: #fa8072;">'lorenz_condy.csv'</span> using 3:4:5 with linespoints pt 7 title <span style="color: #fa8072;">""</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+</div>
+</body>
+</html>

@@ -9,10 +9,12 @@
 /tests/*.tmp
 *.csv
 /examples/*.png
+/examples/*.svg
 /tests/*.png
 a.out
 *~
 *.mod
+/README.html
 /examples/*.csv
 /examples/*.png
 /resources/

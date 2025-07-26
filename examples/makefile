@@ -61,15 +61,29 @@ three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fi
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) lorenz.f90 $(MRKISS_OBJ_FILES) -o $@
 
-lorenz.csv : lorenz
+lorenz_fixed.csv lorenz_condy.csv lorenz_sloppy_condy.csv lorenz_sloppy_condy_short.csv &: lorenz
 	./lorenz$(EXE_SUFFIX)
-	head -n 10 lorenz.csv
-	tail -n 10 lorenz.csv
 
-lorenz.png : lorenz.csv lorenz.gplt
+lorenz_sloppy_condy_short.svg lorenz_sloppy_condy.svg lorenz_fixed.svg lorenz_condy.svg &: lorenz_condy.csv lorenz_sloppy_condy_short.csv lorenz_sloppy_condy.csv lorenz_fixed.csv lorenz.gplt
 	gnuplot -p < lorenz.gplt
-	magick -density 200 -background white lorenz.svg lorenz.png
-	$(IMG_VIEWER) lorenz.png
+
+lorenz_sloppy_condy_short.png : lorenz_sloppy_condy_short.svg
+	magick -density 200 -background white lorenz_sloppy_condy_short.svg lorenz_sloppy_condy_short.png
+
+lorenz_sloppy_condy.png : lorenz_sloppy_condy.svg
+	magick -density 200 -background white lorenz_sloppy_condy.svg lorenz_sloppy_condy.png
+
+lorenz_fixed.png : lorenz_fixed.svg
+	magick -density 200 -background white lorenz_fixed.svg lorenz_fixed.png
+
+lorenz_fixed-c.png : lorenz_fixed.svg
+	magick -density 600 -background white lorenz_fixed.svg -crop 1000x800+0+200 lorenz_fixed-c.png
+
+lorenz_condy.png : lorenz_condy.svg
+	magick -density 200 -background white lorenz_condy.svg lorenz_condy.png
+
+lorenz_png : lorenz_sloppy_condy_short.png lorenz_sloppy_condy.png lorenz_fixed.png lorenz_condy.png lorenz_fixed-c.png
+	$(IMG_VIEWER) lorenz_fixed.png lorenz_sloppy_condy_short.png lorenz_sloppy_condy.png lorenz_condy.png lorenz_fixed-c.png
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
