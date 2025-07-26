@@ -98,9 +98,9 @@ well documented yet and don't cover all the use cases I want to cover.  I have s
  - +Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~+
  - +Update comments on ~steps_*~ solvers to reflect all options and algorithm.+
  - +Add ~t_min_o~ and ~t_max_o~ options to ~print_t_y_sol()~+
- - Add example documentation pages
+ - +Add example documentation pages+
    - +~three_body~+
-   - ~lorenz~
+   - +~lorenz~+
  - +Add aspect ratio argument to ~steps_condy_stab_*t()~+ *CANCELED**
  - +Add "sloppy" option to ~steps_condy_stab_*t~+ *CANCELED**
  - +Add option to not error out on bisection problems in ~steps_condy_stab_*t()~+ *DONE*
