@@ -14,7 +14,7 @@
  - [[https://richmit.github.io/MRKISS/index.html][Draft Documentation]]
  - Examples
    - [[https://richmit.github.io/MRKISS/ex_three_body.html][Three Body Problem]]
-   - [[https://richmit.github.io/MRKISS/ex_three_body.html][Lornez Attracter]]
+   - [[https://richmit.github.io/MRKISS/ex_lorenz.html][Lornez Attracter]]
  - [[https://richmit.github.io/MRKISS/roadmap.html][Work In Progress]]
 
 
