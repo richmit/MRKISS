@@ -61,10 +61,11 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 *[[https://github.com/richmit/MRKISS][~MRKISS~]]* is a *simple*, *tiny* library with *zero dependencies*[[#faq-deps][[*]]] that aims to make it easy to *use*
 and *experiment with* explicit Runge-Kutta methods.
 
-From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like SUNDIALS or DifferentialEquations.jl; however,
-it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and code with others others without
-asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things up and and running quickly when
-moving to a new supercomputer, cloud, or HPC cluster.
+From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like
+[[https://www.mitchr.me/SS/tools/index.html#lib-sci][SUNDIALS]] or [[https://www.mitchr.me/SS/tools/index.html#imath-inla][Julia]]'s
+~DifferentialEquations.jl~; however, it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and
+code with others others without asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things
+up and and running quickly when moving to a new supercomputer, cloud, or HPC cluster.
 
 Here is a complete example in 23 lines that solves [[https://www.mitchr.me/SS/lorenz/index.html][Lorenz's system]] and generates a CSV file of the results.
 
@@ -815,7 +816,7 @@ vectors and matrices are involved.
 
 For a long time I have had a few annoyances related available packages:
 
-  - Sharing results and code required others to install and learn a complex tool chain.
+  - Sharing results and code required others to install and learn a complex software tool chain.
   - Some generative art use cases drive some odd requirements that can be frustratingly difficult to do with some packages.
   - Getting tools installed on new supercomputers and HPC clusters can be a challenge.  It can even be annoying in the cloud.
 
@@ -824,7 +825,7 @@ insufficient user privilege and a broken user space package manager.
 
 In short, sometimes I just want something to work without downloading and installing gigabytes of stuff.
 
-Oh.  And lastly, I enjoy writing this kind of code..
+Oh.  And I enjoy writing this kind of code..
 
 ** Why don't you use package XYZ?
 :PROPERTIES:
@@ -833,9 +834,10 @@ Oh.  And lastly, I enjoy writing this kind of code..
 
 Don't get me wrong, I *do* use other packages!
 
-One of my favorites is [[https://www.mitchr.me/SS/tools/index.html#imath-inla][Julia & DifferentialEquations.jl]].  For bare-metal, I'm quite fond of
-SUNDIALS.  I also find myself using higher level tools like [[https://www.mitchr.me/SS/tools/index.html#stats][R]],
-[[https://www.mitchr.me/SS/tools/index.html#imath-inla][MATLAB/Octave]], and [[https://www.mitchr.me/SS/tools/index.html#imath-gcas][Maple/Maxima]].
+One of my favorites is [[https://www.mitchr.me/SS/tools/index.html#imath-inla][Julia]]'s ~DifferentialEquations.jl~.  For bare-metal, I'm quite fond of
+[[https://www.mitchr.me/SS/tools/index.html#lib-sci][SUNDIALS]].  I also find myself using higher level tools like
+[[https://www.mitchr.me/SS/tools/index.html#stats][R]], [[https://www.mitchr.me/SS/tools/index.html#imath-inla][MATLAB/Octave]], and
+[[https://www.mitchr.me/SS/tools/index.html#imath-gcas][Maple/Maxima]].
 
 ** What are those zotero links in the references?
 :PROPERTIES:
@@ -859,10 +861,10 @@ Yes.  In fact, Euler's method is normally good enough for strange attractors.
 :CUSTOM_ID: faq-need-more
 :END:
 
-My favorite is DifferentialEquations.jl.  It is
-comprehensive, well designed, fast, and pretty easy to use.  
+My favorite is [[https://www.mitchr.me/SS/tools/index.html#imath-inla][Julia]]'s ~DifferentialEquations.jl~.  It is comprehensive, well designed, fast, and
+pretty easy to use.
 
-If you are looking for something you can call from C, C++, or Fortran then my first choice is SUNDIALS.  
+If you are looking for something you can call from C, C++, or Fortran then my first choice is [[https://www.mitchr.me/SS/tools/index.html#lib-sci][SUNDIALS]].
 
 The ~ode*~ set of commands in [[https://www.mitchr.me/SS/tools/index.html#imath-inla][MATLAB/Octave]] are easy to use, work well, and are extensively
 documented.  In addition, Octave has ~lsode~ built-in which is pretty cool.
@@ -877,8 +879,9 @@ If you are doing statistics in combination with ODEs, then [[https://www.mitchr.
 :CUSTOM_ID: faq-need-fast
 :END:
 
-All of the options listed for the question "[[I need a more comprehensive solution.  Do you have advice?][I need a more comprehensive solution.  Do you have advice?]]" are faster than
-*[[https://github.com/richmit/MRKISS][~MRKISS~]]*.  In particular DifferentialEquations.jl and SUNDIALS.
+All of the options listed for the question "[[I need a more comprehensive solution.  Do you have advice?][I need a more comprehensive solution.  Do you have
+advice?]]" are faster than *[[https://github.com/richmit/MRKISS][~MRKISS~]]*.  In particular [[https://www.mitchr.me/SS/tools/index.html#imath-inla][Julia]]'s
+~DifferentialEquations.jl~ and [[https://www.mitchr.me/SS/tools/index.html#lib-sci][SUNDIALS]].
 
 If you are looking for something small without a lot of dependencies, then you might like [[https://www.unige.ch/~hairer/software.html][Hairer's classic
 codes]] -- they are faster than *[[https://github.com/richmit/MRKISS][~MRKISS~]]*.

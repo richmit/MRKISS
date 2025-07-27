@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-26 Sat 16:20 -->
+<!-- 2025-07-27 Sun 10:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-26 16:20:38</i></td>
+<td class="org-left"><i>2025-07-27 10:31:17</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-26 16:20:41</i></td>
+<td class="org-left"><i>2025-07-27 10:32:25</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org1b3510d">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orge79ccc0">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#org698c6d1">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org1d5600b">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org997e13d">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org6f9b370">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -343,10 +343,11 @@ and <b>experiment with</b> explicit Runge-Kutta methods.
 </p>
 
 <p>
-From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like SUNDIALS or DifferentialEquations.jl; however,
-it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and code with others others without
-asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things up and and running quickly when
-moving to a new supercomputer, cloud, or HPC cluster.
+From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like
+<a href="https://www.mitchr.me/SS/tools/index.html#lib-sci">SUNDIALS</a> or <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia</a>'s
+<code>DifferentialEquations.jl</code>; however, it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and
+code with others others without asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things
+up and and running quickly when moving to a new supercomputer, cloud, or HPC cluster.
 </p>
 
 <p>
@@ -490,8 +491,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-org1b3510d" class="outline-2">
-<h2 id="org1b3510d"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orge79ccc0" class="outline-2">
+<h2 id="orge79ccc0"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -746,8 +747,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-org698c6d1" class="outline-3">
-<h3 id="org698c6d1"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org997e13d" class="outline-3">
+<h3 id="org997e13d"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -836,8 +837,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org1d5600b" class="outline-3">
-<h3 id="org1d5600b"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org6f9b370" class="outline-3">
+<h3 id="org6f9b370"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1216,7 +1217,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org6f82afa">
+<pre class="example" id="org2c0d58b">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1236,7 +1237,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="orga7084c8">
+<pre class="example" id="org67b6c27">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1254,7 +1255,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgdc88822" class="figure">
+<div id="orgc2641b9" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1440,7 +1441,7 @@ For a long time I have had a few annoyances related available packages:
 </p>
 
 <ul class="org-ul">
-<li>Sharing results and code required others to install and learn a complex tool chain.</li>
+<li>Sharing results and code required others to install and learn a complex software tool chain.</li>
 <li>Some generative art use cases drive some odd requirements that can be frustratingly difficult to do with some packages.</li>
 <li>Getting tools installed on new supercomputers and HPC clusters can be a challenge.  It can even be annoying in the cloud.</li>
 </ul>
@@ -1455,7 +1456,7 @@ In short, sometimes I just want something to work without downloading and instal
 </p>
 
 <p>
-Oh.  And lastly, I enjoy writing this kind of code..
+Oh.  And I enjoy writing this kind of code..
 </p>
 </div>
 </div>
@@ -1467,9 +1468,10 @@ Don't get me wrong, I <b>do</b> use other packages!
 </p>
 
 <p>
-One of my favorites is <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia &amp; DifferentialEquations.jl</a>.  For bare-metal, I'm quite fond of
-SUNDIALS.  I also find myself using higher level tools like <a href="https://www.mitchr.me/SS/tools/index.html#stats">R</a>,
-<a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">MATLAB/Octave</a>, and <a href="https://www.mitchr.me/SS/tools/index.html#imath-gcas">Maple/Maxima</a>.
+One of my favorites is <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia</a>'s <code>DifferentialEquations.jl</code>.  For bare-metal, I'm quite fond of
+<a href="https://www.mitchr.me/SS/tools/index.html#lib-sci">SUNDIALS</a>.  I also find myself using higher level tools like
+<a href="https://www.mitchr.me/SS/tools/index.html#stats">R</a>, <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">MATLAB/Octave</a>, and
+<a href="https://www.mitchr.me/SS/tools/index.html#imath-gcas">Maple/Maxima</a>.
 </p>
 </div>
 </div>
@@ -1498,12 +1500,12 @@ Yes.  In fact, Euler's method is normally good enough for strange attractors.
 <h3 id="faq-need-more"><span class="section-number-3">12.7.</span> I need a more comprehensive solution.  Do you have advice?</h3>
 <div class="outline-text-3" id="text-faq-need-more">
 <p>
-My favorite is DifferentialEquations.jl.  It is
-comprehensive, well designed, fast, and pretty easy to use.  
+My favorite is <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia</a>'s <code>DifferentialEquations.jl</code>.  It is comprehensive, well designed, fast, and
+pretty easy to use.
 </p>
 
 <p>
-If you are looking for something you can call from C, C++, or Fortran then my first choice is SUNDIALS.  
+If you are looking for something you can call from C, C++, or Fortran then my first choice is <a href="https://www.mitchr.me/SS/tools/index.html#lib-sci">SUNDIALS</a>.
 </p>
 
 <p>
@@ -1525,8 +1527,9 @@ If you are doing statistics in combination with ODEs, then <a href="https://www.
 <h3 id="faq-need-fast"><span class="section-number-3">12.8.</span> I need something faster.  Do you have advice?</h3>
 <div class="outline-text-3" id="text-faq-need-fast">
 <p>
-All of the options listed for the question "<a href="#faq-need-more">I need a more comprehensive solution.  Do you have advice?</a>" are faster than
-<b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  In particular DifferentialEquations.jl and SUNDIALS.
+All of the options listed for the question "<a href="#faq-need-more">I need a more comprehensive solution.  Do you have
+advice?</a>" are faster than <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  In particular <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia</a>'s
+<code>DifferentialEquations.jl</code> and <a href="https://www.mitchr.me/SS/tools/index.html#lib-sci">SUNDIALS</a>.
 </p>
 
 <p>
