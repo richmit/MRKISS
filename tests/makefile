@@ -46,7 +46,7 @@ IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
 
-TESTS = test_rkf45_stab_5 test_rkf45_etab_5 test_rkf45_stab_4 test_rkf45_etab_4 test_rk4_stab test_rk4_ref test_rk4_ref_stab test_rk4_steps
+TESTS = test_rkf45_stab_5 test_rkf45_etab_5 test_rkf45_stab_4 test_rkf45_etab_4 test_rk4_stab test_rk4_ref test_rk4_ref_stab test_rk4_steps test_rich
 
 EXE_TARGETS = rkf45_ref_vs_tab rk4_ref_vs_tab
 
@@ -107,6 +107,21 @@ test_rk4_ref : rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_ref.out
 .PHONY: test_rk4_ref_stab
 test_rk4_ref_stab : rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out
 	$(FD) -e 1e-10 rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out
+
+####################################################################################################
+rich : rich.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) rich.f90 $(MRKISS_OBJ_FILES) -o $@
+
+rich.out : rich
+	./rich$(EXE_SUFFIX)
+
+.PHONY: test_rich
+test_rich : rich.out 
+	$(FD) -e 1e-10 rich.out rich.out
+
+rich_sol.png rich_error.png &: rich.R rich.out
+	R --no-save --no-echo -q -f rich.R
+	$(IMG_VIEWER) rich_sol.png rich_error.png
 
 ####################################################################################################
 
