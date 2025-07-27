@@ -52,8 +52,7 @@ gp <- ggplot() +
   geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive Steps')) +
   geom_point(data=m0Dat, aes(x=x, y=y, col='Moon')) +
   scale_colour_manual(values=c("Earth"="blue", "Moon"="grey", "Fixed Steps"="pink", "Adaptive Steps"="red")) +
-  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='', 
-       subtitle='No stepp_o') +
+  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
@@ -76,8 +75,7 @@ gp <- ggplot() +
   geom_point(data=a2Dat, aes(x=y1, y=y2, col='Adaptive Steps')) +
   geom_point(data=m0Dat, aes(x=x, y=y, col='Moon')) +
   scale_colour_manual(values=c("Earth"="blue", "Moon"="grey", "Fixed Steps"="pink", "Adaptive Steps"="red")) +
-  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='', 
-       subtitle='y_delta_length via stepp_o') +
+  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body_ylen.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
@@ -88,8 +86,7 @@ gp <- ggplot() +
   geom_point(data=a3Dat, aes(x=y1, y=y2, col='Adaptive Steps')) +
   geom_point(data=m0Dat, aes(x=x, y=y, col='Moon')) +
   scale_colour_manual(values=c("Earth"="blue", "Moon"="grey", "Fixed Steps"="pink", "Adaptive Steps"="red")) +
-  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='', 
-       subtitle='max_t via stepp_o') +
+  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body_maxt.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
