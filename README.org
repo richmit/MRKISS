@@ -1,29 +1,14 @@
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
 
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
-
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
-
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
-
---------------------------------------------------------------------------------------------------------------------------------------------
 
 [[https://github.com/richmit/MRKISS][MRKISS]] is a *tiny* library with *zero dependencies* that aims to make it easy to
 *use* and *experiment with* explicit Runge-Kutta methods.
 
- - [[https://richmit.github.io/MRKISS/index.html][Draft Documentation]]
+ - [[https://richmit.github.io/MRKISS/index.html][Documentation]]
  - Examples
    - [[https://richmit.github.io/MRKISS/ex_three_body.html][Three Body Problem]]
    - [[https://richmit.github.io/MRKISS/ex_lorenz.html][Lornez Attracter]]
- - [[https://richmit.github.io/MRKISS/roadmap.html][Work In Progress]]
+ - [[https://richmit.github.io/MRKISS/roadmap.html][Roadmap & Status]]
+   - TLDR: I've completed most of the functionality I was looking for,
+     and everything seems to work.  I still have some features I'm
+     thinking about as well as some test coverage to improve.
 
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
-
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
-
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
-
-*This project is under construction* -- *This project is under construction* -- *This project is under construction*
