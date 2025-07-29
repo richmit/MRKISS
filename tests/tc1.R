@@ -52,3 +52,10 @@ gp <- ggplot(a %>% filter(step>1)) +
   labs(title="TC1: Global Error", x='Time Step', y='Error')
 ggsave(filename='tc1_plot_error.png', plot=gp, width=1024, height=1024, units='px', dpi=100)
 
+b <- a %>% filter(step==keyStep) %>% mutate(relerr=abs(100*error/exact))
+gp <- ggplot(b) + 
+  geom_point(aes(y=reorder(case, -relerr),x=relerr), stat='identity', fill='salmon') +
+  geom_segment(aes(x=min(b$relerr), y=reorder(case, -relerr), yend=reorder(case, -relerr),xend=relerr)) +
+  scale_x_log10() +
+  labs(title="TC1: Final Global Error", x='Time Step', y='Error')
+ggsave(filename='tc1_plot_ferror.png', plot=gp, width=1024, height=1024, units='px', dpi=100)

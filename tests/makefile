@@ -130,9 +130,9 @@ tc1.mk : tc_make_make.rb tc1_template.f90
 
 include tc1.mk
 
-tc1_plot_error.png tc1_plot_sol.png &: tc1.R data_tc1
+tc1_plot_ferror.png tc1_plot_error.png tc1_plot_sol.png &: tc1.R data_tc1
 	R --no-save --no-echo -q -f tc1.R
-	$(IMG_VIEWER) tc1_plot_error.png tc1_plot_sol.png
+	$(IMG_VIEWER) tc1_plot_ferror.png tc1_plot_error.png tc1_plot_sol.png
 
 ####################################################################################################
 
