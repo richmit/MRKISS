@@ -88,7 +88,7 @@ test_rkf45_etab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
 rk4_ref_vs_tab : rk4_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rk4_ref_vs_tab.f90 $(MRKISS_OBJ_FILES) -o $@
 
-rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out &: rk4_ref_vs_tab
+rk4_ref_vs_tab_steps.out rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out &: rk4_ref_vs_tab
 	rk4_ref_vs_tab$(EXE_SUFFIX)
 
 .PHONY: test_rk4_steps
