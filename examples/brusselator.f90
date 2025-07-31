@@ -38,7 +38,7 @@ program brusselator
   use, intrinsic :: iso_fortran_env,                 only: output_unit, error_unit
   use            :: mrkiss_config,                   only: rk, ik, t_delta_tiny
   use            :: mrkiss_solvers_nt,               only: steps_fixed_stab_nt, steps_condy_stab_nt, steps_adapt_etab_nt
-  use            :: mrkiss_utils,                    only: print_t_y_sol
+  use            :: mrkiss_utils,                    only: print_solution
   use            :: mrkiss_eerk_dormand_prince_5_4,  only: a, b=>b1, c
 
   implicit none
@@ -49,14 +49,14 @@ program brusselator
   real(kind=rk),  parameter :: param(1)      = [0.0_rk]
   real(kind=rk),  parameter :: t_end         = 20.0_rk
 
-  real(kind=rk)             :: t_y_sol(1+deq_dim, num_points)
+  real(kind=rk)             :: solution(1+deq_dim, num_points)
   integer(kind=ik)          :: status, istats(16)
   integer                   :: c_beg, c_end, c_rate
 
   ! Call the solver, and time how long it takes.
   call system_clock(count_rate=c_rate)
   call system_clock(c_beg)
-  call steps_fixed_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   call system_clock(c_end)
 
   print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
@@ -70,7 +70,7 @@ program brusselator
      error stop
   end if
 
-  call print_t_y_sol(status, t_y_sol, filename_o="brusselator.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="brusselator.csv", end_o=istats(1))
 
 contains
   

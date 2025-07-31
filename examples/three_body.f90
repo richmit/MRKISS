@@ -66,7 +66,7 @@ program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
   use            :: mrkiss_config,                  only: rk, ik, t_delta_tiny
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
-  use            :: mrkiss_utils,                   only: print_t_y_sol
+  use            :: mrkiss_utils,                   only: print_solution
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
   use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
 
@@ -81,7 +81,7 @@ program three_body
   real(kind=rk),    parameter :: param(1)      = [1.0_rk / 81.45_rk]
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
-  real(kind=rk)               :: t_y_sol(1+deq_dim, num_points)
+  real(kind=rk)               :: solution(1+deq_dim, num_points)
   integer(kind=ik)            :: status, istats(16)
   integer                     :: c_beg, c_end, c_rate
 
@@ -89,32 +89,32 @@ program three_body
 
   ! BEGIN: steps_fixed_stab_wt
   call system_clock(c_beg)
-  call steps_fixed_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
+  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   call system_clock(c_end)
   print '(a)',       "Fixed t_delta run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  call print_t_y_sol(status, t_y_sol, filename_o="tree_body_steps_fixed_stab_wt.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="tree_body_steps_fixed_stab_wt.csv", end_o=istats(1))
   ! END: steps_fixed_stab_wt
 
 
   ! BEGIN: steps_fixed_stab_wt-dp
   call system_clock(c_beg)
-  call steps_fixed_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
+  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   call system_clock(c_end)
   print '(a)',       "Fixed t_delta run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  call print_t_y_sol(status, t_y_sol, filename_o="steps_fixed_stab_wt-dp.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="steps_fixed_stab_wt-dp.csv", end_o=istats(1))
   ! END: steps_fixed_stab_wt-dp
 
     ! BEGIN: steps_condy_stab_wt
   call system_clock(c_beg)
-  call steps_condy_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  call steps_condy_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   call system_clock(c_end)
   print '(a)',       "Fixed y_delta run: "
@@ -125,12 +125,12 @@ program three_body
   print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
   print '(a,i10)',   "              bisection limits: ", istats(7)
   print '(a,i10)',   "           bad bisection start: ", istats(8)
-  call print_t_y_sol(status, t_y_sol, filename_o="three_body_steps_condy_stab_wt.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="three_body_steps_condy_stab_wt.csv", end_o=istats(1))
   ! END: steps_condy_stab_wt
 
   ! BEGIN: steps_sloppy_condy_stab_wt
   call system_clock(c_beg)
-  call steps_sloppy_condy_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  call steps_sloppy_condy_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
   call system_clock(c_end)
   print '(a)',       "Sloppy Fixed y_delta run: "
@@ -139,12 +139,12 @@ program three_body
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
   print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
-  call print_t_y_sol(status, t_y_sol, filename_o="steps_sloppy_condy_stab_wt.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="steps_sloppy_condy_stab_wt.csv", end_o=istats(1))
   ! END: steps_sloppy_condy_stab_wt
 
   ! BEGIN: steps_adapt_etab_wt-std
   call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   call system_clock(c_end)
@@ -154,12 +154,12 @@ program three_body
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
-  call print_t_y_sol(status, t_y_sol, filename_o="three_body_steps_adapt_etab_wt-std.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-std.csv", end_o=istats(1))
   ! END: steps_adapt_etab_wt-std
 
   ! BEGIN: steps_adapt_etab_wt-fix-delta-steps
   call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_sloppy_y_delta_len_max);
@@ -171,12 +171,12 @@ program three_body
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   print '(a,i10)',   "  stepp t_delta one_step calls: ", istats(5)
-  call print_t_y_sol(status, t_y_sol, filename_o="three_body_steps_adapt_etab_wt-fix-delta-steps.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-fix-delta-steps.csv", end_o=istats(1))
   ! END: steps_adapt_etab_wt-fix-delta-steps
 
   ! BEGIN: steps_adapt_etab_wt-pho-t-max
   call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_max_t);
@@ -187,12 +187,12 @@ program three_body
   print '(a,i10)',   "               Solution Points: ", istats(1)
   print '(a,i10)',   "          Total one_step calls: ", istats(2)
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
-  call print_t_y_sol(status, t_y_sol, filename_o="three_body_steps_adapt_etab_wt-pho-t-max.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-pho-t-max.csv", end_o=istats(1))
   ! END: steps_adapt_etab_wt-pho-t-max
 
   ! BEGIN: steps_adapt_etab_wt-isct
   call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
@@ -205,7 +205,7 @@ program three_body
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   print '(a,i10)',   "              bisection limits: ", istats(7)
   print '(a,i10)',   "           bad bisection start: ", istats(8)
-  call print_t_y_sol(status, t_y_sol, filename_o="three_body_steps_adapt_etab_wt-isct.csv", end_o=istats(1))
+  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-isct.csv", end_o=istats(1))
   ! END: steps_adapt_etab_wt-isct
 
 contains
@@ -248,18 +248,18 @@ contains
   
   ! BEGIN: steps_adapt_etab_wt-pho-t-max-stepp
   ! Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab_wt().
-  subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+  subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer(kind=ik), intent(out) :: status
     integer(kind=ik), intent(out) :: end_run
     real(kind=rk),    intent(out) :: new_t_delta
     integer(kind=ik), intent(out) :: sdf_flags
     integer(kind=ik), intent(in)  :: pnt_idx
-    real(kind=rk),    intent(in)  :: t_y_sol(:,:), t_delta, y_delta(:)
+    real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),    parameter   :: t_max = 6.2_rk
     status    = 0_ik
     sdf_flags = 0_ik
     new_t_delta = -1.0_rk
-    if ( t_y_sol(1, pnt_idx-1) + t_delta > t_max) then
+    if ( solution(1, pnt_idx-1) + t_delta > t_max) then
        end_run = 1_ik
     else
        end_run = 0_ik
@@ -270,12 +270,12 @@ contains
   ! BEGIN: steps_adapt_etab_wt-fix-delta-stepp
   ! Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.
   ! It is sloppy because we assume t_delta is linearly proportional to y_delta_len
-  subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+  subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer(kind=ik), intent(out) :: status, end_run
     real(kind=rk),    intent(out) :: new_t_delta
     integer(kind=ik), intent(out) :: sdf_flags
     integer(kind=ik), intent(in)  :: pnt_idx
-    real(kind=rk),    intent(in)  :: t_y_sol(:,:), t_delta, y_delta(:)
+    real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),      parameter :: y_delta_len_max = 0.1_rk
     integer,            parameter :: y_delta_len_idxs(2) = [1, 2]
     real(kind=rk)                 :: y_delta_len
@@ -294,24 +294,24 @@ contains
   ! BEGIN: steps_adapt_etab_wt-isct-stepp
   ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works in conjunction with
   ! sdf_cross_moon().
-  subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+  subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer(kind=ik), intent(out) :: status, end_run
     real(kind=rk),    intent(out) :: new_t_delta
     integer(kind=ik), intent(out) :: sdf_flags
     integer(kind=ik), intent(in)  :: pnt_idx
-    real(kind=rk),    intent(in)  :: t_y_sol(:,:), t_delta, y_delta(:)
+    real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),    parameter   :: eps = 0.0001_rk
     real(kind=rk)                 :: lp_d, cp_d    
     status      = 0_ik
     sdf_flags   = 0_ik
     end_run     = 0_ik
     new_t_delta = -1.0_rk
-    if (t_y_sol(1, pnt_idx-1) > 0.2_rk) then
-       cp_d = norm2(t_y_sol(2:3, pnt_idx-1)+y_delta(1:2))
+    if (solution(1, pnt_idx-1) > 0.2_rk) then
+       cp_d = norm2(solution(2:3, pnt_idx-1)+y_delta(1:2))
        if ( abs(cp_d-1.0_rk)  < eps) then
           end_run   = 1_ik
        else
-          lp_d = norm2(t_y_sol(2:3, pnt_idx-1))
+          lp_d = norm2(solution(2:3, pnt_idx-1))
           if ((min(lp_d, cp_d) < 1.0_rk) .and. (max(lp_d, cp_d) > 1.0_rk)) then
              sdf_flags = 1_ik
              end_run   = 1_ik

@@ -89,7 +89,7 @@ module mrkiss_solvers_nt
   !! param(:) .. Data payload usually used for constants.
   !!
   abstract interface
-     subroutine stepp_iface_nt(status, end_run, sdf_flags, new_t_delta, pnt_idx, t_y_sol, t_delta, y_delta)
+     subroutine stepp_iface_nt(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
        use mrkiss_config, only: rk, ik
        implicit none
        integer(kind=ik), intent(out) :: status
@@ -97,7 +97,7 @@ module mrkiss_solvers_nt
        real(kind=rk),    intent(out) :: new_t_delta   ! If >0, then redo step with new t_delta
        integer(kind=ik), intent(out) :: sdf_flags     ! If >0, then use bisection to solve SDF and use the result to redo step...
        integer(kind=ik), intent(in)  :: pnt_idx
-       real(kind=rk),    intent(in)  :: t_y_sol(:,:), t_delta, y_delta(:)
+       real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
      end subroutine stepp_iface_nt
   end interface
 
@@ -366,7 +366,7 @@ contains
   end subroutine one_step_rkf45_nt
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple fixed time steps with a simple RK method and store solutions in t_y_sol.  
+  !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
   !!
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
@@ -374,9 +374,9 @@ contains
   !!                        - 1120-1151 .. Error in this routine
   !!                        - others ..... Other values are not allowed
   !! istats(:) ........... Integer statistics for run
-  !!                        istats(1): number of computed solution points stored in t_y_sol.
+  !!                        istats(1): number of computed solution points stored in solution.
   !!                        istats(2): number of one_step_* calls not triggerd by an event
-  !! t_y_sol(:,:) ........ Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
+  !! solution(:,:) ........ Array for solution.  Must have ((size(solution, 1) == size(y, 1) + 1) .and. (size(solution, 2) > 1))
   !!                        Each COLUMN is a solution.  
   !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
   !!                        The number of columns, and max_pts_o, determin the number of solution points.
@@ -385,19 +385,19 @@ contains
   !! param(:) ............ Data payload passed to deq
   !! a(:,:), b(:), c(:) .. The butcher tableau
   !! p_o ................. The order for the RK method in the butcher tableau (if provided enables Richardson extrapolation)
-  !! max_pts_o ........... Maximum number of solutions to put in t_y_sol.
+  !! max_pts_o ........... Maximum number of solutions to put in solution.
   !! t_delta_o ........... Step size to use.  
-  !!                       If t_end_o is provided:  Default: (t_end - t) / (size(t_y_sol, 2) - 1)
+  !!                       If t_end_o is provided:  Default: (t_end - t) / (size(solution, 2) - 1)
   !!                       If t_end_o not provided: Default: mrkiss_config::t_delta_ai
   !! t_end_o ............. End point for last step.  Silently ignored if t_delta_o is provided.
   !! t_max_o ............. Maximum value for t
   !!
-  subroutine steps_fixed_stab_nt(status, istats, t_y_sol, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, t_end_o, t_max_o)
+  subroutine steps_fixed_stab_nt(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, t_end_o, t_max_o)
     use mrkiss_config, only: rk, ik, t_delta_ai
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(16)
-    real(kind=rk),              intent(out) :: t_y_sol(:,:)
+    real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_nt)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer(kind=ik), optional, intent(in)  :: p_o, max_pts_o
@@ -407,13 +407,13 @@ contains
     real(kind=rk)                           :: t_cv, t_delta
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1))
     ! Process arguments
-    max_pts = size(t_y_sol, 2)
+    max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
     if (present(t_delta_o)) then
        t_delta = t_delta_o
     else 
        if (present(t_end_o)) then
-          t_delta = (t_end_o - 0.0_rk) / (size(t_y_sol, 2) - 1)
+          t_delta = (t_end_o - 0.0_rk) / (size(solution, 2) - 1)
        else
           t_delta = t_delta_ai
        end if
@@ -422,8 +422,8 @@ contains
     istats = 0
     t_cv = 0.0_rk
     y_cv = y
-    t_y_sol(1,  1) = t_cv
-    t_y_sol(2:, 1) = y_cv
+    solution(1,  1) = t_cv
+    solution(2:, 1) = y_cv
     istats(1) = istats(1) + 1
     do cur_pnt_idx=2,max_pts
        if (present(p_o)) then
@@ -436,8 +436,8 @@ contains
        if (status > 0) return
        y_cv = y_cv + y_delta
        t_cv = t_cv + t_delta
-       t_y_sol(1, cur_pnt_idx) = t_cv
-       t_y_sol(2:, cur_pnt_idx) = y_cv
+       solution(1, cur_pnt_idx) = t_cv
+       solution(2:, cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        if (present(t_max_o)) then
           if (t_cv > t_max_o) then
@@ -450,7 +450,7 @@ contains
   end subroutine steps_fixed_stab_nt
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps with constant length y_delta using a simple RK method storing the solutions in t_y_sol.  
+  !> Take multiple adaptive steps with constant length y_delta using a simple RK method storing the solutions in solution.  
   !!
   !! The adaptive step size is controlled to result in steps that achieve a constant "length".  The "length" is defined to be the
   !! Euclidean norm of the subset of the solution vector specified by y_delta_len_idxs_o.  For each solution the routine will
@@ -477,7 +477,7 @@ contains
   !!                        istats(3): number of one_step_* calls triggered by y_delta length constraint
   !!                        istats(7): number of times bisection failed because of max_bisect_o
   !!                        istats(8): number of times bisection failed because target was not contained
-  !! t_y_sol ............. Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
+  !! solution ............. Array for solution.  Must have ((size(solution, 1) == size(y, 1) + 1) .and. (size(solution, 2) > 1))
   !!                        Each COLUMN is a solution.  
   !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
   !!                        The number of columns, and max_pts_o, determin the number of solution points.
@@ -490,20 +490,20 @@ contains
   !! t_delta_min_o ....... Minimum t_delta
   !! y_delta_len_tol_o ... How close we have to get to y_delta_len_targ.  Default is y_delta_len_targ/100
   !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
-  !! max_pts_o ........... Maximum number of solutions to put in t_y_sol.
+  !! max_pts_o ........... Maximum number of solutions to put in solution.
   !! max_bisect_o ........ Maximum number of bisection iterations to perform for each step.  Default: max_bisect_ai
   !! no_bisect_error_o ... If present, do not exit on bisection errors
   !! y_sol_len_max_o ..... Maximum length of the solution curve
   !! t_max_o ............. Maximum value for t
   !!
-  subroutine steps_condy_stab_nt(status, istats, t_y_sol, deq, y, param, a, b, c, y_delta_len_targ, &
+  subroutine steps_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
                                  y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
     use mrkiss_config, only: rk, ik, t_delta_tiny, max_bisect_ai
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(16)
-    real(kind=rk),              intent(out) :: t_y_sol(:,:)
+    real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_nt)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_max
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o
@@ -518,7 +518,7 @@ contains
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), bs_tmp1_y_delta(size(y, 1)) 
     real(kind=rk)                           :: bs_tmp2_y_delta(size(y, 1)), bs_tmpc_y_delta(size(y, 1))
     ! Process arguments
-    max_pts = size(t_y_sol, 2)
+    max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
     t_delta_min = t_delta_tiny
     if (present(t_delta_min_o)) t_delta_min = t_delta_min_o
@@ -531,8 +531,8 @@ contains
     istats = 0
     t_cv = 0.0_rk
     y_cv = y
-    t_y_sol(1,  1) = t_cv
-    t_y_sol(2:, 1) = y_cv
+    solution(1,  1) = t_cv
+    solution(2:, 1) = y_cv
     istats(1) = istats(1) + 1
     do cur_pnt_idx=2,max_pts
        ! Compute t_delta 1
@@ -612,8 +612,8 @@ contains
        ! Update solution
        y_cv = y_cv + bs_tmpc_y_delta
        t_cv = t_cv + bs_tmpc_t_delta
-       t_y_sol(1,  cur_pnt_idx) = t_cv
-       t_y_sol(2:, cur_pnt_idx) = y_cv
+       solution(1,  cur_pnt_idx) = t_cv
+       solution(2:, cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        if (present(y_sol_len_max_o)) then
           y_sol_len = y_sol_len + bs_tmpc_y_delta_len
@@ -633,7 +633,7 @@ contains
   end subroutine steps_condy_stab_nt
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps adjusting for the length of y_delta using a simple RK method storing the solutions in t_y_sol.  
+  !> Take multiple adaptive steps adjusting for the length of y_delta using a simple RK method storing the solutions in solution.  
   !!
   !! This method attempts to control the length of y_delta.  At each solution step it takes a probing step at t_delta_ini and
   !! then takes another step with t_delta = t_delta_ini * y_delta_len_targ / y_delta_len.  If which will result in a y_delta
@@ -655,7 +655,7 @@ contains
   !!                        istats(1): number of computed solution points
   !!                        istats(2): number of one_step_* calls not triggerd by an event
   !!                        istats(3): number of one_step_* calls triggered by y_delta length constraint
-  !! t_y_sol ............. Array for solution.  Must have ((size(t_y_sol, 1) == size(y, 1) + 1) .and. (size(t_y_sol, 2) > 1))
+  !! solution ............. Array for solution.  Must have ((size(solution, 1) == size(y, 1) + 1) .and. (size(solution, 2) > 1))
   !!                        Each COLUMN is a solution.  
   !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
   !!                        The number of columns, and max_pts_o, determin the number of solution points.
@@ -669,18 +669,18 @@ contains
   !! t_delta_min_o ....... Minimum t_delta
   !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
   !! adj_short_o ......... Adjust when t_delta is too short as well as when it's too long.
-  !! max_pts_o ........... Maximum number of solutions to put in t_y_sol.
+  !! max_pts_o ........... Maximum number of solutions to put in solution.
   !! y_sol_len_max_o ..... Maximum length of the solution curve
   !! t_max_o ............. Maximum value for t
   !!
-  subroutine steps_sloppy_condy_stab_nt(status, istats, t_y_sol, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
+  subroutine steps_sloppy_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o, &
                                         y_sol_len_max_o, t_max_o)
     use mrkiss_config, only: rk, ik, t_delta_tiny
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(16)
-    real(kind=rk),              intent(out) :: t_y_sol(:,:)
+    real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_nt)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_ini
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, t_delta_max_o
@@ -691,7 +691,7 @@ contains
     real(kind=rk)                           :: t_delta_min, y_sol_len, t_cv, t_delta, y_delta_len
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1))
     ! Process arguments
-    max_pts = size(t_y_sol, 2)
+    max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
     t_delta_min = t_delta_tiny
     if (present(t_delta_min_o)) t_delta_min = t_delta_min_o
@@ -700,8 +700,8 @@ contains
     istats = 0
     t_cv = 0.0_rk
     y_cv = y
-    t_y_sol(1,  1) = t_cv
-    t_y_sol(2:, 1) = y_cv
+    solution(1,  1) = t_cv
+    solution(2:, 1) = y_cv
     istats(1) = istats(1) + 1
     do cur_pnt_idx=2,max_pts
        ! Compute Initial step
@@ -729,8 +729,8 @@ contains
        ! Update state
        y_cv = y_cv + y_delta
        t_cv = t_cv + t_delta
-       t_y_sol(1, cur_pnt_idx) = t_cv
-       t_y_sol(2:, cur_pnt_idx) = y_cv
+       solution(1, cur_pnt_idx) = t_cv
+       solution(2:, cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        ! Process solutoin length limit
        if (present(y_sol_len_max_o)) then
@@ -776,7 +776,7 @@ contains
   !!                                istats(6): number of one_step_* calls triggered by SDF bisection
   !!                                istats(7): number of times bisection failed because of max_bisect_o
   !!                                istats(8): number of times bisection failed because target was not contained
-  !! t_y_sol(:,:) ................ Array for solution.
+  !! solution(:,:) ................ Array for solution.
   !!                                Each COLUMN is a solution.
   !!                                The first element of each solution is the t variable with rest the elements of y.
   !!                                The number of columns, and max_pts_o, determin the number of solution points.
@@ -795,7 +795,7 @@ contains
   !! t_delta_fac_fdg_o ........... Extra t_delta adaption factor when shrinking interval. Default: t_delta_fac_fdg_ai
   !! error_tol_abs_o(:) .......... Absolute error tolerance. Default: error_tol_abs_ai
   !! error_tol_rel_o(:) .......... Relative error tolerance. Default: error_tol_rel_ai
-  !! max_pts_o ................... Maximum number of solutions to put in t_y_sol.
+  !! max_pts_o ................... Maximum number of solutions to put in solution.
   !! max_bisect_o ................ Maximum number of bisection iterations to perform for each step. Default: max_bisect_ai
   !! no_bisect_error_o ........... If present, do not exit on bisection errors
   !! sdf_o ....................... SDF function.  Used to set new t_delta for a step.  This subroutine may trigger one or
@@ -808,7 +808,7 @@ contains
   !! sdf_tol_o ................... How close we have to get to accept an sdf solution. Default: sdf_tol_ai
   !! stepp_o ..................... Step processing subroutine.  Called after each step.
   !! 
-  subroutine steps_adapt_etab_nt(status, istats, t_y_sol, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
+  subroutine steps_adapt_etab_nt(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
                                  t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,      &
                                  no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
@@ -816,7 +816,7 @@ contains
     implicit none
     ! Arguments
     integer(kind=ik),                    intent(out) :: status, istats(16)
-    real(kind=rk),                       intent(out) :: t_y_sol(:,:)
+    real(kind=rk),                       intent(out) :: solution(:,:)
     procedure(deq_iface_nt)                          :: deq
     real(kind=rk),                       intent(in)  :: y(:), param(:), a(:,:), b1(:), b2(:), c(:)
     integer(kind=ik),                    intent(in)  :: p1, p2
@@ -873,15 +873,15 @@ contains
        t_delta_ini = t_delta_ai
        if (present(t_delta_max_o))  t_delta_ini = (t_delta_max_o - t_delta_min) / 2
     end if
-    max_pts = size(t_y_sol, 2)
+    max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
     ! Compute solution
     istats = 0
     t_delta = t_delta_ini
     t_cv = 0.0_rk
     y_cv = y
-    t_y_sol(1,  1) = t_cv
-    t_y_sol(2:, 1) = y_cv
+    solution(1,  1) = t_cv
+    solution(2:, 1) = y_cv
     istats(1) = istats(1) + 1
     do cur_pnt_idx=2,max_pts
        ! If close to the end, adjust t_delta to hit t_end_o
@@ -903,7 +903,7 @@ contains
           if (status > 0) return
           ! Compute new t_delta_nxt based on error estimate.
           y_delta_delta = abs(y1_delta-y2_delta)
-          comb_err_tol  = (error_tol_rel + max(abs(t_y_sol(2:, cur_pnt_idx-1)), abs(y_cv + y1_delta)) * error_tol_rel)
+          comb_err_tol  = (error_tol_rel + max(abs(solution(2:, cur_pnt_idx-1)), abs(y_cv + y1_delta)) * error_tol_rel)
           ! MJR TODO NOTE steps_adapt_etab_nt: Fix this for when comb_err_tol has a zero entry!
           t_delta_fac   = (1/sqrt(sum((y_delta_delta / comb_err_tol) ** 2) / size(y, 1))) ** (1 + 1/min(p1, p2))
           if (t_delta_fac < 1.0_rk)  t_delta_fac = t_delta_fac * t_delta_fac_fdg
@@ -929,7 +929,7 @@ contains
           end if
        end do
        if (present(stepp_o)) then
-          call stepp_o(status, sp_end_run, sp_sdf_flags, sp_new_t_delta, cur_pnt_idx, t_y_sol, t_delta, y1_delta)
+          call stepp_o(status, sp_end_run, sp_sdf_flags, sp_new_t_delta, cur_pnt_idx, solution, t_delta, y1_delta)
           if (sp_new_t_delta > 0) then
              if (present(t_delta_min_o)) then
                 sp_new_t_delta = max(t_delta_min_o, sp_new_t_delta)
@@ -1000,8 +1000,8 @@ contains
        y_cv = y_cv + y1_delta
        t_cv = t_cv + t_delta
        t_delta = t_delta_nxt
-       t_y_sol(1,  cur_pnt_idx) = t_cv
-       t_y_sol(2:, cur_pnt_idx) = y_cv
+       solution(1,  cur_pnt_idx) = t_cv
+       solution(2:, cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        if (present(stepp_o)) then
           if (sp_end_run > 0) then

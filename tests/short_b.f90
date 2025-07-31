@@ -37,7 +37,7 @@ program short_b
   use, intrinsic :: iso_fortran_env,                  only: output_unit, error_unit
   use            :: mrkiss_config,                    only: rk, ik
   use            :: mrkiss_solvers_wt,                only: steps_fixed_stab_wt
-  use            :: mrkiss_utils,                     only: print_t_y_sol
+  use            :: mrkiss_utils,                     only: print_solution
   use            :: mrkiss_eerk_bogacki_shampine_3_2, only: a, b=>b1, c, s1
 
   implicit none
@@ -49,16 +49,16 @@ program short_b
   real(kind=rk),     parameter :: t_delta = 0.1_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
-  real(kind=rk)                :: t_y_sol(1+deq_dim, num_points)
+  real(kind=rk)                :: solution(1+deq_dim, num_points)
   integer(kind=ik)             :: status, istats(16)
 
   character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
 
-  call steps_fixed_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
-  call print_t_y_sol(status, t_y_sol, filename_o="short_b_all.out", end_o=istats(1))
+  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
+  call print_solution(status, solution, filename_o="short_b_all.out", end_o=istats(1))
 
-  call steps_fixed_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b(1:s1), c, t_delta_o=t_delta)
-  call print_t_y_sol(status, t_y_sol, filename_o="short_b_sub.out", end_o=istats(1))
+  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b(1:s1), c, t_delta_o=t_delta)
+  call print_solution(status, solution, filename_o="short_b_sub.out", end_o=istats(1))
 
 contains
 

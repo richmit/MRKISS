@@ -51,7 +51,7 @@ improvements and examples I want to implement.
    - +Added ref for Verner's site.+
  - +Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~+
  - +Update comments on ~steps_*~ solvers to reflect all options and algorithm.+
- - +Add ~t_min_o~ and ~t_max_o~ options to ~print_t_y_sol()~+
+ - +Add ~t_min_o~ and ~t_max_o~ options to ~print_solution()~+
  - +Add example documentation pages+
    - +~three_body~+
    - +~lorenz~+

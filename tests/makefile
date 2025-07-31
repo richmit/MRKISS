@@ -48,7 +48,7 @@ FD = ../scripts/float_diff.rb
 
 TESTS = test_rkf45_stab_5 test_rkf45_etab_5 test_rkf45_stab_4 test_rkf45_etab_4 test_rk4_stab test_rk4_ref test_rk4_ref_stab test_rk4_steps test_rich
 
-EXE_TARGETS = rkf45_ref_vs_tab rk4_ref_vs_tab
+EXE_TARGETS = rkf45_ref_vs_tab rk4_ref_vs_tab short_b rich
 
 all : $(EXE_TARGETS)
 

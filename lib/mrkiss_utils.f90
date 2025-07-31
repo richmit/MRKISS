@@ -39,7 +39,7 @@ module mrkiss_utils
   implicit none
   private
 
-  public :: print_t_y_sol
+  public :: print_solution
 
 contains
   
@@ -49,9 +49,9 @@ contains
   !! Inappropriate width_o, digits_o, and separator_o values may cause a runtime error.
   !!
   !! Example 1: The default values will produce CSV output
-  !!   print_t_y_sol(t_y_sol)
+  !!   print_solution(solution)
   !! Example 2: For columnar output we just need to add a width
-  !!   print_t_y_sol(t_y_sol, width_o=30)
+  !!   print_solution(solution, width_o=30)
   !! 
   !! status ....... Exit status
   !!                 - -inf-0 ..... Everything worked
@@ -59,27 +59,27 @@ contains
   !!                                 - 1152 .. Could not open file for write
   !!                                 - 1153 .. Could not close file         
   !!                 - others ..... Other values are not allowed
-  !! t_y_sol ...... Matrix with solution values
+  !! solution ...... Matrix with solution values
   !! filename_o ... Filename to which we print.  Default: NONE
   !!                If not present, then output will be to output_unit (STDOUT).  
   !! digits_o ..... Number of digits for floating point numbers.  Default: 15
   !! width_o ...... Width of print format for all entities. Default: 0
-  !! start_o ...... Starting index to print in t_y_sol. Default: 1
-  !! end_o ........ Ending index to print in t_y_sol.  Default: Number of columns in t_y_sol.
-  !! step_o ....... Print only every step_o'th value in t_y_sol. Default: 1
+  !! start_o ...... Starting index to print in solution. Default: 1
+  !! end_o ........ Ending index to print in solution.  Default: Number of columns in solution.
+  !! step_o ....... Print only every step_o'th value in solution. Default: 1
   !! no_titles_o .. If present, don't print titles.
   !! separator_o .. String to place between fields.  Default: ',' if width_o missing, and ' ' otherwise.
   !! t_min_o ...... Print only solutions with time values >= t_min_o
   !! t_max_o ...... Print only solutions with time values <= t_min_o
   !! 
-  subroutine print_t_y_sol(status, t_y_sol, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o, &
+  subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o, &
                            t_min_o, t_max_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik
     implicit none
     ! Arguments
     integer(kind=ik), intent(out)          :: status
-    real(kind=rk),    intent(in)           :: t_y_sol(:,:)
+    real(kind=rk),    intent(in)           :: solution(:,:)
     character(len=*), intent(in), optional :: filename_o, separator_o
     integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o, no_titles_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
@@ -97,8 +97,8 @@ contains
     if (present(width_o)) width = width_o
     start_idx = 1
     if (present(start_o)) start_idx = start_o
-    end_idx = size(t_y_sol, 2)
-    if (present(end_o)) end_idx = min(end_o, size(t_y_sol, 2))
+    end_idx = size(solution, 2)
+    if (present(end_o)) end_idx = min(end_o, size(solution, 2))
     if (present(separator_o)) then
        separator = separator_o
     else
@@ -126,14 +126,14 @@ contains
        if (present(width_o)) then
           write(out_io_unit, fmt='(a' // width_str // ')', advance="no") "i"
           write(out_io_unit, fmt='("' // separator // '",a' // width_str // ')', advance="no") "t" 
-          do i=1,(size(t_y_sol, 1)-1)
+          do i=1,(size(solution, 1)-1)
              write (tmp_str, '("y",i0)') i
              write(out_io_unit, fmt='("' // separator // '",a' // width_str // ')', advance="no") trim(tmp_str)
           end do
        else
           write(out_io_unit, fmt='(a)', advance="no") "i"
           write(out_io_unit, fmt='("' // separator // '",a)', advance="no") "t" 
-          do i=1,(size(t_y_sol, 1)-1)
+          do i=1,(size(solution, 1)-1)
              write(out_io_unit, fmt='("' // separator // '","y",i0)', advance="no") i
           end do
        end if
@@ -141,16 +141,16 @@ contains
     end if
     ! Create numeric line print format
     fmt = '(i' // width_str // ',"' // separator // '",' // repeat('f' // width_str // '.' // trim(digits_str) &
-          // ',"' // separator // '"', size(t_y_sol, 1)-1) // ',f' // width_str // '.' // trim(digits_str) // ')'
+          // ',"' // separator // '"', size(solution, 1)-1) // ',f' // width_str // '.' // trim(digits_str) // ')'
     ! Print numbers
     do i=start_idx,end_idx,step
        if (present(t_min_o)) then
-          if (t_y_sol(1, i) < t_min_o) cycle
+          if (solution(1, i) < t_min_o) cycle
        end if
        if (present(t_max_o)) then
-          if (t_y_sol(1, i) > t_max_o) cycle
+          if (solution(1, i) > t_max_o) cycle
        end if
-       write (out_io_unit, fmt=fmt) i, t_y_sol(:,i)
+       write (out_io_unit, fmt=fmt) i, solution(:,i)
     end do
     ! Close file
     if (present(filename_o)) then
@@ -161,6 +161,6 @@ contains
        end if
     end if
     status = 0
-  end subroutine print_t_y_sol
+  end subroutine print_solution
 
 end module mrkiss_utils

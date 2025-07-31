@@ -37,7 +37,7 @@ program rk4_ref_vs_tab
   use, intrinsic :: iso_fortran_env,    only: output_unit, error_unit
   use            :: mrkiss_config,      only: rk, ik
   use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt
-  use            :: mrkiss_utils,       only: print_t_y_sol
+  use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
   implicit none
@@ -51,7 +51,7 @@ program rk4_ref_vs_tab
                                                  0.9130598390, 0.9267065986, 0.9506796142, 0.9838057659, 1.0246280460, 1.0715783953 ]
 
   integer(kind=ik)             :: step, status, istats(16)
-  real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, t_y_sol(1+deq_dim, max_step)
+  real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, solution(1+deq_dim, max_step)
   integer                      :: out_io_stat, out_io_unit
 
   character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
@@ -87,8 +87,8 @@ program rk4_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  call steps_fixed_stab_wt(status, istats, t_y_sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
-  call print_t_y_sol(status, t_y_sol, filename_o="rk4_ref_vs_tab_steps.out", end_o=istats(1), width_o=19, no_titles_o=1)
+  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
+  call print_solution(status, solution, filename_o="rk4_ref_vs_tab_steps.out", end_o=istats(1), width_o=19, no_titles_o=1)
 
 contains
 

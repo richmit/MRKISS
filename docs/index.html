@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-27 Sun 10:32 -->
+<!-- 2025-07-30 Wed 23:26 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-27 10:31:17</i></td>
+<td class="org-left"><i>2025-07-30 23:26:04</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-27 10:32:25</i></td>
+<td class="org-left"><i>2025-07-30 23:26:13</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orge79ccc0">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orga22b383">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#org997e13d">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org6f9b370">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org9f80de1">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#orga8612a4">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -361,7 +361,7 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
 
   <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, ik
   <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab_nt
-  <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_t_y_sol
+  <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
 
   <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
@@ -370,11 +370,11 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end    = 50.0_rk</span>
 
-  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> t_y_sol(4, 10000)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> solution(4, 10000)</span>
   <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(16)</span>
 
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_nt</span>(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_end_o=t_end)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_t_y_sol</span>(status, t_y_sol, filename_o=<span style="color: #fa8072;">"minimal.csv"</span>)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_nt</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"minimal.csv"</span>)
 
 <span style="color: #00ffff;">contains</span>
 
@@ -491,8 +491,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orge79ccc0" class="outline-2">
-<h2 id="orge79ccc0"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orga22b383" class="outline-2">
+<h2 id="orga22b383"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -747,8 +747,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-org997e13d" class="outline-3">
-<h3 id="org997e13d"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org9f80de1" class="outline-3">
+<h3 id="org9f80de1"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -837,8 +837,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org6f9b370" class="outline-3">
-<h3 id="org6f9b370"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-orga8612a4" class="outline-3">
+<h3 id="orga8612a4"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1082,7 +1082,7 @@ The first several arguments are common across the higher level solvers.
 <li><code>istats(7)</code>: number of times bisection failed because of max_bisect_o</li>
 <li><code>istats(8)</code>: number of times bisection failed because target was not contained</li>
 </ul></dd>
-<dt><code>t_y_sol</code></dt><dd>Array for solution.  Each <b>column</b> is a solution with the first element being \(t\) and the remaining elements containing \(\mathbf{y}\).  The
+<dt><code>solution</code></dt><dd>Array for solution.  Each <b>column</b> is a solution with the first element being \(t\) and the remaining elements containing \(\mathbf{y}\).  The
 number of columns determines the maximum number of solution points.</dd>
 </dl>
 </div>
@@ -1217,7 +1217,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org2c0d58b">
+<pre class="example" id="org69c30cd">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1237,7 +1237,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="org67b6c27">
+<pre class="example" id="orgc894473">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1255,7 +1255,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgc2641b9" class="figure">
+<div id="org9bbb581" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>

@@ -37,7 +37,7 @@ program minimal
 
   use :: mrkiss_config,      only: rk, ik
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
-  use :: mrkiss_utils,       only: print_t_y_sol
+  use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
 
   implicit none
@@ -46,11 +46,11 @@ program minimal
   real(kind=rk),    parameter :: param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
   real(kind=rk),    parameter :: t_end    = 50.0_rk
 
-  real(kind=rk)               :: t_y_sol(4, 10000)
+  real(kind=rk)               :: solution(4, 10000)
   integer(kind=ik)            :: status, istats(16)
 
-  call steps_fixed_stab_nt(status, istats, t_y_sol, eq, y_iv, param, a, b, c, t_end_o=t_end)
-  call print_t_y_sol(status, t_y_sol, filename_o="minimal.csv")
+  call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  call print_solution(status, solution, filename_o="minimal.csv")
 
 contains
   
