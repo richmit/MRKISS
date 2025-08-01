@@ -48,7 +48,7 @@ FD = ../scripts/float_diff.rb
 
 TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b
 
-EXE_TARGETS = rkf45_ref_vs_tab rk4_ref_vs_tab short_b rich
+EXE_TARGETS = rkf45_ref_vs_tab rk4 short_b rich
 
 all : $(EXE_TARGETS)
 
@@ -112,28 +112,28 @@ test_rkf45_etab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
 test_rkf45 : test_rkf45_stab_5 test_rkf45_stab_4 test_rkf45_etab_5 test_rkf45_etab_4
 
 ####################################################################################################
-rk4_ref_vs_tab : rk4_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
-	$(FC) $(FFLAGS) rk4_ref_vs_tab.f90 $(MRKISS_OBJ_FILES) -o $@
+rk4 : rk4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) rk4.f90 $(MRKISS_OBJ_FILES) -o $@
 
-rk4_ref_vs_tab_steps.out rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out &: rk4_ref_vs_tab
-	rk4_ref_vs_tab$(EXE_SUFFIX)
+rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out &: rk4
+	rk4$(EXE_SUFFIX)
 
 .PHONY: test_rk4_steps
-test_rk4_steps : rk4_ref_vs_tab_steps.out rk4_ref_vs_tab_stab.out 
-	sed "s/^              //" rk4_ref_vs_tab_steps.out > rk4_ref_vs_tab_steps.tmp
-	$(FD) -e 1e-10 rk4_ref_vs_tab_steps.tmp rk4_ref_vs_tab_stab.out 
+test_rk4_steps : rk4_steps.out rk4_stab.out 
+	sed "s/^              //" rk4_steps.out > rk4_steps.tmp
+	$(FD) -e 1e-10 rk4_steps.tmp rk4_stab.out 
 
 .PHONY: test_rk4_stab
-test_rk4_stab : rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_stab.out
-	$(FD) -e 1e-6 rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_stab.out
+test_rk4_stab : rk4_hnd.out rk4_stab.out
+	$(FD) -e 1e-6 rk4_hnd.out rk4_stab.out
 
 .PHONY: test_rk4_ref
-test_rk4_ref : rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_ref.out
-	$(FD) -e 1e-6 rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_ref.out
+test_rk4_ref : rk4_hnd.out rk4_ref.out
+	$(FD) -e 1e-6 rk4_hnd.out rk4_ref.out
 
 .PHONY: test_rk4_ref_stab
-test_rk4_ref_stab : rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out
-	$(FD) -e 1e-10 rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out
+test_rk4_ref_stab : rk4_stab.out rk4_ref.out
+	$(FD) -e 1e-10 rk4_stab.out rk4_ref.out
 
 .PHONY: test_rk4
 test_rk4 : test_rk4_steps test_rk4_ref test_rk4_stab test_rk4_steps

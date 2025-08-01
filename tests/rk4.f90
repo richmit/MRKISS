@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      rk4_ref_vs_tab.f90
+!! @file      rk4.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Test RK4 code.@EOL
 !! @std       F2023
@@ -33,7 +33,7 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
-program rk4_ref_vs_tab
+program rk4
   use, intrinsic :: iso_fortran_env,    only: output_unit, error_unit
   use            :: mrkiss_config,      only: rk, ik
   use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt
@@ -56,7 +56,7 @@ program rk4_ref_vs_tab
 
   character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
 
-  open(newunit=out_io_unit, file="rk4_ref_vs_tab_hnd.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rk4_hnd.out", form='formatted', action='write', iostat=out_io_stat)
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_hwrk(step)
@@ -65,7 +65,7 @@ program rk4_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  open(newunit=out_io_unit, file="rk4_ref_vs_tab_ref.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rk4_ref.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -76,7 +76,7 @@ program rk4_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  open(newunit=out_io_unit, file="rk4_ref_vs_tab_stab.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rk4_stab.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -88,7 +88,7 @@ program rk4_ref_vs_tab
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, sol_no_dy_o=1)
-  call print_solution(status, solution, filename_o="rk4_ref_vs_tab_steps.out", end_o=istats(1), width_o=19, no_titles_o=1, sol_no_dy_o=1)
+  call print_solution(status, solution, filename_o="rk4_steps.out", end_o=istats(1), width_o=19, no_titles_o=1, sol_no_dy_o=1)
 
 contains
 
@@ -102,4 +102,4 @@ contains
     status = 0
   end subroutine eq
 
-end program rk4_ref_vs_tab
+end program rk4

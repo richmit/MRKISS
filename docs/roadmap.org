@@ -64,7 +64,7 @@ improvements and examples I want to implement.
  - +Add ~istats~ docs to each solver with components used.+ *DONE*
  - +Make comment formatting uniform+ *DONE*
  - +Document all function arguments+ *DONE*
- - +Compare ~steps_fixed_stab_wt()~ to other files in ~rk4_ref_vs_tab.f90~+ *DONE*
+ - +Compare ~steps_fixed_stab_wt()~ to other files in ~rk4.f90~+ *DONE*
  - +Use ~b1~ for stage count in ~one_step_etab_wt()~, and ~b~ in ~in one_step_stab_wt()~+ *DONE*
  - +Think about how to document b vectors that require fewer stages than in b+ *DONE*
    - +~mrkiss_eerk_bogacki_shampine_3_2.f90 ..... sd1 1~+ *DONE*
