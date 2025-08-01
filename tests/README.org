@@ -1,2 +1,2 @@
 
-Tests for the MRKISS library.
+Tests for the [[https://github.com/richmit/MRKISS][MRKISS]] library.

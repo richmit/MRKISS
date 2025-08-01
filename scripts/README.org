@@ -1,2 +1,2 @@
 
-Scripts related to MRKISS.
+Scripts related to [[https://github.com/richmit/MRKISS][MRKISS]].

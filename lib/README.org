@@ -1,2 +1,2 @@
 
-The MRKISS library code.  Everything you /need/ to use the library is in this directory.
+The [[https://github.com/richmit/MRKISS][MRKISS]] library code.  Everything you /need/ to use the library is in this directory.

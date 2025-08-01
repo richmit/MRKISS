@@ -1,4 +1,4 @@
 
-This directory contains maple worksheets for each of the Butcher tableaux used by MRKISS.
+This directory contains maple worksheets for each of the Butcher tableaux used by [[https://github.com/richmit/MRKISS][MRKISS]].
 
 It also has some RK related worksheets.
