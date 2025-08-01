@@ -81,7 +81,7 @@ program three_body
   real(kind=rk),    parameter :: param(1)      = [1.0_rk / 81.45_rk]
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
-  real(kind=rk)               :: solution(1+deq_dim, num_points)
+  real(kind=rk)               :: solution(1+2*deq_dim, num_points)
   integer(kind=ik)            :: status, istats(16)
   integer                     :: c_beg, c_end, c_rate
 

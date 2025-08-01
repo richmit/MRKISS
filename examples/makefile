@@ -55,6 +55,8 @@ three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_w
 
 three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png &: three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_condy_stab_wt.csv tree_body_steps_fixed_stab_wt.csv three_body.R
 	R --no-save --no-echo -q -f three_body.R
+
+three_body_png : three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png
 	$(IMG_VIEWER) three_body.png three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_ylen.png three_body_moon.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_unfixed_pos.png &
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -102,6 +104,13 @@ brusselator.png : brusselator.csv
 minimal : minimal.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) minimal.f90 $(MRKISS_OBJ_FILES) -o $@
 
+minimal.csv : minimal
+	./minimal$(EXE_SUFFIX)
+	head -n 10 minimal.csv
+	tail -n 10 minimal.csv
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 clean : clean_multi_mrkiss
 	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.svg
+
+all : brusselator.png lorenz_png three_body_png minimal.csv

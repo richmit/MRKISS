@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-30 Wed 23:26 -->
+<!-- 2025-07-31 Thu 23:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-30 23:26:04</i></td>
+<td class="org-left"><i>2025-07-31 23:10:36</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-30 23:26:13</i></td>
+<td class="org-left"><i>2025-07-31 23:11:13</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orga22b383">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#org9f0d1bd">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#org9f80de1">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#orga8612a4">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orge41b1a0">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org6243ca8">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -441,6 +441,7 @@ Things I care about:
 <li>Fixed \(t\) step size solvers</li>
 <li>Fixed \(\mathbf{y}\) space step size solvers</li>
 </ul></li>
+<li>Solutions include derivative values by default for visualization tools that perform Hermite interpolation.</li>
 <li>Programmable step processing.  Examples:
 <ul class="org-ul">
 <li>Stop the routine if the solution curve is too long in y-space</li>
@@ -491,8 +492,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orga22b383" class="outline-2">
-<h2 id="orga22b383"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-org9f0d1bd" class="outline-2">
+<h2 id="org9f0d1bd"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -747,8 +748,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-org9f80de1" class="outline-3">
-<h3 id="org9f80de1"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orge41b1a0" class="outline-3">
+<h3 id="orge41b1a0"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -837,8 +838,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-orga8612a4" class="outline-3">
-<h3 id="orga8612a4"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org6243ca8" class="outline-3">
+<h3 id="org6243ca8"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1082,8 +1083,10 @@ The first several arguments are common across the higher level solvers.
 <li><code>istats(7)</code>: number of times bisection failed because of max_bisect_o</li>
 <li><code>istats(8)</code>: number of times bisection failed because target was not contained</li>
 </ul></dd>
-<dt><code>solution</code></dt><dd>Array for solution.  Each <b>column</b> is a solution with the first element being \(t\) and the remaining elements containing \(\mathbf{y}\).  The
-number of columns determines the maximum number of solution points.</dd>
+<dt><code>solution</code></dt><dd>Array for solution.  <br />
+Each <b>column</b> is a solution.  By default each column contains \(t\), the coordinates of <code>y</code>, and the derivatives.  The coordinates of <code>y</code>
+start in column <code>sol_y_idx_o</code>, by default <code>2</code>. The inclusion of \(t\) may be suppressed via <code>sol_no_t_o</code>, and the inclusion of the derivatives
+may be suppressed via <code>sol_no_dy_o</code>.</dd>
 </dl>
 </div>
 </div>
@@ -1217,7 +1220,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org69c30cd">
+<pre class="example" id="org81b0551">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1237,7 +1240,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="orgc894473">
+<pre class="example" id="orgeef511c">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1255,7 +1258,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org9bbb581" class="figure">
+<div id="orgbe4f035" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>

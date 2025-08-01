@@ -51,7 +51,7 @@ program rk4_ref_vs_tab
                                                  0.9130598390, 0.9267065986, 0.9506796142, 0.9838057659, 1.0246280460, 1.0715783953 ]
 
   integer(kind=ik)             :: step, status, istats(16)
-  real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, solution(1+deq_dim, max_step)
+  real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, solution(1+deq_dim, max_step), dy(deq_dim)
   integer                      :: out_io_stat, out_io_unit
 
   character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
@@ -60,7 +60,7 @@ program rk4_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_hwrk(step)
-     call one_step_rk4_wt(status, y_delta, eq, t_cv, y_cv, param, t_delta)
+     call one_step_rk4_wt(status, y_delta, dy, eq, t_cv, y_cv, param, t_delta)
      t_cv = t_cv + t_delta
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
@@ -70,7 +70,7 @@ program rk4_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_rk4_wt(status, y_delta, eq, t_cv, y_cv, param, t_delta)
+     call one_step_rk4_wt(status, y_delta, dy, eq, t_cv, y_cv, param, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do
@@ -81,14 +81,14 @@ program rk4_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_stab_wt(status, y_delta, eq, t_cv, y_cv, param, a, b, c, t_delta)
+     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y_cv, param, a, b, c, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
-  call print_solution(status, solution, filename_o="rk4_ref_vs_tab_steps.out", end_o=istats(1), width_o=19, no_titles_o=1)
+  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, sol_no_dy_o=1)
+  call print_solution(status, solution, filename_o="rk4_ref_vs_tab_steps.out", end_o=istats(1), width_o=19, no_titles_o=1, sol_no_dy_o=1)
 
 contains
 

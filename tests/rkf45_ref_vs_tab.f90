@@ -49,7 +49,7 @@ program rkf45_ref_vs_tab
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
   integer(kind=ik) :: step, status
-  real(kind=rk)    :: y_delta(deq_dim), y_tmp(deq_dim), y_cv(deq_dim), t_cv
+  real(kind=rk)    :: y_delta(deq_dim), y_tmp(deq_dim), y_cv(deq_dim), t_cv, dy(deq_dim)
   integer          :: out_io_stat, out_io_unit
 
   character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
@@ -59,7 +59,7 @@ program rkf45_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_rkf45_wt(status, y_delta, y_tmp, eq, t_cv, y_cv, param, t_delta)
+     call one_step_rkf45_wt(status, y_delta, y_tmp, dy, eq, t_cv, y_cv, param, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do
@@ -70,7 +70,7 @@ program rkf45_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_rkf45_wt(status, y_tmp, y_delta, eq, t_cv, y_cv, param, t_delta)
+     call one_step_rkf45_wt(status, y_tmp, y_delta, dy, eq, t_cv, y_cv, param, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do
@@ -81,7 +81,7 @@ program rkf45_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_etab_wt(status, y_delta, y_tmp, eq, t_cv, y_cv, param, a, b1, b2, c, t_delta)
+     call one_step_etab_wt(status, y_delta, y_tmp, dy, eq, t_cv, y_cv, param, a, b1, b2, c, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do
@@ -92,7 +92,7 @@ program rkf45_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_etab_wt(status, y_tmp, y_delta, eq, t_cv, y_cv, param, a, b1, b2, c, t_delta)
+     call one_step_etab_wt(status, y_tmp, y_delta, dy, eq, t_cv, y_cv, param, a, b1, b2, c, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do
@@ -103,7 +103,7 @@ program rkf45_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_stab_wt(status, y_delta, eq, t_cv, y_cv, param, a, b1, c, t_delta)
+     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y_cv, param, a, b1, c, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do
@@ -114,7 +114,7 @@ program rkf45_ref_vs_tab
   t_cv = t_iv
   do step=1,max_step
      write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_stab_wt(status, y_delta, eq, t_cv, y_cv, param, a, b2, c, t_delta)
+     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y_cv, param, a, b2, c, t_delta)
      y_cv = y_cv + y_delta
      t_cv = t_cv + t_delta
   end do

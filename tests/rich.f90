@@ -49,7 +49,7 @@ program tc1_TCASEN
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
   integer(kind=ik)             :: step, status
-  real(kind=rk)                :: y_delta(deq_dim), y1_cv(deq_dim), y2_cv(deq_dim), t_cv, y_tru(deq_dim)
+  real(kind=rk)                :: y_delta(deq_dim), y1_cv(deq_dim), y2_cv(deq_dim), t_cv, y_tru(deq_dim), dy(deq_dim)
   integer                      :: out_io_unit
 
   character(len=*), parameter  :: fmt = "(i5,f23.17,f23.17,f23.17,f23.17,f23.17,f23.17)"
@@ -61,9 +61,9 @@ program tc1_TCASEN
   do step=1,max_steps
      call ysol(status, y_tru, t_cv, param)
      write (out_io_unit, fmt=fmt) step, t_cv, y1_cv, y2_cv, y_tru, abs(y_tru-y1_cv), abs(y_tru-y2_cv)
-     call one_step_stab_wt(status, y_delta, eq, t_cv, y1_cv, param, a, b, c, t_delta)
+     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y1_cv, param, a, b, c, t_delta)
      y1_cv = y1_cv + y_delta
-     call one_richardson_step_stab_wt(status, y_delta, eq, t_cv, y2_cv, param, a, b, c, p, t_delta)
+     call one_richardson_step_stab_wt(status, y_delta, dy, eq, t_cv, y2_cv, param, a, b, c, p, t_delta)
      y2_cv = y2_cv + y_delta
      t_cv  = t_cv + t_delta
   end do

@@ -46,7 +46,7 @@ program minimal
   real(kind=rk),    parameter :: param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
   real(kind=rk),    parameter :: t_end    = 50.0_rk
 
-  real(kind=rk)               :: solution(4, 10000)
+  real(kind=rk)               :: solution(7, 10000)
   integer(kind=ik)            :: status, istats(16)
 
   call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)

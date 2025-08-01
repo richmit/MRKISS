@@ -142,6 +142,7 @@ Things I care about:
  - Easy to use, hardwired methods for /fixed step size/ visualization use cases:
    - Fixed \(t\) step size solvers
    - Fixed \(\mathbf{y}\) space step size solvers
+ - Solutions include derivative values by default for visualization tools that perform Hermite interpolation.
  - Programmable step processing.  Examples:
    - Stop the routine if the solution curve is too long in y-space
    - Stop the routine if the step delta, or some components of it, are too long in y-space
@@ -507,8 +508,10 @@ The first several arguments are common across the higher level solvers.
     - ~istats(6)~: number of one_step_* calls triggered by SDF bisection
     - ~istats(7)~: number of times bisection failed because of max_bisect_o
     - ~istats(8)~: number of times bisection failed because target was not contained
-  - ~solution~ :: Array for solution.  Each *column* is a solution with the first element being \(t\) and the remaining elements containing \(\mathbf{y}\).  The
-     number of columns determines the maximum number of solution points.
+  - ~solution~ :: Array for solution.  \\
+                  Each *column* is a solution.  By default each column contains \(t\), the coordinates of ~y~, and the derivatives.  The coordinates of ~y~
+                  start in column ~sol_y_idx_o~, by default ~2~. The inclusion of \(t\) may be suppressed via ~sol_no_t_o~, and the inclusion of the derivatives
+                  may be suppressed via ~sol_no_dy_o~.
 
 *** The IVP
 :PROPERTIES:

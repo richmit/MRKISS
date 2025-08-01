@@ -7,20 +7,20 @@
 # @brief     Plot the output from brusselator.f90.@EOL
 # @std       GNU-R
 # @see       https://github.com/richmit/MRKISS/
-# @copyright 
+# @copyright
 #  @parblock
 #  Copyright (c) 2025, Mitchell Jay Richling <http://www.mitchr.me/> All rights reserved.
-#  
+#
 #  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-#  
+#
 #  1. Redistributions of source code must retain the above copyright notice, this list of conditions, and the following disclaimer.
-#  
+#
 #  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following disclaimer in the documentation
 #     and/or other materials provided with the distribution.
-#  
+#
 #  3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software
 #     without specific prior written permission.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
 #  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
@@ -33,10 +33,11 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 daDat <- fread('brusselator.csv')
 
-gp <- ggplot() + 
-  geom_line(data=daDat, aes(x=t, y=y1, col='y1'), ) +
-  geom_line(data=daDat, aes(x=t, y=y2, col='y2')) +
+gp <- ggplot() +
+  geom_line(data=daDat %>% mutate(group='f'),  aes(x=t, y=y1,  col='y1')) +
+  geom_line(data=daDat %>% mutate(group='f'),  aes(x=t, y=y2,  col='y2')) +
+  geom_line(data=daDat %>% mutate(group='df'), aes(x=t, y=dy1, col='dy1')) +
+  geom_line(data=daDat %>% mutate(group='df'), aes(x=t, y=dy2, col='dy2')) +
   labs(title='The Brusselator', x='t', y='', col='') +
-  theme(legend.position = c(0.1, 0.8))
-ggsave(filename='brusselator.png', plot=gp, width=1024, height=512, units='px', dpi=150)
- 
+  facet_wrap(~group, ncol=1, scales="free")
+ggsave(filename='brusselator.png', plot=gp, width=1024, height=1024, units='px', dpi=150)
