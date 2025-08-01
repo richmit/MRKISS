@@ -3,6 +3,8 @@
 [[https://github.com/richmit/MRKISS][MRKISS]] is a *tiny* library with *zero dependencies* that aims to make it easy to
 *use* and *experiment with* explicit Runge-Kutta methods.
 
+This library powers the [[https://richmit.github.io/StrangeAttractorZoo/][Strange Attractor Zoo]].
+
  - [[https://richmit.github.io/MRKISS/index.html][Documentation]]
  - Examples
    - [[https://richmit.github.io/MRKISS/ex_three_body.html][Three Body Problem]]
