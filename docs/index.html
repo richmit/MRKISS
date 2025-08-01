@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-31 Thu 23:11 -->
+<!-- 2025-08-01 Fri 14:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-07-31 23:10:36</i></td>
+<td class="org-left"><i>2025-08-01 14:15:07</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-07-31 23:11:13</i></td>
+<td class="org-left"><i>2025-08-01 14:15:08</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org9f0d1bd">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#org647ef3c">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orge41b1a0">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org6243ca8">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org7876b4a">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#orgc073651">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -318,17 +318,27 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <li><a href="#use-makeinc">11.1. Notes about <code>include.mk</code></a></li>
 </ul>
 </li>
-<li><a href="#faq">12. FAQ</a>
+<li><a href="#test-mrkiss">12. <code>MRKISS</code> Testing</a>
 <ul>
-<li><a href="#faq-name">12.1. What's with the name?</a></li>
-<li><a href="#faq-fortran">12.2. Why Fortran</a></li>
-<li><a href="#faq-why">12.3. Why did you write another ODE solver when so many good options exist?</a></li>
-<li><a href="#faq-others">12.4. Why don't you use package XYZ?</a></li>
-<li><a href="#faq-zotero">12.5. What are those zotero links in the references?</a></li>
-<li><a href="#faq-samethods">12.6. Are high order RK methods overkill for strange attractors?</a></li>
-<li><a href="#faq-need-more">12.7. I need a more comprehensive solution.  Do you have advice?</a></li>
-<li><a href="#faq-need-fast">12.8. I need something faster.  Do you have advice?</a></li>
-<li><a href="#faq-deps">12.9. It seems like things are used other than Fortran.  Are there really no external dependencies?</a></li>
+<li><a href="#test-mrkiss-ref-one-step">12.1. Refrence One Step Solvers</a></li>
+<li><a href="#test-mrkiss-tab-ok">12.2. Tableau Plausibility Tests</a></li>
+<li><a href="#test-mrkiss-homo-tab-ok">12.3. Homogeneous Solvers and More Tableau Plausibility Tests</a></li>
+<li><a href="#test-mrkiss-rich">12.4. Richardson Extrapolation</a></li>
+<li><a href="#test-mrkiss-short">12.5. Short Stages</a></li>
+<li><a href="#test-mrkiss-examples">12.6. Examples Are Tests Too</a></li>
+</ul>
+</li>
+<li><a href="#faq">13. FAQ</a>
+<ul>
+<li><a href="#faq-name">13.1. What's with the name?</a></li>
+<li><a href="#faq-fortran">13.2. Why Fortran</a></li>
+<li><a href="#faq-why">13.3. Why did you write another ODE solver when so many good options exist?</a></li>
+<li><a href="#faq-others">13.4. Why don't you use package XYZ?</a></li>
+<li><a href="#faq-zotero">13.5. What are those zotero links in the references?</a></li>
+<li><a href="#faq-samethods">13.6. Are high order RK methods overkill for strange attractors?</a></li>
+<li><a href="#faq-need-more">13.7. I need a more comprehensive solution.  Do you have advice?</a></li>
+<li><a href="#faq-need-fast">13.8. I need something faster.  Do you have advice?</a></li>
+<li><a href="#faq-deps">13.9. It seems like things are used other than Fortran.  Are there really no external dependencies?</a></li>
 </ul>
 </li>
 </ul>
@@ -492,8 +502,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-org9f0d1bd" class="outline-2">
-<h2 id="org9f0d1bd"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-org647ef3c" class="outline-2">
+<h2 id="org647ef3c"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -748,8 +758,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-orge41b1a0" class="outline-3">
-<h3 id="orge41b1a0"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org7876b4a" class="outline-3">
+<h3 id="org7876b4a"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -838,8 +848,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org6243ca8" class="outline-3">
-<h3 id="org6243ca8"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-orgc073651" class="outline-3">
+<h3 id="orgc073651"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1220,7 +1230,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org81b0551">
+<pre class="example" id="org0ed32fd">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1240,7 +1250,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="orgeef511c">
+<pre class="example" id="orgffe77b5">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1258,7 +1268,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgbe4f035" class="figure">
+<div id="orgf8a37d6" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1407,12 +1417,250 @@ how to do that.
 </div>
 </div>
 </div>
+<div id="outline-container-test-mrkiss" class="outline-2">
+<h2 id="test-mrkiss"><span class="section-number-2">12.</span> <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> Testing</h2>
+<div class="outline-text-2" id="text-test-mrkiss">
+<p>
+This section is about how I test <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a>.  
+</p>
+
+<p>
+The <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> directory contains code I primary use for testing
+<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> while the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory contain code I
+primarily use to demonstrate how to use <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a>.  The difference between a "test" and an "example" in
+<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> is a little bit slippery.  Some of the tests, like the <code>tc1_*</code> and <code>tc2_*</code>, could be considered
+demonstrations.  In addition, I use all of the code in <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> for tests.
+</p>
+
+<p>
+The tests can be run by changing into the appropriate directory (<a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> or
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a>), and building the make target <code>tests</code>.  For example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #b0c4de;">cd</span> tests
+make -j 16 tests
+</pre>
+</div>
+
+<p>
+Note the <code>-j 16</code> argument to make.  When running all the tests, especially in the <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> directory,
+I strongly recommend running in parallel.
+</p>
+
+<p>
+In addition, the make files in <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> and
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> have numerous additional targets to run various individual tests or subsets the test
+suite.  These targets are documented in the subsections below.
+</p>
+</div>
+<div id="outline-container-test-mrkiss-ref-one-step" class="outline-3">
+<h3 id="test-mrkiss-ref-one-step"><span class="section-number-3">12.1.</span> Refrence One Step Solvers</h3>
+<div class="outline-text-3" id="text-test-mrkiss-ref-one-step">
+<p>
+The production solvers in <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> all consume Butcher tableaux in the <code>mrkiss_erk*</code> and <code>mrkiss_eerk*</code> modules.
+Therefore the accuracy of these tableaux are critical to the proper operation of <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a>.  
+</p>
+
+<p>
+I don't have a way to automatically test that the data in <i>every</i> tableau is correct.  That said, I can check some of the most important ones by comparing
+output of <code>one_step*()</code> solvers using them with hand coded solvers implemented using alternate references sources.
+</p>
+
+<p>
+Some of the most used RKs in history are the classical O(4) method (<code>mrkiss_erk_kutta_4</code>), Fehlberg's embedded O(4,5) method (<code>mrkiss_eerk_fehlberg_4_5</code>), and
+Dormand &amp; Prince's embedded O(5,4) method (<code>mrkiss_eerk_dormand_prince_5_4</code>).  To this end the <code>mrkiss_solvers_wt</code> module contains hand written versions of
+these solvers (<code>one_step_rk4_wt()</code>, <code>one_step_rkf45_wt()</code>, &amp; <code>one_step_dp54_wt()</code>). The <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> test suite contains
+three tests corresponding to these hand written solvers:
+</p>
+
+<ul class="org-ul">
+<li><code>test_dp54</code> Runs the following tests
+<ul class="org-ul">
+<li><code>test_dp54_ref_vs_stab_5</code> Test tableau data of the O(5) method vs hand coded results.</li>
+<li><code>test_dp54_ref_vs_stab_4</code> Test tableau data of the O(4) method vs hand coded results.</li>
+<li><code>test_dp54_stab_vs_etab_5</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
+<li><code>test_dp54_stab_vs_etab_4</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
+</ul></li>
+<li><code>test_rkf45</code> Runs the following tests
+<ul class="org-ul">
+<li><code>test_rkf45_ref_vs_stab_5</code> Test tableau data of the O(5) method vs hand coded results.</li>
+<li><code>test_rkf45_ref_vs_stab_4</code> Test tableau data of the O(4) method vs hand coded results.</li>
+<li><code>test_rkf45_stab_vs_etab_5</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
+<li><code>test_rkf45_stab_vs_etab_4</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
+</ul></li>
+<li><code>test_rk4</code> Runs the following tests
+<ul class="org-ul">
+<li><code>test_rk4_stab_vs_steps</code> Test consistency of <code>steps_fixed_stab_wt()</code> vs hand coded loop.</li>
+<li><code>test_rk4_ref_vs_stab</code> Test tableau data of the method vs hand coded results.</li>
+<li><code>test_rk4_ref_vs_hnd</code> Test hand coded method vs hand computed results.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-test-mrkiss-tab-ok" class="outline-3">
+<h3 id="test-mrkiss-tab-ok"><span class="section-number-3">12.2.</span> Tableau Plausibility Tests</h3>
+<div class="outline-text-3" id="text-test-mrkiss-tab-ok">
+<p>
+In the <a href="#test-mrkiss-ref-one-step">previous section</a> we have some spot check for three tableaux.  In this section we have tests that verify the <i>plausibility</i> of the
+remaining methods.  What do I mean by "plausibility"?  I mean that we can verify that the tableaux define methods that at least seem to act like well behaved RK methods
+of the appropriate order.  
+</p>
+
+<p>
+These tests also serve as "change detection".  That is to say, if I change something in the code and get different results then I may have introduced a bug.
+</p>
+
+<ul class="org-ul">
+<li><code>tc1_png</code> This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the <code>tc1.R</code> file contains R
+code that may be useful in investigating these results.</li>
+<li><code>test_tc1</code> This will compare the output of the tests to archived results in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a> to detect changes.</li>
+</ul>
+
+<p>
+Note these tests include about 40 individual test cases each with it's own Fortran source.  These tests are <i>generated</i> from a single seed Fortran source file
+named <a href="https://github.com/richmit/MRKISS/blob/master/tests/tc1_template.f90"><code>tc1_template.f90</code></a> that is expanded into the remaining source files via the
+script <a href="https://github.com/richmit/MRKISS/blob/master/tests/tc_make_make.rb"><code>tc_make_make.rb</code></a>.  All of this is handled in the make file which will
+regenerate all the test source if the template is modified.
+</p>
+
+<p>
+The test equation used is:
+</p>
+
+<p>
+\[ \frac{\mathrm{d}y}{\mathrm{d}t} = e^\left(-t^2\right) \]
+</p>
+
+<p>
+The primary diagnostic plot is of global error:
+</p>
+
+
+<div id="org66c9fff" class="figure">
+<p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-test-mrkiss-homo-tab-ok" class="outline-3">
+<h3 id="test-mrkiss-homo-tab-ok"><span class="section-number-3">12.3.</span> Homogeneous Solvers and More Tableau Plausibility Tests</h3>
+<div class="outline-text-3" id="text-test-mrkiss-homo-tab-ok">
+<p>
+In the <a href="#test-mrkiss-tab-ok">previous section</a> we have test the <i>plausibility</i> the tableaux via the <code>mrkiss_solvers_wt</code> module.  This set of tests
+continues that with a new test equation:
+</p>
+
+<p>
+\[ \frac{\mathrm{d}y}{\mathrm{d}t} = -2y \]
+</p>
+
+<p>
+For these tests we use the homogeneous solvers in the <code>mrkiss_solvers_nt</code> module.  This source code for this module is entirely generated from
+<a href="https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_solvers_wt.f90"><code>mrkiss_solvers_wt.f90</code></a> via
+<a href="https://github.com/richmit/MRKISS/blob/master/lib/wt2nt.sed"><code>wt2nt.sed</code></a>.  So these tests also serve as a way to make sure this code gets generated and
+produces reasonable results.
+</p>
+
+<p>
+Like the tests in the <a href="#test-mrkiss-tab-ok">previous section</a> these tests also serve as "change detection".  That is to say, if I change something in the
+code and get different results then I may have introduced a bug.
+</p>
+
+<ul class="org-ul">
+<li><code>tc2_png</code> This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the <code>tc2.R</code> file contains R
+code that may be useful in investigating these results.</li>
+<li><code>test_tc2</code> This will compare the output of the tests to archived results in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a> to
+detect changes.</li>
+</ul>
+
+<p>
+Note these tests include about 40 individual test cases each with it's own Fortran source.  These tests are <i>generated</i> from a single seed Fortran source file
+named <a href="https://github.com/richmit/MRKISS/blob/master/tests/tc2_template.f90"><code>tc2_template.f90</code></a> that is expanded into the remaining source files via the
+script <a href="https://github.com/richmit/MRKISS/blob/master/tests/tc_make_make.rb"><code>tc_make_make.rb</code></a>.  All of this is handled in the make file which will
+regenerate all the test source if the template is modified.
+</p>
+
+<p>
+The primary diagnostic plot is of global error:
+</p>
+
+
+<div id="org1ba916f" class="figure">
+<p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-test-mrkiss-rich" class="outline-3">
+<h3 id="test-mrkiss-rich"><span class="section-number-3">12.4.</span> Richardson Extrapolation</h3>
+<div class="outline-text-3" id="text-test-mrkiss-rich">
+<p>
+This is another plausibility and change detection test.  This test compares <code>one_step_stab_wt()</code> and <code>one_richardson_step_stab_wt()</code> using <code>mrkiss_erk_euler_1</code>
+as the method.
+</p>
+
+<ul class="org-ul">
+<li><code>test_rich</code> Runs the code and compares the output to archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a>.</li>
+<li><code>rich_png</code> Produces diagnostic plots for human to verify the behavior is plausible.</li>
+</ul>
+
+<p>
+The primary diagnostic plot is of global error:
+</p>
+
+
+<div id="org0507d69" class="figure">
+<p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-test-mrkiss-short" class="outline-3">
+<h3 id="test-mrkiss-short"><span class="section-number-3">12.5.</span> Short Stages</h3>
+<div class="outline-text-3" id="text-test-mrkiss-short">
+<p>
+The <code>one_step_stab*()</code>, <code>steps_fixed*()</code>, <code>steps_condy*()</code>, and <code>steps_sloppy_condy*()</code> solvers all use the <code>b</code> vector to determine the number of stages &#x2013;
+not the size of <code>a</code>.  This allows us to use a shorter <code>b</code> vector cutting off trailing zero entries.  This test makes sure this functionality works.
+</p>
+
+<ul class="org-ul">
+<li><code>test_short_b</code> Runs the following tests
+<ul class="org-ul">
+<li><code>test_short_b_sub_vs_arc</code> Compare full stage results with truncated results</li>
+<li><code>test_short_b_all_vs_sub</code> Compare with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-test-mrkiss-examples" class="outline-3">
+<h3 id="test-mrkiss-examples"><span class="section-number-3">12.6.</span> Examples Are Tests Too</h3>
+<div class="outline-text-3" id="text-test-mrkiss-examples">
+<p>
+The <a href="https://github.com/richmit/MRKISS/blob/master/examples/tdata"><code>tdata/</code></a> directory in
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> is used to archive old output files generated from running the examples.  The
+<a href="https://github.com/richmit/MRKISS/blob/master/examples/makefile"><code>makefile</code></a> contains tests to run the examples and compare the results to what was archived.
+These tests serve as "change detection" helping me to identify the introduction of bugs.
+</p>
+
+<ul class="org-ul">
+<li><code>tests</code> Runs the following tests
+<ul class="org-ul">
+<li><code>minimal_test</code> Creates and checks minimal.csv.</li>
+<li><code>brusselator_test</code> Creates and checks brusselator.csv.</li>
+<li><code>lorenz_test</code> Creates and checks the CSV files created by <code>lorenz</code>.</li>
+<li><code>three_body_test</code> Creates and checks the CSV files created by <code>three_body</code>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
 <div id="outline-container-faq" class="outline-2">
-<h2 id="faq"><span class="section-number-2">12.</span> FAQ</h2>
+<h2 id="faq"><span class="section-number-2">13.</span> FAQ</h2>
 <div class="outline-text-2" id="text-faq">
 </div>
 <div id="outline-container-faq-name" class="outline-3">
-<h3 id="faq-name"><span class="section-number-3">12.1.</span> What's with the name?</h3>
+<h3 id="faq-name"><span class="section-number-3">13.1.</span> What's with the name?</h3>
 <div class="outline-text-3" id="text-faq-name">
 <p>
 It's an overlapping acronym
@@ -1428,7 +1676,7 @@ It amuses me, perhaps more than it should, having such a complex name for a supe
 </div>
 </div>
 <div id="outline-container-faq-fortran" class="outline-3">
-<h3 id="faq-fortran"><span class="section-number-3">12.2.</span> Why Fortran</h3>
+<h3 id="faq-fortran"><span class="section-number-3">13.2.</span> Why Fortran</h3>
 <div class="outline-text-3" id="text-faq-fortran">
 <p>
 I do most of my programming in other languages, but I really like Fortran specifically for this kind of work.  It's just good at math.  Especially when
@@ -1437,7 +1685,7 @@ vectors and matrices are involved.
 </div>
 </div>
 <div id="outline-container-faq-why" class="outline-3">
-<h3 id="faq-why"><span class="section-number-3">12.3.</span> Why did you write another ODE solver when so many good options exist?</h3>
+<h3 id="faq-why"><span class="section-number-3">13.3.</span> Why did you write another ODE solver when so many good options exist?</h3>
 <div class="outline-text-3" id="text-faq-why">
 <p>
 For a long time I have had a few annoyances related available packages:
@@ -1464,7 +1712,7 @@ Oh.  And I enjoy writing this kind of code..
 </div>
 </div>
 <div id="outline-container-faq-others" class="outline-3">
-<h3 id="faq-others"><span class="section-number-3">12.4.</span> Why don't you use package XYZ?</h3>
+<h3 id="faq-others"><span class="section-number-3">13.4.</span> Why don't you use package XYZ?</h3>
 <div class="outline-text-3" id="text-faq-others">
 <p>
 Don't get me wrong, I <b>do</b> use other packages!
@@ -1479,7 +1727,7 @@ One of my favorites is <a href="https://www.mitchr.me/SS/tools/index.html#imath-
 </div>
 </div>
 <div id="outline-container-faq-zotero" class="outline-3">
-<h3 id="faq-zotero"><span class="section-number-3">12.5.</span> What are those zotero links in the references?</h3>
+<h3 id="faq-zotero"><span class="section-number-3">13.5.</span> What are those zotero links in the references?</h3>
 <div class="outline-text-3" id="text-faq-zotero">
 <p>
 Zotero is a bibliography tool.  On my computer, those links take me to the Zotero application with the reference in question highlighted.  This allows
@@ -1492,7 +1740,7 @@ Unfortunately they are not of much use to anyone but me.
 </div>
 </div>
 <div id="outline-container-faq-samethods" class="outline-3">
-<h3 id="faq-samethods"><span class="section-number-3">12.6.</span> Are high order RK methods overkill for strange attractors?</h3>
+<h3 id="faq-samethods"><span class="section-number-3">13.6.</span> Are high order RK methods overkill for strange attractors?</h3>
 <div class="outline-text-3" id="text-faq-samethods">
 <p>
 Yes.  In fact, Euler's method is normally good enough for strange attractors.
@@ -1500,7 +1748,7 @@ Yes.  In fact, Euler's method is normally good enough for strange attractors.
 </div>
 </div>
 <div id="outline-container-faq-need-more" class="outline-3">
-<h3 id="faq-need-more"><span class="section-number-3">12.7.</span> I need a more comprehensive solution.  Do you have advice?</h3>
+<h3 id="faq-need-more"><span class="section-number-3">13.7.</span> I need a more comprehensive solution.  Do you have advice?</h3>
 <div class="outline-text-3" id="text-faq-need-more">
 <p>
 My favorite is <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia</a>'s <code>DifferentialEquations.jl</code>.  It is comprehensive, well designed, fast, and
@@ -1527,7 +1775,7 @@ If you are doing statistics in combination with ODEs, then <a href="https://www.
 </div>
 </div>
 <div id="outline-container-faq-need-fast" class="outline-3">
-<h3 id="faq-need-fast"><span class="section-number-3">12.8.</span> I need something faster.  Do you have advice?</h3>
+<h3 id="faq-need-fast"><span class="section-number-3">13.8.</span> I need something faster.  Do you have advice?</h3>
 <div class="outline-text-3" id="text-faq-need-fast">
 <p>
 All of the options listed for the question "<a href="#faq-need-more">I need a more comprehensive solution.  Do you have
@@ -1542,7 +1790,7 @@ codes</a> &#x2013; they are faster than <b><a href="https://github.com/richmit/M
 </div>
 </div>
 <div id="outline-container-faq-deps" class="outline-3">
-<h3 id="faq-deps"><span class="section-number-3">12.9.</span> It seems like things are used other than Fortran.  Are there really no external dependencies?</h3>
+<h3 id="faq-deps"><span class="section-number-3">13.9.</span> It seems like things are used other than Fortran.  Are there really no external dependencies?</h3>
 <div class="outline-text-3" id="text-faq-deps">
 <p>
 I use several tools in the <b>development</b> of <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  In addition several of the examples use external tools to draw

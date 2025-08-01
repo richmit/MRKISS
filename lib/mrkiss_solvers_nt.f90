@@ -511,9 +511,11 @@ contains
        if (cur_pnt_idx >= max_pts) exit
     end do
     ! Compute derivative for final solution point
-    call deq(status, dy, y_cv, param)  ! This sets return status
-    if (status > 0) return
-    solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    if (.not. (present(sol_no_dy_o))) then
+       call deq(status, dy, y_cv, param)  ! This sets return status
+       if (status > 0) return
+       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    end if
     istats(1) = istats(1) + 1
   end subroutine steps_fixed_stab_nt
 
@@ -712,9 +714,11 @@ contains
        if (cur_pnt_idx >= max_pts) exit
     end do
     ! Compute derivative for final solution point
-    call deq(status, dy, y_cv, param)  ! This sets return status
-    if (status > 0) return
-    solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    if (.not. (present(sol_no_dy_o))) then
+       call deq(status, dy, y_cv, param)  ! This sets return status
+       if (status > 0) return
+       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    end if
     istats(1) = istats(1) + 1
   end subroutine steps_condy_stab_nt
 
@@ -845,9 +849,11 @@ contains
        if (cur_pnt_idx >= max_pts) exit
     end do
     ! Compute derivative for final solution point
-    call deq(status, dy, y_cv, param)  ! This sets return status
-    if (status > 0) return
-    solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    if (.not. (present(sol_no_dy_o))) then
+       call deq(status, dy, y_cv, param)  ! This sets return status
+       if (status > 0) return
+       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    end if
     istats(1) = istats(1) + 1
   end subroutine steps_sloppy_condy_stab_nt
 
@@ -1118,9 +1124,11 @@ contains
        if (t_delta_end_p) exit
     end do
     ! Compute derivative for final solution point
-    call deq(status, dy, y_cv, param)  ! This sets return status
-    if (status > 0) return
-    solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    if (.not. (present(sol_no_dy_o))) then
+       call deq(status, dy, y_cv, param)  ! This sets return status
+       if (status > 0) return
+       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
+    end if
     istats(1) = istats(1) + 1
   end subroutine steps_adapt_etab_nt
 

@@ -43,30 +43,55 @@ include $(MRKISS_PATH)/make_includes/include.mk
 
 IMG_VIEWER = nomacs
 
+FD = ../scripts/float_diff.rb
+
 EXE_TARGETS = three_body lorenz minimal brusselator
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) three_body.f90 $(MRKISS_OBJ_FILES) -o $@
 
-three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_condy_stab_wt.csv tree_body_steps_fixed_stab_wt.csv &: three_body
+THREE_BODY_CSVS = three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_condy_stab_wt.csv tree_body_steps_fixed_stab_wt.csv
+
+.PHONY: lorenz_csv
+three_body_csv : $(THREE_BODY_CSVS)
+
+$(THREE_BODY_CSVS) &: three_body
 	./three_body$(EXE_SUFFIX)
 	ls -l three_body_*.csv
 
-three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png &: three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_condy_stab_wt.csv tree_body_steps_fixed_stab_wt.csv three_body.R
+THREE_BODY_PNGS = three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png
+
+$(THREE_BODY_PNGS) &: $(THREE_BODY_CSVS) three_body.R
 	R --no-save --no-echo -q -f three_body.R
 
-three_body_png : three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png
-	$(IMG_VIEWER) three_body.png three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_ylen.png three_body_moon.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_unfixed_pos.png &
+.PHONY: three_body_png
+three_body_png : $(THREE_BODY_PNGS)
+	$(IMG_VIEWER) THREE_BODY_PNGS &
+
+.PHONY: three_body_clean
+three_body_clean :
+	rm -f $(THREE_BODY_PNGS) $(THREE_BODY_CSVS) three_body.exe three_body three_body.o three_body.obj
+
+.PHONY: three_body_test
+three_body_test: $(THREE_BODY_CSVS)
+	$(foreach dir,$^,$(FD) $(dir) tdata/$(dir); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) lorenz.f90 $(MRKISS_OBJ_FILES) -o $@
 
-lorenz_fixed.csv lorenz_condy.csv lorenz_sloppy_condy.csv lorenz_sloppy_condy_short.csv &: lorenz
+LORENZ_CSVS = lorenz_fixed.csv lorenz_condy.csv lorenz_sloppy_condy.csv lorenz_sloppy_condy_short.csv
+
+.PHONY: lorenz_csv
+lorenz_csv : $(LORENZ_CSVS)
+
+$(LORENZ_CSVS) &: lorenz
 	./lorenz$(EXE_SUFFIX)
 
-lorenz_sloppy_condy_short.svg lorenz_sloppy_condy.svg lorenz_fixed.svg lorenz_condy.svg &: lorenz_condy.csv lorenz_sloppy_condy_short.csv lorenz_sloppy_condy.csv lorenz_fixed.csv lorenz.gplt
+LORENZ_SVGS = lorenz_sloppy_condy_short.svg lorenz_sloppy_condy.svg lorenz_fixed.svg lorenz_condy.svg
+
+$(LORENZ_SVGS) &: $(LORENZ_CSVS) lorenz.gplt
 	gnuplot -p < lorenz.gplt
 
 lorenz_sloppy_condy_short.png : lorenz_sloppy_condy_short.svg
@@ -84,8 +109,18 @@ lorenz_fixed-c.png : lorenz_fixed.svg
 lorenz_condy.png : lorenz_condy.svg
 	magick -density 200 -background white lorenz_condy.svg lorenz_condy.png
 
-lorenz_png : lorenz_sloppy_condy_short.png lorenz_sloppy_condy.png lorenz_fixed.png lorenz_condy.png lorenz_fixed-c.png
-	$(IMG_VIEWER) lorenz_fixed.png lorenz_sloppy_condy_short.png lorenz_sloppy_condy.png lorenz_condy.png lorenz_fixed-c.png
+LORENZ_PNGS = lorenz_sloppy_condy_short.png lorenz_sloppy_condy.png lorenz_fixed.png lorenz_condy.png lorenz_fixed-c.png
+
+lorenz_png : $(LORENZ_PNGS)
+	$(IMG_VIEWER) $(LORENZ_PNGS)
+
+.PHONY: lorenz_clean
+lorenz_clean :
+	rm -f $(LORENZ_PNGS) $(LORENZ_CSVS) $(LORENZ_SVGS) lorenz.exe lorenz lorenz.o lorenz.obj
+
+.PHONY: lorenz_test
+lorenz_test: $(LORENZ_CSVS)
+	$(foreach dir,$^,$(FD) $(dir) tdata/$(dir); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -93,12 +128,20 @@ brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 
 brusselator.csv : brusselator
 	./brusselator$(EXE_SUFFIX)
-	head -n 10 brusselator.csv
-	tail -n 10 brusselator.csv
 
 brusselator.png : brusselator.csv
 	R --no-save --no-echo -q -f brusselator.R
+
+brusselator_png : brusselator.png
 	$(IMG_VIEWER) brusselator.png &
+
+.PHONY: brusselator_clean
+brusselator_clean :
+	rm -f brusselator.csv brusselator.png brusselator.exe brusselator brusselator.o brusselator.obj
+
+.PHONY: brusselator_test
+brusselator_test: brusselator.csv
+	$(FD) brusselator.csv tdata/brusselator.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 minimal : minimal.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -108,6 +151,17 @@ minimal.csv : minimal
 	./minimal$(EXE_SUFFIX)
 	head -n 10 minimal.csv
 	tail -n 10 minimal.csv
+
+.PHONY: minimal_clean
+minimal_clean :
+	rm -f minimal.csv minimal.exe minimal minimal.o minimal.obj
+
+.PHONY: minimal_test
+minimal_test: minimal.csv
+	$(FD) minimal.csv tdata/minimal.csv
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+tests : minimal_test brusselator_test lorenz_test three_body_test
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 clean : clean_multi_mrkiss

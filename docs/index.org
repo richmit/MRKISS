@@ -788,6 +788,171 @@ A rule to make a static library is included in ~include.mk~.  You can build it w
 dependency in your build rule.  As the options to link to a shared library differ wildly across platforms and compilers/linkers, I don't provide an example of
 how to do that.
 
+* [[https://github.com/richmit/MRKISS][~MRKISS~]] Testing 
+:PROPERTIES:
+:CUSTOM_ID: test-mrkiss
+:END:
+
+This section is about how I test [[https://github.com/richmit/MRKISS][~MRKISS~]].  
+
+The [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] directory contains code I primary use for testing
+[[https://github.com/richmit/MRKISS][~MRKISS~]] while the [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory contain code I
+primarily use to demonstrate how to use [[https://github.com/richmit/MRKISS][~MRKISS~]].  The difference between a "test" and an "example" in
+[[https://github.com/richmit/MRKISS][~MRKISS~]] is a little bit slippery.  Some of the tests, like the ~tc1_*~ and ~tc2_*~, could be considered
+demonstrations.  In addition, I use all of the code in [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] for tests.
+
+The tests can be run by changing into the appropriate directory ([[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] or
+[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]]), and building the make target ~tests~.  For example:
+
+#+begin_src sh :results output verbatum :exports code
+cd tests
+make -j 16 tests
+#+end_src
+
+Note the ~-j 16~ argument to make.  When running all the tests, especially in the [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] directory,
+I strongly recommend running in parallel.
+
+In addition, the make files in [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] and
+[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] have numerous additional targets to run various individual tests or subsets the test
+suite.  These targets are documented in the subsections below.
+
+** Refrence One Step Solvers
+:PROPERTIES:
+:CUSTOM_ID: test-mrkiss-ref-one-step
+:END:
+
+The production solvers in [[https://github.com/richmit/MRKISS][~MRKISS~]] all consume Butcher tableaux in the ~mrkiss_erk*~ and ~mrkiss_eerk*~ modules.
+Therefore the accuracy of these tableaux are critical to the proper operation of [[https://github.com/richmit/MRKISS][~MRKISS~]].  
+
+I don't have a way to automatically test that the data in /every/ tableau is correct.  That said, I can check some of the most important ones by comparing
+output of ~one_step*()~ solvers using them with hand coded solvers implemented using alternate references sources.
+
+Some of the most used RKs in history are the classical O(4) method (~mrkiss_erk_kutta_4~), Fehlberg's embedded O(4,5) method (~mrkiss_eerk_fehlberg_4_5~), and
+Dormand & Prince's embedded O(5,4) method (~mrkiss_eerk_dormand_prince_5_4~).  To this end the ~mrkiss_solvers_wt~ module contains hand written versions of
+these solvers (~one_step_rk4_wt()~, ~one_step_rkf45_wt()~, & ~one_step_dp54_wt()~). The [[https://github.com/richmit/MRKISS][~MRKISS~]] test suite contains
+three tests corresponding to these hand written solvers:
+
+  - ~test_dp54~ Runs the following tests
+    - ~test_dp54_ref_vs_stab_5~ Test tableau data of the O(5) method vs hand coded results.
+    - ~test_dp54_ref_vs_stab_4~ Test tableau data of the O(4) method vs hand coded results.
+    - ~test_dp54_stab_vs_etab_5~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
+    - ~test_dp54_stab_vs_etab_4~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
+  - ~test_rkf45~ Runs the following tests
+    - ~test_rkf45_ref_vs_stab_5~ Test tableau data of the O(5) method vs hand coded results.
+    - ~test_rkf45_ref_vs_stab_4~ Test tableau data of the O(4) method vs hand coded results.
+    - ~test_rkf45_stab_vs_etab_5~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
+    - ~test_rkf45_stab_vs_etab_4~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
+  - ~test_rk4~ Runs the following tests
+    - ~test_rk4_stab_vs_steps~ Test consistency of ~steps_fixed_stab_wt()~ vs hand coded loop.
+    - ~test_rk4_ref_vs_stab~ Test tableau data of the method vs hand coded results.
+    - ~test_rk4_ref_vs_hnd~ Test hand coded method vs hand computed results.
+
+** Tableau Plausibility Tests
+:PROPERTIES:
+:CUSTOM_ID: test-mrkiss-tab-ok
+:END:
+
+In the [[#test-mrkiss-ref-one-step][previous section]] we have some spot check for three tableaux.  In this section we have tests that verify the /plausibility/ of the
+remaining methods.  What do I mean by "plausibility"?  I mean that we can verify that the tableaux define methods that at least seem to act like well behaved RK methods
+of the appropriate order.  
+
+These tests also serve as "change detection".  That is to say, if I change something in the code and get different results then I may have introduced a bug.
+
+  - ~tc1_png~ This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the ~tc1.R~ file contains R
+    code that may be useful in investigating these results.
+  - ~test_tc1~ This will compare the output of the tests to archived results in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]] to detect changes.
+
+Note these tests include about 40 individual test cases each with it's own Fortran source.  These tests are /generated/ from a single seed Fortran source file
+named [[https://github.com/richmit/MRKISS/blob/master/tests/tc1_template.f90][~tc1_template.f90~]] that is expanded into the remaining source files via the
+script [[https://github.com/richmit/MRKISS/blob/master/tests/tc_make_make.rb][~tc_make_make.rb~]].  All of this is handled in the make file which will
+regenerate all the test source if the template is modified.
+
+The test equation used is:
+
+\[ \frac{\mathrm{d}y}{\mathrm{d}t} = e^\left(-t^2\right) \]
+
+The primary diagnostic plot is of global error:
+
+#+ATTR_HTML: :width 90% :align center
+[[file:pics/tc1_plot_error.png][file:pics/tc1_plot_error.png]]
+
+** Homogeneous Solvers and More Tableau Plausibility Tests
+:PROPERTIES:
+:CUSTOM_ID: test-mrkiss-homo-tab-ok
+:END:
+
+In the [[#test-mrkiss-tab-ok][previous section]] we have test the /plausibility/ the tableaux via the ~mrkiss_solvers_wt~ module.  This set of tests
+continues that with a new test equation:
+
+\[ \frac{\mathrm{d}y}{\mathrm{d}t} = -2y \]
+
+For these tests we use the homogeneous solvers in the ~mrkiss_solvers_nt~ module.  This source code for this module is entirely generated from
+[[https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_solvers_wt.f90][~mrkiss_solvers_wt.f90~]] via
+[[https://github.com/richmit/MRKISS/blob/master/lib/wt2nt.sed][~wt2nt.sed~]].  So these tests also serve as a way to make sure this code gets generated and
+produces reasonable results.
+
+Like the tests in the [[#test-mrkiss-tab-ok][previous section]] these tests also serve as "change detection".  That is to say, if I change something in the
+code and get different results then I may have introduced a bug.
+
+  - ~tc2_png~ This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the ~tc2.R~ file contains R
+    code that may be useful in investigating these results.
+  - ~test_tc2~ This will compare the output of the tests to archived results in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]] to
+    detect changes.
+
+Note these tests include about 40 individual test cases each with it's own Fortran source.  These tests are /generated/ from a single seed Fortran source file
+named [[https://github.com/richmit/MRKISS/blob/master/tests/tc2_template.f90][~tc2_template.f90~]] that is expanded into the remaining source files via the
+script [[https://github.com/richmit/MRKISS/blob/master/tests/tc_make_make.rb][~tc_make_make.rb~]].  All of this is handled in the make file which will
+regenerate all the test source if the template is modified.
+
+The primary diagnostic plot is of global error:
+
+#+ATTR_HTML: :width 90% :align center
+[[file:pics/tc2_plot_error.png][file:pics/tc2_plot_error.png]]
+
+** Richardson Extrapolation
+:PROPERTIES:
+:CUSTOM_ID: test-mrkiss-rich
+:END:
+
+This is another plausibility and change detection test.  This test compares ~one_step_stab_wt()~ and ~one_richardson_step_stab_wt()~ using ~mrkiss_erk_euler_1~
+as the method.
+
+ - ~test_rich~ Runs the code and compares the output to archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
+ - ~rich_png~ Produces diagnostic plots for human to verify the behavior is plausible.
+
+The primary diagnostic plot is of global error:
+
+#+ATTR_HTML: :width 90% :align center
+[[file:pics/rich_error.png][file:pics/rich_error.png]]
+
+** Short Stages
+:PROPERTIES:
+:CUSTOM_ID: test-mrkiss-short
+:END:
+
+The ~one_step_stab*()~, ~steps_fixed*()~, ~steps_condy*()~, and ~steps_sloppy_condy*()~ solvers all use the ~b~ vector to determine the number of stages --
+not the size of ~a~.  This allows us to use a shorter ~b~ vector cutting off trailing zero entries.  This test makes sure this functionality works.
+
+  - ~test_short_b~ Runs the following tests
+    - ~test_short_b_sub_vs_arc~ Compare full stage results with truncated results
+    - ~test_short_b_all_vs_sub~ Compare with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
+
+** Examples Are Tests Too
+:PROPERTIES:
+:CUSTOM_ID: test-mrkiss-examples
+:END:
+
+The [[https://github.com/richmit/MRKISS/blob/master/examples/tdata][~tdata/~]] directory in
+[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] is used to archive old output files generated from running the examples.  The
+[[https://github.com/richmit/MRKISS/blob/master/examples/makefile][~makefile~]] contains tests to run the examples and compare the results to what was archived.
+These tests serve as "change detection" helping me to identify the introduction of bugs.
+
+ - ~tests~ Runs the following tests
+   - ~minimal_test~ Creates and checks minimal.csv.
+   - ~brusselator_test~ Creates and checks brusselator.csv.
+   - ~lorenz_test~ Creates and checks the CSV files created by ~lorenz~.
+   - ~three_body_test~ Creates and checks the CSV files created by ~three_body~.
+
 * FAQ
 :PROPERTIES:
 :CUSTOM_ID: faq
