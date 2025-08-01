@@ -48,7 +48,7 @@ FD = ../scripts/float_diff.rb
 
 TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b
 
-EXE_TARGETS = rkf45_ref_vs_tab rk4 short_b rich
+EXE_TARGETS = rkf45 rk4 short_b rich
 
 all : $(EXE_TARGETS)
 
@@ -89,24 +89,27 @@ test_dp54_etab_4 : dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_etab_4.out
 test_dp54 : test_dp54_stab_5 test_dp54_stab_4 test_dp54_etab_5 test_dp54_etab_4
 
 ####################################################################################################
-rkf45_ref_vs_tab_stab_5.out rkf45_ref_vs_tab_stab_4.out rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_5.out rkf45_ref_vs_tab_etab_4.out &: rkf45_ref_vs_tab
-	rkf45_ref_vs_tab$(EXE_SUFFIX)
+rkf45 : rkf45.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) rkf45.f90 $(MRKISS_OBJ_FILES) -o $@
+
+rkf45_stab_5.out rkf45_stab_4.out rkf45_ref_5.out rkf45_ref_4.out rkf45_etab_5.out rkf45_etab_4.out &: rkf45
+	rkf45$(EXE_SUFFIX)
 
 .PHONY: test_rkf45_stab_5
-test_rkf45_stab_5 : rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_stab_5.out
-	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_stab_5.out
+test_rkf45_stab_5 : rkf45_ref_5.out rkf45_stab_5.out
+	$(FD) -e 1e-7 rkf45_ref_5.out rkf45_stab_5.out
 
 .PHONY: test_rkf45_stab_4
-test_rkf45_stab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
-	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
+test_rkf45_stab_4 : rkf45_ref_4.out rkf45_stab_4.out
+	$(FD) -e 1e-7 rkf45_ref_4.out rkf45_stab_4.out
 
 .PHONY: test_rkf45_etab_5
-test_rkf45_etab_5 : rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_etab_5.out
-	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_etab_5.out
+test_rkf45_etab_5 : rkf45_ref_5.out rkf45_etab_5.out
+	$(FD) -e 1e-7 rkf45_ref_5.out rkf45_etab_5.out
 
 .PHONY: test_rkf45_etab_4
-test_rkf45_etab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
-	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
+test_rkf45_etab_4 : rkf45_ref_4.out rkf45_etab_4.out
+	$(FD) -e 1e-7 rkf45_ref_4.out rkf45_etab_4.out
 
 .PHONY: test_rkf45
 test_rkf45 : test_rkf45_stab_5 test_rkf45_stab_4 test_rkf45_etab_5 test_rkf45_etab_4

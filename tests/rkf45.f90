@@ -1,7 +1,7 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
-!! @file      rkf45_ref_vs_tab.f90
+!! @file      rkf45.f90
 !! @author    Mitch Richling http://www.mitchr.me/
 !! @brief     Test code for RKF45.@EOL
 !! @std       F2023
@@ -33,7 +33,7 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
-program rkf45_ref_vs_tab
+program rkf45
   use, intrinsic :: iso_fortran_env,          only: output_unit, error_unit
   use            :: mrkiss_config,            only: rk, ik
   use            :: mrkiss_solvers_wt,        only: one_step_rkf45_wt, one_step_etab_wt, one_step_stab_wt
@@ -54,7 +54,7 @@ program rkf45_ref_vs_tab
 
   character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
 
-  open(newunit=out_io_unit, file="rkf45_ref_vs_tab_ref_4.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rkf45_ref_4.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -65,7 +65,7 @@ program rkf45_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  open(newunit=out_io_unit, file="rkf45_ref_vs_tab_ref_5.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rkf45_ref_5.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -76,7 +76,7 @@ program rkf45_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  open(newunit=out_io_unit, file="rkf45_ref_vs_tab_etab_4.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rkf45_etab_4.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -87,7 +87,7 @@ program rkf45_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  open(newunit=out_io_unit, file="rkf45_ref_vs_tab_etab_5.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rkf45_etab_5.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -98,7 +98,7 @@ program rkf45_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  open(newunit=out_io_unit, file="rkf45_ref_vs_tab_stab_4.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rkf45_stab_4.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -109,7 +109,7 @@ program rkf45_ref_vs_tab
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 
-  open(newunit=out_io_unit, file="rkf45_ref_vs_tab_stab_5.out", form='formatted', action='write', iostat=out_io_stat)
+  open(newunit=out_io_unit, file="rkf45_stab_5.out", form='formatted', action='write', iostat=out_io_stat)
   y_cv = y_iv
   t_cv = t_iv
   do step=1,max_step
@@ -132,4 +132,4 @@ contains
     status = 0
   end subroutine eq
 
-end program rkf45_ref_vs_tab
+end program rkf45
