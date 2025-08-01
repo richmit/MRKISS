@@ -796,9 +796,9 @@ how to do that.
 This section is about how I test [[https://github.com/richmit/MRKISS][~MRKISS~]].  
 
 The [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] directory contains code I primary use for testing
-[[https://github.com/richmit/MRKISS][~MRKISS~]] while the [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory contain code I
+[[https://github.com/richmit/MRKISS][~MRKISS~]] while the [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory contains code I
 primarily use to demonstrate how to use [[https://github.com/richmit/MRKISS][~MRKISS~]].  The difference between a "test" and an "example" in
-[[https://github.com/richmit/MRKISS][~MRKISS~]] is a little bit slippery.  Some of the tests, like the ~tc1_*~ and ~tc2_*~, could be considered
+[[https://github.com/richmit/MRKISS][~MRKISS~]] is a little bit slippery.  Some of the tests, like ~tc1_*~ and ~tc2_*~, could be considered
 demonstrations.  In addition, I use all of the code in [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] for tests.
 
 The tests can be run by changing into the appropriate directory ([[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] or
@@ -813,8 +813,8 @@ Note the ~-j 16~ argument to make.  When running all the tests, especially in th
 I strongly recommend running in parallel.
 
 In addition, the make files in [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] and
-[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] have numerous additional targets to run various individual tests or subsets the test
-suite.  These targets are documented in the subsections below.
+[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] have numerous additional targets to run various individual tests or subsets of the
+test suite.  These targets are documented in the subsections below.
 
 ** Refrence One Step Solvers
 :PROPERTIES:
@@ -825,7 +825,7 @@ The production solvers in [[https://github.com/richmit/MRKISS][~MRKISS~]] all co
 Therefore the accuracy of these tableaux are critical to the proper operation of [[https://github.com/richmit/MRKISS][~MRKISS~]].  
 
 I don't have a way to automatically test that the data in /every/ tableau is correct.  That said, I can check some of the most important ones by comparing
-output of ~one_step*()~ solvers using them with hand coded solvers implemented using alternate references sources.
+output of ~one_step*()~ solvers using them with hand coded solvers implemented using alternate reference sources.
 
 Some of the most used RKs in history are the classical O(4) method (~mrkiss_erk_kutta_4~), Fehlberg's embedded O(4,5) method (~mrkiss_eerk_fehlberg_4_5~), and
 Dormand & Prince's embedded O(5,4) method (~mrkiss_eerk_dormand_prince_5_4~).  To this end the ~mrkiss_solvers_wt~ module contains hand written versions of
@@ -847,19 +847,24 @@ three tests corresponding to these hand written solvers:
     - ~test_rk4_ref_vs_stab~ Test tableau data of the method vs hand coded results.
     - ~test_rk4_ref_vs_hnd~ Test hand coded method vs hand computed results.
 
+A note about the tests for consistency between ~one_step_stab_wt()~ and ~one_step_etab_wt()~ is probably in order.  The subroutine ~one_step_stab_wt()~ is
+/generated/ from ~one_step_etab_wt()~ -- see the comment above ~one_step_etab_wt()~ in
+[[https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_solvers_wt.f90][~mrkiss_solvers_wt.f90~]] for details.  These tests make sure my code generation is
+working and produces correct results.
+
 ** Tableau Plausibility Tests
 :PROPERTIES:
 :CUSTOM_ID: test-mrkiss-tab-ok
 :END:
 
-In the [[#test-mrkiss-ref-one-step][previous section]] we have some spot check for three tableaux.  In this section we have tests that verify the /plausibility/ of the
+In the [[#test-mrkiss-ref-one-step][previous section]] we have some spot checks for three tableaux.  In this section we have tests that verify the /plausibility/ of the
 remaining methods.  What do I mean by "plausibility"?  I mean that we can verify that the tableaux define methods that at least seem to act like well behaved RK methods
 of the appropriate order.  
 
 These tests also serve as "change detection".  That is to say, if I change something in the code and get different results then I may have introduced a bug.
 
-  - ~tc1_png~ This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the ~tc1.R~ file contains R
-    code that may be useful in investigating these results.
+  - ~tc1_png~ This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the ~tc1.R~ file contains R code that
+    may be useful in investigating these results.
   - ~test_tc1~ This will compare the output of the tests to archived results in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]] to detect changes.
 
 Note these tests include about 40 individual test cases each with it's own Fortran source.  These tests are /generated/ from a single seed Fortran source file
@@ -881,7 +886,7 @@ The primary diagnostic plot is of global error:
 :CUSTOM_ID: test-mrkiss-homo-tab-ok
 :END:
 
-In the [[#test-mrkiss-tab-ok][previous section]] we have test the /plausibility/ the tableaux via the ~mrkiss_solvers_wt~ module.  This set of tests
+In the [[#test-mrkiss-tab-ok][previous section]] we documented /plausibility/ tests for the tableaux via the ~mrkiss_solvers_wt~ module.  This set of tests
 continues that with a new test equation:
 
 \[ \frac{\mathrm{d}y}{\mathrm{d}t} = -2y \]
@@ -894,7 +899,7 @@ produces reasonable results.
 Like the tests in the [[#test-mrkiss-tab-ok][previous section]] these tests also serve as "change detection".  That is to say, if I change something in the
 code and get different results then I may have introduced a bug.
 
-  - ~tc2_png~ This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the ~tc2.R~ file contains R
+  - ~tc2_png~ This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the ~tc2.R~ file contains R
     code that may be useful in investigating these results.
   - ~test_tc2~ This will compare the output of the tests to archived results in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]] to
     detect changes.

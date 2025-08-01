@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-01 Fri 14:15 -->
+<!-- 2025-08-01 Fri 14:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-01 14:15:07</i></td>
+<td class="org-left"><i>2025-08-01 14:38:06</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-01 14:15:08</i></td>
+<td class="org-left"><i>2025-08-01 14:38:07</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org647ef3c">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orgee267e6">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#org7876b4a">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#orgc073651">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orga310cea">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org8695f75">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -502,8 +502,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-org647ef3c" class="outline-2">
-<h2 id="org647ef3c"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orgee267e6" class="outline-2">
+<h2 id="orgee267e6"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -758,8 +758,8 @@ worksheets contain the coefficients for the method's Butcher tableau, code to co
 stability region.
 </p>
 </div>
-<div id="outline-container-org7876b4a" class="outline-3">
-<h3 id="org7876b4a"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orga310cea" class="outline-3">
+<h3 id="orga310cea"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -848,8 +848,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-orgc073651" class="outline-3">
-<h3 id="orgc073651"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org8695f75" class="outline-3">
+<h3 id="org8695f75"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1230,7 +1230,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org0ed32fd">
+<pre class="example" id="org6bad5bc">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1250,7 +1250,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="orgffe77b5">
+<pre class="example" id="org2ea73e3">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1268,7 +1268,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgf8a37d6" class="figure">
+<div id="org2758845" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1426,9 +1426,9 @@ This section is about how I test <a href="https://github.com/richmit/MRKISS"><co
 
 <p>
 The <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> directory contains code I primary use for testing
-<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> while the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory contain code I
+<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> while the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory contains code I
 primarily use to demonstrate how to use <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a>.  The difference between a "test" and an "example" in
-<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> is a little bit slippery.  Some of the tests, like the <code>tc1_*</code> and <code>tc2_*</code>, could be considered
+<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> is a little bit slippery.  Some of the tests, like <code>tc1_*</code> and <code>tc2_*</code>, could be considered
 demonstrations.  In addition, I use all of the code in <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> for tests.
 </p>
 
@@ -1450,8 +1450,8 @@ I strongly recommend running in parallel.
 
 <p>
 In addition, the make files in <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> and
-<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> have numerous additional targets to run various individual tests or subsets the test
-suite.  These targets are documented in the subsections below.
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> have numerous additional targets to run various individual tests or subsets of the
+test suite.  These targets are documented in the subsections below.
 </p>
 </div>
 <div id="outline-container-test-mrkiss-ref-one-step" class="outline-3">
@@ -1464,7 +1464,7 @@ Therefore the accuracy of these tableaux are critical to the proper operation of
 
 <p>
 I don't have a way to automatically test that the data in <i>every</i> tableau is correct.  That said, I can check some of the most important ones by comparing
-output of <code>one_step*()</code> solvers using them with hand coded solvers implemented using alternate references sources.
+output of <code>one_step*()</code> solvers using them with hand coded solvers implemented using alternate reference sources.
 </p>
 
 <p>
@@ -1496,13 +1496,20 @@ three tests corresponding to these hand written solvers:
 <li><code>test_rk4_ref_vs_hnd</code> Test hand coded method vs hand computed results.</li>
 </ul></li>
 </ul>
+
+<p>
+A note about the tests for consistency between <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> is probably in order.  The subroutine <code>one_step_stab_wt()</code> is
+<i>generated</i> from <code>one_step_etab_wt()</code> &#x2013; see the comment above <code>one_step_etab_wt()</code> in
+<a href="https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_solvers_wt.f90"><code>mrkiss_solvers_wt.f90</code></a> for details.  These tests make sure my code generation is
+working and produces correct results.
+</p>
 </div>
 </div>
 <div id="outline-container-test-mrkiss-tab-ok" class="outline-3">
 <h3 id="test-mrkiss-tab-ok"><span class="section-number-3">12.2.</span> Tableau Plausibility Tests</h3>
 <div class="outline-text-3" id="text-test-mrkiss-tab-ok">
 <p>
-In the <a href="#test-mrkiss-ref-one-step">previous section</a> we have some spot check for three tableaux.  In this section we have tests that verify the <i>plausibility</i> of the
+In the <a href="#test-mrkiss-ref-one-step">previous section</a> we have some spot checks for three tableaux.  In this section we have tests that verify the <i>plausibility</i> of the
 remaining methods.  What do I mean by "plausibility"?  I mean that we can verify that the tableaux define methods that at least seem to act like well behaved RK methods
 of the appropriate order.  
 </p>
@@ -1512,8 +1519,8 @@ These tests also serve as "change detection".  That is to say, if I change somet
 </p>
 
 <ul class="org-ul">
-<li><code>tc1_png</code> This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the <code>tc1.R</code> file contains R
-code that may be useful in investigating these results.</li>
+<li><code>tc1_png</code> This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the <code>tc1.R</code> file contains R code that
+may be useful in investigating these results.</li>
 <li><code>test_tc1</code> This will compare the output of the tests to archived results in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a> to detect changes.</li>
 </ul>
 
@@ -1537,7 +1544,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org66c9fff" class="figure">
+<div id="org94b4fd2" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1547,7 +1554,7 @@ The primary diagnostic plot is of global error:
 <h3 id="test-mrkiss-homo-tab-ok"><span class="section-number-3">12.3.</span> Homogeneous Solvers and More Tableau Plausibility Tests</h3>
 <div class="outline-text-3" id="text-test-mrkiss-homo-tab-ok">
 <p>
-In the <a href="#test-mrkiss-tab-ok">previous section</a> we have test the <i>plausibility</i> the tableaux via the <code>mrkiss_solvers_wt</code> module.  This set of tests
+In the <a href="#test-mrkiss-tab-ok">previous section</a> we documented <i>plausibility</i> tests for the tableaux via the <code>mrkiss_solvers_wt</code> module.  This set of tests
 continues that with a new test equation:
 </p>
 
@@ -1568,7 +1575,7 @@ code and get different results then I may have introduced a bug.
 </p>
 
 <ul class="org-ul">
-<li><code>tc2_png</code> This will run the tests and display produce diagnostic visualization a human can check for plausibility.  Note the <code>tc2.R</code> file contains R
+<li><code>tc2_png</code> This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the <code>tc2.R</code> file contains R
 code that may be useful in investigating these results.</li>
 <li><code>test_tc2</code> This will compare the output of the tests to archived results in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a> to
 detect changes.</li>
@@ -1586,7 +1593,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org1ba916f" class="figure">
+<div id="org978a94e" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1610,7 +1617,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org0507d69" class="figure">
+<div id="orgf8c000f" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>

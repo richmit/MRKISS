@@ -1,2 +1,4 @@
 
-This directory contains makefile fragments.
+Make file fragments.  
+
+These are "included" into other makefiles in order to make it easier to build & link with MRKISS.

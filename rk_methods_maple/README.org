@@ -1,2 +1,4 @@
 
-This directory contains maple worksheets for Butcher tableau computations.
+This directory contains maple worksheets for each of the Butcher tableaux used by MRKISS.
+
+It also has some RK related worksheets.

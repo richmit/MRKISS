@@ -1,2 +1,2 @@
 
-This directory contains the MRKISS library code.  Everything you /need/ to use the library is in this directory.
+The MRKISS library code.  Everything you /need/ to use the library is in this directory.
