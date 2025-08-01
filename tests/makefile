@@ -63,27 +63,27 @@ test_short_b : short_b_all.out short_b_sub.out
 	$(FD) -e 1e-10 short_b_all.out short_b_sub.out
 
 ####################################################################################################
-dp54_ref_vs_tab : dp54_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
-	$(FC) $(FFLAGS) dp54_ref_vs_tab.f90 $(MRKISS_OBJ_FILES) -o $@
+dp54 : dp54.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) dp54.f90 $(MRKISS_OBJ_FILES) -o $@
 
-dp54_ref_vs_tab_stab_5.out dp54_ref_vs_tab_stab_4.out dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_etab_5.out dp54_ref_vs_tab_etab_4.out &: dp54_ref_vs_tab
-	dp54_ref_vs_tab$(EXE_SUFFIX)
+dp54_stab_5.out dp54_stab_4.out dp54_ref_5.out dp54_ref_4.out dp54_etab_5.out dp54_etab_4.out &: dp54
+	dp54$(EXE_SUFFIX)
 
 .PHONY: test_dp54_stab_5
-test_dp54_stab_5 : dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_stab_5.out
-	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_stab_5.out
+test_dp54_stab_5 : dp54_ref_5.out dp54_stab_5.out
+	$(FD) -e 1e-7 dp54_ref_5.out dp54_stab_5.out
 
 .PHONY: test_dp54_stab_4
-test_dp54_stab_4 : dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_stab_4.out
-	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_stab_4.out
+test_dp54_stab_4 : dp54_ref_4.out dp54_stab_4.out
+	$(FD) -e 1e-7 dp54_ref_4.out dp54_stab_4.out
 
 .PHONY: test_dp54_etab_5
-test_dp54_etab_5 : dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_etab_5.out
-	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_etab_5.out
+test_dp54_etab_5 : dp54_ref_5.out dp54_etab_5.out
+	$(FD) -e 1e-7 dp54_ref_5.out dp54_etab_5.out
 
 .PHONY: test_dp54_etab_4
-test_dp54_etab_4 : dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_etab_4.out
-	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_etab_4.out
+test_dp54_etab_4 : dp54_ref_4.out dp54_etab_4.out
+	$(FD) -e 1e-7 dp54_ref_4.out dp54_etab_4.out
 
 .PHONY: test_dp54
 test_dp54 : test_dp54_stab_5 test_dp54_stab_4 test_dp54_etab_5 test_dp54_etab_4
