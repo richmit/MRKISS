@@ -212,9 +212,9 @@ contains
   !! 
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
-  !!                        - ????-???? .. Error in this routine
-  !!                                        - ???? .. Could not open file for write
-  !!                                        - ???? .. Could not close file         
+  !!                        - 1297-1313 .. Error in this routine
+  !!                                        - 1297 .. Could not open file for write
+  !!                                        - 1313 .. Could not close file         
   !!                        - others ..... Other values are not allowed
   !! solution ............ Matrix with solution values
   !! y_dim_o ............. Number of elements in y
@@ -315,7 +315,7 @@ contains
     if (present(filename_o)) then
        open(newunit=out_io_unit, file=filename_o, form='formatted', action='write', iostat=out_io_stat)
        if (out_io_stat /= 0) then
-          status = 1152
+          status = 1297
           return
        end if
     else
@@ -342,7 +342,7 @@ contains
     if (present(filename_o)) then
        close(unit=out_io_unit, status='keep', iostat=out_io_stat)
        if (out_io_stat /= 0) then
-          status = 1153
+          status = 1313
           return
        end if
     end if

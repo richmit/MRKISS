@@ -113,7 +113,7 @@ module mrkiss_solvers_wt
   end interface
 
   public :: one_step_etab_wt, one_step_stab_wt, one_richardson_step_stab_wt
-  public :: one_step_rk4_wt, one_step_rkf45_wt
+  public :: one_step_rk4_wt, one_step_rkf45_wt, one_step_dp54_wt
   public :: steps_fixed_stab_wt, steps_condy_stab_wt, steps_sloppy_condy_stab_wt, steps_adapt_etab_wt
 
 contains
@@ -365,6 +365,53 @@ contains
     y2_delta = t_delta * (16.0_rk/135.0_rk * k1 + 6656.0_rk/12825.0_rk * k3 + 28561.0_rk/56430.0_rk * k4 - 9.0_rk/50.0_rk * k5 + 2.0_rk/55.0_rk * k6)
     status = 0
   end subroutine one_step_rkf45_wt
+
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Compute one step of DP45 (mrkiss_eerk_dormand_prince_5_4)
+  !!
+  !! status ...... Exit status
+  !!                - -inf-0 ..... Everything worked
+  !!                - 0-255 ...... Evaluation of deq failed
+  !!                - 1263-1279 .. Error in this routine
+  !!                - others ..... Other values are not allowed
+  !! y_delta(:) .. Returned delta for the method
+  !! dy(:) ....... Returned dy/dt value at t
+  !! deq ......... Equation subroutine
+  !! t, y(:) ..... Initial conditions.  y is a column vector!
+  !! param(:) .... Data payload passed to deq
+  !! t_delta ..... Delta t to use for the step.
+  !!
+  subroutine one_step_dp54_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta)
+    use mrkiss_config, only: rk, ik
+    implicit none
+    ! Arguments
+    integer(kind=ik), intent(out) :: status
+    real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
+    procedure(deq_iface_wt)       :: deq
+    real(kind=rk),    intent(in)  :: t
+    real(kind=rk),    intent(in)  :: y(:), param(:), t_delta
+    ! Variables
+    real(kind=rk)                 :: k1(size(y, 1)), k2(size(y, 1)), k3(size(y, 1)), k4(size(y, 1))
+    real(kind=rk)                 :: k5(size(y, 1)), k6(size(y, 1)), k7(size(y, 1))
+    ! Compute Step
+    call deq(status, k1, t, y, param)
+    if (status > 0) return
+    call deq(status, k2, t+t_delta/5.0_rk, y + t_delta * (k1/5.0_rk), param)
+    if (status > 0) return
+    call deq(status, k3, t+t_delta*3.0_rk/10.0_rk, y + t_delta * (k1*3.0_rk/40.0_rk + k2*9.0_rk/40.0_rk), param)
+    if (status > 0) return
+    call deq(status, k4, t+t_delta*4.0_rk/5.0_rk, y + t_delta * (k1*44.0_rk/45.0_rk - k2*56.0_rk/15.0_rk + k3*32.0_rk/9.0_rk), param)
+    if (status > 0) return
+    call deq(status, k5, t+t_delta*8.0_rk/9.0_rk, y + t_delta * (k1*19372.0_rk/6561.0_rk - k2*25360.0_rk/2187.0_rk + k3*64448.0_rk/6561.0_rk - k4*212.0_rk/729.0_rk), param)
+    if (status > 0) return
+    call deq(status, k6, t+t_delta, y + t_delta * (k1*9017.0_rk/3168.0_rk - k2*355.0_rk/33.0_rk + k3*46732.0_rk/5247.0_rk + k4*49.0_rk/176.0_rk - k5*5103.0_rk/18656.0_rk), param)
+    if (status > 0) return
+    call deq(status, k7, t+t_delta, y + t_delta * (k1*35.0_rk/384.0_rk + k3*500.0_rk/1113.0_rk + k4*125.0_rk/192.0_rk - k5*2187.0_rk/6784.0_rk + k6*11.0_rk/84.0_rk), param)
+    if (status > 0) return
+    y1_delta = t_delta * (5179.0_rk/57600.0_rk*k1 + 7571.0_rk/16695.0_rk*k3 + 393.0_rk/640.0_rk*k4 - 92097.0_rk/339200.0_rk*k5 + 187.0_rk/2100.0_rk*k6 + 1.0_rk/40.0_rk*k7)
+    y2_delta = t_delta * (35.0_rk/384.0_rk*k1 + 500.0_rk/1113.0_rk*k3 + 125.0_rk/192.0_rk*k4 - 2187.0_rk/6784.0_rk*k5 + 11.0_rk/84.0_rk*k6)
+    status = 0
+  end subroutine one_step_dp54_wt
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
@@ -683,7 +730,7 @@ contains
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
-  !!                        - ????-???? .. Error in this routine (no_bisect_error_o is not present)
+  !!                        - 1280-1296 .. Error in this routine
   !!                        - others ..... Other values are not allowed
   !! istats(:) ........... Integer statistics for run
   !!                        istats(1): number of computed solution points

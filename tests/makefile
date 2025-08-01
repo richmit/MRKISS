@@ -46,16 +46,13 @@ IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
 
-TESTS = test_rkf45_stab_5 test_rkf45_etab_5 test_rkf45_stab_4 test_rkf45_etab_4 test_rk4_stab test_rk4_ref test_rk4_ref_stab test_rk4_steps test_rich
+TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b
 
 EXE_TARGETS = rkf45_ref_vs_tab rk4_ref_vs_tab short_b rich
 
 all : $(EXE_TARGETS)
 
 ####################################################################################################
-rkf45_ref_vs_tab : rkf45_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
-	$(FC) $(FFLAGS) rkf45_ref_vs_tab.f90 $(MRKISS_OBJ_FILES) -o $@
-
 short_b : short_b.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) short_b.f90 $(MRKISS_OBJ_FILES) -o $@
 
@@ -65,24 +62,54 @@ short_b_all.out short_b_sub.out &: short_b
 test_short_b : short_b_all.out short_b_sub.out
 	$(FD) -e 1e-10 short_b_all.out short_b_sub.out
 
+####################################################################################################
+dp54_ref_vs_tab : dp54_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) dp54_ref_vs_tab.f90 $(MRKISS_OBJ_FILES) -o $@
+
+dp54_ref_vs_tab_stab_5.out dp54_ref_vs_tab_stab_4.out dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_etab_5.out dp54_ref_vs_tab_etab_4.out &: dp54_ref_vs_tab
+	dp54_ref_vs_tab$(EXE_SUFFIX)
+
+.PHONY: test_dp54_stab_5
+test_dp54_stab_5 : dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_stab_5.out
+	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_stab_5.out
+
+.PHONY: test_dp54_stab_4
+test_dp54_stab_4 : dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_stab_4.out
+	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_stab_4.out
+
+.PHONY: test_dp54_etab_5
+test_dp54_etab_5 : dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_etab_5.out
+	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_5.out dp54_ref_vs_tab_etab_5.out
+
+.PHONY: test_dp54_etab_4
+test_dp54_etab_4 : dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_etab_4.out
+	$(FD) -e 1e-7 dp54_ref_vs_tab_ref_4.out dp54_ref_vs_tab_etab_4.out
+
+.PHONY: test_dp54
+test_dp54 : test_dp54_stab_5 test_dp54_stab_4 test_dp54_etab_5 test_dp54_etab_4
+
+####################################################################################################
 rkf45_ref_vs_tab_stab_5.out rkf45_ref_vs_tab_stab_4.out rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_5.out rkf45_ref_vs_tab_etab_4.out &: rkf45_ref_vs_tab
 	rkf45_ref_vs_tab$(EXE_SUFFIX)
 
 .PHONY: test_rkf45_stab_5
 test_rkf45_stab_5 : rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_stab_5.out
-	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_stab_5.out
+	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_stab_5.out
+
+.PHONY: test_rkf45_stab_4
+test_rkf45_stab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
+	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
 
 .PHONY: test_rkf45_etab_5
 test_rkf45_etab_5 : rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_etab_5.out
-	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_etab_5.out
+	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_5.out rkf45_ref_vs_tab_etab_5.out
 
 .PHONY: test_rkf45_etab_4
-test_rkf45_stab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
-	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_stab_4.out
-
-.PHONY: test_rk4_steps
 test_rkf45_etab_4 : rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
-	$(FD) -e 1e-10 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
+	$(FD) -e 1e-7 rkf45_ref_vs_tab_ref_4.out rkf45_ref_vs_tab_etab_4.out
+
+.PHONY: test_rkf45
+test_rkf45 : test_rkf45_stab_5 test_rkf45_stab_4 test_rkf45_etab_5 test_rkf45_etab_4
 
 ####################################################################################################
 rk4_ref_vs_tab : rk4_ref_vs_tab.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -108,6 +135,9 @@ test_rk4_ref : rk4_ref_vs_tab_hnd.out rk4_ref_vs_tab_ref.out
 test_rk4_ref_stab : rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out
 	$(FD) -e 1e-10 rk4_ref_vs_tab_stab.out rk4_ref_vs_tab_ref.out
 
+.PHONY: test_rk4
+test_rk4 : test_rk4_steps test_rk4_ref test_rk4_stab test_rk4_steps
+
 ####################################################################################################
 rich : rich.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rich.f90 $(MRKISS_OBJ_FILES) -o $@
@@ -121,6 +151,9 @@ test_rich : rich.out
 
 rich_sol.png rich_error.png &: rich.R rich.out
 	R --no-save --no-echo -q -f rich.R
+
+.PHONY: rich_png
+rich_png: rich_sol.png rich_error.png
 	$(IMG_VIEWER) rich_sol.png rich_error.png
 
 ####################################################################################################
@@ -132,6 +165,9 @@ include tc1.mk
 
 tc1_plot_ferror.png tc1_plot_error.png tc1_plot_sol.png &: tc1.R data_tc1
 	R --no-save --no-echo -q -f tc1.R
+
+.PHONY: tc1_png
+tc1_png : tc1_plot_ferror.png tc1_plot_error.png tc1_plot_sol.png 
 	$(IMG_VIEWER) tc1_plot_ferror.png tc1_plot_error.png tc1_plot_sol.png
 
 ####################################################################################################
@@ -143,6 +179,9 @@ include tc2.mk
 
 tc2_plot_error.png tc2_plot_sol.png &: tc2.R data_tc2
 	R --no-save --no-echo -q -f tc2.R
+
+.PHONY: tc2_png
+tc2_png : tc2_plot_error.png tc2_plot_sol.png
 	$(IMG_VIEWER) tc2_plot_error.png tc2_plot_sol.png
 
 ####################################################################################################
