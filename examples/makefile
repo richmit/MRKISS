@@ -67,7 +67,7 @@ $(THREE_BODY_PNGS) &: $(THREE_BODY_CSVS) three_body.R
 
 .PHONY: three_body_png
 three_body_png : $(THREE_BODY_PNGS)
-	$(IMG_VIEWER) THREE_BODY_PNGS &
+	$(IMG_VIEWER) $(THREE_BODY_PNGS) &
 
 .PHONY: three_body_clean
 three_body_clean :
