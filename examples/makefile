@@ -60,7 +60,7 @@ $(THREE_BODY_CSVS) &: three_body
 	./three_body$(EXE_SUFFIX)
 	ls -l three_body_*.csv
 
-THREE_BODY_PNGS = three_body_unfixed_pos.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_adaptive_maxt.png three_body_ylen.png three_body_moon.png
+THREE_BODY_PNGS = three_body.png three_body-dp.png three_body_ylen.png three_body_maxt.png three_body_moon.png three_body_fixed_pos.png three_body_fixed_vel.png
 
 $(THREE_BODY_PNGS) &: $(THREE_BODY_CSVS) three_body.R
 	R --no-save --no-echo -q -f three_body.R
