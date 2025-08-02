@@ -403,6 +403,7 @@ contains
     ! Compute Step
     call deq(status, k1, y, param)
     if (status > 0) return
+    dy = k1;
     call deq(status, k2, y + t_delta * (k1/5.0_rk), param)
     if (status > 0) return
     call deq(status, k3, y + t_delta * (k1*3.0_rk/40.0_rk + k2*9.0_rk/40.0_rk), param)

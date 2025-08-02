@@ -837,15 +837,18 @@ three tests corresponding to these hand written solvers:
     - ~test_dp54_ref_vs_stab_4~ Test tableau data of the O(4) method vs hand coded results.
     - ~test_dp54_stab_vs_etab_5~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
     - ~test_dp54_stab_vs_etab_4~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
+    - ~test_dp54_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
   - ~test_rkf45~ Runs the following tests
     - ~test_rkf45_ref_vs_stab_5~ Test tableau data of the O(5) method vs hand coded results.
     - ~test_rkf45_ref_vs_stab_4~ Test tableau data of the O(4) method vs hand coded results.
     - ~test_rkf45_stab_vs_etab_5~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
     - ~test_rkf45_stab_vs_etab_4~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
+    - ~test_rkf45_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
   - ~test_rk4~ Runs the following tests
     - ~test_rk4_stab_vs_steps~ Test consistency of ~steps_fixed_stab_wt()~ vs hand coded loop.
     - ~test_rk4_ref_vs_stab~ Test tableau data of the method vs hand coded results.
     - ~test_rk4_ref_vs_hnd~ Test hand coded method vs hand computed results.
+    - ~test_rk4_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
 
 A note about the tests for consistency between ~one_step_stab_wt()~ and ~one_step_etab_wt()~ is probably in order.  The subroutine ~one_step_stab_wt()~ is
 /generated/ from ~one_step_etab_wt()~ -- see the comment above ~one_step_etab_wt()~ in

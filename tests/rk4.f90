@@ -34,61 +34,56 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program rk4
-  use, intrinsic :: iso_fortran_env,    only: output_unit, error_unit
   use            :: mrkiss_config,      only: rk, ik
   use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt
   use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
   implicit none
-  integer(kind=ik),  parameter :: max_step = 11
-  integer(kind=ik),  parameter :: deq_dim  = 1
-  real(kind=rk),     parameter :: param(1) = [1.0_rk]
-  real(kind=rk),     parameter :: t_iv = 0.0_rk
-  real(kind=rk),     parameter :: t_delta = 0.1_rk
-  real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
-  real(kind=rk),     parameter :: y_hwrk(11) = [ 1.0000000000, 0.9655827899, 0.9377962750, 0.9189181059, 0.9104421929, &
-                                                 0.9130598390, 0.9267065986, 0.9506796142, 0.9838057659, 1.0246280460, 1.0715783953 ]
-
+  integer(kind=ik),  parameter :: max_step                     = 11
+  integer(kind=ik),  parameter :: deq_dim                      = 1
+  real(kind=rk),     parameter :: param(1)                     = [1.0_rk]
+  real(kind=rk),     parameter :: t_iv                         = 0.0_rk
+  real(kind=rk),     parameter :: t_delta                      = 0.1_rk
+  real(kind=rk),     parameter :: y_iv(deq_dim)                = [1.0_rk]
+  real(kind=rk),     parameter :: sol_h(1+2*deq_dim, max_step) = reshape([ 0.0000000000_rk, 1.0000000000_rk, -0.3678794411_rk, &
+                                                                           0.1000000000_rk, 0.9655827899_rk, -0.3154430003_rk, &
+                                                                           0.2000000000_rk, 0.9377962750_rk, -0.2364818517_rk, &
+                                                                           0.3000000000_rk, 0.9189181059_rk, -0.1385886320_rk, &
+                                                                           0.4000000000_rk, 0.9104421929_rk, -0.0297863398_rk, &
+                                                                           0.5000000000_rk, 0.9130598390_rk,  0.0820103570_rk, &
+                                                                           0.6000000000_rk, 0.9267065986_rk,  0.1897229700_rk, &
+                                                                           0.7000000000_rk, 0.9506796142_rk,  0.2877487252_rk, &
+                                                                           0.8000000000_rk, 0.9838057659_rk,  0.3723152399_rk, &
+                                                                           0.9000000000_rk, 1.0246280460_rk,  0.4414926096_rk, &
+                                                                           1.0000000000_rk, 1.0715783953_rk,  0.4949291477_rk], [1+2*deq_dim, max_step])
   integer(kind=ik)             :: step, status, istats(16)
-  real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, solution(1+deq_dim, max_step), dy(deq_dim)
+  real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, sol(1+2*deq_dim, max_step), dy(deq_dim)
   integer                      :: out_io_stat, out_io_unit
 
-  character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
 
-  open(newunit=out_io_unit, file="rk4_hnd.out", form='formatted', action='write', iostat=out_io_stat)
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_hwrk(step)
-     call one_step_rk4_wt(status, y_delta, dy, eq, t_cv, y_cv, param, t_delta)
-     t_cv = t_cv + t_delta
+  call print_solution(status, sol_h, filename_o="rk4_hnd.out", width_o=20)
+
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_rk4_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="rk4_ref.out", width_o=20)
 
-  open(newunit=out_io_unit, file="rk4_ref.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_rk4_wt(status, y_delta, dy, eq, t_cv, y_cv, param, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_stab_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="rk4_stab.out", width_o=20)
 
-  open(newunit=out_io_unit, file="rk4_stab.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y_cv, param, a, b, c, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
-  end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
-
-  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, sol_no_dy_o=1)
-  call print_solution(status, solution, filename_o="rk4_steps.out", end_o=istats(1), width_o=19, no_titles_o=1, sol_no_dy_o=1)
+  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, sol_no_dy_o=1)
+  call print_solution(status, sol, filename_o="rk4_steps.out", width_o=20)
 
 contains
 

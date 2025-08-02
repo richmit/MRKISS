@@ -71,7 +71,9 @@ test_short_b : test_short_b_sub_vs_arc test_short_b_all_vs_sub
 dp54 : dp54.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) dp54.f90 $(MRKISS_OBJ_FILES) -o $@
 
-dp54_stab_5.out dp54_stab_4.out dp54_ref_5.out dp54_ref_4.out dp54_etab_5.out dp54_etab_4.out &: dp54
+DP54_OUTS = dp54_stab_5.out dp54_stab_4.out dp54_ref_5.out dp54_ref_4.out dp54_etab_5.out dp54_etab_4.out
+
+$(DP54_OUTS) &: dp54
 	dp54$(EXE_SUFFIX)
 
 .PHONY: test_dp54_ref_vs_stab_5
@@ -90,57 +92,72 @@ test_dp54_stab_vs_etab_5 : dp54_stab_5.out dp54_etab_5.out
 test_dp54_stab_vs_etab_4 : dp54_stab_4.out dp54_etab_4.out
 	$(FD) -e 1e-10 dp54_stab_4.out dp54_etab_4.out
 
+.PHONY: test_dp54_archive
+test_dp54_archive: $(DP54_OUTS)
+	$(foreach fil,$^,$(FD) $(fil) data/$(fil); )
+
 .PHONY: test_dp54
-test_dp54 : test_dp54_ref_vs_stab_5 test_dp54_ref_vs_stab_4 test_dp54_stab_vs_etab_5 test_dp54_stab_vs_etab_4
+test_dp54 : test_dp54_ref_vs_stab_5 test_dp54_ref_vs_stab_4 test_dp54_stab_vs_etab_5 test_dp54_stab_vs_etab_4 test_dp54_archive
 
 ####################################################################################################
 rkf45 : rkf45.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rkf45.f90 $(MRKISS_OBJ_FILES) -o $@
 
-rkf45_stab_5.out rkf45_stab_4.out rkf45_ref_5.out rkf45_ref_4.out rkf45_etab_5.out rkf45_etab_4.out &: rkf45
+RKF45_OUTS = rkf45_stab_5.out rkf45_stab_4.out rkf45_ref_5.out rkf45_ref_4.out rkf45_etab_5.out rkf45_etab_4.out
+
+$(RKF45_OUTS) &: rkf45
 	rkf45$(EXE_SUFFIX)
 
 .PHONY: test_rkf45_ref_vs_stab_5
-test_rkf45_stab_5 : rkf45_ref_5.out rkf45_stab_5.out
+test_rkf45_ref_vs_stab_5 : rkf45_ref_5.out rkf45_stab_5.out
 	$(FD) -e 1e-7 rkf45_ref_5.out rkf45_stab_5.out
 
 .PHONY: test_rkf45_ref_vs_stab_4
-test_rkf45_stab_4 : rkf45_ref_4.out rkf45_stab_4.out
+test_rkf45_ref_vs_stab_4 : rkf45_ref_4.out rkf45_stab_4.out
 	$(FD) -e 1e-7 rkf45_ref_4.out rkf45_stab_4.out
 
 .PHONY: test_rkf45_stab_vs_etab_5
-test_rkf45_etab_5 : rkf45_stab_5.out rkf45_etab_5.out
+test_rkf45_stab_vs_etab_5 : rkf45_stab_5.out rkf45_etab_5.out
 	$(FD) -e 1e-10 rkf45_stab_5.out rkf45_etab_5.out
 
 .PHONY: test_rkf45_stab_vs_etab_4
-test_rkf45_etab_4 : rkf45_stab_4.out rkf45_etab_4.out
+test_rkf45_stab_vs_etab_4 : rkf45_stab_4.out rkf45_etab_4.out
 	$(FD) -e 1e-10 rkf45_stab_4.out rkf45_etab_4.out
 
+.PHONY: test_rkf45_archive
+test_rkf45_archive: $(RKF45_OUTS)
+	$(foreach fil,$^,$(FD) $(fil) data/$(fil); )
+
 .PHONY: test_rkf45
-test_rkf45 : test_rkf45_ref_vs_stab_5 test_rkf45_ref_vs_stab_4 test_rkf45_stab_vs_etab_5 test_rkf45_stab_vs_etab_4
+test_rkf45 : test_rkf45_ref_vs_stab_5 test_rkf45_ref_vs_stab_4 test_rkf45_stab_vs_etab_5 test_rkf45_stab_vs_etab_4 test_rkf45_archive
 
 ####################################################################################################
 rk4 : rk4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rk4.f90 $(MRKISS_OBJ_FILES) -o $@
 
-rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out &: rk4
+RK4_OUTS = rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out
+
+$(RK4_OUTS) &: rk4
 	rk4$(EXE_SUFFIX)
 
 .PHONY: test_rk4_stab_vs_steps
 test_rk4_stab_vs_steps : rk4_steps.out rk4_stab.out 
-	sed "s/^              //" rk4_steps.out > rk4_steps.tmp
-	$(FD) -e 1e-10 rk4_steps.tmp rk4_stab.out 
+	$(FD) -e 1e-10 rk4_steps.out rk4_stab.out 
 
 .PHONY: test_rk4_ref_vs_stab
-test_rk4_ref_stab : rk4_ref.out rk4_stab.out 
+test_rk4_ref_vs_stab : rk4_ref.out rk4_stab.out 
 	$(FD) -e 1e-10 rk4_ref.out rk4_stab.out 
 
 .PHONY: test_rk4_ref_vs_hnd
 test_rk4_ref_vs_hnd : rk4_ref.out rk4_hnd.out 
 	$(FD) -e 1e-6 rk4_ref.out rk4_hnd.out 
 
+.PHONY: test_rk4_archive
+test_rk4_archive: $(RK4_OUTS)
+	$(foreach fil,$^,$(FD) $(fil) data/$(fil); )
+
 .PHONY: test_rk4
-test_rk4 : test_rk4_stab_vs_steps test_rk4_ref_vs_stab test_rk4_ref_vs_hnd
+test_rk4 : test_rk4_stab_vs_steps test_rk4_ref_vs_stab test_rk4_ref_vs_hnd test_rk4_archive
 
 ####################################################################################################
 rich : rich.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)

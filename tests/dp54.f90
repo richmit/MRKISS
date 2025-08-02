@@ -34,91 +34,76 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program dp54
-  use, intrinsic :: iso_fortran_env,          only: output_unit, error_unit
-  use            :: mrkiss_config,            only: rk, ik
-  use            :: mrkiss_solvers_wt,        only: one_step_dp54_wt, one_step_etab_wt, one_step_stab_wt
-  use            :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, p1, p2, c
+  use :: mrkiss_config,            only: rk, ik
+  use :: mrkiss_solvers_wt,        only: one_step_dp54_wt, one_step_etab_wt, one_step_stab_wt
+  use :: mrkiss_utils,             only: print_solution
+  use :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, p1, p2, c
 
   implicit none
 
-  integer(kind=ik),  parameter :: max_step = 11
-  integer(kind=ik),  parameter :: deq_dim  = 1
-  real(kind=rk),     parameter :: param(1) = [1.0_rk]
-  real(kind=rk),     parameter :: t_iv = 0.0_rk
-  real(kind=rk),     parameter :: t_delta = 0.1_rk
+  integer(kind=ik),  parameter :: max_step      = 11
+  integer(kind=ik),  parameter :: deq_dim       = 1
+  real(kind=rk),     parameter :: param(1)      = [1.0_rk]
+  real(kind=rk),     parameter :: t_iv          = 0.0_rk
+  real(kind=rk),     parameter :: t_delta       = 0.1_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
-  integer(kind=ik) :: step, status
-  real(kind=rk)    :: y_delta(deq_dim), y_tmp(deq_dim), y_cv(deq_dim), t_cv, dy(deq_dim)
-  integer          :: out_io_stat, out_io_unit
+  integer(kind=ik)             :: step, status
+  real(kind=rk)                :: y_delta(deq_dim), y_tmp(deq_dim), sol(1+2*deq_dim, max_step)
 
-  character(len=*), parameter  :: fmt = "(i5,f20.15,f20.15)"
-
-  open(newunit=out_io_unit, file="dp54_ref_5.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_dp54_wt(status, y_delta, y_tmp, dy, eq, t_cv, y_cv, param, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_dp54_wt(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="dp54_ref_5.out", width_o=20)
 
-  open(newunit=out_io_unit, file="dp54_ref_4.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_dp54_wt(status, y_tmp, y_delta, dy, eq, t_cv, y_cv, param, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_dp54_wt(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="dp54_ref_4.out", width_o=20)
 
-  open(newunit=out_io_unit, file="dp54_etab_5.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_etab_wt(status, y_delta, y_tmp, dy, eq, t_cv, y_cv, param, a, b1, b2, c, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_etab_wt(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="dp54_etab_5.out", width_o=20)
 
-  open(newunit=out_io_unit, file="dp54_etab_4.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_etab_wt(status, y_tmp, y_delta, dy, eq, t_cv, y_cv, param, a, b1, b2, c, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_etab_wt(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="dp54_etab_4.out", width_o=20)
 
-  open(newunit=out_io_unit, file="dp54_stab_5.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y_cv, param, a, b1, c, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_stab_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="dp54_stab_5.out", width_o=20)
 
-  open(newunit=out_io_unit, file="dp54_stab_4.out", form='formatted', action='write', iostat=out_io_stat)
-  y_cv = y_iv
-  t_cv = t_iv
-  do step=1,max_step
-     write (out_io_unit, fmt=fmt) step, t_cv, y_cv
-     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y_cv, param, a, b2, c, t_delta)
-     y_cv = y_cv + y_delta
-     t_cv = t_cv + t_delta
+  sol = 0
+  sol(1:2,1) = [ t_iv, y_iv ]
+  do step=2,max_step
+     call one_step_stab_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b2, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
-  close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
+  call print_solution(status, sol, filename_o="dp54_stab_4.out", width_o=20)
 
 contains
 
