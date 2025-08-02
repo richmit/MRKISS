@@ -46,7 +46,6 @@ have a few functionality improvements I want to implement, but I don't forsee an
    - Given scalar t & sol, compute y
    - Given vector t & sol, compute a sol matrix with new y values (no dy)
  - Solver that takes a t-vec, and computes solution using those points
- - Solver that takes a t, t_end, and n. Compute y, dy at t_end using the n fixed sized steps
  - Multi-solver
    - Give it multiple IVs and produce a steps_fixed_* multi-solution
    - Give it multiple PARAMs and produce a steps_fixed_* multi-solution
@@ -54,6 +53,7 @@ have a few functionality improvements I want to implement, but I don't forsee an
  - Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
+ - +Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps+
  - +Consider how to use examples as consistency tests+
  - +Add dy to solver output+
  - +Add ARKODE_VERNER_13_7_8+

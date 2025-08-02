@@ -135,7 +135,7 @@ test_rkf45 : test_rkf45_ref_vs_stab_5 test_rkf45_ref_vs_stab_4 test_rkf45_stab_v
 rk4 : rk4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rk4.f90 $(MRKISS_OBJ_FILES) -o $@
 
-RK4_OUTS = rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out
+RK4_OUTS = rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out rk4_frog.out
 
 $(RK4_OUTS) &: rk4
 	rk4$(EXE_SUFFIX)

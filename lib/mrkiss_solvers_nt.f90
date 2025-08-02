@@ -127,6 +127,7 @@ module mrkiss_solvers_nt
 
   public :: one_step_etab_nt, one_step_stab_nt, one_richardson_step_stab_nt
   public :: one_step_rk4_nt, one_step_rkf45_nt, one_step_dp54_nt
+  public :: frog_stab_nt
   public :: steps_fixed_stab_nt, steps_condy_stab_nt, steps_sloppy_condy_stab_nt, steps_adapt_etab_nt
 
 contains
@@ -422,34 +423,108 @@ contains
   end subroutine one_step_dp54_nt
 
   !--------------------------------------------------------------------------------------------------------------------------------
+  !> Take multiple fixed time steps with a simple RK method to compute a single solution at t_end.
+  !!
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
+  !!                                - ????-???? .. Error in this routine
+  !!                                - others ..... Other values are not allowed
+  !! istats(:) ................... Integer statistics for run
+  !!                                - istats(1): number of computed solution points stored in solution.
+  !! solution(:) ................. Array for solution.  
+  !!                                Note this is a VECTOR not a 2D ARRAY.
+  !!                                Contents:
+  !!                                 - First element is the t variable if sol_no_t_o not present.
+  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
+  !!                                 - The next size(y, 1) elements have dy values if sol_no_dy_o not present.
+  !!                                The number of columns, and max_pts_o, determine the number of solution points.
+  !! deq ......................... Equation subroutine
+  !! t, y(:) ..................... Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b(:), c(:) .......... The butcher tableau
+  !! t_end ....................... End point for last step.  Silently ignored if t_delta_o is provided.
+  !! steps ....................... Number of steps to take
+  !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
+  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
+  !! sol_no_t_o .................. When present means solution has no t values
+  !! sol_no_dy_o ................. When present means solution has no dy values
+  !!
+  subroutine frog_stab_nt(status, istats, solution, deq, y, param, a, b, c, t_end, steps, p_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o)
+    use mrkiss_config, only: rk, ik, t_delta_ai
+    implicit none
+    ! Arguments
+    integer(kind=ik),           intent(out) :: status, istats(16)
+    real(kind=rk),              intent(out) :: solution(:)
+    procedure(deq_iface_nt)                 :: deq
+    real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), t_end
+    integer(kind=ik),           intent(in)  :: steps
+    integer(kind=ik), optional, intent(in)  :: p_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o
+    ! Vars
+    integer(kind=ik)                        :: y_dim, sol_y_idx, step
+    real(kind=rk)                           :: t_cv, t_delta
+    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
+    ! Process arguments
+    sol_y_idx = 2
+    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
+    ! Compute solution
+    y_dim = size(y, 1)
+    t_delta = (t_end - 0.0_rk) / (steps)
+    istats = 0
+    t_cv = 0.0_rk
+    y_cv = y
+    do step=1,steps
+       if (present(p_o)) then
+          call one_richardson_step_stab_nt(status, y_delta, dy, deq, y_cv, param, a, b, c, p_o, t_delta)
+          istats(2) = istats(2) + 3
+       else
+          call one_step_stab_nt(status, y_delta, dy, deq, y_cv, param, a, b, c, t_delta)
+          istats(2) = istats(2) + 1
+       end if
+       if (status > 0) return
+       y_cv = y_cv + y_delta
+       t_cv = t_cv + t_delta
+    end do
+    if (.not. (present(sol_no_t_o))) solution(1) = t_cv
+    solution(sol_y_idx:(sol_y_idx+y_dim-1+2)) = y_cv
+    if (.not. (present(sol_no_dy_o))) then
+       call deq(status, dy, y_cv, param)
+       if (status > 0) return
+       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1)) = dy
+    end if
+    istats(1) = 1
+  end subroutine frog_stab_nt
+
+  !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
   !!
-  !! status .............. Exit status
-  !!                        - -inf-0 ..... Everything worked
-  !!                        - 0-255 ...... Evaluation of deq failed
-  !!                        - 1120-1151 .. Error in this routine
-  !!                        - others ..... Other values are not allowed
-  !! istats(:) ........... Integer statistics for run
-  !!                        istats(1): number of computed solution points stored in solution.
-  !!                        istats(2): number of one_step_* calls not triggerd by an event
-  !! solution(:,:) ....... Array for solution.  Must have ((size(solution, 1) == size(y, 1) + 1) .and. (size(solution, 2) > 1))
-  !!                        Each COLUMN is a solution.  
-  !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
-  !!                        The number of columns, and max_pts_o, determin the number of solution points.
-  !! deq ................. Equation subroutine
-  !! t, y(:) ............. Initial conditions.  y is a column vector!
-  !! param(:) ............ Data payload passed to deq
-  !! a(:,:), b(:), c(:) .. The butcher tableau
-  !! p_o ................. The order for the RK method in the butcher tableau (if provided enables Richardson extrapolation)
-  !! max_pts_o ........... Maximum number of solutions to put in solution.
-  !! t_delta_o ........... Step size to use.  
-  !!                       If t_end_o is provided:  Default: (t_end - t) / (size(solution, 2) - 1)
-  !!                       If t_end_o not provided: Default: mrkiss_config::t_delta_ai
-  !! t_end_o ............. End point for last step.  Silently ignored if t_delta_o is provided.
-  !! t_max_o ............. Maximum value for t
-  !! sol_y_idx_o ......... Index of y in solution.  Default: 2
-  !! sol_no_t_o .......... When present means solution has no t values
-  !! sol_no_dy_o ......... When present means solution has no dy values
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
+  !!                                - 1120-1151 .. Error in this routine
+  !!                                - others ..... Other values are not allowed
+  !! istats(:) ................... Integer statistics for run
+  !!                                - istats(1): number of computed solution points stored in solution.
+  !!                                - istats(2): number of one_step_* calls not triggered by an event
+  !! solution(:,:) ............... Array for solution.  
+  !!                                Each COLUMN is a solution:
+  !!                                 - First element is the t variable if sol_no_t_o not present.
+  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
+  !!                                 - The next size(y, 1) elements have dy values if sol_no_dy_o not present.
+  !! deq ......................... Equation subroutine
+  !! t, y(:) ..................... Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b(:), c(:) .......... The butcher tableau
+  !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
+  !! max_pts_o ................... Maximum number of solutions to put in solution.
+  !! t_delta_o ................... Step size to use.  
+  !!                                If t_end_o is provided:  Default: (t_end - 0.0_rk) / (size(solution, 2) - 1)
+  !!                                If t_end_o not provided: Default: mrkiss_config::t_delta_ai
+  !! t_end_o ..................... End point for last step.  Silently ignored if t_delta_o is provided.
+  !! t_max_o ..................... Maximum value for t
+  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
+  !! sol_no_t_o .................. When present means solution has no t values
+  !! sol_no_dy_o ................. When present means solution has no dy values
   !!
   subroutine steps_fixed_stab_nt(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
                                  t_end_o, t_max_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o)
@@ -535,43 +610,44 @@ contains
   !!
   !! My primary use case for this function is to create uniform sphere sweeps for constructive solid geometry applications.
   !!
-  !! status .............. Exit status
-  !!                        - -inf-0 ..... Everything worked
-  !!                        - 0-255 ...... Evaluation of deq failed
-  !!                        - 1024-1055 .. Error in this routine (no_bisect_error_o is not present)
-  !!                                        - 1024 .. t_delta_min yielded a longer step than t_delta_max
-  !!                                        - 1025 .. no_bisect_error_o not present and max_bisect_o violated
-  !!                        - others ..... Other values are not allowed
-  !! istats(:) ........... Integer statistics for run
-  !!                        istats(1): number of computed solution points
-  !!                        istats(2): number of one_step_* calls not triggerd by an event
-  !!                        istats(3): number of one_step_* calls triggered by y_delta length constraint
-  !!                        istats(7): number of times bisection failed because of max_bisect_o
-  !!                        istats(8): number of times bisection failed because target was not contained
-  !! solution ............ Array for solution.  Must have ((size(solution, 1) == size(y, 1) + 1) .and. (size(solution, 2) > 1))
-  !!                        Each COLUMN is a solution.  
-  !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
-  !!                        The number of columns, and max_pts_o, determin the number of solution points.
-  !! deq ................. Equation subroutine
-  !! t, y(:) ............. Initial conditions.  y is a column vector!
-  !! param(:) ............ Data payload passed to deq
-  !! a(:,:), b(:), c(:) .. The butcher tableau
-  !! y_delta_len_targ .... Attempt to make all steps this long
-  !! t_delta_max ......... Maximum t_delta
-  !! t_delta_min_o ....... Minimum t_delta
-  !! y_delta_len_tol_o ... How close we have to get to y_delta_len_targ.  Default is y_delta_len_targ/100
-  !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
-  !! max_pts_o ........... Maximum number of solutions to put in solution.
-  !! max_bisect_o ........ Maximum number of bisection iterations to perform for each step.  Default: max_bisect_ai
-  !! no_bisect_error_o ... If present, do not exit on bisection errors
-  !! y_sol_len_max_o ..... Maximum length of the solution curve
-  !! t_max_o ............. Maximum value for t
-  !! sol_y_idx_o ......... Index of y in solution.  Default: 2
-  !! sol_no_t_o .......... When present means solution has no t values
-  !! sol_no_dy_o ......... When present means solution has no dy values
-  !! sol_y_idx_o ......... Index of y in solution.  Default: 2
-  !! sol_no_t_o .......... When present means solution has no t values
-  !! sol_no_dy_o ......... When present means solution has no dy values
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
+  !!                                - 1024-1055 .. Error in this routine (no_bisect_error_o is not present)
+  !!                                                - 1024 .. t_delta_min yielded a longer step than t_delta_max
+  !!                                                - 1025 .. no_bisect_error_o not present and max_bisect_o violated
+  !!                                - others ..... Other values are not allowed
+  !! istats(:) ................... Integer statistics for run
+  !!                                - istats(1): number of computed solution points
+  !!                                - istats(2): number of one_step_* calls not triggered by an event
+  !!                                - istats(3): number of one_step_* calls triggered by y_delta length constraint
+  !!                                - istats(7): number of times bisection failed because of max_bisect_o
+  !!                                - istats(8): number of times bisection failed because target was not contained
+  !! solution .................... Array for solution.  
+  !!                                Each COLUMN is a solution:
+  !!                                 - First element is the t variable if sol_no_t_o not present.
+  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
+  !!                                 - The next size(y, 1) elements have dy values if sol_no_dy_o not present.
+  !! deq ......................... Equation subroutine
+  !! t, y(:) ..................... Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b(:), c(:) .......... The butcher tableau
+  !! y_delta_len_targ ............ Attempt to make all steps this long
+  !! t_delta_max ................. Maximum t_delta
+  !! t_delta_min_o ............... Minimum t_delta
+  !! y_delta_len_tol_o ........... How close we have to get to y_delta_len_targ.  Default is y_delta_len_targ/100
+  !! y_delta_len_idxs_o .......... Components of y_delta to use for y_delta length computation
+  !! max_pts_o ................... Maximum number of solutions to put in solution.
+  !! max_bisect_o ................ Maximum number of bisection iterations per each step.  Default: max_bisect_ai
+  !! no_bisect_error_o ........... If present, do not exit on bisection errors
+  !! y_sol_len_max_o ............. Maximum length of the solution curve
+  !! t_max_o ..................... Maximum value for t
+  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
+  !! sol_no_t_o .................. When present means solution has no t values
+  !! sol_no_dy_o ................. When present means solution has no dy values
+  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
+  !! sol_no_t_o .................. When present means solution has no t values
+  !! sol_no_dy_o ................. When present means solution has no dy values
   !!
   subroutine steps_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
@@ -737,35 +813,36 @@ contains
   !!
   !! My primary use case for this function is to shrink down long steps for smoother curves/tubes in visualizations.
   !!
-  !! status .............. Exit status
-  !!                        - -inf-0 ..... Everything worked
-  !!                        - 0-255 ...... Evaluation of deq failed
-  !!                        - 1280-1296 .. Error in this routine
-  !!                        - others ..... Other values are not allowed
-  !! istats(:) ........... Integer statistics for run
-  !!                        istats(1): number of computed solution points
-  !!                        istats(2): number of one_step_* calls not triggerd by an event
-  !!                        istats(3): number of one_step_* calls triggered by y_delta length constraint
-  !! solution ............ Array for solution.  Must have ((size(solution, 1) == size(y, 1) + 1) .and. (size(solution, 2) > 1))
-  !!                        Each COLUMN is a solution.  
-  !!                        The first element of each solution is the t variable.  The remaining values are the elements of y.
-  !!                        The number of columns, and max_pts_o, determin the number of solution points.
-  !! deq ................. Equation subroutine
-  !! t, y(:) ............. Initial conditions.  y is a column vector!
-  !! param(:) ............ Data payload passed to deq
-  !! a(:,:), b(:), c(:) .. The butcher tableau
-  !! y_delta_len_targ .... Attempt to make all steps this long
-  !! t_delta_ini ......... Maximum t_delta
-  !! t_delta_max_o ....... Maximum t_delta
-  !! t_delta_min_o ....... Minimum t_delta
-  !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
-  !! adj_short_o ......... Adjust when t_delta is too short as well as when it's too long.
-  !! max_pts_o ........... Maximum number of solutions to put in solution.
-  !! y_sol_len_max_o ..... Maximum length of the solution curve
-  !! t_max_o ............. Maximum value for t
-  !! sol_y_idx_o ......... Index of y in solution.  Default: 2
-  !! sol_no_t_o .......... When present means solution has no t values
-  !! sol_no_dy_o ......... When present means solution has no dy values
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
+  !!                                - 1280-1296 .. Error in this routine
+  !!                                - others ..... Other values are not allowed
+  !! istats(:) ................... Integer statistics for run
+  !!                                - istats(1): number of computed solution points
+  !!                                - istats(2): number of one_step_* calls not triggered by an event
+  !!                                - istats(3): number of one_step_* calls triggered by y_delta length constraint
+  !! solution .................... Array for solution.  
+  !!                                Each COLUMN is a solution:
+  !!                                 - First element is the t variable if sol_no_t_o not present.
+  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
+  !!                                 - The next size(y, 1) elements have dy values if sol_no_dy_o not present.
+  !! deq ......................... Equation subroutine
+  !! t, y(:) ..................... Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b(:), c(:) .......... The butcher tableau
+  !! y_delta_len_targ ............ Attempt to make all steps this long
+  !! t_delta_ini ................. Maximum t_delta
+  !! t_delta_max_o ............... Maximum t_delta
+  !! t_delta_min_o ............... Minimum t_delta
+  !! y_delta_len_idxs_o .......... Components of y_delta to use for y_delta length computation
+  !! adj_short_o ................. Adjust when t_delta is too short as well as when it's too long.
+  !! max_pts_o ................... Maximum number of solutions to put in solution.
+  !! y_sol_len_max_o ............. Maximum length of the solution curve
+  !! t_max_o ..................... Maximum value for t
+  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
+  !! sol_no_t_o .................. When present means solution has no t values
+  !! sol_no_dy_o ................. When present means solution has no dy values
   !!
   subroutine steps_sloppy_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
@@ -871,24 +948,25 @@ contains
   !!                                - 1056-1119 .. Error in this routine
   !!                                               - 1056 .... no_bisect_error_o not present and max_bisect_o violated
   !!                                - others ..... Other values are not allowed
-  !! istats(:) ................... Integer statstics for run
+  !! istats(:) ................... Integer statistics for run
   !!                                istats(1): number of computed solution points
-  !!                                istats(2): number of one_step_* calls not triggerd by an event
+  !!                                istats(2): number of one_step_* calls not triggered by an event
   !!                                istats(4): number of one_step_* calls triggered by y_delta error constraint
   !!                                istats(5): number of one_step_* calls triggered by step processing with new t_delta
   !!                                istats(6): number of one_step_* calls triggered by SDF bisection
   !!                                istats(7): number of times bisection failed because of max_bisect_o
   !!                                istats(8): number of times bisection failed because target was not contained
   !! solution(:,:) ............... Array for solution.
-  !!                                Each COLUMN is a solution.
-  !!                                The first element of each solution is the t variable with rest the elements of y.
-  !!                                The number of columns, and max_pts_o, determin the number of solution points.
+  !!                                Each COLUMN is a solution:
+  !!                                 - First element is the t variable if sol_no_t_o not present.
+  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
+  !!                                 - The next size(y, 1) elements have dy values if sol_no_dy_o not present.
   !! deq ......................... Equation subroutine
   !! t, y(:) ..................... Initial conditions.  y is a column vector!
   !! param(:) .................... Data payload passed to deq
   !! a(:,:), b1(:), b2(:), c(:) .. The butcher tableau
   !! p1, p2 ...................... The orders for the RK methods in the butcher tableaus
-  !! t_max_o ..................... Stop if t>t_max_o.  Diffrent from t_end_o! Default: NONE
+  !! t_max_o ..................... Stop if t>t_max_o.  Different from t_end_o! Default: NONE
   !! t_end_o ..................... Try to stop integration at t_end. Default: NONE
   !! t_delta_ini_o ............... Initial t_delta. Default: (t_delta_max_o+t_delta_min_o)/2 or t_delta_ai otherwise
   !! t_delta_min_o ............... Minimum allowed t_delta. Default: t_delta_tiny
@@ -902,7 +980,7 @@ contains
   !! max_bisect_o ................ Maximum number of bisection iterations to perform for each step. Default: max_bisect_ai
   !! no_bisect_error_o ........... If present, do not exit on bisection errors
   !! sdf_o ....................... SDF function.  Used to set new t_delta for a step.  This subroutine may trigger one or
-  !!                               more of the follwoing actions:
+  !!                               more of the following actions:
   !!                                - status>0      => Immediately returns doing nothing else propagating status to caller.
   !!                                                   Positive status values must come from the interval [256, 511].
   !!                                - new_t_delta>0 => Recompute y_delta using new_t_delta.
@@ -910,10 +988,9 @@ contains
   !!                                - end_run>0     => routine returns after this step is complete.
   !! sdf_tol_o ................... How close we have to get to accept an sdf solution. Default: sdf_tol_ai
   !! stepp_o ..................... Step processing subroutine.  Called after each step.
-  !! sol_y_idx_o ......... Index of y in solution.  Default: 2
-  !! sol_no_t_o .......... When present means solution has no t values
-  !! sol_no_dy_o ......... When present means solution has no dy values
-  !!
+  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
+  !! sol_no_t_o .................. When present means solution has no t values
+  !! sol_no_dy_o ................. When present means solution has no dy values
   !! 
   subroutine steps_adapt_etab_nt(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &

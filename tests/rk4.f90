@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program rk4
   use            :: mrkiss_config,      only: rk, ik
-  use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt
+  use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt, frog_stab_wt
   use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -61,7 +61,6 @@ program rk4
   real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, sol(1+2*deq_dim, max_step), dy(deq_dim)
   integer                      :: out_io_stat, out_io_unit
 
-
   call print_solution(status, sol_h, filename_o="rk4_hnd.out", width_o=20)
 
   sol = 0
@@ -82,8 +81,13 @@ program rk4
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
   call print_solution(status, sol, filename_o="rk4_stab.out", width_o=20)
 
-  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, sol_no_dy_o=1)
+  sol = 0
+  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
   call print_solution(status, sol, filename_o="rk4_steps.out", width_o=20)
+
+  sol = 0
+  call frog_stab_wt(status, istats, sol(:,max_step), eq, t_iv, y_iv, param, a, b, c, 1.0_rk, 10)
+  call print_solution(status, sol, filename_o="rk4_frog.out", width_o=20, start_o=max_step)
 
 contains
 

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-02 Sat 12:40 -->
+<!-- 2025-08-02 Sat 13:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -216,8 +216,8 @@
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">MRKISS Roadmap</h1>
-<div id="outline-container-org11d97c8" class="outline-2">
-<h2 id="org11d97c8"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-org711fb39" class="outline-2">
+<h2 id="org711fb39"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work.  Test coverage is poor for the high level solvers, but solid for the one step solvers and tableaux.  I
@@ -234,7 +234,6 @@ have a few functionality improvements I want to implement, but I don't forsee an
 <li>Given vector t &amp; sol, compute a sol matrix with new y values (no dy)</li>
 </ul></li>
 <li>Solver that takes a t-vec, and computes solution using those points</li>
-<li>Solver that takes a t, t_end, and n. Compute y, dy at t_end using the n fixed sized steps</li>
 <li>Multi-solver
 <ul class="org-ul">
 <li>Give it multiple IVs and produce a steps_fixed_* multi-solution</li>
@@ -244,6 +243,7 @@ have a few functionality improvements I want to implement, but I don't forsee an
 <li>Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta</li>
 <li>Finalize step-size and error computation in <code>steps_adapt_etab_*t()</code></li>
 <li>Add tests for high level solvers</li>
+<li><del>Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps</del></li>
 <li><del>Consider how to use examples as consistency tests</del></li>
 <li><del>Add dy to solver output</del></li>
 <li><del>Add ARKODE_VERNER_13_7_8</del>
