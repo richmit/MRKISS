@@ -11,6 +11,7 @@ This library powers the [[https://richmit.github.io/StrangeAttractorZoo/][Strang
    - [[https://richmit.github.io/MRKISS/ex_lorenz.html][Lornez Attracter]]
  - [[https://richmit.github.io/MRKISS/roadmap.html][Roadmap & Status]]
    - TLDR: I've completed most of the functionality I was looking for,
-     and everything seems to work.  I still have some features I'm
-     thinking about as well as some test coverage to improve.
-
+     and I don't foresee any API changes when I add the few items left
+     on my list.  Test coverage solid for the low level bits, but I
+     plan on improving coverage for the high level API. I also have a
+     few examples I would like to add.

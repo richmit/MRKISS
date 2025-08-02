@@ -36,13 +36,26 @@
 
 * Summary
 
-Right now everything that is implemented seems to work; however, I have pretty poor test coverage for the high level solvers.  I have a few functionality
-improvements and examples I want to implement.
+Right now everything that is implemented seems to work.  Test coverage is poor for the high level solvers, but solid for the one step solvers and tableaux.  I
+have a few functionality improvements I want to implement, but I don't forsee any API changes.  I also have a few examples I would like to add.
 
- - Support some kind of "multi-solver" option to simultaneously solve for multiple IVs or parameters. Should run in parallel.
+ - Add dy to a solution without it already
+ - Example showing error V with t_delta size
+ - Example showing error vs. order
+ - Hermite Interpolation
+   - Given scalar t & sol, compute y
+   - Given vector t & sol, compute a sol matrix with new y values (no dy)
+ - Solver that takes a t-vec, and computes solution using those points
+ - Solver that takes a t, t_end, and n. Compute y, dy at t_end using the n fixed sized steps
+ - Multi-solver
+   - Give it multiple IVs and produce a steps_fixed_* multi-solution
+   - Give it multiple PARAMs and produce a steps_fixed_* multi-solution
+   - Run parallel across cores using OpenMP
+ - Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
- - Consider how to use examples as consistency tests
  - Add tests for high level solvers
+ - +Consider how to use examples as consistency tests+
+ - +Add dy to solver output+
  - +Add ARKODE_VERNER_13_7_8+
    - +BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8+
    - +Added ref for Verner's site.+
