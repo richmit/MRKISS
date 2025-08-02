@@ -40,6 +40,7 @@ module mrkiss_utils
   private
 
   public :: print_solution, analyze_solution
+  public :: seq
 
 contains
   
@@ -297,7 +298,6 @@ contains
        if ( .not. (present(sol_no_t_o))) then
           t_max =  max(t_max, solution(1, i))
           t_min =  min(t_min, solution(1, i))
-
           t_delta_max =  max(t_delta_max, abs(solution(1, i) - solution(1, i-1)))
           t_delta_min =  min(t_delta_min, abs(solution(1, i) - solution(1, i-1)))
        end if
@@ -349,5 +349,65 @@ contains
     status = 0
   end subroutine analyze_solution
 
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Produce a sequence of values with fixed seporation.  Modeled after R's seq() function.
+  !!
+  !! status .............. Exit status
+  !!                        - -inf-0 ..... Everything worked
+  !!                        - ????-???? .. Error in this routine
+  !! y_at_t .............. The value of the function at t
+  !! t ................... Vector to fill
+  !! from_o .............. Starting value
+  !! to_o ................ Ending value
+  !! step_o .............. Delta between valeus
+  !! 
+  subroutine seq(status, t, from_o, to_o, step_o)
+    use :: mrkiss_config, only: rk, ik
+    implicit none
+    ! Arguments
+    integer(kind=ik), intent(out) :: status
+    real(kind=rk),    intent(out) :: t(:)
+    real(kind=rk), optional, intent(in)  :: from_o, to_o, step_o
+    ! Variables
+    integer(kind=ik)              :: n_v, i
+    real(kind=rk)                 :: from_v, to_v, step_v
+    ! Compute paramaters
+    if     (.not. (present(from_o))) then
+       status = 0
+       n_v    = size(t, 1) - 1
+       to_v   = to_o
+       step_v = step_o
+       from_v = -step_v * n_v + to_v
+    elseif (.not. (present(to_o))) then
+       n_v    = size(t, 1) - 1
+       step_v = step_o
+       from_v = from_o
+       to_v   = step_v * n_v + from_v
+    elseif (.not. (present(step_o))) then
+       status = 0
+       n_v    = size(t, 1) - 1
+       to_v   = to_o
+       from_v = from_o
+       step_v = -(-to_v + from_v) / n_v
+    else
+       n_v    = size(t, 1) - 1
+       to_v   = to_o
+       from_v = from_o
+       step_v = step_o
+       if (abs((step_v * n_v) - (to_v - from_v)) > 1.0e-10_rk) then  !! TODO: Use epsilon here
+          status = 1
+       else
+          status = 0
+       end if
+    end if
+    ! Compute seqeunce
+    if (status == 0) then
+       t = (/(from_v+i*step_v, i=0,n_v,1)/)
+    end if
+  end subroutine seq
 
 end module mrkiss_utils
+
+
+
+

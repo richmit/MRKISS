@@ -50,9 +50,9 @@ have a few functionality improvements I want to implement, but I don't forsee an
    - Give it multiple IVs and produce a steps_fixed_* multi-solution
    - Give it multiple PARAMs and produce a steps_fixed_* multi-solution
    - Run parallel across cores using OpenMP
- - Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
+ - +Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta+
  - +Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps+
  - +Consider how to use examples as consistency tests+
  - +Add dy to solver output+

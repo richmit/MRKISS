@@ -206,6 +206,17 @@ tc2_png : tc2_plot_error.png tc2_plot_sol.png
 	$(IMG_VIEWER) tc2_plot_error.png tc2_plot_sol.png
 
 ####################################################################################################
+seqt : seqt.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) seqt.f90 $(MRKISS_OBJ_FILES) -o $@
+
+seqt.out : seqt
+	./seqt$(EXE_SUFFIX)
+
+.PHONY: test_seqt
+test_seqt : seqt.out 
+	$(FD) -e 1e-10 seqt.out data/seqt.out
+
+####################################################################################################
 .PHONY: tests
 tests : $(TESTS) test_tc1 test_tc2
 
