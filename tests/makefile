@@ -135,7 +135,7 @@ test_rkf45 : test_rkf45_ref_vs_stab_5 test_rkf45_ref_vs_stab_4 test_rkf45_stab_v
 rk4 : rk4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rk4.f90 $(MRKISS_OBJ_FILES) -o $@
 
-RK4_OUTS = rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out rk4_frog.out
+RK4_OUTS = rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out rk4_frog.out rk4_frog_end.out rk4_steps_end.out
 
 $(RK4_OUTS) &: rk4
 	rk4$(EXE_SUFFIX)
@@ -152,12 +152,20 @@ test_rk4_ref_vs_stab : rk4_ref.out rk4_stab.out
 test_rk4_ref_vs_hnd : rk4_ref.out rk4_hnd.out 
 	$(FD) -e 1e-6 rk4_ref.out rk4_hnd.out 
 
+.PHONY: test_rk4_frog_d_vs_e
+test_rk4_frog_d_vs_e : rk4_frog.out rk4_frog_end.out
+	$(FD) -e 1e-10 rk4_frog.out rk4_frog_end.out
+
+.PHONY: test_rk4_steps_d_vs_e
+test_rk4_steps_d_vs_e : rk4_steps.out rk4_steps_end.out
+	$(FD) -e 1e-10 rk4_steps.out rk4_steps_end.out
+
 .PHONY: test_rk4_archive
 test_rk4_archive: $(RK4_OUTS)
 	$(foreach fil,$^,$(FD) $(fil) data/$(fil); )
 
 .PHONY: test_rk4
-test_rk4 : test_rk4_stab_vs_steps test_rk4_ref_vs_stab test_rk4_ref_vs_hnd test_rk4_archive
+test_rk4 : test_rk4_stab_vs_steps test_rk4_ref_vs_stab test_rk4_ref_vs_hnd test_rk4_frog_d_vs_e test_rk4_steps_d_vs_e test_rk4_archive
 
 ####################################################################################################
 rich : rich.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)

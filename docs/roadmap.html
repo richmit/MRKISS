@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-03 Sun 10:09 -->
+<!-- 2025-08-03 Sun 15:44 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -216,8 +216,8 @@
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">MRKISS Roadmap</h1>
-<div id="outline-container-org1340915" class="outline-2">
-<h2 id="org1340915"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-orgb460448" class="outline-2">
+<h2 id="orgb460448"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work.  Test coverage is poor for the high level solvers, but solid for the one step solvers and tableaux.  I
@@ -248,7 +248,11 @@ have a few functionality improvements I want to implement, but I don't forsee an
 </ul></li>
 <li><del>Given scalar t &amp; sol; compute y(t)</del> <b>CANCELED</b></li>
 <li><del>Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta</del> <b>DONE</b></li>
-<li><del>Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps</del> <b>DONE</b></li>
+<li><del>Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps</del> <b>DONE</b>
+<ul class="org-ul">
+<li><del>Add single point mode to steps_fixed_*</del> <b>DONE</b></li>
+<li><del>Flesh out tests for this feature*</del> <b>DONE</b></li>
+</ul></li>
 <li><del>Consider how to use examples as consistency tests</del> <b>DONE</b></li>
 <li><del>Add dy to solver output</del> <b>DONE</b></li>
 <li><del>Add ARKODE_VERNER_13_7_8</del> <b>DONE</b>

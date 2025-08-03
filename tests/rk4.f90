@@ -35,37 +35,38 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program rk4
   use            :: mrkiss_config,      only: rk, ik
-  use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt, frog_stab_wt
+  use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt
   use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
   implicit none
-  integer(kind=ik),  parameter :: max_step                     = 11
-  integer(kind=ik),  parameter :: deq_dim                      = 1
-  real(kind=rk),     parameter :: param(1)                     = [1.0_rk]
-  real(kind=rk),     parameter :: t_iv                         = 0.0_rk
-  real(kind=rk),     parameter :: t_delta                      = 0.1_rk
-  real(kind=rk),     parameter :: y_iv(deq_dim)                = [1.0_rk]
-  real(kind=rk),     parameter :: sol_h(1+2*deq_dim, max_step) = reshape([ 0.0000000000_rk, 1.0000000000_rk, -0.3678794411_rk, &
-                                                                           0.1000000000_rk, 0.9655827899_rk, -0.3154430003_rk, &
-                                                                           0.2000000000_rk, 0.9377962750_rk, -0.2364818517_rk, &
-                                                                           0.3000000000_rk, 0.9189181059_rk, -0.1385886320_rk, &
-                                                                           0.4000000000_rk, 0.9104421929_rk, -0.0297863398_rk, &
-                                                                           0.5000000000_rk, 0.9130598390_rk,  0.0820103570_rk, &
-                                                                           0.6000000000_rk, 0.9267065986_rk,  0.1897229700_rk, &
-                                                                           0.7000000000_rk, 0.9506796142_rk,  0.2877487252_rk, &
-                                                                           0.8000000000_rk, 0.9838057659_rk,  0.3723152399_rk, &
-                                                                           0.9000000000_rk, 1.0246280460_rk,  0.4414926096_rk, &
-                                                                           1.0000000000_rk, 1.0715783953_rk,  0.4949291477_rk], [1+2*deq_dim, max_step])
-  integer(kind=ik)             :: step, status, istats(16)
-  real(kind=rk)                :: y_delta(deq_dim), y_cv(deq_dim), t_cv, sol(1+2*deq_dim, max_step), dy(deq_dim)
+  integer(kind=ik), parameter :: max_pts                     = 11
+  integer(kind=ik), parameter :: deq_dim                     = 1
+  real(kind=rk),    parameter :: param(1)                    = [1.0_rk]
+  real(kind=rk),    parameter :: t_iv                        = 0.0_rk
+  real(kind=rk),    parameter :: t_delta                     = 0.1_rk
+  real(kind=rk),    parameter :: t_end                       = 1.0_rk
+  real(kind=rk),    parameter :: y_iv(deq_dim)               = [1.0_rk]
+  real(kind=rk),    parameter :: sol_h(1+2*deq_dim, max_pts) = reshape([ 0.0000000000_rk, 1.0000000000_rk, -0.3678794411_rk, &
+                                                                         0.1000000000_rk, 0.9655827899_rk, -0.3154430003_rk, &
+                                                                         0.2000000000_rk, 0.9377962750_rk, -0.2364818517_rk, &
+                                                                         0.3000000000_rk, 0.9189181059_rk, -0.1385886320_rk, &
+                                                                         0.4000000000_rk, 0.9104421929_rk, -0.0297863398_rk, &
+                                                                         0.5000000000_rk, 0.9130598390_rk,  0.0820103570_rk, &
+                                                                         0.6000000000_rk, 0.9267065986_rk,  0.1897229700_rk, &
+                                                                         0.7000000000_rk, 0.9506796142_rk,  0.2877487252_rk, &
+                                                                         0.8000000000_rk, 0.9838057659_rk,  0.3723152399_rk, &
+                                                                         0.9000000000_rk, 1.0246280460_rk,  0.4414926096_rk, &
+                                                                         1.0000000000_rk, 1.0715783953_rk,  0.4949291477_rk], [1+2*deq_dim, max_pts])
+  integer(kind=ik)            :: step, status, istats(16)
+  real(kind=rk)               :: y_delta(deq_dim), y_cv(deq_dim), t_cv, sol(1+2*deq_dim, max_pts), dy(deq_dim)
   integer                      :: out_io_stat, out_io_unit
 
   call print_solution(status, sol_h, filename_o="rk4_hnd.out", width_o=20)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
-  do step=2,max_step
+  do step=2,max_pts
      call one_step_rk4_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
@@ -74,7 +75,7 @@ program rk4
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
-  do step=2,max_step
+  do step=2,max_pts
      call one_step_stab_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
@@ -86,8 +87,16 @@ program rk4
   call print_solution(status, sol, filename_o="rk4_steps.out", width_o=20)
 
   sol = 0
-  call frog_stab_wt(status, istats, sol(:,max_step), eq, t_iv, y_iv, param, a, b, c, 1.0_rk, 10)
-  call print_solution(status, sol, filename_o="rk4_frog.out", width_o=20, start_o=max_step)
+  call steps_fixed_stab_wt(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=max_pts)
+  call print_solution(status, sol, filename_o="rk4_frog.out", width_o=20, start_o=max_pts)
+
+  sol = 0
+  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
+  call print_solution(status, sol, filename_o="rk4_steps_end.out", width_o=20)
+
+  sol = 0
+  call steps_fixed_stab_wt(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end, max_pts_o=max_pts)
+  call print_solution(status, sol, filename_o="rk4_frog_end.out", width_o=20, start_o=max_pts)
 
 contains
 

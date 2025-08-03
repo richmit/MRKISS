@@ -57,6 +57,8 @@ have a few functionality improvements I want to implement, but I don't forsee an
  - +Given scalar t & sol; compute y(t)+ *CANCELED*
  - +Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta+ *DONE*
  - +Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps+ *DONE*
+   - +Add single point mode to steps_fixed_*+ *DONE*
+   - +Flesh out tests for this feature*+ *DONE*
  - +Consider how to use examples as consistency tests+ *DONE*
  - +Add dy to solver output+ *DONE*
  - +Add ARKODE_VERNER_13_7_8+ *DONE*

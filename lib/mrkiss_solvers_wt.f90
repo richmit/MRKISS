@@ -114,7 +114,6 @@ module mrkiss_solvers_wt
 
   public :: one_step_etab_wt, one_step_stab_wt, one_richardson_step_stab_wt
   public :: one_step_rk4_wt, one_step_rkf45_wt, one_step_dp54_wt
-  public :: frog_stab_wt
   public :: steps_fixed_stab_wt, steps_condy_stab_wt, steps_sloppy_condy_stab_wt, steps_adapt_etab_wt
 
 contains
@@ -416,80 +415,6 @@ contains
   end subroutine one_step_dp54_wt
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple fixed time steps with a simple RK method to compute a single solution at t_end.
-  !!
-  !! status ...................... Exit status
-  !!                                - -inf-0 ..... Everything worked
-  !!                                - 0-255 ...... Evaluation of deq failed
-  !!                                - ????-???? .. Error in this routine
-  !!                                - others ..... Other values are not allowed
-  !! istats(:) ................... Integer statistics for run
-  !!                                - istats(1): number of computed solution points stored in solution.
-  !! solution(:) ................. Array for solution.  
-  !!                                Note this is a VECTOR not a 2D ARRAY.
-  !!                                Contents:
-  !!                                 - First element is the t variable if sol_no_t_o not present.
-  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
-  !!                                 - The next size(y, 1) elements have dy values if sol_no_dy_o not present.
-  !!                                The number of columns, and max_pts_o, determine the number of solution points.
-  !! deq ......................... Equation subroutine
-  !! t, y(:) ..................... Initial conditions.  y is a column vector!
-  !! param(:) .................... Data payload passed to deq
-  !! a(:,:), b(:), c(:) .......... The butcher tableau
-  !! t_end ....................... End point for last step.  Silently ignored if t_delta_o is provided.
-  !! steps ....................... Number of steps to take
-  !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
-  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
-  !! sol_no_t_o .................. When present means solution has no t values
-  !! sol_no_dy_o ................. When present means solution has no dy values
-  !!
-  subroutine frog_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, t_end, steps, p_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o)
-    use mrkiss_config, only: rk, ik, t_delta_ai
-    implicit none
-    ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(16)
-    real(kind=rk),              intent(out) :: solution(:)
-    procedure(deq_iface_wt)                 :: deq
-    real(kind=rk),              intent(in)  :: t
-    real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), t_end
-    integer(kind=ik),           intent(in)  :: steps
-    integer(kind=ik), optional, intent(in)  :: p_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o
-    ! Vars
-    integer(kind=ik)                        :: y_dim, sol_y_idx, step
-    real(kind=rk)                           :: t_cv, t_delta
-    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
-    ! Process arguments
-    sol_y_idx = 2
-    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
-    ! Compute solution
-    y_dim = size(y, 1)
-    t_delta = (t_end - t) / (steps)
-    istats = 0
-    t_cv = t
-    y_cv = y
-    do step=1,steps
-       if (present(p_o)) then
-          call one_richardson_step_stab_wt(status, y_delta, dy, deq, t_cv, y_cv, param, a, b, c, p_o, t_delta)
-          istats(2) = istats(2) + 3
-       else
-          call one_step_stab_wt(status, y_delta, dy, deq, t_cv, y_cv, param, a, b, c, t_delta)
-          istats(2) = istats(2) + 1
-       end if
-       if (status > 0) return
-       y_cv = y_cv + y_delta
-       t_cv = t_cv + t_delta
-    end do
-    if (.not. (present(sol_no_t_o))) solution(1) = t_cv
-    solution(sol_y_idx:(sol_y_idx+y_dim-1)) = y_cv
-    if (.not. (present(sol_no_dy_o))) then
-       call deq(status, dy, t_cv, y_cv, param)
-       if (status > 0) return
-       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1)) = dy
-    end if
-    istats(1) = 1
-  end subroutine frog_stab_wt
-
-  !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
   !!
   !! status ...................... Exit status
@@ -511,6 +436,8 @@ contains
   !! a(:,:), b(:), c(:) .......... The butcher tableau
   !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
   !! max_pts_o ................... Maximum number of solutions to put in solution.
+  !!                               If max_pts_o>1 & size(solution, 2)==1, then max_pts_o-1 steps are taken and 
+  !!                               only the last solution is stored in solution.
   !! t_delta_o ................... Step size to use.  
   !!                                If t_end_o is provided:  Default: (t_end - t) / (size(solution, 2) - 1)
   !!                                If t_end_o not provided: Default: mrkiss_config::t_delta_ai
@@ -534,19 +461,28 @@ contains
     real(kind=rk),    optional, intent(in)  :: t_delta_o, t_end_o, t_max_o
     integer(kind=ik), optional, intent(in)  :: sol_y_idx_o, sol_no_t_o, sol_no_dy_o
     ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, max_pts, y_dim, sol_y_idx
+    integer(kind=ik)                        :: cur_pnt_idx, max_pts, y_dim, sol_y_idx, cur_step, max_steps
     real(kind=rk)                           :: t_cv, t_delta
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
+    logical                                 :: lotsopnts 
     ! Process arguments
     sol_y_idx = 2
     if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
-    max_pts = size(solution, 2)
-    if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
+    max_steps = size(solution, 2) - 1
+    lotsopnts = .true.
+    if (present(max_pts_o)) then
+       if ((max_steps == 0) .and. (max_pts_o > 1)) then
+          lotsopnts = .false.
+          max_steps = max_pts_o - 1
+       else
+          max_steps = min(max_pts_o - 1, max_steps)
+       end if
+    end if
     if (present(t_delta_o)) then
        t_delta = t_delta_o
     else 
        if (present(t_end_o)) then
-          t_delta = (t_end_o - t) / (size(solution, 2) - 1)
+          t_delta = (t_end_o - t) / max_steps
        else
           t_delta = t_delta_ai
        end if
@@ -556,11 +492,13 @@ contains
     istats = 0
     t_cv = t
     y_cv = y
-    if (.not. (present(sol_no_t_o))) solution(1,  1) = t_cv
-    solution(sol_y_idx:(sol_y_idx+y_dim-1), 1) = y_cv
+    cur_step = 0
     cur_pnt_idx = 1
+    if (.not. (present(sol_no_t_o))) solution(1,  cur_pnt_idx) = t_cv
+    solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+!print *, size(solution, 2), lotsopnts, max_steps
     do 
-       cur_pnt_idx = cur_pnt_idx + 1
+       cur_step = cur_step + 1
        if (present(p_o)) then
           call one_richardson_step_stab_wt(status, y_delta, dy, deq, t_cv, y_cv, param, a, b, c, p_o, t_delta)
           istats(2) = istats(2) + 3
@@ -571,15 +509,19 @@ contains
        if (status > 0) return
        y_cv = y_cv + y_delta
        t_cv = t_cv + t_delta
+!print *, "ITR", cur_step, t_cv
+       if (lotsopnts) then
+          cur_pnt_idx = cur_pnt_idx + 1
+          if (.not. (present(sol_no_dy_o))) solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx-1) = dy
+       end if
        if (.not. (present(sol_no_t_o))) solution(1, cur_pnt_idx) = t_cv
-       if (.not. (present(sol_no_dy_o))) solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx-1) = dy
        solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        status = 0
        if (present(t_max_o)) then
           if (t_cv > t_max_o) exit
        end if
-       if (cur_pnt_idx >= max_pts) exit
+       if (cur_step >= max_steps) exit
     end do
     ! Compute derivative for final solution point
     if (.not. (present(sol_no_dy_o))) then
