@@ -480,7 +480,7 @@ contains
        t_cv = t_cv + t_delta
     end do
     if (.not. (present(sol_no_t_o))) solution(1) = t_cv
-    solution(sol_y_idx:(sol_y_idx+y_dim-1+2)) = y_cv
+    solution(sol_y_idx:(sol_y_idx+y_dim-1)) = y_cv
     if (.not. (present(sol_no_dy_o))) then
        call deq(status, dy, t_cv, y_cv, param)
        if (status > 0) return
