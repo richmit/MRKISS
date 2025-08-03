@@ -143,6 +143,7 @@ Things I care about:
    - Fixed \(t\) step size solvers
    - Fixed \(\mathbf{y}\) space step size solvers
  - Solutions include derivative values by default for visualization tools that perform Hermite interpolation.
+ - Interpolate entire solutions to new time points (Hermite & linear).
  - Programmable step processing.  Examples:
    - Stop the routine if the solution curve is too long in y-space
    - Stop the routine if the step delta, or some components of it, are too long in y-space

@@ -41,6 +41,7 @@ module mrkiss_utils
 
   public :: print_solution, analyze_solution
   public :: seq
+  public :: interpolate_solution
 
 contains
   
@@ -405,6 +406,84 @@ contains
        t = (/(from_v+i*step_v, i=0,n_v,1)/)
     end if
   end subroutine seq
+
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Interpolate an old solution to a new solution with a different time series.
+  !! 
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - ????-???? .. Error in this routine
+  !!                                               - ???? .. new_t_solution t value out of bounds
+  !!                                - others ..... Other values are not allowed
+  !! new_solution(:,:) ........... Array for new solution.  
+  !!                                This array *must* have a populated t sequence in new_solution(1,:)
+  !!                                It must also have room for a new y solution series starting in at 
+  !!                                column new_sol_y_idx_o, 2 by default.
+  !! old_solution(:,:) ........... Array for old solution.  
+  !!                                This array *must* have t!  
+  !! y_dim ....................... Number of elements in y.  Default infered from size of old_solution.
+  !! new_sol_y_idx_o ............. Index of y in new_solution.  Default: 2
+  !! old_sol_y_idx_o ............. Index of y in old_solution.  Default: 2
+  !! end_o ....................... The number of solutions in old_solution.  Default infered from size of old_solution.
+  !! sol_no_dy_o ................. old_solution has no dy data.
+  !!                               If dy data is present then Hermite interpolation is used.  
+  !!                               Without dy, linear interpolation is used.
+  subroutine interpolate_solution(status, new_solution, old_solution, new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o, sol_no_dy_o)
+    use :: mrkiss_config, only: rk, ik
+    implicit none
+    ! Arguments
+    integer(kind=ik),           intent(out)   :: status
+    real(kind=rk),              intent(inout) :: new_solution(:,:)
+    real(kind=rk),              intent(out)   :: old_solution(:,:)
+    integer(kind=ik), optional, intent(in)    :: new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o, sol_no_dy_o
+    ! Variables
+    integer(kind=ik)                          :: new_sol_idx, old_sol_idx, max_idx, new_sol_y_idx, old_sol_y_idx, old_end, y_dim
+    real(kind=rk)                             :: t, t0, t1, tu, td
+    real(kind=rk), allocatable                :: y0(:), y1(:), dy0(:), dy1(:), yat(:)
+    ! Process Arguments
+    old_end = size(old_solution, 2)
+    if (present(end_o)) old_end = min(end_o, size(old_solution, 2))
+    new_sol_y_idx = 2
+    if (present(new_sol_y_idx_o)) new_sol_y_idx = new_sol_y_idx_o
+    old_sol_y_idx = 2
+    if (present(old_sol_y_idx_o)) old_sol_y_idx = old_sol_y_idx_o
+    if (present(y_dim_o)) then
+       y_dim = y_dim_o
+    else ! The old_solution *must* have both t and dy components.
+       y_dim = size(old_solution, 1)
+       y_dim = y_dim - 1
+       if ( .not. (present(sol_no_dy_o))) y_dim = y_dim / 2
+    end if
+    ! Compute value
+    max_idx = size(new_solution, 2)
+    old_sol_idx = 2
+    do new_sol_idx=1, max_idx
+       t = new_solution(1, new_sol_idx)
+       do while (t > old_solution(1, old_sol_idx))
+          old_sol_idx = old_sol_idx + 1
+          if (old_sol_idx > old_end) then
+             status = 10000
+             return
+          end if
+       end do
+       ! If we get here, we are in the interval we want
+       t0 = old_solution(1, old_sol_idx-1)
+       t1 = old_solution(1, old_sol_idx)
+       y0 = old_solution(old_sol_y_idx:(old_sol_y_idx+y_dim-1), old_sol_idx-1)
+       y1 = old_solution(old_sol_y_idx:(old_sol_y_idx+y_dim-1), old_sol_idx)
+       td = (t1 - t0)
+       if (present(sol_no_dy_o)) then 
+          yat = (y0 * (t1 - t) + y1 * (t - t0)) / td
+       else
+          dy0 = td * old_solution((old_sol_y_idx+y_dim):(old_sol_y_idx+2*y_dim-1), old_sol_idx-1)
+          dy1 = td * old_solution((old_sol_y_idx+y_dim):(old_sol_y_idx+2*y_dim-1), old_sol_idx)
+          tu  = (t - t0) / td
+          yat = tu * (tu * (tu * (2 * y0 + dy0 - 2 * y1 + dy1) - 2 * dy0 - 3 * y0 + 3 * y1 - dy1) + dy0) + y0
+       end if
+       new_solution(new_sol_y_idx:(new_sol_y_idx+y_dim-1), new_sol_idx) = yat
+    end do
+    status = 0;
+  end subroutine interpolate_solution
 
 end module mrkiss_utils
 

@@ -35,15 +35,42 @@ adDat <- fread('three_body_steps_adapt_etab_wt-std.csv')
 ftDat <- fread('tree_body_steps_fixed_stab_wt.csv')
 fyDat <- fread('three_body_steps_condy_stab_wt.csv')
 loDat <- fread('steps_fixed_stab_wt-dp.csv')
-loDat <- fread('steps_fixed_stab_wt-dp.csv')
 slDat <- fread('steps_sloppy_condy_stab_wt.csv')
 a2Dat <- fread('three_body_steps_adapt_etab_wt-fix-delta-steps.csv')
 a3Dat <- fread('three_body_steps_adapt_etab_wt-pho-t-max.csv')
 a4Dat <- fread('three_body_steps_adapt_etab_wt-isct.csv')
-
+aiDat <- fread('three_body_steps_adapt_std_interpolated.csv')
+alDat <- fread('three_body_steps_adapt_std_interpolated_lin.csv')
 erDat <- data.table(b=c('Earth'), x=c(0), y=c(0))
 moDat <- data.table(x=cos(seq(0, 2*pi, 0.01)), y=sin(seq(0, 2*pi, 0.01)))
 m0Dat <- data.table(x=1.0, y=0.0)
+
+gp <- ggplot() + 
+  geom_path(data=aiDat, aes(x=y1, y=y2, col='Interpolated')) + 
+  geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive')) +
+  scale_colour_manual(values=c("Interpolated"="darkblue", "Adaptive"="red")) +
+  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Hermite)', x=expression(x[1]), y=expression(x[2]), col='') +
+  coord_fixed()
+ggsave(filename='three_body_interp_adapt_path.png', plot=gp, width=1024, height=800, units='px', dpi=150)
+
+gp <- ggplot() + 
+  geom_path(data=alDat, aes(x=y1, y=y2, col='Interpolated')) + 
+  geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive')) +
+  scale_colour_manual(values=c("Interpolated"="darkblue", "Adaptive"="red")) +
+  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Linear)', x=expression(x[1]), y=expression(x[2]), col='') +
+  coord_fixed()
+ggsave(filename='three_body_lin_interp_adapt_path.png', plot=gp, width=1024, height=800, units='px', dpi=150)
+
+gp <- ggplot() + 
+  geom_point(aes(x=ftDat$t, y=abs(aiDat$y1-ftDat$y1), col='x1'), size=0.1) +
+  geom_point(aes(x=ftDat$t, y=abs(aiDat$y2-ftDat$y2), col='x2'), size=0.1) +
+  geom_point(aes(x=ftDat$t, y=abs(aiDat$y3-ftDat$y3), col='v1'), size=0.1) +
+  geom_point(aes(x=ftDat$t, y=abs(aiDat$y4-ftDat$y4), col='v2'), size=0.1) +
+  scale_colour_manual(values=c("x1"="blue", "x2"="lightblue", "v1"="pink", "v2"="darkred"),
+                      labels=c(expression(x[1]), expression(x[2]), expression(v[1]), expression(v[2]))) +
+  scale_y_log10() +
+  labs(title='Interpolated Adaptive Solution', subtitle='Error', x=expression(t), y='error', col='') 
+ggsave(filename='three_body_interp_adapt_error.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
 gp <- ggplot() + 
   geom_point(data=erDat, aes(x=x, y=y, col='Earth')) +

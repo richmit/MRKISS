@@ -159,12 +159,63 @@ sed -n '/^  *! BEGIN: steps_adapt_etab_wt-std *$/,/^ *! END: steps_adapt_etab_wt
   ! END: steps_adapt_etab_wt-std
 #+end_src
 
+* Interpolation
+:PROPERTIES:
+:CUSTOM_ID: interpolate
+:END:
+
+Most visualization tools directly support Hermite spline interpolation between points, and will happily use use the derivative information in the solution to
+connect the widely separated red dots in the adaptive solution with smooth curves.  So it is rare that we wish to do interpolation simply to connect dots.
+More common is the need to "line up" two solutions on the same \(t\) values for some other reason. *[[https://github.com/richmit/MRKISS][~MRKISS~]]* can do
+both Hermite and linear interpolation:
+
+[[file:pics/three_body_interp_adapt_path.png][file:pics/three_body_interp_adapt_path.png]]
+
+[[file:pics/three_body_lin_interp_adapt_path.png][file:pics/three_body_lin_interp_adapt_path.png]]
+
+Note that Hermite interpolation provides an O(3) solution to the IVP.  Linear interpolation is O(1).  So both are inappropriate if high accuracy solutions are
+required.  Here we can see the errors:
+
+[[file:pics/three_body_interp_adapt_error.png][file:pics/three_body_interp_adapt_error.png]]
+
+The code for the above images:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+sed -n '/^  *! BEGIN: steps_adapt_int *$/,/^ *! END: steps_adapt_int *$/p' ../examples/three_body.f90
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+  ! BEGIN: steps_adapt_int
+  call system_clock(c_beg)
+  isolution = 0
+  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);            ! Create new t values
+  call interpolate_solution(status, isolution, solution, end_o=istats(1)) ! Preform the interpolation
+  call system_clock(c_end)
+  print '(a)',       "Adaptive hermite interpolation run: "
+  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "                        Status: ", status
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv", sol_no_dy_o=1)
+
+  call system_clock(c_beg)
+  isolution = 0
+  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
+  ! Note we must provide y_dim_o because solution really contains dy.  
+  call interpolate_solution(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_no_dy_o=1)
+  call system_clock(c_end)
+  print '(a)',       "Adaptive linear interpolation run: "
+  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "                        Status: ", status
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv", sol_no_dy_o=1)
+  ! END: steps_adapt_int
+#+end_src
+
 * Fixed Steps & Method Order
 :PROPERTIES:
 :CUSTOM_ID: fixedorder
 :END:
 
-The pink curve in the [[#classicalsol][previous section]] was the result of 4000 fixed steps with a 9th order Runge-Kutta method.  Why did we pick a 9th order
+The pink curve in our [[#classicalsol][first image]] was the result of 4000 fixed steps with a 9th order Runge-Kutta method.  Why did we pick a 9th order
 solver?  Because it allowed us to use a step size small enough to be ascetically pleasing but large enough to not produce too many points for our simple
 plotting program.
 

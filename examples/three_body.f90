@@ -66,7 +66,7 @@ program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
   use            :: mrkiss_config,                  only: rk, ik, t_delta_tiny
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
-  use            :: mrkiss_utils,                   only: print_solution
+  use            :: mrkiss_utils,                   only: print_solution, seq, interpolate_solution
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
   use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
 
@@ -81,9 +81,11 @@ program three_body
   real(kind=rk),    parameter :: param(1)      = [1.0_rk / 81.45_rk]
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
-  real(kind=rk)               :: solution(1+2*deq_dim, num_points)
+  real(kind=rk)               :: solution(1+2*deq_dim, num_points), isolution(1+deq_dim, num_points)
   integer(kind=ik)            :: status, istats(16)
   integer                     :: c_beg, c_end, c_rate
+
+  real(kind=rk)               :: dy(deq_dim)
 
   call system_clock(count_rate=c_rate)
 
@@ -91,7 +93,7 @@ program three_body
   call system_clock(c_beg)
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run: "
+  print '(a)',       "Fixed t_delta run V(9): "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
@@ -104,7 +106,7 @@ program three_body
   call system_clock(c_beg)
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run: "
+  print '(a)',       "Fixed t_delta run DP(5): "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
@@ -156,6 +158,29 @@ program three_body
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-std.csv", end_o=istats(1))
   ! END: steps_adapt_etab_wt-std
+
+  ! BEGIN: steps_adapt_int
+  call system_clock(c_beg)
+  isolution = 0
+  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);            ! Create new t values
+  call interpolate_solution(status, isolution, solution, end_o=istats(1)) ! Preform the interpolation
+  call system_clock(c_end)
+  print '(a)',       "Adaptive hermite interpolation run: "
+  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "                        Status: ", status
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv", sol_no_dy_o=1)
+
+  call system_clock(c_beg)
+  isolution = 0
+  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
+  ! Note we must provide y_dim_o because solution really contains dy.  
+  call interpolate_solution(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_no_dy_o=1)
+  call system_clock(c_end)
+  print '(a)',       "Adaptive linear interpolation run: "
+  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "                        Status: ", status
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv", sol_no_dy_o=1)
+  ! END: steps_adapt_int
 
   ! BEGIN: steps_adapt_etab_wt-fix-delta-steps
   call system_clock(c_beg)

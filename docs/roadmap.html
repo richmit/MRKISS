@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-02 Sat 16:00 -->
+<!-- 2025-08-03 Sun 10:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -216,8 +216,8 @@
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
 <h1 class="title">MRKISS Roadmap</h1>
-<div id="outline-container-orgc5a4f77" class="outline-2">
-<h2 id="orgc5a4f77"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-org1340915" class="outline-2">
+<h2 id="org1340915"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work.  Test coverage is poor for the high level solvers, but solid for the one step solvers and tableaux.  I
@@ -228,11 +228,6 @@ have a few functionality improvements I want to implement, but I don't forsee an
 <li>Add dy to a solution without it already</li>
 <li>Example showing error V with t_delta size</li>
 <li>Example showing error vs. order</li>
-<li>Hermite Interpolation
-<ul class="org-ul">
-<li>Given scalar t &amp; sol, compute y</li>
-<li>Given vector t &amp; sol, compute a sol matrix with new y values (no dy)</li>
-</ul></li>
 <li>Solver that takes a t-vec, and computes solution using those points</li>
 <li>Multi-solver
 <ul class="org-ul">
@@ -242,27 +237,37 @@ have a few functionality improvements I want to implement, but I don't forsee an
 </ul></li>
 <li>Finalize step-size and error computation in <code>steps_adapt_etab_*t()</code></li>
 <li>Add tests for high level solvers</li>
-<li><del>Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta</del></li>
-<li><del>Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps</del></li>
-<li><del>Consider how to use examples as consistency tests</del></li>
-<li><del>Add dy to solver output</del></li>
-<li><del>Add ARKODE_VERNER_13_7_8</del>
+<li><del>Hermite Interpolation</del> <b>DONE</b>
 <ul class="org-ul">
-<li><del>BT: <a href="https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8">https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8</a></del></li>
-<li><del>Added ref for Verner's site.</del></li>
+<li><del>Given scalar t, y0, y1, dy0, and dy1; compute y(t)</del> <b>CANCELED</b></li>
+<li><del>Given vector t &amp; sol, compute a sol matrix with new y values (no dy)</del> <b>DONE</b>
+<ul class="org-ul">
+<li><del>Do linear interpolation if no dy in old solution</del> <b>DONE</b></li>
 </ul></li>
-<li><del>Add ARKODE_VERNER_10_6_7</del>
-<ul class="org-ul">
-<li><del>BT: <a href="https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7">https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7</a></del></li>
-<li><del>Added ref for Verner's site.</del></li>
+<li><del>Add example to three_body.f90</del> <b>DONE</b></li>
 </ul></li>
-<li><del>Create <i>sloppy</i> version of <code>steps_condy_stab_*t</code> called <code>steps_sloppy_condy_stab_*t</code></del></li>
-<li><del>Update comments on <code>steps_*</code> solvers to reflect all options and algorithm.</del></li>
-<li><del>Add <code>t_min_o</code> and <code>t_max_o</code> options to <code>print_solution()</code></del></li>
-<li><del>Add example documentation pages</del>
+<li><del>Given scalar t &amp; sol; compute y(t)</del> <b>CANCELED</b></li>
+<li><del>Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta</del> <b>DONE</b></li>
+<li><del>Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps</del> <b>DONE</b></li>
+<li><del>Consider how to use examples as consistency tests</del> <b>DONE</b></li>
+<li><del>Add dy to solver output</del> <b>DONE</b></li>
+<li><del>Add ARKODE_VERNER_13_7_8</del> <b>DONE</b>
 <ul class="org-ul">
-<li><del><code>three_body</code></del></li>
-<li><del><code>lorenz</code></del></li>
+<li><del>BT: <a href="https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8">https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8</a></del> <b>DONE</b></li>
+<li><del>Added ref for Verner's site.</del> <b>DONE</b></li>
+</ul></li>
+<li><del>Add ARKODE_VERNER_10_6_7</del> <b>DONE</b>
+<ul class="org-ul">
+<li><del>BT: <a href="https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7">https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7</a></del> <b>DONE</b></li>
+<li><del>Added ref for Verner's site.</del> <b>DONE</b></li>
+</ul></li>
+<li><del>Create <i>sloppy</i> version of <code>steps_condy_stab_*t</code> called <code>steps_sloppy_condy_stab_*t</code></del> <b>DONE</b></li>
+<li><del>Update comments on <code>steps_*</code> solvers to reflect all options and algorithm.</del> <b>DONE</b></li>
+<li><del>Add <code>t_min_o</code> and <code>t_max_o</code> options to <code>print_solution()</code></del> <b>DONE</b></li>
+<li><del>Add example documentation pages</del> <b>DONE</b>
+<ul class="org-ul">
+<li><del><code>three_body</code></del> <b>DONE</b></li>
+<li><del><code>lorenz</code></del> <b>DONE</b></li>
 </ul></li>
 <li><del>Add aspect ratio argument to <code>steps_condy_stab_*t()</code></del> <b>CANCELED*</b></li>
 <li><del>Add "sloppy" option to <code>steps_condy_stab_*t</code></del> <b>CANCELED*</b></li>

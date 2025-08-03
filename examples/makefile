@@ -51,7 +51,7 @@ EXE_TARGETS = three_body lorenz minimal brusselator
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) three_body.f90 $(MRKISS_OBJ_FILES) -o $@
 
-THREE_BODY_CSVS = three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_condy_stab_wt.csv tree_body_steps_fixed_stab_wt.csv
+THREE_BODY_CSVS = steps_fixed_stab_wt-dp.csv three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_std_interpolated.csv three_body_steps_condy_stab_wt.csv steps_sloppy_condy_stab_wt.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_adapt_std_interpolated_lin.csv tree_body_steps_fixed_stab_wt.csv
 
 .PHONY: lorenz_csv
 three_body_csv : $(THREE_BODY_CSVS)
@@ -60,7 +60,7 @@ $(THREE_BODY_CSVS) &: three_body
 	./three_body$(EXE_SUFFIX)
 	ls -l three_body_*.csv
 
-THREE_BODY_PNGS = three_body.png three_body-dp.png three_body_ylen.png three_body_maxt.png three_body_moon.png three_body_fixed_pos.png three_body_fixed_vel.png
+THREE_BODY_PNGS = three_body-dp.png three_body.png three_body_fixed_pos.png three_body_fixed_vel.png three_body_interp_adapt_error.png three_body_interp_adapt_path.png three_body_lin_interp_adapt_path.png three_body_maxt.png three_body_moon.png three_body_ylen.png
 
 $(THREE_BODY_PNGS) &: $(THREE_BODY_CSVS) three_body.R
 	R --no-save --no-echo -q -f three_body.R

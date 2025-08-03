@@ -42,9 +42,6 @@ have a few functionality improvements I want to implement, but I don't forsee an
  - Add dy to a solution without it already
  - Example showing error V with t_delta size
  - Example showing error vs. order
- - Hermite Interpolation
-   - Given scalar t & sol, compute y
-   - Given vector t & sol, compute a sol matrix with new y values (no dy)
  - Solver that takes a t-vec, and computes solution using those points
  - Multi-solver
    - Give it multiple IVs and produce a steps_fixed_* multi-solution
@@ -52,22 +49,28 @@ have a few functionality improvements I want to implement, but I don't forsee an
    - Run parallel across cores using OpenMP
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
- - +Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta+
- - +Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps+
- - +Consider how to use examples as consistency tests+
- - +Add dy to solver output+
- - +Add ARKODE_VERNER_13_7_8+
-   - +BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8+
-   - +Added ref for Verner's site.+
- - +Add ARKODE_VERNER_10_6_7+
-   - +BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7+
-   - +Added ref for Verner's site.+
- - +Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~+
- - +Update comments on ~steps_*~ solvers to reflect all options and algorithm.+
- - +Add ~t_min_o~ and ~t_max_o~ options to ~print_solution()~+
- - +Add example documentation pages+
-   - +~three_body~+
-   - +~lorenz~+
+ - +Hermite Interpolation+ *DONE*
+   - +Given scalar t, y0, y1, dy0, and dy1; compute y(t)+ *CANCELED*
+   - +Given vector t & sol, compute a sol matrix with new y values (no dy)+ *DONE*
+     - +Do linear interpolation if no dy in old solution+ *DONE*
+   - +Add example to three_body.f90+ *DONE*
+ - +Given scalar t & sol; compute y(t)+ *CANCELED*
+ - +Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta+ *DONE*
+ - +Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps+ *DONE*
+ - +Consider how to use examples as consistency tests+ *DONE*
+ - +Add dy to solver output+ *DONE*
+ - +Add ARKODE_VERNER_13_7_8+ *DONE*
+   - +BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_13_7_8+ *DONE*
+   - +Added ref for Verner's site.+ *DONE*
+ - +Add ARKODE_VERNER_10_6_7+ *DONE*
+   - +BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7+ *DONE*
+   - +Added ref for Verner's site.+ *DONE*
+ - +Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~+ *DONE*
+ - +Update comments on ~steps_*~ solvers to reflect all options and algorithm.+ *DONE*
+ - +Add ~t_min_o~ and ~t_max_o~ options to ~print_solution()~+ *DONE*
+ - +Add example documentation pages+ *DONE*
+   - +~three_body~+ *DONE*
+   - +~lorenz~+ *DONE*
  - +Add aspect ratio argument to ~steps_condy_stab_*t()~+ *CANCELED**
  - +Add "sloppy" option to ~steps_condy_stab_*t~+ *CANCELED**
  - +Add option to not error out on bisection problems in ~steps_condy_stab_*t()~+ *DONE*
