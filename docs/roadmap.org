@@ -34,6 +34,14 @@
 #+HTML_LINK_UP: https://github.com/richmit/MRKISS/
 # ######################################################################################################################################################.H.E.##
 
+#+ATTR_HTML: :border 2 solid #ccc :frame hsides :align center
+|          <r> | <l>                                          |
+|    *Author:* | /{{{author}}}/                               |
+|   *Updated:* | /{{{modification-time(%Y-%m-%d %H:%M:%S)}}}/ |
+| *Generated:* | /{{{time(%Y-%m-%d %H:%M:%S)}}}/              |
+#+ATTR_HTML: :align center
+Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
+
 * Summary
 
 Right now everything that is implemented seems to work.  Test coverage is poor for the high level solvers, but solid for the one step solvers and tableaux.  I
@@ -49,6 +57,14 @@ have a few functionality improvements I want to implement, but I don't forsee an
    - Run parallel across cores using OpenMP
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
+ - Release 1.0
+   - +Add doxygen generation+ *DONE*
+   - +Create web site for doxygen docs+ *DONE*
+   - +Add verison constants to mrkiss_config+ *DONE*
+   - +Create doxygen deployment rules+ *DONE*
+   - Tag script
+   - +Create next-tag.org+ *DONE*
+   - +Create changelog+ *DONE*
  - +Hermite Interpolation+ *DONE*
    - +Given scalar t, y0, y1, dy0, and dy1; compute y(t)+ *CANCELED*
    - +Given vector t & sol, compute a sol matrix with new y values (no dy)+ *DONE*

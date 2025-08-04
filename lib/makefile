@@ -59,3 +59,12 @@ TAGS : *.f90
 clean : clean_multi_mrkiss
 	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe
 
+../docs/dox/Doxyfile : Doxyfile *.f90
+	doxygen
+	cp Doxyfile ../docs/dox/Doxyfile
+
+dox : ../docs/dox/Doxyfile
+
+dox-deploy : ../docs/dox/Doxyfile $(HOME)/MJR/WWW/site/SS/MRKISS/doc-lib/Doxyfile
+	sh -c 'rsync -Fvrt --safe-links --chmod=Da+rx,a+rX --delete-excluded --delete ../docs/dox/ ~/MJR/WWW/site/SS/MRKISS/doc-lib/'
+

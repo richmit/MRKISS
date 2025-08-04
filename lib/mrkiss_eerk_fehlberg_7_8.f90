@@ -41,10 +41,10 @@
 !! Known Aliases: 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_13_7_8' (SUNDIALS).
 !!
 !! References:
-!!   Erwin Fehlberg (1972); Classical eight- and lower-order Runge-Kutta-Nystroem formulas with stepsize control for special second-order differential equations; NASA Technical Report M-533
-!!   Butcher (2008); Numerical Methods for Ordinary Differential Equations; p209
-!!   Butcher (2016); Numerical Methods for Ordinary Differential Equations; p222
-!!   Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p180
+!!  - Erwin Fehlberg (1972); Classical eight- and lower-order Runge-Kutta-Nystroem formulas with stepsize control for special second-order differential equations; NASA Technical Report M-533
+!!  - Butcher (2008); Numerical Methods for Ordinary Differential Equations; p209
+!!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations; p222
+!!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p180
 !!
 module mrkiss_eerk_fehlberg_7_8
   use mrkiss_config, only: rk, ik

@@ -106,6 +106,9 @@ lorenz_fixed.png : lorenz_fixed.svg
 lorenz_fixed-c.png : lorenz_fixed.svg
 	magick -density 600 -background white lorenz_fixed.svg -crop 1000x800+0+200 lorenz_fixed-c.png
 
+logo_background.png : lorenz_fixed.svg
+	magick -density 600 -background white lorenz_fixed.svg -crop 1200x600+0+200 logo_background.png
+
 lorenz_condy.png : lorenz_condy.svg
 	magick -density 200 -background white lorenz_condy.svg lorenz_condy.png
 

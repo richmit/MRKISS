@@ -43,7 +43,7 @@
 !! Known Aliases: 'ARKODE_CASH_KARP_6_4_5' (SUNDIALS)
 !!
 !! References:
-!!   Cash & Karp(1990);  A variable order Runge-Kutta method for initial value problems with rapidly varying right-hand sides; TOMS 16; zotero://select/items/0_2YSGGWSD
+!!  - Cash & Karp(1990);  A variable order Runge-Kutta method for initial value problems with rapidly varying right-hand sides; TOMS 16; zotero://select/items/0_2YSGGWSD
 !!
 module mrkiss_eerk_cash_karp_5_4
   use mrkiss_config, only: rk, ik

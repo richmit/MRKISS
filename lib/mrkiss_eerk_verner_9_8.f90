@@ -41,16 +41,16 @@
 !! Known Aliases: 'Vern9' (OrdinaryDiffEq.jl), 'ARKODE_VERNER_16_8_9' (SUNDIALS).
 !!
 !! References:
-!!   Verner (1978) "Explicit Runge-Kutta Methods with Estimates of the Local Truncation Error"; SIAM J. Num. Anal. 15 (4); p772-790
-!!   Jim Verner's Refuge for Runge-Kutta Pairs
-!!     Retrieved on 2025-07-16 from :
+!!  - Verner (1978) "Explicit Runge-Kutta Methods with Estimates of the Local Truncation Error"; SIAM J. Num. Anal. 15 (4); p772-790
+!!  - Jim Verner's Refuge for Runge-Kutta Pairs
+!!     - Retrieved on 2025-07-16 from :
 !!       https://www.sfu.ca/~jverner/
-!!     On the above page, in a section annotated with "Added May, 2007", this tableau was labeled as
+!!     - On the above page, in a section annotated with "Added May, 2007", this tableau was labeled as
 !!       A "more efficient" Runge--Kutta (9)8 Pair with Interpolants
-!!     The two links with the data were:
-!!       https://www.sfu.ca/~jverner/RKV98.IIa.Efficient.000000349.081209.FLOAT6040OnWeb           zotero://select/items/0_UEQBISIW
-!!       https://www.sfu.ca/~jverner/RKV98.IIa.Efficient.000000349.081210.CoeffsOnlyRADandFLOATS
-!!     The first link above is titled:
+!!     - The two links with the data were:
+!!        - https://www.sfu.ca/~jverner/RKV98.IIa.Efficient.000000349.081209.FLOAT6040OnWeb           zotero://select/items/0_UEQBISIW
+!!        - https://www.sfu.ca/~jverner/RKV98.IIa.Efficient.000000349.081210.CoeffsOnlyRADandFLOATS
+!!     - The first link above is titled:
 !!       A 'most efficient" Runge--Kutta (16:9(8)) pair
 !!
 module mrkiss_eerk_verner_9_8

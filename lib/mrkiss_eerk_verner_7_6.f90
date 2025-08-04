@@ -41,11 +41,11 @@
 !! Known Aliases: 'ARKODE_VERNER_10_6_7' (SUNDIALS).
 !!
 !! References:
-!!   Verner (2010); Numerically Optimal Runge-Kutta Pairs with Interpolants; Num. Alg. 53 (2-3); p383-396; zotero://select/items/0_24ANPMLC
-!!   Verner (2007, CORRECTED 2024); A "more efficient" Runge-Kutta (7)6 Pair with corrected Interpolants; https://www.sfu.ca/~jverner/; zotero://select/items/0_9NS8U6I6
-!!             Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV76.IIa.Efficient.00001675585.240711.FLOAT6040OnWeb
-!!             Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV76.IIa.Efficient.00001675585.240711.CoeffsOnlyRATandRAD
-!!             Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV76.IIa.Efficient.00001675585.240712.CoeffsOnlyFLOAT
+!!  - Verner (2010); Numerically Optimal Runge-Kutta Pairs with Interpolants; Num. Alg. 53 (2-3); p383-396; zotero://select/items/0_24ANPMLC
+!!  - Verner (2007, CORRECTED 2024); A "more efficient" Runge-Kutta (7)6 Pair with corrected Interpolants; https://www.sfu.ca/~jverner/; zotero://select/items/0_9NS8U6I6
+!!     - Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV76.IIa.Efficient.00001675585.240711.FLOAT6040OnWeb
+!!     - Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV76.IIa.Efficient.00001675585.240711.CoeffsOnlyRATandRAD
+!!     - Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV76.IIa.Efficient.00001675585.240712.CoeffsOnlyFLOAT
 !!
 module mrkiss_eerk_verner_7_6
   use mrkiss_config, only: rk, ik

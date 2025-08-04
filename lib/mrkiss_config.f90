@@ -41,21 +41,46 @@ module mrkiss_config
   private
 
   ! Real & integer types for externally viable interfaces and arguments
-  integer,          parameter, public    :: ik                 = c_int32_t                       !< Integer kinds used in interfaces
-  integer,          parameter, public    :: rk                 = c_double                        !< Real kind used in interfaces
-                                                
+  integer,          parameter, public :: ik                 = c_int32_t                       !< Integer kinds used in interfaces
+  integer,          parameter, public :: rk                 = c_double                        !< Real kind used in interfaces
+
+  ! Libray meta data
+  character(len=10), parameter, public :: version       = '2025-08-03'                        !< Version string
+                                             
   ! Absolute constants
-  real(kind=rk),    parameter, public    :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero
-  real(kind=rk),    parameter, public    :: t_delta_tiny       = tiny(zero_epsilon) * 1.0e18_rk  !< Smallest value for t_delta
+  real(kind=rk),    parameter, public :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero
+  real(kind=rk),    parameter, public :: t_delta_tiny       = tiny(zero_epsilon) * 1.0e18_rk  !< Smallest value for t_delta
 
   ! ab initio parameters for defaults when we know nothing
-  real(kind=rk),    parameter, public    :: t_delta_ai         = 1.0e-4_rk                       !< t_delta ai default
-  real(kind=rk),    parameter, public    :: error_tol_abs_ai   = 1.0e-5_rk                       !< error_tol_abs ai default
-  real(kind=rk),    parameter, public    :: error_tol_rel_ai   = 1.0e-3_rk                       !< error_tol_rel ai default
-  integer(kind=ik), parameter, public    :: max_bisect_ai      = 1000                            !< max_bisect ai default
-  real(kind=rk),    parameter, public    :: t_delta_fac_min_ai = 0.5_rk                          !< t_delta_fac_min ai default
-  real(kind=rk),    parameter, public    :: t_delta_fac_max_ai = 2.0_rk                          !< t_delta_fac_max ai default
-  real(kind=rk),    parameter, public    :: t_delta_fac_fdg_ai = 0.5_rk                          !< t_delta_fac_fdg ai default
-  real(kind=rk),    parameter, public    :: sdf_tol_ai         = 1.0e-3                          !< sdf_tol ai default
-
+  real(kind=rk),    parameter, public :: t_delta_ai         = 1.0e-4_rk                       !< t_delta ai default
+  real(kind=rk),    parameter, public :: error_tol_abs_ai   = 1.0e-5_rk                       !< error_tol_abs ai default
+  real(kind=rk),    parameter, public :: error_tol_rel_ai   = 1.0e-3_rk                       !< error_tol_rel ai default
+  integer(kind=ik), parameter, public :: max_bisect_ai      = 1000                            !< max_bisect ai default
+  real(kind=rk),    parameter, public :: t_delta_fac_min_ai = 0.5_rk                          !< t_delta_fac_min ai default
+  real(kind=rk),    parameter, public :: t_delta_fac_max_ai = 2.0_rk                          !< t_delta_fac_max ai default
+  real(kind=rk),    parameter, public :: t_delta_fac_fdg_ai = 0.5_rk                          !< t_delta_fac_fdg ai default
+  real(kind=rk),    parameter, public :: sdf_tol_ai         = 1.0e-3                          !< sdf_tol ai default
 end module mrkiss_config
+
+
+!----------------------------------------------------------------------------------------------------------------------------------
+!> \mainpage 
+!! 
+!! @image html MRKISS_logo_c_500x250.png
+!!
+!! MRKISS == MR RK KISS == Mitch Richling's Runge-Kutta Keep It Simple Stupid
+!!
+!! ~MRKISS~ is a *simple*, *tiny* library with *zero dependencies* that aims to make it easy to *use* and *experiment with* explicit Runge-Kutta methods.
+!! 
+!! For an overview of MRKISS and some tutorial information, check out the documentation: https://richmit.github.io/MRKISS/index.html
+!!
+!! A couple of the examples in the repository have longer explanatory documentation:
+!!    - Three Body Problem: https://richmit.github.io/MRKISS/ex_three_body.html
+!!    - Lornez Attracter: https://richmit.github.io/MRKISS/ex_lorenz.html
+!!
+!! The development road-map: https://richmit.github.io/MRKISS/roadmap.html
+!!
+!! The changelog: https://richmit.github.io/MRKISS/changelog.html
+!! 
+!! This library powers the Strange Attractor Zoo: https://richmit.github.io/StrangeAttractorZoo/
+!!

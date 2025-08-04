@@ -41,7 +41,7 @@
 !! Known Aliases: 'ARKODE_KNOTH_WOLKE_3_3' (SUNDIALS)
 !!
 !! References:
-!!   Knoth & Wolke (1988); Implicit-explicit runge-kutta methods for computiong atmospheric reactive flows; Appl. Num. Anal. 28(2-4); p327-341
+!!  - Knoth & Wolke (1988); Implicit-explicit runge-kutta methods for computiong atmospheric reactive flows; Appl. Num. Anal. 28(2-4); p327-341
 !!
 module mrkiss_erk_knoth_wolke_3
   use mrkiss_config, only: rk, ik

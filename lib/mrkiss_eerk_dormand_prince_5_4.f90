@@ -42,9 +42,9 @@
 !!                'RK5(4)7M' (Dormand & Prince), & DOPRI5 (Hairer), 'ARKODE_DORMAND_PRINCE_7_4_5' (SUNDIALS)
 !!
 !! References:
-!!  Dormand & Prince (1980); A family of embedded Runge-Kutta formulae; J. Comput. Appl. Math. 6, no. 1
-!!  Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p178
-!!  Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p224
+!!  - Dormand & Prince (1980); A family of embedded Runge-Kutta formulae; J. Comput. Appl. Math. 6, no. 1
+!!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p178
+!!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p224
 !!
 module mrkiss_eerk_dormand_prince_5_4
   use mrkiss_config, only: rk, ik

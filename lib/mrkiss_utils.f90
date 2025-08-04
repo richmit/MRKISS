@@ -50,11 +50,12 @@ contains
   !! 
   !! Inappropriate width_o, digits_o, and separator_o values may cause a runtime error.
   !!
-  !! Example 1: The default values will produce CSV output
+  !! - Example 1: The default values will produce CSV output
   !!   print_solution(solution)
-  !! Example 2: For columnar output we just need to add a width
+  !! - Example 2: For columnar output we just need to add a width
   !!   print_solution(solution, width_o=30)
   !! 
+  !! @verbatim
   !! status ....... Exit status
   !!                 - -inf-0 ..... Everything worked
   !!                 - 1152-1183 .. Error in this routine
@@ -80,6 +81,7 @@ contains
   !! sol_y_idx_o .. Index of y in solution.  Default: 2
   !! sol_no_t_o ... When present means solution has no t values
   !! sol_no_dy_o .. When present means solution has no dy values
+  !! @endverbatim
   !! 
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o, &
                             t_min_o, t_max_o, y_dim_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o)
@@ -212,6 +214,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Analyze an RK solution matrix.
   !! 
+  !! @verbatim
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - 1297-1313 .. Error in this routine
@@ -228,6 +231,7 @@ contains
   !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
   !! filename_o .......... Filename to which we print.  Default: NONE
   !!                       If not present, then output will be to output_unit (STDOUT).  
+  !! @endverbatim
   !! 
   subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o, y_delta_len_idxs_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
@@ -353,6 +357,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Produce a sequence of values with fixed seporation.  Modeled after R's seq() function.
   !!
+  !! @verbatim
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - ????-???? .. Error in this routine
@@ -361,6 +366,7 @@ contains
   !! from_o .............. Starting value
   !! to_o ................ Ending value
   !! step_o .............. Delta between valeus
+  !! @endverbatim
   !! 
   subroutine seq(status, t, from_o, to_o, step_o)
     use :: mrkiss_config, only: rk, ik
@@ -410,6 +416,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Interpolate an old solution to a new solution with a different time series.
   !! 
+  !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
   !!                                - ????-???? .. Error in this routine
@@ -428,6 +435,8 @@ contains
   !! sol_no_dy_o ................. old_solution has no dy data.
   !!                               If dy data is present then Hermite interpolation is used.  
   !!                               Without dy, linear interpolation is used.
+  !! @endverbatim
+  !!
   subroutine interpolate_solution(status, new_solution, old_solution, new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o, sol_no_dy_o)
     use :: mrkiss_config, only: rk, ik
     implicit none

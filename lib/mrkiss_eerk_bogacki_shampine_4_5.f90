@@ -41,8 +41,8 @@
 !! Known Aliases: 'bs5' (OrdinaryDiffEq.jl)
 !!
 !! References:
-!!   Bogacki & Shampine (1996); An Efficient Runge-Kutta (4,5) Pair; Comp. & Math. with Appl. 32 (6); p15-28; zotero://select/items/0_3SDMHUHW
-!!   Peter Stone (2012); Bogacki-Shampine Combined 7 Stage, Order 4 and 5 Runge-Kutta Scheme with an Additional 8 Stage, Order 4 FSAL Embedded Scheme; zotero://select/items/0_AS3ZHL53
+!!  - Bogacki & Shampine (1996); An Efficient Runge-Kutta (4,5) Pair; Comp. & Math. with Appl. 32 (6); p15-28; zotero://select/items/0_3SDMHUHW
+!!  - Peter Stone (2012); Bogacki-Shampine Combined 7 Stage, Order 4 and 5 Runge-Kutta Scheme with an Additional 8 Stage, Order 4 FSAL Embedded Scheme; zotero://select/items/0_AS3ZHL53
 !!
 module mrkiss_eerk_bogacki_shampine_4_5
   use mrkiss_config, only: rk, ik

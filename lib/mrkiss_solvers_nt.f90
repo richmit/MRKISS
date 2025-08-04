@@ -57,6 +57,7 @@ module mrkiss_solvers_nt
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type for ODE dydt functions.
   !!
+  !! @verbatim
   !! status .... Exit status
   !! status .... Exit status
   !!              - -inf-0 .... Everything worked
@@ -65,6 +66,7 @@ module mrkiss_solvers_nt
   !! t ......... Value for t.
   !! y(:) ...... Value for y.
   !! param(:) .. Data payload usually used for constants.
+  !! @endverbatim
   !!
   abstract interface
      subroutine deq_iface_nt(status, dydt, y, param)
@@ -80,6 +82,7 @@ module mrkiss_solvers_nt
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type step processing subroutine.
   !!
+  !! @verbatim
   !! status .... Exit status
   !!              - -inf-0 .... Everything worked
   !!              - 256-511 ... Error in this routine
@@ -87,6 +90,7 @@ module mrkiss_solvers_nt
   !! t ......... Value for t.
   !! y(:) ...... Value for y.
   !! param(:) .. Data payload usually used for constants.
+  !! @endverbatim
   !!
   abstract interface
      subroutine stepp_iface_nt(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -104,6 +108,7 @@ module mrkiss_solvers_nt
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type SDF function on a solution point.
   !!
+  !! @verbatim
   !! status ..... Exit status
   !!               - -inf-0 .... Everything worked
   !!               - 512-767 ... Error in this routine
@@ -113,6 +118,7 @@ module mrkiss_solvers_nt
   !! t .......... The t value.
   !! y(:) ....... The y value.
   !! param(:) ... Data payload usually used for constants.
+  !! @endverbatim
   !!
   abstract interface
      subroutine sdf_iface_nt(status, dist, sdf_flags, t, y)
@@ -134,6 +140,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of a embedded RK method expressed as a Butcher Tableau.
   !!
+  !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
@@ -147,6 +154,7 @@ contains
   !! param(:) .................... Data payload passed to deq
   !! a(:,:), b1(:), b2(:), c(:) .. The butcher tableau
   !! t_delta ..................... Delta t to use for the step.
+  !! @endverbatim
   !!
   subroutine one_step_etab_nt(status, y1_delta, y2_delta, dy, deq, y, param, a, b1, b2, c, t_delta)
     use mrkiss_config, only: rk, ik
@@ -188,6 +196,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of a non-embedded RK method expressed as a Butcher Tableau.
   !!
+  !! @verbatim
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
@@ -200,6 +209,7 @@ contains
   !! param(:) ............ Data payload passed to deq
   !! a(:,:), b(:), c(:) .. The butcher tableau
   !! t_delta ............. Delta t to use for the step.
+  !! @endverbatim
   !!
   !! The number of stages is determined based on the length of b.  All of the methods in an EERK need not be the same number of
   !! stages.  When this occurs, the b1 or b2 pulled from the module can be shortened when passing it to this function.  This will
@@ -246,6 +256,7 @@ contains
   !!
   !! Uses Richardson extrapolation to produce an estimate of order one greater than the provided Runge-Kutta method.
   !!
+  !! @verbatim
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
@@ -259,6 +270,7 @@ contains
   !! a(:,:), b(:), c(:) .. The butcher tableau
   !! p ................... The order for the RK method in the butcher tableau
   !! t_delta ............. Delta t to use for the step.
+  !! @endverbatim
   !!
   subroutine one_richardson_step_stab_nt(status, y_delta, dy, deq, y, param, a, b, c, p, t_delta)
     use mrkiss_config, only: rk, ik
@@ -294,6 +306,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of RK (mrkiss_erk_kutta_4)
   !!
+  !! @verbatim
   !! status ...... Exit status
   !!                - -inf-0 ..... Everything worked
   !!                - 0-255 ...... Evaluation of deq failed
@@ -305,6 +318,7 @@ contains
   !! t, y(:) ..... Initial conditions.  y is a column vector!
   !! param(:) .... Data payload passed to deq
   !! t_delta ..... Delta t to use for the step.
+  !! @endverbatim
   !!
   subroutine one_step_rk4_nt(status, y_delta, dy, deq, y, param, t_delta)
     use mrkiss_config, only: rk, ik
@@ -332,6 +346,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of RKF45 (mrkiss_eerk_fehlberg_4_5)
   !!
+  !! @verbatim
   !! status ...... Exit status
   !!                - -inf-0 ..... Everything worked
   !!                - 0-255 ...... Evaluation of deq failed
@@ -343,6 +358,7 @@ contains
   !! t, y(:) ..... Initial conditions.  y is a column vector!
   !! param(:) .... Data payload passed to deq
   !! t_delta ..... Delta t to use for the step.
+  !! @endverbatim
   !!
   subroutine one_step_rkf45_nt(status, y1_delta, y2_delta, dy, deq, y, param, t_delta)
     use mrkiss_config, only: rk, ik
@@ -377,6 +393,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of DP45 (mrkiss_eerk_dormand_prince_5_4)
   !!
+  !! @verbatim
   !! status ...... Exit status
   !!                - -inf-0 ..... Everything worked
   !!                - 0-255 ...... Evaluation of deq failed
@@ -388,6 +405,7 @@ contains
   !! t, y(:) ..... Initial conditions.  y is a column vector!
   !! param(:) .... Data payload passed to deq
   !! t_delta ..... Delta t to use for the step.
+  !! @endverbatim
   !!
   subroutine one_step_dp54_nt(status, y1_delta, y2_delta, dy, deq, y, param, t_delta)
     use mrkiss_config, only: rk, ik
@@ -424,6 +442,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
   !!
+  !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
@@ -453,6 +472,8 @@ contains
   !! sol_y_idx_o ................. Index of y in solution.  Default: 2
   !! sol_no_t_o .................. When present means solution has no t values
   !! sol_no_dy_o ................. When present means solution has no dy values
+  !! @endverbatim
+  !! @endverbatim
   !!
   subroutine steps_fixed_stab_nt(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
                                  t_end_o, t_max_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o)
@@ -493,7 +514,6 @@ contains
           t_delta = t_delta_ai
        end if
     end if
-    ! Compute solution
     y_dim = size(y, 1)
     istats = 0
     t_cv = 0.0_rk
@@ -502,7 +522,6 @@ contains
     cur_pnt_idx = 1
     if (.not. (present(sol_no_t_o))) solution(1,  cur_pnt_idx) = t_cv
     solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
-!print *, size(solution, 2), lotsopnts, max_steps
     do 
        cur_step = cur_step + 1
        if (present(p_o)) then
@@ -553,6 +572,7 @@ contains
   !!
   !! My primary use case for this function is to create uniform sphere sweeps for constructive solid geometry applications.
   !!
+  !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
@@ -591,6 +611,7 @@ contains
   !! sol_y_idx_o ................. Index of y in solution.  Default: 2
   !! sol_no_t_o .................. When present means solution has no t values
   !! sol_no_dy_o ................. When present means solution has no dy values
+  !! @endverbatim
   !!
   subroutine steps_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
@@ -756,6 +777,7 @@ contains
   !!
   !! My primary use case for this function is to shrink down long steps for smoother curves/tubes in visualizations.
   !!
+  !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
@@ -786,6 +808,7 @@ contains
   !! sol_y_idx_o ................. Index of y in solution.  Default: 2
   !! sol_no_t_o .................. When present means solution has no t values
   !! sol_no_dy_o ................. When present means solution has no dy values
+  !! @endverbatim
   !!
   subroutine steps_sloppy_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
@@ -881,8 +904,9 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple adaptive steps with an embedded RK method using relatively traditional step size controls.
   !!
-  !! WARNING: I have not yet finalized the error estimate method.  /0 is possible when error_tol_abs_o = 0.
+  !! @warning I have not yet finalized the error estimate method.  /0 is possible when error_tol_abs_o = 0.
   !!
+  !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
@@ -934,6 +958,7 @@ contains
   !! sol_y_idx_o ................. Index of y in solution.  Default: 2
   !! sol_no_t_o .................. When present means solution has no t values
   !! sol_no_dy_o ................. When present means solution has no dy values
+  !! @endverbatim
   !! 
   subroutine steps_adapt_etab_nt(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
