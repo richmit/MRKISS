@@ -45,19 +45,21 @@ ignore_ws_cnt  = false
 ignore_ws_all  = false
 dump           = false
 ignore_non_num = false
+lines_matching = Regexp.new('.*')
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: float_diff.rb [options] file1 file2"
   opts.separator ""
   opts.separator "Options:"
-  opts.on("-h",         "--help",                   "Show this message")                           { puts opts; exit 1;       }
-  opts.on("-e epsilon", "--epsilon epsilon",        "Set floating point epsilon")                  { |v| epsilon=v.to_f;      }
-  opts.on("-D",         "--dump-diffs",             "Print string differences with .dump")         { |v| dump=true;           }
-  opts.on("-q",         "--brief",                  "Print just first difference")                 { |v| brief=true;          }
-  opts.on("-s",         "--report-identical-files", "Report identical files")                      { |v| identical=true;      }
-  opts.on("-Z",         "--ignore-trailing-space",  "ignore white space at line end")              { |v| ignore_ws_end=true;  }
-  opts.on("-b",         "--ignore-space-change",    "ignore changes in the amount of white space") { |v| ignore_ws_cnt=true;  }
-  opts.on("-w",         "--ignore-all-space",       "ignore all white space")                      { |v| ignore_ws_all=true;  }
-  opts.on("-a",         "--ignore-non-numeric",     "ignore non-numeric differences")              { |v| ignore_non_num=true; }
+  opts.on("-h",         "--help",                   "Show this message")                           { puts opts; exit 1;                }
+  opts.on("-e epsilon", "--epsilon epsilon",        "Set floating point epsilon")                  { |v| epsilon=v.to_f;               }
+  opts.on("-D",         "--dump-diffs",             "Print string differences with .dump")         { |v| dump=true;                    }
+  opts.on("-q",         "--brief",                  "Print just first difference")                 { |v| brief=true;                   }
+  opts.on("-s",         "--report-identical-files", "Report identical files")                      { |v| identical=true;               }
+  opts.on("-Z",         "--ignore-trailing-space",  "ignore white space at line end")              { |v| ignore_ws_end=true;           }
+  opts.on("-b",         "--ignore-space-change",    "ignore changes in the amount of white space") { |v| ignore_ws_cnt=true;           }
+  opts.on("-w",         "--ignore-all-space",       "ignore all white space")                      { |v| ignore_ws_all=true;           }
+  opts.on("-a",         "--ignore-non-numeric",     "ignore non-numeric differences")              { |v| ignore_non_num=true;          }
+  opts.on("-r regexp",  "--lines-matching regexp",  "Only compare matching lines")                 { |v| lines_matching=Regexp.new(v); }
   opts.separator ""
   opts.separator "Super simple file diff that ignores small differences in floating"
   opts.separator "point values.  A non-zero exit code is returned if the files are"
@@ -74,7 +76,7 @@ end
 
 file_lines = ARGV.map { |fname|
   open(fname, "r") do |file|
-    file.readlines()
+    file.readlines().select { |line| line.match(lines_matching) }
   end
 }
 
