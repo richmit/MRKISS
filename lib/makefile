@@ -61,7 +61,7 @@ TAGS : *.f90 mrkiss_solvers_nt.f90
 
 ##--------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Yea.  This is weird.  It's because we usually set MRKISS_PATH to ...  This makes the rule in include.mk fail if we say make mrkiss_solvers_nt.f90
-mrkiss_solvers_nt.f90 : mrkiss_solvers_wt.f90
+mrkiss_solvers_nt.f90 : mrkiss_solvers_wt.f90 wt2nt.sed
 	make ../lib/mrkiss_solvers_nt.f90
 
 ##--------------------------------------------------------------------------------------------------------------------------------------------------------------
