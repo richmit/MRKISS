@@ -360,7 +360,8 @@ contains
   !! @verbatim
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
-  !!                        - ????-???? .. Error in this routine
+  !!                        - 1314:1330 .. Error in this routine
+  !!                          - 1314 .. Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v
   !! y_at_t .............. The value of the function at t
   !! t ................... Vector to fill
   !! from_o .............. Starting value
@@ -402,7 +403,7 @@ contains
        from_v = from_o
        step_v = step_o
        if (abs((step_v * n_v) - (to_v - from_v)) > 1.0e-10_rk) then  !! TODO: Use epsilon here
-          status = 1
+          status = 1314
        else
           status = 0
        end if
@@ -419,8 +420,8 @@ contains
   !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
-  !!                                - ????-???? .. Error in this routine
-  !!                                               - ???? .. new_t_solution t value out of bounds
+  !!                                - 1331:1347 .. Error in this routine
+  !!                                   - 1331 ...... new_solution t value out of bounds
   !!                                - others ..... Other values are not allowed
   !! new_solution(:,:) ........... Array for new solution.  
   !!                                This array *must* have a populated t sequence in new_solution(1,:)
@@ -471,7 +472,7 @@ contains
        do while (t > old_solution(1, old_sol_idx))
           old_sol_idx = old_sol_idx + 1
           if (old_sol_idx > old_end) then
-             status = 10000
+             status = 1331
              return
           end if
        end do
