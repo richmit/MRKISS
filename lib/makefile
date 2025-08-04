@@ -53,18 +53,47 @@ MRKISS_PATH = ..
 include $(MRKISS_PATH)/make_includes/include.mk
 ################################################################################################################################################################
 
-TAGS : *.f90
+BROWSER = edge
+
+##--------------------------------------------------------------------------------------------------------------------------------------------------------------
+TAGS : *.f90 mrkiss_solvers_nt.f90
 	etags *.f90
 
-clean : clean_multi_mrkiss
-	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe
+##--------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Yea.  This is weird.  It's because we usually set MRKISS_PATH to ...  This makes the rule in include.mk fail if we say make mrkiss_solvers_nt.f90
+mrkiss_solvers_nt.f90 : mrkiss_solvers_wt.f90
+	make ../lib/mrkiss_solvers_nt.f90
 
+##--------------------------------------------------------------------------------------------------------------------------------------------------------------
 ../docs/dox/Doxyfile : Doxyfile *.f90
 	doxygen
 	cp Doxyfile ../docs/dox/Doxyfile
 
+.PHONY: dox
 dox : ../docs/dox/Doxyfile
 
+.PHONY: dox-deploy
 dox-deploy : ../docs/dox/Doxyfile $(HOME)/MJR/WWW/site/SS/MRKISS/doc-lib/Doxyfile
 	sh -c 'rsync -Fvrt --safe-links --chmod=Da+rx,a+rX --delete-excluded --delete ../docs/dox/ ~/MJR/WWW/site/SS/MRKISS/doc-lib/'
+
+.PHONY: dox-view
+dox-view : ../docs/dox/Doxyfile
+	$(BROWSER) ../docs/dox/html/index.html
+
+##--------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Do a deep clean, build all the modules, and finish with a normal clean.  If we get no errors, then things are good.
+.PHONY: test-build
+test-build : 
+	make clean_clean
+	make all_mrkiss_mod
+	make clean
+
+##--------------------------------------------------------------------------------------------------------------------------------------------------------------
+.PHONY: clean
+clean : clean_multi_mrkiss
+	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe
+
+.PHONY: clean_clean
+clean_clean : clean
+	rm -f mrkiss_solvers_nt.f90
 
