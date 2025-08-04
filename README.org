@@ -5,13 +5,16 @@
 
 This library powers the [[https://richmit.github.io/StrangeAttractorZoo/][Strange Attractor Zoo]].
 
- - [[https://richmit.github.io/MRKISS/index.html][Documentation]]
- - Examples
+For an overview of MRKISS and some tutorial information, check out the [[https://richmit.github.io/MRKISS/index.html][documentation]].
+
+
+A couple of the examples in the repository have longer explanatory documentation:
    - [[https://richmit.github.io/MRKISS/ex_three_body.html][Three Body Problem]]
    - [[https://richmit.github.io/MRKISS/ex_lorenz.html][Lornez Attracter]]
- - [[https://richmit.github.io/MRKISS/roadmap.html][Roadmap & Status]]
-   - TLDR: I've completed most of the functionality I was looking for,
-     and I don't foresee any API changes when I add the few items left
-     on my list.  Test coverage solid for the low level bits, but I
-     plan on improving coverage for the high level API. I also have a
-     few examples I would like to add.
+
+Generated [[https://www.mitchr.me/SS/MRKISS/doc-lib/html/index.html][API documentation]] is viable as well.
+
+Development News:
+  - [[https://richmit.github.io/MRKISS/changelog.html][changelog]]
+  - [[https://richmit.github.io/MRKISS/roadmap.html][roadmap]]
+

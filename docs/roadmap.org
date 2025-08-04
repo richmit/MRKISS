@@ -57,12 +57,12 @@ have a few functionality improvements I want to implement, but I don't forsee an
    - Run parallel across cores using OpenMP
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
- - Release 1.0
+ - +Release 2025-08-04+ *DONE*
    - +Add doxygen generation+ *DONE*
    - +Create web site for doxygen docs+ *DONE*
    - +Add verison constants to mrkiss_config+ *DONE*
    - +Create doxygen deployment rules+ *DONE*
-   - Tag script
+   - +Tag script+ *DONE*
    - +Create next-tag.org+ *DONE*
    - +Create changelog+ *DONE*
  - +Hermite Interpolation+ *DONE*

@@ -53,20 +53,29 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Known Issues
     - N/A
   - API breaking Changes
-    - N/A
+    - Removed 'version' from mrkiss_config
   - Deprecated functionality
     - N/A
   - New functionality
     - N/A
   - Documentation
-    - N/A
+    - Doxygen links in main README & mainpage.
+    - Better mainpage markup
+    - Master list of status assignments
   - Examples
     - New
       - N/A
     - Updated
       - N/A
+  - Tests
+    - New
+      - tests/test_rk4_frog_vs_steps: Compare frog output to last line of steps
+      - lib/test-build: Test code generation & module build
+    - Updated
+      - N/A
   - Miscellaneous
-    - N/A
+    - Release automation complete
+    - Added makefile to scripts directory to update them from primary copies
 
 * 2025-08-04: Initial Release
 :PROPERTIES:
@@ -128,6 +137,11 @@ file contains a title line and the contents of the section above named
   - Documentation
     - N/A
   - Examples
+    - New
+      - N/A
+    - Updated
+      - N/A
+  - Tests
     - New
       - N/A
     - Updated

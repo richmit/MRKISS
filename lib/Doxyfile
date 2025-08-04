@@ -5,8 +5,8 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "MRKISS"
-PROJECT_NUMBER         = 2025-08-04
-PROJECT_BRIEF          = "A *tiny* library with *zero dependencies* that aims to make it easy to *use* and *experiment with* explicit Runge-Kutta methods."
+PROJECT_NUMBER         = 2025-08-04+
+PROJECT_BRIEF          = "A tiny library with zero dependencies that aims to make it easy to use & experiment with explicit Runge-Kutta methods."
 PROJECT_LOGO           = ../docs/logo/MRKISS_logo_bg_120x60.png
 PROJECT_ICON           =
 OUTPUT_DIRECTORY       = ../docs/dox/
@@ -136,56 +136,7 @@ WARN_LOGFILE           =
 INPUT                  =
 INPUT_ENCODING         = UTF-8
 INPUT_FILE_ENCODING    =
-FILE_PATTERNS          = *.c \
-                         *.cc \
-                         *.cxx \
-                         *.cxxm \
-                         *.cpp \
-                         *.cppm \
-                         *.ccm \
-                         *.c++ \
-                         *.c++m \
-                         *.java \
-                         *.ii \
-                         *.ixx \
-                         *.ipp \
-                         *.i++ \
-                         *.inl \
-                         *.idl \
-                         *.ddl \
-                         *.odl \
-                         *.h \
-                         *.hh \
-                         *.hxx \
-                         *.hpp \
-                         *.h++ \
-                         *.l \
-                         *.cs \
-                         *.d \
-                         *.php \
-                         *.php4 \
-                         *.php5 \
-                         *.phtml \
-                         *.inc \
-                         *.m \
-                         *.markdown \
-                         *.md \
-                         *.mm \
-                         *.dox \
-                         *.py \
-                         *.pyw \
-                         *.f90 \
-                         *.f95 \
-                         *.f03 \
-                         *.f08 \
-                         *.f18 \
-                         *.f \
-                         *.for \
-                         *.vhd \
-                         *.vhdl \
-                         *.ucf \
-                         *.qsf \
-                         *.ice
+FILE_PATTERNS          = *.f90
 RECURSIVE              = NO
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
@@ -296,7 +247,7 @@ EXTRA_SEARCH_MAPPINGS  =
 #---------------------------------------------------------------------------
 # Configuration options related to the LaTeX output
 #---------------------------------------------------------------------------
-GENERATE_LATEX         = YES
+GENERATE_LATEX         = NO
 LATEX_OUTPUT           = latex
 LATEX_CMD_NAME         =
 MAKEINDEX_CMD_NAME     = makeindex
