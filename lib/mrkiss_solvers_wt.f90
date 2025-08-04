@@ -466,7 +466,6 @@ contains
   !! sol_no_t_o .................. When present means solution has no t values
   !! sol_no_dy_o ................. When present means solution has no dy values
   !! @endverbatim
-  !! @endverbatim
   !!
   subroutine steps_fixed_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
                                  t_end_o, t_max_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o)
