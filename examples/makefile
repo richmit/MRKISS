@@ -75,7 +75,7 @@ three_body_clean :
 
 .PHONY: three_body_test
 three_body_test: $(THREE_BODY_CSVS)
-	$(foreach dir,$^,$(FD) $(dir) tdata/$(dir); )
+	$(foreach fil,$^,$(FD) -q $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -123,7 +123,7 @@ lorenz_clean :
 
 .PHONY: lorenz_test
 lorenz_test: $(LORENZ_CSVS)
-	$(foreach dir,$^,$(FD) $(dir) tdata/$(dir); )
+	$(foreach fil,$^,$(FD) -q $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -144,7 +144,7 @@ brusselator_clean :
 
 .PHONY: brusselator_test
 brusselator_test: brusselator.csv
-	$(FD) brusselator.csv tdata/brusselator.csv
+	$(FD) -q brusselator.csv tdata/brusselator.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 minimal : minimal.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -161,7 +161,7 @@ minimal_clean :
 
 .PHONY: minimal_test
 minimal_test: minimal.csv
-	$(FD) minimal.csv tdata/minimal.csv
+	$(FD) -q minimal.csv tdata/minimal.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 tests : minimal_test brusselator_test lorenz_test three_body_test

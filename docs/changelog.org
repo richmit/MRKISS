@@ -54,6 +54,13 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - N/A
   - API breaking Changes
     - Removed 'version' from mrkiss_config
+    - sol_no_dy_o & sol_no_t_o arguments removed
+      - Replaced by sol_w_dy_o & sol_w_t_o
+      - Old arguments were integer, new ones are logical
+      - Old argument values were not used, just present().
+      - Usage is inverted (went from without to with)
+    - no_bisect_error_o is not logical, and it's value matters.
+    - Richardson extrapolation used in steps_fixed_stab_wt() when when p_o>0 -- not just present().
   - Deprecated functionality
     - N/A
   - New functionality

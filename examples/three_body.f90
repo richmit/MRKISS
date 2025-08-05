@@ -64,7 +64,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
-  use            :: mrkiss_config,                  only: rk, ik, t_delta_tiny
+  use            :: mrkiss_config,                  only: rk, ik, bk, t_delta_tiny
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
   use            :: mrkiss_utils,                   only: print_solution, seq, interpolate_solution
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
@@ -168,18 +168,18 @@ program three_body
   print '(a)',       "Adaptive hermite interpolation run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
-  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv", sol_no_dy_o=1)
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv", sol_w_dy_o=.false._bk)
 
   call system_clock(c_beg)
   isolution = 0
   call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
   ! Note we must provide y_dim_o because solution really contains dy.  
-  call interpolate_solution(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_no_dy_o=1)
+  call interpolate_solution(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_w_dy_o=.false._bk)
   call system_clock(c_end)
   print '(a)',       "Adaptive linear interpolation run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
-  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv", sol_no_dy_o=1)
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv", sol_w_dy_o=.false._bk)
   ! END: steps_adapt_int
 
   ! BEGIN: steps_adapt_etab_wt-fix-delta-steps

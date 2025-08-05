@@ -36,13 +36,14 @@
 !> Configuration for MRKISS == MR RK KISS == Mitch Richling's Runge-Kutta Keep It Simple Stupid
 !!
 module mrkiss_config
-  use, intrinsic:: iso_c_binding, only: c_int32_t, c_double, c_float
+  use, intrinsic:: iso_c_binding, only: c_int32_t, c_double, c_float, c_bool
   implicit none
   private
 
   ! Real & integer types for externally viable interfaces and arguments
   integer,          parameter, public :: ik                 = c_int32_t                       !< Integer kinds used in interfaces
   integer,          parameter, public :: rk                 = c_double                        !< Real kind used in interfaces
+  integer,          parameter, public :: bk                 = c_bool                          !< Integer kind for boolean
 
   ! Absolute constants
   real(kind=rk),    parameter, public :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero

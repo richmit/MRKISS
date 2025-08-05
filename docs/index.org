@@ -518,10 +518,10 @@ The first several arguments are common across the higher level solvers.
   - ~solution~ :: Array for solution.  \\
     - Each *column* is a solution containing, by default, \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).
     - By default the first column contains \(t\).  
-      - The inclusion of \(t\) may be suppressed via ~sol_no_t_o~
+      - The inclusion of \(t\) may be suppressed via ~sol_w_t_o=0~
     - The coordinates of \(\mathbf{y}\) start in column ~sol_y_idx_o~, by default ~2~. 
     - By default the coordinates \(\mathbf{y'}\) are included, and begin immediatly after the coordinates of \(\mathbf{y}\). 
-      - The inclusion of the derivatives may be suppressed via ~sol_no_dy_o~.
+      - The inclusion of the derivatives may be suppressed via ~sol_w_dy_o=0~.
 
 *** The IVP
 :PROPERTIES:

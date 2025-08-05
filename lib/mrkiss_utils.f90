@@ -64,9 +64,9 @@ contains
   !!                                 - 1153 .. Could not close file         
   !!                 - others ..... Other values are not allowed
   !! solution ..... Matrix with solution values
-  !!                 t ... row 1 unless sol_no_t_o
+  !!                 t ... row 1 unless sol_w_t_o==.false.
   !!                 y ... rows sol_y_idx:(sol_y_idx+y_dim)
-  !!                 dy .. rows (sol_y_idx+y_dim+1):(sol_y_idx+2*y_dim+1) unless sol_no_dy_o
+  !!                 dy .. rows (sol_y_idx+y_dim+1):(sol_y_idx+2*y_dim+1) unless sol_w_dy_o=.false.
   !! filename_o ... Filename to which we print.  Default: NONE
   !!                If not present, then output will be to output_unit (STDOUT).  
   !! digits_o ..... Number of digits for floating point numbers.  Default: 15
@@ -78,16 +78,16 @@ contains
   !! separator_o .. String to place between fields.  Default: ',' if width_o missing, and ' ' otherwise.
   !! t_min_o ...... Print only solutions with time values >= t_min_o
   !! t_max_o ...... Print only solutions with time values <= t_min_o
-  !! y_dim ........ Number of elements in y.  Infered from solution, sol_no_t_o, & sol_no_dy_o when sol_y_idx_o==1
+  !! y_dim ........ Number of elements in y.  Infered from solution, sol_w_t_o, & sol_w_dy_o when sol_y_idx_o==2
   !! sol_y_idx_o .. Index of y in solution.  Default: 2
-  !! sol_no_t_o ... When present means solution has no t values
-  !! sol_no_dy_o .. When present means solution has no dy values
+  !! sol_w_t_o .... Solution has t when .true.  Default: .true.
+  !! sol_w_dy_o ... Solution has dy when .true.  Default: .true.
   !! @endverbatim
   !! 
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o, &
-                            t_min_o, t_max_o, y_dim_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o)
+                            t_min_o, t_max_o, y_dim_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: rk, ik
+    use            :: mrkiss_config,   only: rk, ik, bk
     implicit none
     ! Arguments
     integer(kind=ik), intent(out)          :: status
@@ -95,9 +95,11 @@ contains
     character(len=*), intent(in), optional :: filename_o, separator_o
     integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o, no_titles_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
-    integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o
+    integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o
+    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o
     ! Local variables
     integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx
+    logical(kind=bk)                       :: sol_w_t, sol_w_dy
     integer(kind=ik)                       :: i, out_io_stat, out_io_unit
     character(len=:), allocatable          :: fmt, separator
     character(len=512)                     :: digits_str, width_str, tmp_str
@@ -123,12 +125,16 @@ contains
     end if
     sol_y_idx = 2
     if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
+    sol_w_t = .true._bk
+    if (present(sol_w_t_o)) sol_w_t = sol_w_t_o
+    sol_w_dy = .true._bk
+    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     if (present(y_dim_o)) then
        y_dim = y_dim_o
     else ! If solution contains exactily one solution set with no extra space and sol_y_idx_o==1, then we can guess y_dim
        y_dim = size(solution, 1)
-       if ( .not. (present(sol_no_t_o)))  y_dim = y_dim - 1
-       if ( .not. (present(sol_no_dy_o))) y_dim = y_dim / 2
+       if (sol_w_t)  y_dim = y_dim - 1
+       if (sol_w_dy) y_dim = y_dim / 2
     end if
     ! Create string from for format bits
     write (digits_str, '(i0)') digits
@@ -147,14 +153,14 @@ contains
     if ( .not. (present(no_titles_o))) then
        if (present(width_o)) then
           write(out_io_unit, fmt='(a' // trim(width_str) // ')', advance="no") "i"
-          if ( .not. (present(sol_no_t_o))) then
+          if (sol_w_t) then
              write(out_io_unit, fmt='("' // separator // '",a' // trim(width_str) // ')', advance="no") "t" 
           end if
           do i=1,y_dim
              write (tmp_str, '("y",i0)') i
              write(out_io_unit, fmt='("' // separator // '",a' // trim(width_str) // ')', advance="no") trim(tmp_str)
           end do
-       if ( .not. (present(sol_no_dy_o))) then
+       if (sol_w_dy) then
           do i=1,y_dim
              write (tmp_str, '("dy",i0)') i
              write(out_io_unit, fmt='("' // separator // '",a' // trim(width_str) // ')', advance="no") trim(tmp_str)
@@ -162,13 +168,13 @@ contains
        end if
        else
           write(out_io_unit, fmt='(a)', advance="no") "i"
-          if ( .not. (present(sol_no_t_o))) then
+          if (sol_w_t) then
              write(out_io_unit, fmt='("' // separator // '",a)', advance="no") "t" 
           end if
           do i=1,y_dim
              write(out_io_unit, fmt='("' // separator // '","y",i0)', advance="no") i
           end do
-          if ( .not. (present(sol_no_dy_o))) then
+          if (sol_w_dy) then
              do i=1,y_dim
                 write(out_io_unit, fmt='("' // separator // '","dy",i0)', advance="no") i
              end do
@@ -177,8 +183,8 @@ contains
        write(out_io_unit, fmt='()')
     end if
     i = y_dim
-    if ( .not. (present(sol_no_t_o)))  i = i + 1
-    if ( .not. (present(sol_no_dy_o))) i = i + y_dim
+    if (sol_w_t)  i = i + 1
+    if (sol_w_dy) i = i + y_dim
     fmt = ('(i' // trim(width_str) // repeat(',"' // separator // '",' // 'f' // trim(width_str) // '.' // trim(digits_str), i) // ')')
     do i=start_idx,end_idx,step
        if (present(t_min_o)) then
@@ -187,17 +193,17 @@ contains
        if (present(t_max_o)) then
           if (solution(1, i) > t_max_o) cycle
        end if
-       if (present(sol_no_t_o)) then
-          if (present(sol_no_dy_o)) then
-             write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+       if (sol_w_t) then
+          if (sol_w_dy) then
+             write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
           else
-             write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
           end if
        else
-          if (present(sol_no_dy_o)) then
-             write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+          if (sol_w_dy) then
+             write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
           else
-             write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
           end if
        end if
     end do
@@ -227,25 +233,27 @@ contains
   !! start_o ............. Starting index to print in solution. Default: 1
   !! end_o ............... Ending index to print in solution.  Default: Number of columns in solution.
   !! sol_y_idx_o ......... Index of y in solution.  Default: 2
-  !! sol_no_t_o .......... solution has no t values
-  !! sol_no_dy_o ......... solution has no dy values
+  !! sol_w_t_o ........... When .false. solution has no t values
+  !! sol_w_dy_o .......... When .false. solution has no dy values
   !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation
   !! filename_o .......... Filename to which we print.  Default: NONE
   !!                       If not present, then output will be to output_unit (STDOUT).  
   !! @endverbatim
   !! 
-  subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o, y_delta_len_idxs_o)
+  subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o, y_delta_len_idxs_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: rk, ik
+    use            :: mrkiss_config,   only: rk, ik, bk
     implicit none
     ! Arguments
     integer(kind=ik), intent(out)          :: status
     real(kind=rk),    intent(in)           :: solution(:,:)
     character(len=*), intent(in), optional :: filename_o
-    integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o, sol_no_t_o, sol_no_dy_o, y_delta_len_idxs_o(:), start_o, end_o
+    integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o, y_delta_len_idxs_o(:), start_o, end_o
+    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o
     ! Local variables
     integer(kind=ik)                       :: y_dim, sol_y_idx, end_idx, start_idx
     integer(kind=ik)                       :: i, out_io_stat, out_io_unit
+    logical(kind=bk)                        :: sol_w_t, sol_w_dy
     real(kind=rk)                          :: t_max, t_min, t_delta_max, t_delta_min, y_delta_len_max, y_delta_len_min
     real(kind=rk), allocatable             :: dy_max(:), dy_min(:), y_max(:), y_min(:)
     real(kind=rk), allocatable             :: y_delta_max(:), y_delta_min(:)
@@ -256,19 +264,23 @@ contains
     if (present(end_o)) end_idx = min(end_o, size(solution, 2))
     sol_y_idx = 2
     if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
+    sol_w_t = .true._bk
+    if (present(sol_w_t_o)) sol_w_t = sol_w_t_o
+    sol_w_dy = .true._bk
+    if (sol_w_dy_o) sol_w_dy = sol_w_dy_o
     if (present(y_dim_o)) then
        y_dim = y_dim_o
     else ! If solution contains exactily one solution set with no extra columns and sol_y_idx_o==1, then we can guess y_dim
        y_dim = size(solution, 1)
-       if ( .not. (present(sol_no_t_o)))  y_dim = y_dim - 1
-       if ( .not. (present(sol_no_dy_o))) y_dim = y_dim / 2
+       if (sol_w_t)  y_dim = y_dim - 1
+       if (sol_w_dy) y_dim = y_dim / 2
     end if
     ! Compute 
     if(end_idx - start_idx > 1) then
-       if (present(sol_no_t_o)) then
-          t_delta_max = 0.0_rk
-       else
+       if (sol_w_t) then
           t_delta_max =  abs(solution(1, start_idx+1) - solution(1, start_idx))
+       else
+          t_delta_max = 0.0_rk
        end if
        t_delta_min =  t_delta_max
        if (present(y_delta_len_idxs_o)) then
@@ -282,13 +294,13 @@ contains
     end if
     y_max =  solution(sol_y_idx:(sol_y_idx+y_dim-1), start_idx)
     y_min =  y_max
-    if (present(sol_no_dy_o)) then
-       dy_max = 0.0_rk
-    else
+    if (sol_w_dy) then
        dy_max = solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), start_idx)
+    else
+       dy_max = 0.0_rk
     end if
     dy_min = dy_max
-    if ( .not. (present(sol_no_t_o))) then
+    if (sol_w_t) then
        t_max =  solution(1, start_idx)
     else
        t_max = 0.0_rk
@@ -297,11 +309,11 @@ contains
     do i=(start_idx+1),end_idx
        y_max =  max(y_max, solution(sol_y_idx:(sol_y_idx+y_dim-1), i))
        y_min =  min(y_min, solution(sol_y_idx:(sol_y_idx+y_dim-1), i))
-       if ( .not. (present(sol_no_dy_o))) then
+       if (sol_w_dy) then
           dy_max = max(dy_max, solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), i))
           dy_min = min(dy_min, solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), i))
        end if
-       if ( .not. (present(sol_no_t_o))) then
+       if (sol_w_t) then
           t_max =  max(t_max, solution(1, i))
           t_min =  min(t_min, solution(1, i))
           t_delta_max =  max(t_delta_max, abs(solution(1, i) - solution(1, i-1)))
@@ -434,21 +446,23 @@ contains
   !! new_sol_y_idx_o ............. Index of y in new_solution.  Default: 2
   !! old_sol_y_idx_o ............. Index of y in old_solution.  Default: 2
   !! end_o ....................... The number of solutions in old_solution.  Default infered from size of old_solution.
-  !! sol_no_dy_o ................. old_solution has no dy data.
+  !! sol_w_dy_o .................. When .false. old_solution has no dy data.
   !!                               If dy data is present then Hermite interpolation is used.  
   !!                               Without dy, linear interpolation is used.
   !! @endverbatim
   !!
-  subroutine interpolate_solution(status, new_solution, old_solution, new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o, sol_no_dy_o)
-    use :: mrkiss_config, only: rk, ik
+  subroutine interpolate_solution(status, new_solution, old_solution, new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o, sol_w_dy_o)
+    use :: mrkiss_config, only: rk, ik, bk
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out)   :: status
     real(kind=rk),              intent(inout) :: new_solution(:,:)
     real(kind=rk),              intent(out)   :: old_solution(:,:)
-    integer(kind=ik), optional, intent(in)    :: new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o, sol_no_dy_o
+    integer(kind=ik), optional, intent(in)    :: new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o
+    logical(kind=bk), optional, intent(in)    :: sol_w_dy_o
     ! Variables
     integer(kind=ik)                          :: new_sol_idx, old_sol_idx, max_idx, new_sol_y_idx, old_sol_y_idx, old_end, y_dim
+    logical(kind=bk)                          :: sol_w_dy
     real(kind=rk)                             :: t, t0, t1, tu, td
     real(kind=rk), allocatable                :: y0(:), y1(:), dy0(:), dy1(:), yat(:)
     ! Process Arguments
@@ -458,12 +472,14 @@ contains
     if (present(new_sol_y_idx_o)) new_sol_y_idx = new_sol_y_idx_o
     old_sol_y_idx = 2
     if (present(old_sol_y_idx_o)) old_sol_y_idx = old_sol_y_idx_o
+    sol_w_dy = .true._bk
+    if (sol_w_dy_o) sol_w_dy = sol_w_dy_o
     if (present(y_dim_o)) then
        y_dim = y_dim_o
     else ! The old_solution *must* have both t
        y_dim = size(old_solution, 1)
        y_dim = y_dim - 1
-       if ( .not. (present(sol_no_dy_o))) y_dim = y_dim / 2
+       if (sol_w_dy) y_dim = y_dim / 2
     end if
     ! Compute value
     max_idx = size(new_solution, 2)
@@ -483,13 +499,13 @@ contains
        y0 = old_solution(old_sol_y_idx:(old_sol_y_idx+y_dim-1), old_sol_idx-1)
        y1 = old_solution(old_sol_y_idx:(old_sol_y_idx+y_dim-1), old_sol_idx)
        td = (t1 - t0)
-       if (present(sol_no_dy_o)) then 
-          yat = (y0 * (t1 - t) + y1 * (t - t0)) / td
-       else
+       if (sol_w_dy) then 
           dy0 = td * old_solution((old_sol_y_idx+y_dim):(old_sol_y_idx+2*y_dim-1), old_sol_idx-1)
           dy1 = td * old_solution((old_sol_y_idx+y_dim):(old_sol_y_idx+2*y_dim-1), old_sol_idx)
           tu  = (t - t0) / td
           yat = tu * (tu * (tu * (2 * y0 + dy0 - 2 * y1 + dy1) - 2 * dy0 - 3 * y0 + 3 * y1 - dy1) + dy0) + y0
+       else
+          yat = (y0 * (t1 - t) + y1 * (t - t0)) / td
        end if
        new_solution(new_sol_y_idx:(new_sol_y_idx+y_dim-1), new_sol_idx) = yat
     end do

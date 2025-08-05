@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-05 Tue 12:57 -->
+<!-- 2025-08-05 Tue 13:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-05 12:57:32</i></td>
+<td class="org-left"><i>2025-08-05 13:30:11</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-05 12:57:33</i></td>
+<td class="org-left"><i>2025-08-05 13:30:13</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orge4211bf">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#org7e13076">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orgb9ff236">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#orgd4c1cf1">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orge32fa95">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org145de30">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -503,8 +503,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orge4211bf" class="outline-2">
-<h2 id="orge4211bf"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-org7e13076" class="outline-2">
+<h2 id="org7e13076"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -759,8 +759,8 @@ These worksheets contain the coefficients for the method's Butcher tableau, code
 method's stability region.
 </p>
 </div>
-<div id="outline-container-orgb9ff236" class="outline-3">
-<h3 id="orgb9ff236"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orge32fa95" class="outline-3">
+<h3 id="orge32fa95"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -849,8 +849,8 @@ method's stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-orgd4c1cf1" class="outline-3">
-<h3 id="orgd4c1cf1"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org145de30" class="outline-3">
+<h3 id="org145de30"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1106,12 +1106,12 @@ The first several arguments are common across the higher level solvers.
 <li>Each <b>column</b> is a solution containing, by default, \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).</li>
 <li>By default the first column contains \(t\).  
 <ul class="org-ul">
-<li>The inclusion of \(t\) may be suppressed via <code>sol_no_t_o</code></li>
+<li>The inclusion of \(t\) may be suppressed via <code>sol_w_t_o=0</code></li>
 </ul></li>
 <li>The coordinates of \(\mathbf{y}\) start in column <code>sol_y_idx_o</code>, by default <code>2</code>.</li>
 <li>By default the coordinates \(\mathbf{y'}\) are included, and begin immediatly after the coordinates of \(\mathbf{y}\). 
 <ul class="org-ul">
-<li>The inclusion of the derivatives may be suppressed via <code>sol_no_dy_o</code>.</li>
+<li>The inclusion of the derivatives may be suppressed via <code>sol_w_dy_o=0</code>.</li>
 </ul></li>
 </ul></dd>
 </dl>
@@ -1247,7 +1247,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org715e430">
+<pre class="example" id="org6a6c43d">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1267,7 +1267,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="org69413cf">
+<pre class="example" id="orgd302627">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1285,7 +1285,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org2d7f92a" class="figure">
+<div id="orgeb8755a" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1565,7 +1565,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgcbb6bce" class="figure">
+<div id="org79c163a" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1614,7 +1614,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgd99efa3" class="figure">
+<div id="org345befd" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1638,7 +1638,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgc616873" class="figure">
+<div id="org3fcd904" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>

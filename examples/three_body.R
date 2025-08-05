@@ -61,15 +61,17 @@ gp <- ggplot() +
   coord_fixed()
 ggsave(filename='three_body_lin_interp_adapt_path.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
-gp <- ggplot() + 
-  geom_point(aes(x=ftDat$t, y=abs(aiDat$y1-ftDat$y1), col='x1'), size=0.1) +
-  geom_point(aes(x=ftDat$t, y=abs(aiDat$y2-ftDat$y2), col='x2'), size=0.1) +
-  geom_point(aes(x=ftDat$t, y=abs(aiDat$y3-ftDat$y3), col='v1'), size=0.1) +
-  geom_point(aes(x=ftDat$t, y=abs(aiDat$y4-ftDat$y4), col='v2'), size=0.1) +
-  scale_colour_manual(values=c("x1"="blue", "x2"="lightblue", "v1"="pink", "v2"="darkred"),
+gp <- ggplot(rbind(data.table(t=ftDat$t, aerr=abs(aiDat$y1-ftDat$y1), bse=abs(ftDat$y1) , var='x1'),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y2-ftDat$y2), bse=abs(ftDat$y2) , var='x2'),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y3-ftDat$y3), bse=abs(ftDat$y3) , var='v1'),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y4-ftDat$y4), bse=abs(ftDat$y4) , var='v2')) %>%
+             filter(aerr>0 & bse>0) %>%
+             mutate(rerr=aerr/bse)) + 
+  geom_point(aes(x=t, y=rerr, col=var), shape=16, alpha=0.05, size=3.1) +
+  scale_colour_manual(values=c("x1"="darkgreen", "x2"="darkblue", "v1"="brown", "v2"="darkred"),
                       labels=c(expression(x[1]), expression(x[2]), expression(v[1]), expression(v[2]))) +
   scale_y_log10() +
-  labs(title='Interpolated Adaptive Solution', subtitle='Error', x=expression(t), y='error', col='') 
+  labs(title='Interpolated Adaptive Solution', subtitle='Relative Error', x=expression(t), y='error', col='') 
 ggsave(filename='three_body_interp_adapt_error.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
 gp <- ggplot() + 

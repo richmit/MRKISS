@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-05 Tue 10:50 -->
+<!-- 2025-08-05 Tue 15:53 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS changelog</title>
@@ -232,12 +232,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-05 10:50:01</i></td>
+<td class="org-left"><i>2025-08-05 15:53:51</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-05 10:50:24</i></td>
+<td class="org-left"><i>2025-08-05 15:53:52</i></td>
 </tr>
 </tbody>
 </table>
@@ -269,6 +269,15 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <li>API breaking Changes
 <ul class="org-ul">
 <li>Removed 'version' from mrkiss_config</li>
+<li>sol_no_dy_o &amp; sol_no_t_o arguments removed
+<ul class="org-ul">
+<li>Replaced by sol_w_dy_o &amp; sol_w_t_o</li>
+<li>Old arguments were integer, new ones are logical</li>
+<li>Old argument values were not used, just present().</li>
+<li>Usage is inverted (went from without to with)</li>
+</ul></li>
+<li>no_bisect_error_o is not logical, and it's value matters.</li>
+<li>Richardson extrapolation used in steps_fixed_stab_wt() when when p_o&gt;0 &#x2013; not just present().</li>
 </ul></li>
 <li>Deprecated functionality
 <ul class="org-ul">
