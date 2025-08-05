@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-03 Sun 10:09 -->
+<!-- 2025-08-05 Tue 12:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-03 10:09:46</i></td>
+<td class="org-left"><i>2025-08-05 12:57:32</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-03 10:09:48</i></td>
+<td class="org-left"><i>2025-08-05 12:57:33</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org658af30">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orge4211bf">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orgbacf994">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org5d463c5">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orgb9ff236">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#orgd4c1cf1">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -503,8 +503,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-org658af30" class="outline-2">
-<h2 id="org658af30"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orge4211bf" class="outline-2">
+<h2 id="orge4211bf"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -669,8 +669,8 @@ The values of <code>p1</code> and <code>p2</code> must be a positive integers.
 <div class="outline-text-2" id="text-predefinedrk">
 <p>
 <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides several predefined methods in modules found in the
-"<a href="https://github.com/richmit/MRKISS/blob/master/lib"><code>lib/</code></a>" directory.  Each module defines a single tableau via parameters with names mirroring the
-Butcher Tableau arguments documented in the <a href="#def-method">previous section</a>.  In addition, these modules also have a parameter containing the number of
+"<a href="https://github.com/richmit/MRKISS/blob/master/lib"><code>MRKISS/lib/</code></a>" directory.  Each module defines a single tableau via parameters with names mirroring
+the Butcher Tableau arguments documented in the <a href="#def-method">previous section</a>.  In addition, these modules also have a parameter containing the number of
 stages for the overall method and the number of stages for any embedded method that differs from the overall method.
 </p>
 
@@ -681,8 +681,8 @@ stages for the overall method and the number of stages for any embedded method t
 </ul>
 
 <p>
-In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same
-naming conventions.  See <a href="https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90"><code>mrkiss_eerk_cash_karp_5_4.f90</code></a> for an example.
+In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same naming
+conventions.  See <a href="https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90"><code>mrkiss_eerk_cash_karp_5_4.f90</code></a> for an example.
 </p>
 
 <p>
@@ -754,13 +754,13 @@ extrapolation</i>.  Note that each of the methods in an embedded Butcher tableau
 
 <p>
 In addition to the module files, several maple worksheets may be found in the
-"<a href="https://github.com/richmit/MRKISS/blob/master/rk_methods_maple"><code>rk_methods_maple/</code></a>" directory.  The filenames mirror the names of the modules.  These
-worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the method's
-stability region.
+"<a href="https://github.com/richmit/MRKISS/blob/master/rk_methods_maple"><code>MRKISS/rk_methods_maple/</code></a>" directory.  The filenames mirror the names of the modules.
+These worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the
+method's stability region.
 </p>
 </div>
-<div id="outline-container-orgbacf994" class="outline-3">
-<h3 id="orgbacf994"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orgb9ff236" class="outline-3">
+<h3 id="orgb9ff236"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -849,8 +849,8 @@ stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org5d463c5" class="outline-3">
-<h3 id="org5d463c5"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-orgd4c1cf1" class="outline-3">
+<h3 id="orgd4c1cf1"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1057,17 +1057,24 @@ of higher level routines to indicate an error condition.
 <li>These last two could be achieved with the programmable step processing and bisection features, but these requirements are so common that is convenient
 to have them directly available.</li>
 </ul></dd>
-<dt><code>steps_fixed_stab_*t()</code> uses fixed time steps</dt><dd><ul class="org-ul">
-<li>Solution points separated by fixed time steps allow animations of the solution to naturally display velocity.</li>
+<dt><code>steps_fixed_stab_*t()</code> uses fixed \(\Delta{t}\) steps</dt><dd><ul class="org-ul">
 <li>This is a good place to start when writing a custom solver.</li>
 <li>With most modern ODE packages, this would be done with interpolation.</li>
 <li>This routine has the option to use Richardson extrapolation.</li>
+<li>Most common use: curve evolution animations that naturally display velocity.</li>
 </ul></dd>
-<dt><code>steps_condy_stab_*t()</code> uses fixed (y-space) steps</dt><dd><ul class="org-ul">
-<li>Produce solution points separated by fixed deltas in y-space, or some subset of y-space.</li>
+<dt><code>steps_condy_stab_*t()</code> uses fixed \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
+<li>Produce solution points separated by fixed deltas in \(\Delta{\mathbf{y}}\)-space, or some subset of \(\Delta{\mathbf{y}}\)-space.</li>
 <li>This is a good place to start when writing a custom solver with a bisection step.</li>
-<li>A parametric plot of the first two components of a solution looks better when the points are uniformly separated.</li>
 <li>With most modern ODE packages, this would be done with interpolation.</li>
+<li>Most common use: parametric plots, parametric tube plots, and sphere sweeps.</li>
+</ul></dd>
+<dt><code>steps_sloppy_condy_stab_*t()</code> adjusts \(\Delta{t}\) to <b>approximate</b> \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
+<li>Much like <code>steps_condy_stab_*t()</code> in practice but faster and less precise.</li>
+<li>Computes a test step and then adjusts \(\Delta{t}\) in proportion to the ratio of the desired length vs test length.</li>
+<li>This method has no guarantee for correctness, but generally works well in practice.</li>
+<li>Can operate on every step or just steps that are too long.</li>
+<li>Most common use: <code>steps_fixed_stab_*t()</code> results have a few steps that are "too long"</li>
 </ul></dd>
 </dl>
 </div>
@@ -1095,9 +1102,18 @@ The first several arguments are common across the higher level solvers.
 <li><code>istats(8)</code>: number of times bisection failed because target was not contained</li>
 </ul></dd>
 <dt><code>solution</code></dt><dd>Array for solution.  <br />
-Each <b>column</b> is a solution.  By default each column contains \(t\), the coordinates of <code>y</code>, and the derivatives.  The coordinates of <code>y</code>
-start in column <code>sol_y_idx_o</code>, by default <code>2</code>. The inclusion of \(t\) may be suppressed via <code>sol_no_t_o</code>, and the inclusion of the derivatives
-may be suppressed via <code>sol_no_dy_o</code>.</dd>
+<ul class="org-ul">
+<li>Each <b>column</b> is a solution containing, by default, \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).</li>
+<li>By default the first column contains \(t\).  
+<ul class="org-ul">
+<li>The inclusion of \(t\) may be suppressed via <code>sol_no_t_o</code></li>
+</ul></li>
+<li>The coordinates of \(\mathbf{y}\) start in column <code>sol_y_idx_o</code>, by default <code>2</code>.</li>
+<li>By default the coordinates \(\mathbf{y'}\) are included, and begin immediatly after the coordinates of \(\mathbf{y}\). 
+<ul class="org-ul">
+<li>The inclusion of the derivatives may be suppressed via <code>sol_no_dy_o</code>.</li>
+</ul></li>
+</ul></dd>
 </dl>
 </div>
 </div>
@@ -1166,8 +1182,8 @@ Alternatly, you could download the zip file: <a href="https://github.com/richmit
 <h3 id="qs-min-examples"><span class="section-number-3">10.2.</span> Check Out The Examples</h3>
 <div class="outline-text-3" id="text-qs-min-examples">
 <p>
-The newly cloned repository will contain a directory called "<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a>".  
-Change into the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory.  
+The newly cloned repository will contain a directory called "<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a>".  
+Change into the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> directory.  
 </p>
 
 <div class="org-src-container">
@@ -1221,8 +1237,8 @@ completely unnecessary for making full use of the modules, so you you can safely
 <h4 id="qs-min-examples-build"><span class="section-number-4">10.2.2.</span> Build An Example</h4>
 <div class="outline-text-4" id="text-qs-min-examples-build">
 <p>
-Once you have the <code>makefile</code> worked out, pick an example to build.  For example, we might try the one called
-<a href="https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90"><code>lorenz.f90</code></a>:
+Once you have the <code>makefile</code> worked out, pick an example to build.  For example, we might try this one:
+<a href="https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90"><code>lorenz.f90</code></a>.
 </p>
 
 <div class="org-src-container">
@@ -1231,7 +1247,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="orge928145">
+<pre class="example" id="org715e430">
 rm -f mrkiss_config.obj mrkiss_config.mod
 gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
 rm -f mrkiss_utils.obj mrkiss_utils.mod
@@ -1251,7 +1267,7 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="org6326190">
+<pre class="example" id="org69413cf">
              Milliseconds:      0.000
           Solution Points:      10000
      Total one_step calls:       9999
@@ -1269,7 +1285,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orga9d0fa4" class="figure">
+<div id="org2d7f92a" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1288,7 +1304,7 @@ compile/link everything together.
 <p>
 You can do that by just listing all the source files on the command line with most Fortran compilers.  For example, we could compile the
 <a href="https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90"><code>lorenz.f90</code></a> example in the
-<a href="https://github.com/richmit/MRKISS/blob/master/examples/"><code>examples/</code></a> directly like this:
+<a href="https://github.com/richmit/MRKISS/blob/master/examples/"><code>MRKISS/examples/</code></a> directly like this:
 </p>
 
 <div class="org-src-container">
@@ -1299,9 +1315,9 @@ gfortran.exe lorenz.f90 ../src/*.f90
 
 <p>
 That said, most people will probably want to use a build system.  If GNU Make is your thing, then the files in the
-<a href="https://github.com/richmit/MRKISS/blob/master/make_include/"><code>make_include/</code></a> directory may be of help.  In particular the makefile fragment
+<a href="https://github.com/richmit/MRKISS/blob/master/make_include/"><code>/MRKISS/make_include/</code></a> directory may be of help.  In particular the makefile fragment
 <a href="https://github.com/richmit/MRKISS/blob/master/make_include/include.mk"><code>include.mk</code></a> provides useful targets and variables.  The makefile in the
-<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory is a good guide on how to use
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> directory is a good guide on how to use
 <a href="https://github.com/richmit/MRKISS/blob/master/include.mk"><code>include.mk</code></a>.  In essence you do the following in your makefile:
 </p>
 
@@ -1426,16 +1442,16 @@ This section is about how I test <a href="https://github.com/richmit/MRKISS"><co
 </p>
 
 <p>
-The <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> directory contains code I primary use for testing
-<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> while the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> directory contains code I
-primarily use to demonstrate how to use <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a>.  The difference between a "test" and an "example" in
-<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> is a little bit slippery.  Some of the tests, like <code>tc1_*</code> and <code>tc2_*</code>, could be considered
-demonstrations.  In addition, I use all of the code in <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> for tests.
+The <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>MRKISS/tests/</code></a> directory contains code I primary use for testing
+<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> while the <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> directory contains
+code I primarily use to demonstrate how to use <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a>.  The difference between a "test" and an "example" in
+<a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> is a little bit slippery.  Some of the tests, like <code>tc1_*</code> and <code>tc2_*</code>, could be considered demonstrations.
+In addition, I use all of the code in <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> for tests.
 </p>
 
 <p>
-The tests can be run by changing into the appropriate directory (<a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> or
-<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a>), and building the make target <code>tests</code>.  For example:
+The tests can be run by changing into the appropriate directory (<a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>MRKISS/tests/</code></a> or
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a>), and building the make target <code>tests</code>.  For example:
 </p>
 
 <div class="org-src-container">
@@ -1445,14 +1461,14 @@ make -j 16 tests
 </div>
 
 <p>
-Note the <code>-j 16</code> argument to make.  When running all the tests, especially in the <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> directory,
-I strongly recommend running in parallel.
+Note the <code>-j 16</code> argument to make.  When running all the tests, especially in the <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>MRKISS/tests/</code></a>
+directory, I strongly recommend running in parallel.
 </p>
 
 <p>
-In addition, the make files in <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>tests/</code></a> and
-<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> have numerous additional targets to run various individual tests or subsets of the
-test suite.  These targets are documented in the subsections below.
+In addition, the make files in <a href="https://github.com/richmit/MRKISS/blob/master/tests"><code>MRKISS/tests/</code></a> and
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> have numerous additional targets to run various individual tests or subsets of
+the test suite.  These targets are documented in the subsections below.
 </p>
 </div>
 <div id="outline-container-test-mrkiss-ref-one-step" class="outline-3">
@@ -1482,7 +1498,7 @@ three tests corresponding to these hand written solvers:
 <li><code>test_dp54_ref_vs_stab_4</code> Test tableau data of the O(4) method vs hand coded results.</li>
 <li><code>test_dp54_stab_vs_etab_5</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
 <li><code>test_dp54_stab_vs_etab_4</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
-<li><code>test_dp54_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a>.</li>
+<li><code>test_dp54_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
 </ul></li>
 <li><code>test_rkf45</code> Runs the following tests
 <ul class="org-ul">
@@ -1490,14 +1506,14 @@ three tests corresponding to these hand written solvers:
 <li><code>test_rkf45_ref_vs_stab_4</code> Test tableau data of the O(4) method vs hand coded results.</li>
 <li><code>test_rkf45_stab_vs_etab_5</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
 <li><code>test_rkf45_stab_vs_etab_4</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
-<li><code>test_rkf45_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a>.</li>
+<li><code>test_rkf45_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
 </ul></li>
 <li><code>test_rk4</code> Runs the following tests
 <ul class="org-ul">
 <li><code>test_rk4_stab_vs_steps</code> Test consistency of <code>steps_fixed_stab_wt()</code> vs hand coded loop.</li>
 <li><code>test_rk4_ref_vs_stab</code> Test tableau data of the method vs hand coded results.</li>
 <li><code>test_rk4_ref_vs_hnd</code> Test hand coded method vs hand computed results.</li>
-<li><code>test_rk4_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a>.</li>
+<li><code>test_rk4_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
 </ul></li>
 </ul>
 
@@ -1525,7 +1541,8 @@ These tests also serve as "change detection".  That is to say, if I change somet
 <ul class="org-ul">
 <li><code>tc1_png</code> This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the <code>tc1.R</code> file contains R code that
 may be useful in investigating these results.</li>
-<li><code>test_tc1</code> This will compare the output of the tests to archived results in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a> to detect changes.</li>
+<li><code>test_tc1</code> This will compare the output of the tests to archived results in
+<a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a> to detect changes.</li>
 </ul>
 
 <p>
@@ -1548,7 +1565,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org6bbe2e4" class="figure">
+<div id="orgcbb6bce" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1581,7 +1598,7 @@ code and get different results then I may have introduced a bug.
 <ul class="org-ul">
 <li><code>tc2_png</code> This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the <code>tc2.R</code> file contains R
 code that may be useful in investigating these results.</li>
-<li><code>test_tc2</code> This will compare the output of the tests to archived results in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a> to
+<li><code>test_tc2</code> This will compare the output of the tests to archived results in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a> to
 detect changes.</li>
 </ul>
 
@@ -1597,7 +1614,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orge4e608b" class="figure">
+<div id="orgd99efa3" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1612,7 +1629,7 @@ as the method.
 </p>
 
 <ul class="org-ul">
-<li><code>test_rich</code> Runs the code and compares the output to archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a>.</li>
+<li><code>test_rich</code> Runs the code and compares the output to archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
 <li><code>rich_png</code> Produces diagnostic plots for human to verify the behavior is plausible.</li>
 </ul>
 
@@ -1621,7 +1638,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orga794baf" class="figure">
+<div id="orgc616873" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1639,7 +1656,7 @@ not the size of <code>a</code>.  This allows us to use a shorter <code>b</code> 
 <li><code>test_short_b</code> Runs the following tests
 <ul class="org-ul">
 <li><code>test_short_b_sub_vs_arc</code> Compare full stage results with truncated results</li>
-<li><code>test_short_b_all_vs_sub</code> Compare with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>data/</code></a>.</li>
+<li><code>test_short_b_all_vs_sub</code> Compare with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
 </ul></li>
 </ul>
 </div>
@@ -1648,10 +1665,10 @@ not the size of <code>a</code>.  This allows us to use a shorter <code>b</code> 
 <h3 id="test-mrkiss-examples"><span class="section-number-3">12.6.</span> Examples Are Tests Too</h3>
 <div class="outline-text-3" id="text-test-mrkiss-examples">
 <p>
-The <a href="https://github.com/richmit/MRKISS/blob/master/examples/tdata"><code>tdata/</code></a> directory in
-<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>examples/</code></a> is used to archive old output files generated from running the examples.  The
-<a href="https://github.com/richmit/MRKISS/blob/master/examples/makefile"><code>makefile</code></a> contains tests to run the examples and compare the results to what was archived.
-These tests serve as "change detection" helping me to identify the introduction of bugs.
+The <a href="https://github.com/richmit/MRKISS/blob/master/examples/tdata"><code>MRKISS/examples/tdata/</code></a> directory in
+<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> is used to archive old output files generated from running the examples.  The
+<a href="https://github.com/richmit/MRKISS/blob/master/examples/makefile"><code>makefile</code></a> contains tests to run the examples and compare the results to what was
+archived.  These tests serve as "change detection" helping me to identify the introduction of bugs.
 </p>
 
 <ul class="org-ul">
@@ -1810,31 +1827,43 @@ graphs.  None of these tools are required to compile and use the package because
 
 <dl class="org-dl">
 <dt>POSIX shell (<code>sh</code>)</dt><dd><ul class="org-ul">
-<li>Used to generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
-<li>Used in some makefile constructs for code generation, plotting, testing, etc&#x2026;</li>
+<li>Generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Some makefile constructs for code generation, plotting, testing, etc&#x2026;</li>
 </ul></dd>
 <dt>sed</dt><dd><ul class="org-ul">
-<li>Used to generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
-<li>Generates <code>mrkiss_solvers_nt.f90</code> from <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Generate <code>mrkiss_solvers_nt.f90</code> from <code>mrkiss_solvers_wt.f90</code>.</li>
 </ul></dd>
 <dt>ruby</dt><dd><ul class="org-ul">
-<li>Generates code and make files for testing</li>
+<li>Generate code and make files for testing</li>
 <li>My <code>float_diff.rb</code> script, used by the tests.</li>
 </ul></dd>
 <dt>R</dt><dd><ul class="org-ul">
-<li>Used to visualize output files</li>
+<li>Visualize output files</li>
 </ul></dd>
 <dt>GNUplot</dt><dd><ul class="org-ul">
-<li>Used to visualize output files</li>
+<li>Visualize output files</li>
 </ul></dd>
 <dt>Maple</dt><dd><ul class="org-ul">
-<li>Used for Butcher tableau computations.</li>
+<li>Butcher tableau computations.</li>
 </ul></dd>
 <dt>nomacs</dt><dd><ul class="org-ul">
-<li>Used to display images</li>
+<li>Display images</li>
 </ul></dd>
 <dt>ImageMagick</dt><dd><ul class="org-ul">
-<li>Used to process and/or convert image files</li>
+<li>Process and/or convert image files</li>
+</ul></dd>
+<dt>Doxygen</dt><dd><ul class="org-ul">
+<li>Generate API documentation</li>
+</ul></dd>
+<dt>LaTeX</dt><dd><ul class="org-ul">
+<li>Generate logo images</li>
+</ul></dd>
+<dt>ghostscript</dt><dd><ul class="org-ul">
+<li>Generate logo images</li>
+</ul></dd>
+<dt>rsync</dt><dd><ul class="org-ul">
+<li>Deploy doxygen documentation to my web site</li>
 </ul></dd>
 </dl>
 </div>

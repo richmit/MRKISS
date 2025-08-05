@@ -296,16 +296,16 @@ The values of ~p1~ and ~p2~ must be a positive integers.
 :END:
 
 *[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides several predefined methods in modules found in the
-"[[https://github.com/richmit/MRKISS/blob/master/lib][~lib/~]]" directory.  Each module defines a single tableau via parameters with names mirroring the
-Butcher Tableau arguments documented in the [[#def-method][previous section]].  In addition, these modules also have a parameter containing the number of
+"[[https://github.com/richmit/MRKISS/blob/master/lib][~MRKISS/lib/~]]" directory.  Each module defines a single tableau via parameters with names mirroring
+the Butcher Tableau arguments documented in the [[#def-method][previous section]].  In addition, these modules also have a parameter containing the number of
 stages for the overall method and the number of stages for any embedded method that differs from the overall method.
 
  - ~s~   -- The number of stages for the entire method.
  - ~s1~  -- The number of stages for the ~b1~ method if it differs from ~s~.
  - ~s2~  -- The number of stages for the ~b2~ method if it differs from ~s~.
 
-In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same
-naming conventions.  See [[https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90][~mrkiss_eerk_cash_karp_5_4.f90~]] for an example.
+In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same naming
+conventions.  See [[https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90][~mrkiss_eerk_cash_karp_5_4.f90~]] for an example.
 
 The modules follow a simple naming conventions:
   - They have one of two prefixes:
@@ -363,9 +363,9 @@ This is a recommendation, and is in no way enforced by the library.  When the hi
 extrapolation/.  Note that each of the methods in an embedded Butcher tableau may be used individually as a non-embedded method.
 
 In addition to the module files, several maple worksheets may be found in the
-"[[https://github.com/richmit/MRKISS/blob/master/rk_methods_maple][~rk_methods_maple/~]]" directory.  The filenames mirror the names of the modules.  These
-worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the method's
-stability region.
+"[[https://github.com/richmit/MRKISS/blob/master/rk_methods_maple][~MRKISS/rk_methods_maple/~]]" directory.  The filenames mirror the names of the modules.
+These worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the
+method's stability region.
 
 ** Predefined Non-embedded Methods
 
@@ -476,16 +476,22 @@ of higher level routines to indicate an error condition.
     - It can end precisely on a time value, or it can simply quit when a step goes beyond a maximum time value.
     - These last two could be achieved with the programmable step processing and bisection features, but these requirements are so common that is convenient
       to have them directly available.
-  - ~steps_fixed_stab_*t()~ uses fixed time steps ::
-    - Solution points separated by fixed time steps allow animations of the solution to naturally display velocity.
+  - ~steps_fixed_stab_*t()~ uses fixed \(\Delta{t}\) steps ::
     - This is a good place to start when writing a custom solver.
     - With most modern ODE packages, this would be done with interpolation.
     - This routine has the option to use Richardson extrapolation.
-  - ~steps_condy_stab_*t()~ uses fixed (y-space) steps ::
-    - Produce solution points separated by fixed deltas in y-space, or some subset of y-space.
+    - Most common use: curve evolution animations that naturally display velocity.
+  - ~steps_condy_stab_*t()~ uses fixed \(\Delta{\mathbf{y}}\)-space steps ::
+    - Produce solution points separated by fixed deltas in \(\Delta{\mathbf{y}}\)-space, or some subset of \(\Delta{\mathbf{y}}\)-space.
     - This is a good place to start when writing a custom solver with a bisection step.
-    - A parametric plot of the first two components of a solution looks better when the points are uniformly separated.
     - With most modern ODE packages, this would be done with interpolation.
+    - Most common use: parametric plots, parametric tube plots, and sphere sweeps.
+  - ~steps_sloppy_condy_stab_*t()~ adjusts \(\Delta{t}\) to *approximate* \(\Delta{\mathbf{y}}\)-space steps ::
+    - Much like ~steps_condy_stab_*t()~ in practice but faster and less precise.
+    - Computes a test step and then adjusts \(\Delta{t}\) in proportion to the ratio of the desired length vs test length.
+    - This method has no guarantee for correctness, but generally works well in practice.
+    - Can operate on every step or just steps that are too long.  
+    - Most common use: ~steps_fixed_stab_*t()~ results have a few steps that are "too long"
 
 ** High Level Solver Common Arguments
 :PROPERTIES:
@@ -510,9 +516,12 @@ The first several arguments are common across the higher level solvers.
     - ~istats(7)~: number of times bisection failed because of max_bisect_o
     - ~istats(8)~: number of times bisection failed because target was not contained
   - ~solution~ :: Array for solution.  \\
-                  Each *column* is a solution.  By default each column contains \(t\), the coordinates of ~y~, and the derivatives.  The coordinates of ~y~
-                  start in column ~sol_y_idx_o~, by default ~2~. The inclusion of \(t\) may be suppressed via ~sol_no_t_o~, and the inclusion of the derivatives
-                  may be suppressed via ~sol_no_dy_o~.
+    - Each *column* is a solution containing, by default, \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).
+    - By default the first column contains \(t\).  
+      - The inclusion of \(t\) may be suppressed via ~sol_no_t_o~
+    - The coordinates of \(\mathbf{y}\) start in column ~sol_y_idx_o~, by default ~2~. 
+    - By default the coordinates \(\mathbf{y'}\) are included, and begin immediatly after the coordinates of \(\mathbf{y}\). 
+      - The inclusion of the derivatives may be suppressed via ~sol_no_dy_o~.
 
 *** The IVP
 :PROPERTIES:
@@ -569,8 +578,8 @@ Alternatly, you could download the zip file: [[https://github.com/richmit/MRKISS
 :CUSTOM_ID: qs-min-examples
 :END:
 
-The newly cloned repository will contain a directory called "[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]]".  
-Change into the [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory.  
+The newly cloned repository will contain a directory called "[[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]]".  
+Change into the [[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]] directory.  
 
 #+begin_src sh :results output verbatum :exports code
 cd MRKISS/examples
@@ -626,8 +635,8 @@ completely unnecessary for making full use of the modules, so you you can safely
 :CUSTOM_ID: qs-min-examples-build
 :END:
 
-Once you have the ~makefile~ worked out, pick an example to build.  For example, we might try the one called
-[[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~lorenz.f90~]]:
+Once you have the ~makefile~ worked out, pick an example to build.  For example, we might try this one:
+[[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~lorenz.f90~]].
 
 #+begin_src sh :results output verbatum :exports both
 make lorenz
@@ -680,7 +689,7 @@ compile/link everything together.
 
 You can do that by just listing all the source files on the command line with most Fortran compilers.  For example, we could compile the
 [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~lorenz.f90~]] example in the
-[[https://github.com/richmit/MRKISS/blob/master/examples/][~examples/~]] directly like this:
+[[https://github.com/richmit/MRKISS/blob/master/examples/][~MRKISS/examples/~]] directly like this:
 
 #+begin_src sh :results output verbatum :exports code
 cd examples
@@ -688,9 +697,9 @@ gfortran.exe lorenz.f90 ../src/*.f90
 #+end_src
 
 That said, most people will probably want to use a build system.  If GNU Make is your thing, then the files in the
-[[https://github.com/richmit/MRKISS/blob/master/make_include/][~make_include/~]] directory may be of help.  In particular the makefile fragment
+[[https://github.com/richmit/MRKISS/blob/master/make_include/][~/MRKISS/make_include/~]] directory may be of help.  In particular the makefile fragment
 [[https://github.com/richmit/MRKISS/blob/master/make_include/include.mk][~include.mk~]] provides useful targets and variables.  The makefile in the
-[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory is a good guide on how to use
+[[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]] directory is a good guide on how to use
 [[https://github.com/richmit/MRKISS/blob/master/include.mk][~include.mk~]].  In essence you do the following in your makefile:
 
   1) Set MRKISS_PATH in your makefile to the path of the *[[https://github.com/richmit/MRKISS][~MRKISS~]]* source directory -- that's the one with the ~include.mk~ file.
@@ -796,26 +805,26 @@ how to do that.
 
 This section is about how I test [[https://github.com/richmit/MRKISS][~MRKISS~]].  
 
-The [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] directory contains code I primary use for testing
-[[https://github.com/richmit/MRKISS][~MRKISS~]] while the [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] directory contains code I
-primarily use to demonstrate how to use [[https://github.com/richmit/MRKISS][~MRKISS~]].  The difference between a "test" and an "example" in
-[[https://github.com/richmit/MRKISS][~MRKISS~]] is a little bit slippery.  Some of the tests, like ~tc1_*~ and ~tc2_*~, could be considered
-demonstrations.  In addition, I use all of the code in [[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] for tests.
+The [[https://github.com/richmit/MRKISS/blob/master/tests][~MRKISS/tests/~]] directory contains code I primary use for testing
+[[https://github.com/richmit/MRKISS][~MRKISS~]] while the [[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]] directory contains
+code I primarily use to demonstrate how to use [[https://github.com/richmit/MRKISS][~MRKISS~]].  The difference between a "test" and an "example" in
+[[https://github.com/richmit/MRKISS][~MRKISS~]] is a little bit slippery.  Some of the tests, like ~tc1_*~ and ~tc2_*~, could be considered demonstrations.
+In addition, I use all of the code in [[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]] for tests.
 
-The tests can be run by changing into the appropriate directory ([[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] or
-[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]]), and building the make target ~tests~.  For example:
+The tests can be run by changing into the appropriate directory ([[https://github.com/richmit/MRKISS/blob/master/tests][~MRKISS/tests/~]] or
+[[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]]), and building the make target ~tests~.  For example:
 
 #+begin_src sh :results output verbatum :exports code
 cd tests
 make -j 16 tests
 #+end_src
 
-Note the ~-j 16~ argument to make.  When running all the tests, especially in the [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] directory,
-I strongly recommend running in parallel.
+Note the ~-j 16~ argument to make.  When running all the tests, especially in the [[https://github.com/richmit/MRKISS/blob/master/tests][~MRKISS/tests/~]]
+directory, I strongly recommend running in parallel.
 
-In addition, the make files in [[https://github.com/richmit/MRKISS/blob/master/tests][~tests/~]] and
-[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] have numerous additional targets to run various individual tests or subsets of the
-test suite.  These targets are documented in the subsections below.
+In addition, the make files in [[https://github.com/richmit/MRKISS/blob/master/tests][~MRKISS/tests/~]] and
+[[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]] have numerous additional targets to run various individual tests or subsets of
+the test suite.  These targets are documented in the subsections below.
 
 ** Refrence One Step Solvers
 :PROPERTIES:
@@ -838,18 +847,18 @@ three tests corresponding to these hand written solvers:
     - ~test_dp54_ref_vs_stab_4~ Test tableau data of the O(4) method vs hand coded results.
     - ~test_dp54_stab_vs_etab_5~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
     - ~test_dp54_stab_vs_etab_4~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
-    - ~test_dp54_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
+    - ~test_dp54_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~MRKISS/tests/data/~]].
   - ~test_rkf45~ Runs the following tests
     - ~test_rkf45_ref_vs_stab_5~ Test tableau data of the O(5) method vs hand coded results.
     - ~test_rkf45_ref_vs_stab_4~ Test tableau data of the O(4) method vs hand coded results.
     - ~test_rkf45_stab_vs_etab_5~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
     - ~test_rkf45_stab_vs_etab_4~ Test consistency of ~one_step_stab_wt()~ and ~one_step_etab_wt()~ on O(5) method.
-    - ~test_rkf45_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
+    - ~test_rkf45_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~MRKISS/tests/data/~]].
   - ~test_rk4~ Runs the following tests
     - ~test_rk4_stab_vs_steps~ Test consistency of ~steps_fixed_stab_wt()~ vs hand coded loop.
     - ~test_rk4_ref_vs_stab~ Test tableau data of the method vs hand coded results.
     - ~test_rk4_ref_vs_hnd~ Test hand coded method vs hand computed results.
-    - ~test_rk4_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
+    - ~test_rk4_archive~ Test new output with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~MRKISS/tests/data/~]].
 
 A note about the tests for consistency between ~one_step_stab_wt()~ and ~one_step_etab_wt()~ is probably in order.  The subroutine ~one_step_stab_wt()~ is
 /generated/ from ~one_step_etab_wt()~ -- see the comment above ~one_step_etab_wt()~ in
@@ -869,7 +878,8 @@ These tests also serve as "change detection".  That is to say, if I change somet
 
   - ~tc1_png~ This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the ~tc1.R~ file contains R code that
     may be useful in investigating these results.
-  - ~test_tc1~ This will compare the output of the tests to archived results in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]] to detect changes.
+  - ~test_tc1~ This will compare the output of the tests to archived results in
+    [[https://github.com/richmit/MRKISS/blob/master/tests/data][~MRKISS/tests/data/~]] to detect changes.
 
 Note these tests include about 40 individual test cases each with it's own Fortran source.  These tests are /generated/ from a single seed Fortran source file
 named [[https://github.com/richmit/MRKISS/blob/master/tests/tc1_template.f90][~tc1_template.f90~]] that is expanded into the remaining source files via the
@@ -905,7 +915,7 @@ code and get different results then I may have introduced a bug.
 
   - ~tc2_png~ This will run the tests and display diagnostic visualizations a human can check for plausibility.  Note the ~tc2.R~ file contains R
     code that may be useful in investigating these results.
-  - ~test_tc2~ This will compare the output of the tests to archived results in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]] to
+  - ~test_tc2~ This will compare the output of the tests to archived results in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~MRKISS/tests/data/~]] to
     detect changes.
 
 Note these tests include about 40 individual test cases each with it's own Fortran source.  These tests are /generated/ from a single seed Fortran source file
@@ -926,7 +936,7 @@ The primary diagnostic plot is of global error:
 This is another plausibility and change detection test.  This test compares ~one_step_stab_wt()~ and ~one_richardson_step_stab_wt()~ using ~mrkiss_erk_euler_1~
 as the method.
 
- - ~test_rich~ Runs the code and compares the output to archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
+ - ~test_rich~ Runs the code and compares the output to archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~MRKISS/tests/data/~]].
  - ~rich_png~ Produces diagnostic plots for human to verify the behavior is plausible.
 
 The primary diagnostic plot is of global error:
@@ -944,17 +954,17 @@ not the size of ~a~.  This allows us to use a shorter ~b~ vector cutting off tra
 
   - ~test_short_b~ Runs the following tests
     - ~test_short_b_sub_vs_arc~ Compare full stage results with truncated results
-    - ~test_short_b_all_vs_sub~ Compare with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~data/~]].
+    - ~test_short_b_all_vs_sub~ Compare with archived output in [[https://github.com/richmit/MRKISS/blob/master/tests/data][~MRKISS/tests/data/~]].
 
 ** Examples Are Tests Too
 :PROPERTIES:
 :CUSTOM_ID: test-mrkiss-examples
 :END:
 
-The [[https://github.com/richmit/MRKISS/blob/master/examples/tdata][~tdata/~]] directory in
-[[https://github.com/richmit/MRKISS/blob/master/examples][~examples/~]] is used to archive old output files generated from running the examples.  The
-[[https://github.com/richmit/MRKISS/blob/master/examples/makefile][~makefile~]] contains tests to run the examples and compare the results to what was archived.
-These tests serve as "change detection" helping me to identify the introduction of bugs.
+The [[https://github.com/richmit/MRKISS/blob/master/examples/tdata][~MRKISS/examples/tdata/~]] directory in
+[[https://github.com/richmit/MRKISS/blob/master/examples][~MRKISS/examples/~]] is used to archive old output files generated from running the examples.  The
+[[https://github.com/richmit/MRKISS/blob/master/examples/makefile][~makefile~]] contains tests to run the examples and compare the results to what was
+archived.  These tests serve as "change detection" helping me to identify the introduction of bugs.
 
  - ~tests~ Runs the following tests
    - ~minimal_test~ Creates and checks minimal.csv.
@@ -1072,21 +1082,29 @@ I use several tools in the *development* of *[[https://github.com/richmit/MRKISS
 graphs.  None of these tools are required to compile and use the package because I have included all the generated code in the repository.  Here is a summary:
 
   - POSIX shell (~sh~) ::
-    - Used to generate ~one_step_stab_wt~ from ~one_step_etab_wt~ in =mrkiss_solvers_wt.f90=.
-    - Used in some makefile constructs for code generation, plotting, testing, etc...
+    - Generate ~one_step_stab_wt~ from ~one_step_etab_wt~ in =mrkiss_solvers_wt.f90=.
+    - Some makefile constructs for code generation, plotting, testing, etc...
   - sed ::
-    - Used to generate ~one_step_stab_wt~ from ~one_step_etab_wt~ in =mrkiss_solvers_wt.f90=.
-    - Generates =mrkiss_solvers_nt.f90= from =mrkiss_solvers_wt.f90=.
+    - Generate ~one_step_stab_wt~ from ~one_step_etab_wt~ in =mrkiss_solvers_wt.f90=.
+    - Generate =mrkiss_solvers_nt.f90= from =mrkiss_solvers_wt.f90=.
   - ruby ::
-    - Generates code and make files for testing
+    - Generate code and make files for testing
     - My =float_diff.rb= script, used by the tests.
   - R ::
-    - Used to visualize output files
+    - Visualize output files
   - GNUplot ::
-    - Used to visualize output files
+    - Visualize output files
   - Maple ::
-    - Used for Butcher tableau computations.
+    - Butcher tableau computations.
   - nomacs ::
-    - Used to display images
-  - ImageMagick ::
-    - Used to process and/or convert image files
+    - Display images
+  - ImageMagick :: 
+    - Process and/or convert image files
+  - Doxygen :: 
+    - Generate API documentation
+  - LaTeX :: 
+    - Generate logo images
+  - ghostscript :: 
+    - Generate logo images
+  - rsync :: 
+    - Deploy doxygen documentation to my web site
