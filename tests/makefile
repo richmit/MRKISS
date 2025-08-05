@@ -45,12 +45,24 @@ include $(MRKISS_PATH)/make_includes/include.mk
 IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
+TD = diff
 
-TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b
+TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b test_statuscodes
 
-EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt
+EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt statuscodes
 
 all : $(EXE_TARGETS)
+
+
+####################################################################################################
+statuscodes : statuscodes.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) statuscodes.f90 $(MRKISS_OBJ_FILES) -o $@
+
+statuscodes.out &: statuscodes
+	statuscodes$(EXE_SUFFIX)
+
+test_statuscodes : statuscodes.out
+	$(TD) statuscodes.out data/statuscodes.out
 
 ####################################################################################################
 short_b : short_b.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)

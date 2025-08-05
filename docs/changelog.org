@@ -57,11 +57,12 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Deprecated functionality
     - N/A
   - New functionality
-    - N/A
+    - status_to_origin(): Returns source for status code
+    - status_to_message(): Returns message for status code
   - Documentation
     - Doxygen links in main README & mainpage.
     - Better mainpage markup
-    - Master list of status assignments
+    - Consolidated list of status assignments
   - Examples
     - New
       - N/A
@@ -70,7 +71,8 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Tests
     - New
       - tests/test_rk4_frog_vs_steps: Compare frog output to last line of steps
-      - lib/test-build: Test code generation & module build
+      - lib/test_build: Test code generation & module build
+      - tests/test_statuscodes: Test status_to_origin() & status_to_message().
     - Updated
       - N/A
   - Miscellaneous

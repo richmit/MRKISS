@@ -42,6 +42,7 @@ module mrkiss_utils
   public :: print_solution, analyze_solution
   public :: seq
   public :: interpolate_solution
+  public :: status_to_origin, status_to_message
 
 contains
   
@@ -459,7 +460,7 @@ contains
     if (present(old_sol_y_idx_o)) old_sol_y_idx = old_sol_y_idx_o
     if (present(y_dim_o)) then
        y_dim = y_dim_o
-    else ! The old_solution *must* have both t and dy components.
+    else ! The old_solution *must* have both t
        y_dim = size(old_solution, 1)
        y_dim = y_dim - 1
        if ( .not. (present(sol_no_dy_o))) y_dim = y_dim / 2
@@ -494,8 +495,143 @@ contains
     end do
     status = 0;
   end subroutine interpolate_solution
+  
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Return, as a string, the source of a status code.
+  !! 
+  !! Status codes are assigned in blocks to subroutines and interfaces.  Status codes are frequently "passed up" the call chain.
+  !! i.e. a routine may return a status code that was returned to it by another routine.  Assigning the codes in blocks allows
+  !! the user to know from which subroutine a status originated.
+  !! 
+  !! Assigned Status Ranges
+  !! - 0001-0255 ... interface  deq_iface_*t
+  !! - 0256-0511 ... interface  stepp_iface_*t
+  !! - 0512-0767 ... interface  sdf_iface_*t
+  !! - 1232-1247 ... subroutine one_step_etab_*t
+  !! - 1248-1263 ... subroutine one_step_stab_*t
+  !! - 1216-1231 ... subroutine one_richardson_step_stab_*t
+  !! - 1200-1215 ... subroutine one_step_rk4_*t
+  !! - 1184-1199 ... subroutine one_step_rkf45_*t
+  !! - 1263-1279 ... subroutine one_step_dp54_*t
+  !! - 1120-1151 ... subroutine steps_fixed_stab_*t
+  !! - 1024-1055 ... subroutine steps_condy_stab_*t
+  !! - 1280-1296 ... subroutine steps_sloppy_condy_stab_*t
+  !! - 1056-1119 ... subroutine steps_adapt_etab_*t
+  !! - 1152-1183 ... subroutine print_solution
+  !! - 1297-1313 ... subroutine analyze_solution
+  !! - 1314:1330 ... subroutine seq
+  !! - 1331:1347 ... subroutine interpolate_solution
+  !! - 1348-1364 ... Unallocated
+  !! - 1365-1381 ... Unallocated
+  !! - 1382-1398 ... Unallocated
+  !! - 1399-1415 ... Unallocated
+  !! 
+  !! I use the following bit of code to generate new blocks:
+  !! @verbatim
+  !! (let ((s "\n"))
+  !!   (cl-loop for f from 1348 to 2000 by 17
+  !!            do (print f)
+  !!            do (setq s (concat s (format "%d-%d\n" f (+ 16 f)))))
+  !!   s)
+  !! @endverbatim
+  !! 
+  !! @verbatim
+  !! status ...................... This is an intent(in) argument!!!!
+  !! status_to_origin(len=64) .... A string identifying the origin of the status code.
+  !!                                - NO ERROR .. Non-error status of unknown origin
+  !!                                - ERROR ..... Error status of unknown origin
+  !!                                - Every other return is a known interface or subroutine 
+  !! @endverbatim
+  !!
+  character(len=64) function status_to_origin(status)
+    use :: mrkiss_config, only: rk, ik
+    implicit none
+    ! Arguments
+    integer(kind=ik), intent(in) :: status
+    ! Process Input
+    if     (status  <=    0) then
+       status_to_origin = "NO ERROR"
+    elseif ((status >=    1) .and. (status <=  255)) then
+       status_to_origin = "interface  deq_iface_*t"
+    elseif ((status >=  256) .and. (status <=  511)) then
+       status_to_origin = "interface  stepp_iface_*t"
+    elseif ((status >=  512) .and. (status <=  767)) then
+       status_to_origin = "interface  sdf_iface_*t"
+    elseif ((status >= 1232) .and. (status <= 1247)) then
+       status_to_origin = "subroutine one_step_etab_*t"
+    elseif ((status >= 1248) .and. (status <= 1263)) then
+       status_to_origin = "subroutine one_step_stab_*t"
+    elseif ((status >= 1216) .and. (status <= 1231)) then
+       status_to_origin = "subroutine one_richardson_step_stab_*t"
+    elseif ((status >= 1200) .and. (status <= 1215)) then
+       status_to_origin = "subroutine one_step_rk4_*t"
+    elseif ((status >= 1184) .and. (status <= 1199)) then
+       status_to_origin = "subroutine one_step_rkf45_*t"
+    elseif ((status >= 1263) .and. (status <= 1279)) then
+       status_to_origin = "subroutine one_step_dp54_*t"
+    elseif ((status >= 1120) .and. (status <= 1151)) then
+       status_to_origin = "subroutine steps_fixed_stab_*t"
+    elseif ((status >= 1024) .and. (status <= 1055)) then
+       status_to_origin = "subroutine steps_condy_stab_*t"
+    elseif ((status >= 1280) .and. (status <= 1296)) then
+       status_to_origin = "subroutine steps_sloppy_condy_stab_*t"
+    elseif ((status >= 1056) .and. (status <= 1119)) then
+       status_to_origin = "subroutine steps_adapt_etab_*t"
+    elseif ((status >= 1152) .and. (status <= 1183)) then
+       status_to_origin = "subroutine print_solution"
+    elseif ((status >= 1297) .and. (status <= 1313)) then
+       status_to_origin = "subroutine analyze_solution"
+    elseif ((status >= 1314) .and. (status <= 1330)) then
+       status_to_origin = "subroutine seq"
+    elseif ((status >= 1331) .and. (status <= 1347)) then
+       status_to_origin = "subroutine interpolate_solution"
+    else
+       status_to_origin = "ERROR"
+    end if
+  end function status_to_origin
+
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Return, as a string, the source of a status code.
+  !! 
+  !! @verbatim
+  !! status ...................... This is an intent(in) argument!!!!
+  !! status_to_message(len=128) .. A string identifying the message of the status code.
+  !!                                - NO ERROR .. Non-error status of unknown message
+  !!                                - ERROR ..... Error status of unknown message
+  !!                                - Every other return is a known error message
+  !! @endverbatim
+  !!
+  character(len=128) function status_to_message(status)
+    use :: mrkiss_config, only: rk, ik
+    implicit none
+    ! Arguments
+    integer(kind=ik), intent(in) :: status
+    ! Process Input
+    if (status == 1024) then
+       status_to_message = "t_delta_min yielded a longer step than t_delta_max"
+    elseif (status == 1025) then
+       status_to_message = "no_bisect_error_o not present and max_bisect_o violated"
+    elseif (status == 1056) then
+       status_to_message = ". no_bisect_error_o not present and max_bisect_o violated"
+    elseif (status == 1152) then
+       status_to_message = "Could not open file for write"
+    elseif (status == 1153) then
+       status_to_message = "Could not close file         "
+    elseif (status == 1297) then
+       status_to_message = "Could not open file for write"
+    elseif (status == 1313) then
+       status_to_message = "Could not close file         "
+    elseif (status == 1314) then
+       status_to_message = "Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v"
+    elseif (status == 1331) then
+       status_to_message = "... new_solution t value out of bounds"
+    else
+       status_to_message = status_to_origin(status)
+    end if
+  end function status_to_message
 
 end module mrkiss_utils
+
 
 
 

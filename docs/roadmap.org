@@ -48,6 +48,7 @@ Right now everything that is implemented seems to work.  Test coverage is poor f
 have a few functionality improvements I want to implement, but I don't forsee any API changes.  I also have a few examples I would like to add.
 
  - Add dy to a solution without it already
+ - Add status -> message function in mrkiss_utils
  - Example showing error V with t_delta size
  - Example showing error vs. order
  - Solver that takes a t-vec, and computes solution using those points
@@ -57,6 +58,11 @@ have a few functionality improvements I want to implement, but I don't forsee an
    - Run parallel across cores using OpenMP
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
+ - +Message table+
+   - +status -> source: ~status_to_origin~+ *DONE*
+   - +status -> message: ~status_to_message~+ *DONE*
+   - +Tests for above+ *DONE*
+   - +List of allocated status code ranges+ *DONE*
  - +Release 2025-08-04+ *DONE*
    - +Add doxygen generation+ *DONE*
    - +Create web site for doxygen docs+ *DONE*
