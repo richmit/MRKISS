@@ -57,7 +57,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :CUSTOM_ID: introduction
 :END:
 
-The code for this example is found in [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]].  Additionally the
+The code for this example is found in [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]].  Additionally the
 code may be found at the end of this document in the section [[#full-code][Full Code Listing]].
 
 One strange thing when visualizing strange attracters is that we are frequently less concerned with the absolute accuracy of the solution curves than we are
@@ -87,7 +87,7 @@ do Hermite interpolation.  Having a few longer steps when using such a tool is n
 can make the animation jerkey.  When this happens, if you still want to preserve time in the animation, the only real solution is to decrease the value used
 for \(\Delta{t}\).
 
-THe solutions used in the images above were created by this snippit of [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]]:
+THe solutions used in the images above were created by this snippit of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
 sed -n '/^  *! BEGIN: lorenz_fixed *$/,/^ *! END: lorenz_fixed *$/p' ../examples/lorenz.f90
@@ -142,7 +142,7 @@ file:pics/lorenz_condy.png
 #+ATTR_HTML: :width 90% :align center
 file:pics/lorenz_sloppy_condy_short.png
 
-These images were created by the following snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]]:
+These images were created by the following snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
 sed -n '/^  *! BEGIN: lorenz_fixed-y *$/,/^ *! END: lorenz_fixed-y *$/p' ../examples/lorenz.f90
@@ -200,7 +200,7 @@ Here is the result:
 #+ATTR_HTML: :width 90% :align center
 file:pics/lorenz_sloppy_condy.png
 
-The solution used in the image above was created by this snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lornez.f90][~examples/lornez.f90~]]:
+The solution used in the image above was created by this snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
 sed -n '/^  *! BEGIN: lorenz_clip-y *$/,/^ *! END: lorenz_clip-y *$/p' ../examples/lorenz.f90
@@ -344,7 +344,7 @@ end program
 :CUSTOM_ID: gpcode
 :END:
 
-The images were produced with R.
+The images were produced with GNUplot.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
 ~/core/codeBits/bin/src2noHeader ../examples/lorenz.gplt | sed 's/; zotero.*$//; s/---------------------------------$//;'
