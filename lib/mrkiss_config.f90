@@ -45,6 +45,9 @@ module mrkiss_config
   integer,          parameter, public :: rk                 = c_double                        !< Real kind used in interfaces
   integer,          parameter, public :: bk                 = c_bool                          !< Integer kind for boolean
 
+  ! Constants related to the library
+  integer,          parameter, public :: istats_size        = 16                              !< Number of elements in istats(:)
+
   ! Absolute constants
   real(kind=rk),    parameter, public :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero
   real(kind=rk),    parameter, public :: t_delta_tiny       = tiny(zero_epsilon) * 1.0e18_rk  !< Smallest value for t_delta

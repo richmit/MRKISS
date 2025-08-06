@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-03 Sun 10:10 -->
+<!-- 2025-08-05 Tue 23:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-03 10:03:28</i></td>
+<td class="org-left"><i>2025-08-05 23:09:30</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-03 10:10:06</i></td>
+<td class="org-left"><i>2025-08-05 23:09:30</i></td>
 </tr>
 </tbody>
 </table>
@@ -368,7 +368,7 @@ In this section we produce the classical image of the solution.
 </p>
 
 
-<div id="orgfb4ea47" class="figure">
+<div id="org36f989b" class="figure">
 <p><img src="pics/three_body.png" alt="three_body.png" />
 </p>
 </div>
@@ -383,7 +383,7 @@ The solid pink curve is generated from 4000 points on the orbit generated with a
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run V(9): "</span>
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
@@ -445,13 +445,13 @@ both Hermite and linear interpolation:
 </p>
 
 
-<div id="orga70fa76" class="figure">
+<div id="orga2558c1" class="figure">
 <p><a href="pics/three_body_interp_adapt_path.png"><img src="pics/three_body_interp_adapt_path.png" alt="three_body_interp_adapt_path.png" /></a>
 </p>
 </div>
 
 
-<div id="org9c866e3" class="figure">
+<div id="org793a151" class="figure">
 <p><a href="pics/three_body_lin_interp_adapt_path.png"><img src="pics/three_body_lin_interp_adapt_path.png" alt="three_body_lin_interp_adapt_path.png" /></a>
 </p>
 </div>
@@ -462,7 +462,7 @@ required.  Here we can see the errors:
 </p>
 
 
-<div id="orgfa3f706" class="figure">
+<div id="orgde4e20e" class="figure">
 <p><a href="pics/three_body_interp_adapt_error.png"><img src="pics/three_body_interp_adapt_error.png" alt="three_body_interp_adapt_error.png" /></a>
 </p>
 </div>
@@ -481,18 +481,18 @@ isolution = 0
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive hermite interpolation run: "</span>
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, isolution, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_std_interpolated.csv"</span>, sol_no_dy_o=1)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, isolution, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_std_interpolated.csv"</span>, sol_w_dy_o=<span style="color: #00ffff;">.false.</span>_bk)
 
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
 isolution = 0
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">seq</span>(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Note we must provide y_dim_o because solution really contains dy.  </span>
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">interpolate_solution</span>(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_no_dy_o=1)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">interpolate_solution</span>(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_w_dy_o=<span style="color: #00ffff;">.false.</span>_bk)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive linear interpolation run: "</span>
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, isolution, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_std_interpolated_lin.csv"</span>, sol_no_dy_o=1)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, isolution, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_std_interpolated_lin.csv"</span>, sol_w_dy_o=<span style="color: #00ffff;">.false.</span>_bk)
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_int</span>
 </pre>
 </div>
@@ -518,7 +518,7 @@ In the following image we see the unsatisfactory result of using a 5th order sol
 </p>
 
 
-<div id="orgf0984a9" class="figure">
+<div id="org62d4f36" class="figure">
 <p><a href="pics/three_body-dp.png"><img src="pics/three_body-dp.png" alt="three_body-dp.png" /></a>
 </p>
 </div>
@@ -532,7 +532,7 @@ The code for the above solution is identical except for a change in Runge-Kutta 
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, solution, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run DP(5): "</span>
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
@@ -547,7 +547,7 @@ The code for the above solution is identical except for a change in Runge-Kutta 
 <h2 id="adaptiveylim"><span class="section-number-2">5.</span> Adaptive Solution With More Steps For A Nice Plot</h2>
 <div class="outline-text-2" id="text-adaptiveylim">
 
-<div id="org80a0b81" class="figure">
+<div id="org0cbd7fe" class="figure">
 <p><img src="pics/three_body_ylen.png" alt="three_body_ylen.png" />
 </p>
 </div>
@@ -630,7 +630,7 @@ vector (the first two components) and not the velocity components (the last two 
 </p>
 
 
-<div id="org0ad7044" class="figure">
+<div id="org58d1a5a" class="figure">
 <p><img src="pics/three_body_fixed_pos.png" alt="three_body_fixed_pos.png" />
 </p>
 </div>
@@ -640,7 +640,7 @@ Below are the velocity components plotted in the same manner as the position com
 </p>
 
 
-<div id="org7755ce6" class="figure">
+<div id="org8668836" class="figure">
 <p><img src="pics/three_body_fixed_vel.png" alt="three_body_fixed_vel.png" />
 </p>
 </div>
@@ -704,7 +704,7 @@ function.  In this example we keep it simple, and just use the
 </p>
 
 
-<div id="orga5e5751" class="figure">
+<div id="orgcd48f3a" class="figure">
 <p><img src="pics/three_body_maxt.png" alt="three_body_maxt.png" />
 </p>
 </div>
@@ -766,7 +766,7 @@ We wire up this subroutine to <code>steps_adapt_etab_wt()</code> via the <code>s
 <h2 id="moonsatorb"><span class="section-number-2">8.</span> Satellite &amp; Moon Orbit Intersection</h2>
 <div class="outline-text-2" id="text-moonsatorb">
 
-<div id="org644ea72" class="figure">
+<div id="org4bcbc34" class="figure">
 <p><img src="pics/three_body_moon.png" alt="three_body_moon.png" />
 </p>
 </div>
@@ -880,9 +880,9 @@ Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the 
 <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
 <span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">three_body</span>
   <span style="color: #00ffff;">use</span>, <span style="color: #00ffff;">intrinsic</span> :: <span style="color: #00fa9a; font-weight: bold;">iso_fortran_env</span>,                <span style="color: #00ffff;">only</span>: <span style="color: #8470ff; font-weight: bold;">output_unit</span>, <span style="color: #8470ff; font-weight: bold;">error_unit</span>
-  <span style="color: #00ffff;">use</span>            :: mrkiss_config,                  <span style="color: #00ffff;">only</span>: rk, ik, t_delta_tiny
+  <span style="color: #00ffff;">use</span>            :: mrkiss_config,                  <span style="color: #00ffff;">only</span>: rk, ik, bk, t_delta_tiny
   <span style="color: #00ffff;">use</span>            :: mrkiss_solvers_wt,              <span style="color: #00ffff;">only</span>: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
-  <span style="color: #00ffff;">use</span>            :: mrkiss_utils,                   <span style="color: #00ffff;">only</span>: print_solution
+  <span style="color: #00ffff;">use</span>            :: mrkiss_utils,                   <span style="color: #00ffff;">only</span>: print_solution, seq, interpolate_solution
   <span style="color: #00ffff;">use</span>            :: mrkiss_eerk_verner_9_8,         <span style="color: #00ffff;">only</span>: a, b1, b2, c, p1, p2
   <span style="color: #00ffff;">use</span>            :: mrkiss_eerk_dormand_prince_5_4, <span style="color: #00ffff;">only</span>: dpa=&gt;a, dpb=&gt;b1, dpc=&gt;c
 
@@ -897,9 +897,11 @@ Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the 
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(1)      = [1.0_rk / 81.45_rk]</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_delta       = 17.06521656015796d0 / (num_points - 1 )</span>
 
-  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> solution(1+deq_dim, num_points)</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(16)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> solution(1+2*deq_dim, num_points), isolution(1+deq_dim, num_points)</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
   <span style="color: #63b8ff;">integer</span>                     ::<span style="color: #7fffd4;"> c_beg, c_end, c_rate</span>
+
+  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> dy(deq_dim)</span>
 
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
 
@@ -907,7 +909,7 @@ Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the 
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run V(9): "</span>
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
@@ -920,7 +922,7 @@ Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the 
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_wt</span>(status, istats, solution, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Fixed t_delta run DP(5): "</span>
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"               Solution Points: "</span>, istats(1)
@@ -972,6 +974,29 @@ Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the 
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   y-err Adjust one_step calls: "</span>, istats(4)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_etab_wt-std.csv"</span>, end_o=istats(1))
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_etab_wt-std</span>
+
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_int</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  isolution = 0
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">seq</span>(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);            <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Create new t values</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">interpolate_solution</span>(status, isolution, solution, end_o=istats(1)) <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Preform the interpolation</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive hermite interpolation run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, isolution, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_std_interpolated.csv"</span>, sol_w_dy_o=<span style="color: #00ffff;">.false.</span>_bk)
+
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  isolution = 0
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">seq</span>(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Note we must provide y_dim_o because solution really contains dy.  </span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">interpolate_solution</span>(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_w_dy_o=<span style="color: #00ffff;">.false.</span>_bk)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>,       <span style="color: #fa8072;">"Adaptive linear interpolation run: "</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"                  Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                        Status: "</span>, status
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, isolution, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_std_interpolated_lin.csv"</span>, sol_w_dy_o=<span style="color: #00ffff;">.false.</span>_bk)
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: steps_adapt_int</span>
 
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: steps_adapt_etab_wt-fix-delta-steps</span>
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
@@ -1170,15 +1195,44 @@ adDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span 
 ftDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'tree_body_steps_fixed_stab_wt.csv'</span>)
 fyDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_condy_stab_wt.csv'</span>)
 loDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'steps_fixed_stab_wt-dp.csv'</span>)
-loDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'steps_fixed_stab_wt-dp.csv'</span>)
 slDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'steps_sloppy_condy_stab_wt.csv'</span>)
 a2Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_etab_wt-fix-delta-steps.csv'</span>)
 a3Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_etab_wt-pho-t-max.csv'</span>)
 a4Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_etab_wt-isct.csv'</span>)
-
+aiDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_std_interpolated.csv'</span>)
+alDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> fread(<span style="color: #fa8072;">'three_body_steps_adapt_std_interpolated_lin.csv'</span>)
 erDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(b=c(<span style="color: #fa8072;">'Earth'</span>), x=c(0), y=c(0))
 moDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(x=cos(seq(0, 2*pi, 0.01)), y=sin(seq(0, 2*pi, 0.01)))
 m0Dat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(x=1.0, y=0.0)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_path(data=aiDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Interpolated'</span>)) + 
+  geom_point(data=adDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Interpolated"</span>=<span style="color: #fa8072;">"darkblue"</span>, <span style="color: #fa8072;">"Adaptive"</span>=<span style="color: #fa8072;">"red"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, subtitle=<span style="color: #fa8072;">'Interpolated Adaptive Solution (Hermite)'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body_interp_adapt_path.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_path(data=alDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Interpolated'</span>)) + 
+  geom_point(data=adDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive'</span>)) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"Interpolated"</span>=<span style="color: #fa8072;">"darkblue"</span>, <span style="color: #fa8072;">"Adaptive"</span>=<span style="color: #fa8072;">"red"</span>)) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, subtitle=<span style="color: #fa8072;">'Interpolated Adaptive Solution (Linear)'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>) +
+  coord_fixed()
+ggsave(filename=<span style="color: #fa8072;">'three_body_lin_interp_adapt_path.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(rbind(data.table(t=ftDat$t, aerr=abs(aiDat$y1-ftDat$y1), bse=abs(ftDat$y1) , var=<span style="color: #fa8072;">'x1'</span>),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y2-ftDat$y2), bse=abs(ftDat$y2) , var=<span style="color: #fa8072;">'x2'</span>),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y3-ftDat$y3), bse=abs(ftDat$y3) , var=<span style="color: #fa8072;">'v1'</span>),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y4-ftDat$y4), bse=abs(ftDat$y4) , var=<span style="color: #fa8072;">'v2'</span>)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span>
+             filter(aerr&gt;0 &amp; bse&gt;0) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span>
+             mutate(rerr=aerr/bse)) + 
+  geom_point(aes(x=t, y=rerr, col=var), shape=16, alpha=0.05, size=3.1) +
+  scale_colour_manual(values=c(<span style="color: #fa8072;">"x1"</span>=<span style="color: #fa8072;">"darkgreen"</span>, <span style="color: #fa8072;">"x2"</span>=<span style="color: #fa8072;">"darkblue"</span>, <span style="color: #fa8072;">"v1"</span>=<span style="color: #fa8072;">"brown"</span>, <span style="color: #fa8072;">"v2"</span>=<span style="color: #fa8072;">"darkred"</span>),
+                      labels=c(expression(x[1]), expression(x[2]), expression(v[1]), expression(v[2]))) +
+  scale_y_log10() +
+  labs(title=<span style="color: #fa8072;">'Interpolated Adaptive Solution'</span>, subtitle=<span style="color: #fa8072;">'Relative Error'</span>, x=expression(t), y=<span style="color: #fa8072;">'error'</span>, col=<span style="color: #fa8072;">''</span>) 
+ggsave(filename=<span style="color: #fa8072;">'three_body_interp_adapt_error.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
   geom_point(data=erDat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Earth'</span>)) +
@@ -1187,8 +1241,7 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_point(data=adDat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
   geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
-       subtitle=<span style="color: #fa8072;">'No stepp_o'</span>) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
@@ -1211,8 +1264,7 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_point(data=a2Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
   geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
-       subtitle=<span style="color: #fa8072;">'y_delta_length via stepp_o'</span>) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body_ylen.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
@@ -1223,8 +1275,7 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() +
   geom_point(data=a3Dat, aes(x=y1, y=y2, col=<span style="color: #fa8072;">'Adaptive Steps'</span>)) +
   geom_point(data=m0Dat, aes(x=x, y=y, col=<span style="color: #fa8072;">'Moon'</span>)) +
   scale_colour_manual(values=c(<span style="color: #fa8072;">"Earth"</span>=<span style="color: #fa8072;">"blue"</span>, <span style="color: #fa8072;">"Moon"</span>=<span style="color: #fa8072;">"grey"</span>, <span style="color: #fa8072;">"Fixed Steps"</span>=<span style="color: #fa8072;">"pink"</span>, <span style="color: #fa8072;">"Adaptive Steps"</span>=<span style="color: #fa8072;">"red"</span>)) +
-  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>, 
-       subtitle=<span style="color: #fa8072;">'max_t via stepp_o'</span>) +
+  labs(title=<span style="color: #fa8072;">'Restricted Three Body Problem'</span>, x=expression(x[1]), y=expression(x[2]), col=<span style="color: #fa8072;">''</span>) +
   coord_fixed()
 ggsave(filename=<span style="color: #fa8072;">'three_body_maxt.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 

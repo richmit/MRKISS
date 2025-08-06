@@ -71,6 +71,11 @@ s/\(steps_condy_stab_nt(\([^,]\+,\)\{4\}\)[^,]\+,/\1/;
 s/\(steps_sloppy_condy_stab_nt(\([^,]\+,\)\{4\}\)[^,]\+,/\1/; 
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Slimey fixes for steps_points_stab_wt where above rules break
+s/call deq(status, dy, 1), y, param)/call deq(status, dy, y, param)/;
+s/^\(  *deq, \).*/\1 \&/;
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Remove variable declarations with just a t -- I have left these on lines by themselves to make this easy. 
 
 /:: t$/d;

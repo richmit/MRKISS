@@ -79,7 +79,7 @@ Here is a complete example in 23 lines that solves [[https://www.mitchr.me/SS/lo
 !-------------------------------------------------------------------------------------------------
 program minimal
 
-  use :: mrkiss_config,      only: rk, ik
+  use :: mrkiss_config,      only: rk, ik, istats_size
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
@@ -90,8 +90,8 @@ program minimal
   real(kind=rk),    parameter :: param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
   real(kind=rk),    parameter :: t_end    = 50.0_rk
 
-  real(kind=rk)               :: solution(4, 10000)
-  integer(kind=ik)            :: status, istats(16)
+  real(kind=rk)               :: solution(7, 10000)
+  integer(kind=ik)            :: status, istats(istats_size)
 
   call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   call print_solution(status, solution, filename_o="minimal.csv")
@@ -335,9 +335,9 @@ To make all this concrete, here is what one of these modules looks like (~mrkiss
 !! Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), & 'The Runge-Kutta Method'.
 !!
 !! References:
-!!   Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
-!!   Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
-!!   Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
+!!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
+!!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
+!!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
 !!
 module mrkiss_erk_kutta_4
   use mrkiss_config, only: rk, ik
@@ -450,7 +450,7 @@ sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../
 #+end_src
 
 The arguments are as follows:
-#+begin_src text
+#+begin_src text :eval never :tangle no
               status ........ A status code. A positive value indicates failure.
                               Do not return a value larger than 255!
               dydt .......... The value of for f(t, y) is returned in this argument
@@ -571,6 +571,8 @@ The first step is to download *[[https://github.com/richmit/MRKISS][~MRKISS~]]*.
 git clone 'https://github.com/richmit/MRKISS.git'
 #+end_src
 
+#+RESULTS:
+
 Alternatly, you could download the zip file: [[https://github.com/richmit/MRKISS/archive/refs/heads/master.zip][MRKISS]]
 
 ** Check Out The Examples
@@ -584,6 +586,8 @@ Change into the [[https://github.com/richmit/MRKISS/blob/master/examples][~MRKIS
 #+begin_src sh :results output verbatum :exports code
 cd MRKISS/examples
 #+end_src
+
+#+RESULTS:
 
 *** Using something other than ~gfortran~
 :PROPERTIES:
@@ -624,7 +628,7 @@ are unlucky, then you may need to set some variables.  In particular, you might 
 AR := ar
 FC := nvfortran
 FFLAGS := -O3 -Wall -W -Xlinker -z -Xlinker execstack
-FSHFLG = -o $(MRFFL_SHARED_LIB_FILE) -shared $(MRFFL_OBJ_FILES)
+FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
 #+end_src
 
 The only tricky one is the ~FSHFLG~ variable.  Luckily you only need the ~FSHFLG~ variable if you plan on building a shared library.  The shared library is
@@ -645,13 +649,21 @@ ls
 
 #+RESULTS:
 #+begin_example
-rm -f mrkiss_config.obj mrkiss_config.mod
-gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
-rm -f mrkiss_utils.obj mrkiss_utils.mod
-gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_utils.f90 -o mrkiss_utils.obj
-rm -f mrkiss_solvers_wt.obj mrkiss_solvers_wt.mod
-......
-gfortran -O3 -Wsurprising -W -std=f2023 lorenz.f90 ....
+changelog.html
+changelog.org
+dox
+ex_lorenz.html
+ex_lorenz.org
+ex_three_body.html
+ex_three_body.org
+index.html
+index.org
+logo
+MRKISS
+pics
+README.org
+roadmap.html
+roadmap.org
 #+end_example
 
 Assuming the build worked, we can now run the code.  On UNIX systems the binary will be called ~lorenz~ and on Windows it will be called ~lorenz.exe~.  On
@@ -662,12 +674,6 @@ Windows running it looks like this:
 #+end_src
 
 #+RESULTS:
-#+begin_example
-             Milliseconds:      0.000
-          Solution Points:      10000
-     Total one_step calls:       9999
-Adjustment one_step calls:          0
-#+end_example
 
 That's not very interesting.  The fun part is what it did in the background.  The program should produce a file called ~lorenz.csv~ that has the solution
 curve.  If you have GNU Plot, you can graph it with something like this:
@@ -675,6 +681,8 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 #+begin_src sh
 gnuplot -p < lorenz.gplt
 #+end_src
+
+#+RESULTS:
 
 #+ATTR_HTML: :width 90% :align center
 [[file:pics/lorenz.png][file:pics/lorenz.png]]
@@ -696,6 +704,8 @@ cd examples
 gfortran.exe lorenz.f90 ../src/*.f90
 #+end_src
 
+#+RESULTS:
+
 That said, most people will probably want to use a build system.  If GNU Make is your thing, then the files in the
 [[https://github.com/richmit/MRKISS/blob/master/make_include/][~/MRKISS/make_include/~]] directory may be of help.  In particular the makefile fragment
 [[https://github.com/richmit/MRKISS/blob/master/make_include/include.mk][~include.mk~]] provides useful targets and variables.  The makefile in the
@@ -709,7 +719,7 @@ That said, most people will probably want to use a build system.  If GNU Make is
 
 Your makefile will look something like this:
 
-#+begin_src makefile
+#+begin_src makefile :eval never :tangle no
 MRKISS_PATH = ../MRKISS
 
 # Set FC, FFLAGS, & AR here.  The include below has the settings I use on my system.
@@ -725,7 +735,7 @@ Note the rule for ~your_program~ in the makefile above takes the lazy approach o
 dependency regardless of if your program actually needs them all.  This is how most people use the modules because it's simple.  The cost might be a couple
 seconds of extra compile time.  You can explicitly list out the modules in the makefile if you wish.  Such a rule might look like the following:
 
-#+begin_src makefile
+#+begin_src makefile :eval never :tangle no
 your_program : your_program.f90 mrkiss_config$(OBJ_SUFFIX) mrkiss_solvers_wt(OBJ_SUFFIX) mrkiss_utils$(OBJ_SUFFIX)
     $(FC) $(FFLAGS) $^ -o $@
 #+end_src
@@ -784,7 +794,7 @@ A rule to make a static library is included in ~include.mk~.  A build rule like 
 I'm just including the library file on the command line instead of linker like options (i.e. ~-L~ and ~-l~ for GNU compilers).  That's because simply including
 the library on the command line is broadly supported across more compilers -- this way I don't have to document how to do the same thing for each one. ;)
 
-#+begin_src makefile
+#+begin_src makefile :eval never :tangle no
 your_program : your_program.f90 $(MRKISS_STATIC_LIB_FILE)
     $(FC) $(FFLAGS) $^ $(MRKISS_STATIC_LIB_FILE) -o $@
 #+end_src
@@ -818,6 +828,8 @@ The tests can be run by changing into the appropriate directory ([[https://githu
 cd tests
 make -j 16 tests
 #+end_src
+
+#+RESULTS:
 
 Note the ~-j 16~ argument to make.  When running all the tests, especially in the [[https://github.com/richmit/MRKISS/blob/master/tests][~MRKISS/tests/~]]
 directory, I strongly recommend running in parallel.

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-05 Tue 13:30 -->
+<!-- 2025-08-05 Tue 23:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-05 13:30:11</i></td>
+<td class="org-left"><i>2025-08-05 23:11:11</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-05 13:30:13</i></td>
+<td class="org-left"><i>2025-08-05 23:11:12</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org7e13076">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#org5b12040">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orge32fa95">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org145de30">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orgebdb3b1">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org72ef7dd">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -380,8 +380,8 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end    = 50.0_rk</span>
 
-  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> solution(4, 10000)</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(16)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> solution(7, 10000)</span>
+  <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
 
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_nt</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"minimal.csv"</span>)
@@ -503,8 +503,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-org7e13076" class="outline-2">
-<h2 id="org7e13076"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-org5b12040" class="outline-2">
+<h2 id="org5b12040"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -720,9 +720,9 @@ To make all this concrete, here is what one of these modules looks like (<code>m
 <span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), &amp; 'The Runge-Kutta Method'.</span>
 <span style="color: #ffa500;">!!</span>
 <span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">References:</span>
-<span style="color: #ffa500;">!!   </span><span style="color: #ff7f24;">Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53</span>
-<span style="color: #ffa500;">!!   </span><span style="color: #ff7f24;">Hairer, Norsett &amp; Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138</span>
-<span style="color: #ffa500;">!!   </span><span style="color: #ff7f24;">Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102</span>
+<span style="color: #ffa500;">!!  </span><span style="color: #ff7f24;">- Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53</span>
+<span style="color: #ffa500;">!!  </span><span style="color: #ff7f24;">- Hairer, Norsett &amp; Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138</span>
+<span style="color: #ffa500;">!!  </span><span style="color: #ff7f24;">- Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102</span>
 <span style="color: #ffa500;">!!</span>
 <span style="color: #00ffff;">module</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_erk_kutta_4</span>
   <span style="color: #00ffff;">use</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_config</span>, <span style="color: #00ffff;">only</span>: rk, ik
@@ -759,8 +759,8 @@ These worksheets contain the coefficients for the method's Butcher tableau, code
 method's stability region.
 </p>
 </div>
-<div id="outline-container-orge32fa95" class="outline-3">
-<h3 id="orge32fa95"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orgebdb3b1" class="outline-3">
+<h3 id="orgebdb3b1"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -849,8 +849,8 @@ method's stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org145de30" class="outline-3">
-<h3 id="org145de30"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org72ef7dd" class="outline-3">
+<h3 id="org72ef7dd"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1223,7 +1223,7 @@ are unlucky, then you may need to set some variables.  In particular, you might 
 <pre class="src src-makefile"><span style="color: #7fffd4;">AR</span> := ar
 <span style="color: #7fffd4;">FC</span> := nvfortran
 <span style="color: #7fffd4;">FFLAGS</span> := -O3 -Wall -W -Xlinker -z -Xlinker execstack
-<span style="color: #7fffd4;">FSHFLG</span> = -o $(<span style="color: #7fffd4;">MRFFL_SHARED_LIB_FILE</span>) -shared $(<span style="color: #7fffd4;">MRFFL_OBJ_FILES</span>)
+<span style="color: #7fffd4;">FSHFLG</span> = -o $(<span style="color: #7fffd4;">MRKISS_SHARED_LIB_FILE</span>) -shared $(<span style="color: #7fffd4;">MRKISS_OBJ_FILES</span>)
 </pre>
 </div>
 
@@ -1247,14 +1247,22 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org6a6c43d">
-rm -f mrkiss_config.obj mrkiss_config.mod
-gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_config.f90 -o mrkiss_config.obj
-rm -f mrkiss_utils.obj mrkiss_utils.mod
-gfortran -O3 -Wsurprising -W -std=f2023 -c ../src/mrkiss_utils.f90 -o mrkiss_utils.obj
-rm -f mrkiss_solvers_wt.obj mrkiss_solvers_wt.mod
-......
-gfortran -O3 -Wsurprising -W -std=f2023 lorenz.f90 ....
+<pre class="example" id="org7173874">
+changelog.html
+changelog.org
+dox
+ex_lorenz.html
+ex_lorenz.org
+ex_three_body.html
+ex_three_body.org
+index.html
+index.org
+logo
+MRKISS
+pics
+README.org
+roadmap.html
+roadmap.org
 </pre>
 
 <p>
@@ -1267,13 +1275,6 @@ Windows running it looks like this:
 </pre>
 </div>
 
-<pre class="example" id="orgd302627">
-             Milliseconds:      0.000
-          Solution Points:      10000
-     Total one_step calls:       9999
-Adjustment one_step calls:          0
-</pre>
-
 <p>
 That's not very interesting.  The fun part is what it did in the background.  The program should produce a file called <code>lorenz.csv</code> that has the solution
 curve.  If you have GNU Plot, you can graph it with something like this:
@@ -1285,7 +1286,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgeb8755a" class="figure">
+<div id="orgdb6c5d6" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1565,7 +1566,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org79c163a" class="figure">
+<div id="org33672c5" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1614,7 +1615,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org345befd" class="figure">
+<div id="orgab8d398" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1638,7 +1639,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org3fcd904" class="figure">
+<div id="orgb0525c4" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>

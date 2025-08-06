@@ -120,7 +120,7 @@ module mrkiss_solvers_wt
 
   public :: one_step_etab_wt, one_step_stab_wt, one_richardson_step_stab_wt
   public :: one_step_rk4_wt, one_step_rkf45_wt, one_step_dp54_wt
-  public :: steps_fixed_stab_wt, steps_condy_stab_wt, steps_sloppy_condy_stab_wt, steps_adapt_etab_wt
+  public :: steps_fixed_stab_wt, steps_condy_stab_wt, steps_sloppy_condy_stab_wt, steps_adapt_etab_wt, steps_points_stab_wt
 
 contains
 
@@ -432,6 +432,48 @@ contains
     status = 0
   end subroutine one_step_dp54_wt
 
+  subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o, sol_y_idx_o, sol_w_dy_o)
+    use mrkiss_config, only: rk, ik, bk, t_delta_ai, istats_size
+    implicit none
+    ! Arguments
+    integer(kind=ik),           intent(out) :: status, istats(istats_size)
+    real(kind=rk),              intent(out) :: solution(:,:)
+    procedure(deq_iface_wt)                 :: deq
+    real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
+    integer(kind=ik),           intent(in)  :: steps_per_pnt
+    integer(kind=ik), optional, intent(in)  :: p_o, sol_y_idx_o
+    logical(kind=bk), optional, intent(in)  :: sol_w_dy_o
+    ! Vars
+    integer(kind=ik)                        :: cur_pnt_idx, max_pts, y_dim, sol_y_idx, jstats(istats_size), p
+    logical(kind=bk)                        :: sol_w_dy
+    real(kind=rk)                           :: t_delta
+    real(kind=rk)                           :: dy(size(y, 1))
+    ! Process arguments
+    sol_y_idx = 2
+    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
+    sol_w_dy = .true._bk
+    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
+    p = 0_ik
+    if (present(p_o)) p = p_o
+    ! Compute Solution
+    y_dim = size(y, 1)
+    istats = 0
+    solution(sol_y_idx:(sol_y_idx+y_dim-1), 1) = y
+    if (sol_w_dy) then
+       call deq(status, dy, solution(1, 1), y, param)
+       if (status > 0) return
+       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), 1) = dy
+    end if
+    do cur_pnt_idx=2,size(solution, 2)
+       call steps_fixed_stab_wt(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), &
+                                deq, solution(1, cur_pnt_idx-1), &
+                                solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx-1), param, a, b, c, p,             &
+                                t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1, sol_y_idx_o=sol_y_idx, sol_w_dy_o=sol_w_dy)
+       istats = istats + jstats
+       if (status > 0) return
+    end do
+  end subroutine steps_points_stab_wt
+
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
   !!
@@ -469,10 +511,10 @@ contains
   !!
   subroutine steps_fixed_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
                                  t_end_o, t_max_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
-    use mrkiss_config, only: rk, ik, bk, t_delta_ai
+    use mrkiss_config, only: rk, ik, bk, t_delta_ai, istats_size
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(16)
+    integer(kind=ik),           intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
@@ -483,7 +525,7 @@ contains
     logical(kind=bk), optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     ! Vars
     integer(kind=ik)                        :: cur_pnt_idx, max_pts, y_dim, sol_y_idx, cur_step, max_steps, p
-    logical(kind=bk)                        :: sol_w_t, sol_w_dy, p
+    logical(kind=bk)                        :: sol_w_t, sol_w_dy
     real(kind=rk)                           :: t_cv, t_delta
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
     logical                                 :: lotsopnts 
@@ -615,10 +657,10 @@ contains
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
                                  y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o,                        &
                                  sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
-    use mrkiss_config, only: rk, ik, bk, t_delta_tiny, max_bisect_ai
+    use mrkiss_config, only: rk, ik, bk, t_delta_tiny, max_bisect_ai, istats_size
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(16)
+    integer(kind=ik),           intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
@@ -821,10 +863,10 @@ contains
   subroutine steps_sloppy_condy_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
                                         y_sol_len_max_o, t_max_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
-    use mrkiss_config, only: rk, ik, bk, t_delta_tiny
+    use mrkiss_config, only: rk, ik, bk, t_delta_tiny, istats_size
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(16)
+    integer(kind=ik),           intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
@@ -982,7 +1024,7 @@ contains
     use mrkiss_config
     implicit none
     ! Arguments
-    integer(kind=ik),                    intent(out) :: status, istats(16)
+    integer(kind=ik),                    intent(out) :: status, istats(istats_size)
     real(kind=rk),                       intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                          :: deq
     real(kind=rk),                       intent(in)  :: t

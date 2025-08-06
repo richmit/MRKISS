@@ -114,7 +114,7 @@ sed -n '/^  *! BEGIN: steps_fixed_stab_wt *$/,/^ *! END: steps_fixed_stab_wt *$/
   call system_clock(c_beg)
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run: "
+  print '(a)',       "Fixed t_delta run V(9): "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
@@ -239,7 +239,7 @@ sed -n '/^  *! BEGIN: steps_fixed_stab_wt-dp *$/,/^ *! END: steps_fixed_stab_wt-
   call system_clock(c_beg)
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run: "
+  print '(a)',       "Fixed t_delta run DP(5): "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
@@ -585,9 +585,9 @@ sed -n '/^  *! BEGIN: steps_adapt_etab_wt-isct *$/,/^ *! END: steps_adapt_etab_w
 !-------------------------------------------------------------------------------------------------
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
-  use            :: mrkiss_config,                  only: rk, ik, t_delta_tiny
+  use            :: mrkiss_config,                  only: rk, ik, bk, t_delta_tiny, istats_size
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
-  use            :: mrkiss_utils,                   only: print_solution
+  use            :: mrkiss_utils,                   only: print_solution, seq, interpolate_solution
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
   use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
 
@@ -602,9 +602,11 @@ program three_body
   real(kind=rk),    parameter :: param(1)      = [1.0_rk / 81.45_rk]
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
-  real(kind=rk)               :: solution(1+deq_dim, num_points)
-  integer(kind=ik)            :: status, istats(16)
+  real(kind=rk)               :: solution(1+2*deq_dim, num_points), isolution(1+deq_dim, num_points)
+  integer(kind=ik)            :: status, istats(istats_size)
   integer                     :: c_beg, c_end, c_rate
+
+  real(kind=rk)               :: dy(deq_dim)
 
   call system_clock(count_rate=c_rate)
 
@@ -612,7 +614,7 @@ program three_body
   call system_clock(c_beg)
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run: "
+  print '(a)',       "Fixed t_delta run V(9): "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
@@ -625,7 +627,7 @@ program three_body
   call system_clock(c_beg)
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run: "
+  print '(a)',       "Fixed t_delta run DP(5): "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
   print '(a,i10)',   "               Solution Points: ", istats(1)
@@ -677,6 +679,29 @@ program three_body
   print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
   call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-std.csv", end_o=istats(1))
   ! END: steps_adapt_etab_wt-std
+
+  ! BEGIN: steps_adapt_int
+  call system_clock(c_beg)
+  isolution = 0
+  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);            ! Create new t values
+  call interpolate_solution(status, isolution, solution, end_o=istats(1)) ! Preform the interpolation
+  call system_clock(c_end)
+  print '(a)',       "Adaptive hermite interpolation run: "
+  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "                        Status: ", status
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv", sol_w_dy_o=.false._bk)
+
+  call system_clock(c_beg)
+  isolution = 0
+  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
+  ! Note we must provide y_dim_o because solution really contains dy.  
+  call interpolate_solution(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_w_dy_o=.false._bk)
+  call system_clock(c_end)
+  print '(a)',       "Adaptive linear interpolation run: "
+  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
+  print '(a,i10)',   "                        Status: ", status
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv", sol_w_dy_o=.false._bk)
+  ! END: steps_adapt_int
 
   ! BEGIN: steps_adapt_etab_wt-fix-delta-steps
   call system_clock(c_beg)
@@ -878,15 +903,44 @@ adDat <- fread('three_body_steps_adapt_etab_wt-std.csv')
 ftDat <- fread('tree_body_steps_fixed_stab_wt.csv')
 fyDat <- fread('three_body_steps_condy_stab_wt.csv')
 loDat <- fread('steps_fixed_stab_wt-dp.csv')
-loDat <- fread('steps_fixed_stab_wt-dp.csv')
 slDat <- fread('steps_sloppy_condy_stab_wt.csv')
 a2Dat <- fread('three_body_steps_adapt_etab_wt-fix-delta-steps.csv')
 a3Dat <- fread('three_body_steps_adapt_etab_wt-pho-t-max.csv')
 a4Dat <- fread('three_body_steps_adapt_etab_wt-isct.csv')
-
+aiDat <- fread('three_body_steps_adapt_std_interpolated.csv')
+alDat <- fread('three_body_steps_adapt_std_interpolated_lin.csv')
 erDat <- data.table(b=c('Earth'), x=c(0), y=c(0))
 moDat <- data.table(x=cos(seq(0, 2*pi, 0.01)), y=sin(seq(0, 2*pi, 0.01)))
 m0Dat <- data.table(x=1.0, y=0.0)
+
+gp <- ggplot() + 
+  geom_path(data=aiDat, aes(x=y1, y=y2, col='Interpolated')) + 
+  geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive')) +
+  scale_colour_manual(values=c("Interpolated"="darkblue", "Adaptive"="red")) +
+  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Hermite)', x=expression(x[1]), y=expression(x[2]), col='') +
+  coord_fixed()
+ggsave(filename='three_body_interp_adapt_path.png', plot=gp, width=1024, height=800, units='px', dpi=150)
+
+gp <- ggplot() + 
+  geom_path(data=alDat, aes(x=y1, y=y2, col='Interpolated')) + 
+  geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive')) +
+  scale_colour_manual(values=c("Interpolated"="darkblue", "Adaptive"="red")) +
+  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Linear)', x=expression(x[1]), y=expression(x[2]), col='') +
+  coord_fixed()
+ggsave(filename='three_body_lin_interp_adapt_path.png', plot=gp, width=1024, height=800, units='px', dpi=150)
+
+gp <- ggplot(rbind(data.table(t=ftDat$t, aerr=abs(aiDat$y1-ftDat$y1), bse=abs(ftDat$y1) , var='x1'),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y2-ftDat$y2), bse=abs(ftDat$y2) , var='x2'),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y3-ftDat$y3), bse=abs(ftDat$y3) , var='v1'),
+                   data.table(t=ftDat$t, aerr=abs(aiDat$y4-ftDat$y4), bse=abs(ftDat$y4) , var='v2')) %>%
+             filter(aerr>0 & bse>0) %>%
+             mutate(rerr=aerr/bse)) + 
+  geom_point(aes(x=t, y=rerr, col=var), shape=16, alpha=0.05, size=3.1) +
+  scale_colour_manual(values=c("x1"="darkgreen", "x2"="darkblue", "v1"="brown", "v2"="darkred"),
+                      labels=c(expression(x[1]), expression(x[2]), expression(v[1]), expression(v[2]))) +
+  scale_y_log10() +
+  labs(title='Interpolated Adaptive Solution', subtitle='Relative Error', x=expression(t), y='error', col='') 
+ggsave(filename='three_body_interp_adapt_error.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
 gp <- ggplot() + 
   geom_point(data=erDat, aes(x=x, y=y, col='Earth')) +
@@ -895,8 +949,7 @@ gp <- ggplot() +
   geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive Steps')) +
   geom_point(data=m0Dat, aes(x=x, y=y, col='Moon')) +
   scale_colour_manual(values=c("Earth"="blue", "Moon"="grey", "Fixed Steps"="pink", "Adaptive Steps"="red")) +
-  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='', 
-       subtitle='No stepp_o') +
+  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
@@ -919,8 +972,7 @@ gp <- ggplot() +
   geom_point(data=a2Dat, aes(x=y1, y=y2, col='Adaptive Steps')) +
   geom_point(data=m0Dat, aes(x=x, y=y, col='Moon')) +
   scale_colour_manual(values=c("Earth"="blue", "Moon"="grey", "Fixed Steps"="pink", "Adaptive Steps"="red")) +
-  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='', 
-       subtitle='y_delta_length via stepp_o') +
+  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body_ylen.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
@@ -931,8 +983,7 @@ gp <- ggplot() +
   geom_point(data=a3Dat, aes(x=y1, y=y2, col='Adaptive Steps')) +
   geom_point(data=m0Dat, aes(x=x, y=y, col='Moon')) +
   scale_colour_manual(values=c("Earth"="blue", "Moon"="grey", "Fixed Steps"="pink", "Adaptive Steps"="red")) +
-  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='', 
-       subtitle='max_t via stepp_o') +
+  labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body_maxt.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 

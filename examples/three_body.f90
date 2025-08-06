@@ -64,7 +64,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
-  use            :: mrkiss_config,                  only: rk, ik, bk, t_delta_tiny
+  use            :: mrkiss_config,                  only: rk, ik, bk, t_delta_tiny, istats_size
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
   use            :: mrkiss_utils,                   only: print_solution, seq, interpolate_solution
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
@@ -82,7 +82,7 @@ program three_body
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
   real(kind=rk)               :: solution(1+2*deq_dim, num_points), isolution(1+deq_dim, num_points)
-  integer(kind=ik)            :: status, istats(16)
+  integer(kind=ik)            :: status, istats(istats_size)
   integer                     :: c_beg, c_end, c_rate
 
   real(kind=rk)               :: dy(deq_dim)
