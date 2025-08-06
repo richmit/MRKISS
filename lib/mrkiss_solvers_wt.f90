@@ -459,7 +459,7 @@ contains
   !! @endverbatim
   !!
   subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o, sol_y_idx_o, sol_w_dy_o)
-    use mrkiss_config, only: rk, ik, bk, t_delta_ai, istats_size
+    use mrkiss_config, only: rk, ik, bk, istats_size
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(istats_size)
@@ -470,9 +470,8 @@ contains
     integer(kind=ik), optional, intent(in)  :: p_o, sol_y_idx_o
     logical(kind=bk), optional, intent(in)  :: sol_w_dy_o
     ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, max_pts, y_dim, sol_y_idx, jstats(istats_size), p
+    integer(kind=ik)                        :: cur_pnt_idx, y_dim, sol_y_idx, jstats(istats_size), p
     logical(kind=bk)                        :: sol_w_dy
-    real(kind=rk)                           :: t_delta
     real(kind=rk)                           :: dy(size(y, 1))
     ! Process arguments
     sol_y_idx = 2
@@ -550,7 +549,7 @@ contains
     integer(kind=ik), optional, intent(in)  :: sol_y_idx_o
     logical(kind=bk), optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, max_pts, y_dim, sol_y_idx, cur_step, max_steps, p
+    integer(kind=ik)                        :: cur_pnt_idx, y_dim, sol_y_idx, cur_step, max_steps, p
     logical(kind=bk)                        :: sol_w_t, sol_w_dy
     real(kind=rk)                           :: t_cv, t_delta
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
@@ -704,7 +703,7 @@ contains
     real(kind=rk)                           :: bs_tmp1_t_delta, bs_tmp2_t_delta, t_cv, dy(size(y, 1))
     real(kind=rk)                           :: bs_tmpc_dy(size(y, 1)), bs_tmp1_dy(size(y, 1)), bs_tmp2_dy(size(y, 1))
     real(kind=rk)                           :: bs_tmp2_y_delta_len, bs_tmpc_y_delta_len, bs_tmpc_t_delta
-    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), bs_tmp1_y_delta(size(y, 1)) 
+    real(kind=rk)                           :: y_cv(size(y, 1)), bs_tmp1_y_delta(size(y, 1)) 
     real(kind=rk)                           :: bs_tmp2_y_delta(size(y, 1)), bs_tmpc_y_delta(size(y, 1))
     ! Process arguments
     max_pts = size(solution, 2)
@@ -903,7 +902,7 @@ contains
     integer(kind=ik), optional, intent(in)  :: sol_y_idx_o
     logical(kind=bk), optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     ! Variables
-    integer(kind=ik)                        :: max_pts, cur_pnt_idx, biter, sol_y_idx, y_dim
+    integer(kind=ik)                        :: max_pts, cur_pnt_idx, sol_y_idx, y_dim
     logical(kind=bk)                        :: sol_w_t, sol_w_dy
     real(kind=rk)                           :: t_delta_min, y_sol_len, t_cv, t_delta, y_delta_len
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
@@ -1059,19 +1058,19 @@ contains
     real(kind=rk),             optional, intent(in)  :: t_max_o, t_end_o, t_delta_ini_o, t_delta_min_o, t_delta_max_o
     real(kind=rk),             optional, intent(in)  :: t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o
     real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
-    integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisect_o
+    integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisect_o, sol_y_idx_o
     logical(kind=bk),          optional, intent(in)  :: no_bisect_error_o
     procedure(sdf_iface_wt),   optional              :: sdf_o
-    real(kind=rk),             optional, intent(in)  :: sdf_tol_o, sol_y_idx_o
+    real(kind=rk),             optional, intent(in)  :: sdf_tol_o
     logical(kind=bk),          optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     procedure(stepp_iface_wt), optional              :: stepp_o
     ! Variables
-    integer(kind=ik)                                 :: max_pts, cur_pnt_idx, i, adj_cnt, sol_y_idx, y_dim
+    integer(kind=ik)                                 :: max_pts, cur_pnt_idx, adj_cnt, sol_y_idx, y_dim
     integer(kind=ik)                                 :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
     logical(kind=bk)                                 :: sol_w_t, sol_w_dy, no_bisect_error
-    real(kind=rk)                                    :: t_delta_fac, t_nxt, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
-    real(kind=rk)                                    :: y2_delta(size(y, 1)), y_nxt(size(y, 1)), t_delta_ini, t_delta_min
-    real(kind=rk)                                    :: t_delta_max, y_delta_delta(size(y, 1)), t_delta_fac_max, t_delta_fac_min
+    real(kind=rk)                                    :: t_delta_fac, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
+    real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min
+    real(kind=rk)                                    :: y_delta_delta(size(y, 1)), t_delta_fac_max, t_delta_fac_min
     real(kind=rk)                                    :: t_delta_fac_fdg, t_delta_nxt, sdf_tol, error_tol_abs(size(y, 1))
     real(kind=rk)                                    :: error_tol_rel(size(y, 1)), comb_err_tol(size(y, 1)), t_cv, t_delta
     real(kind=rk)                                    :: sp_new_t_delta, bs_tmp1_t_delta, bs_tmp2_t_delta, bs_tmp_t_delta

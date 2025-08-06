@@ -459,7 +459,7 @@ contains
     ! Arguments
     integer(kind=ik),           intent(out)   :: status
     real(kind=rk),              intent(inout) :: new_solution(:,:)
-    real(kind=rk),              intent(out)   :: old_solution(:,:)
+    real(kind=rk),              intent(in)    :: old_solution(:,:)
     integer(kind=ik), optional, intent(in)    :: new_sol_y_idx_o, old_sol_y_idx_o, y_dim_o, end_o
     logical(kind=bk), optional, intent(in)    :: sol_w_dy_o
     ! Variables
@@ -562,7 +562,7 @@ contains
   !! @endverbatim
   !!
   character(len=64) function status_to_origin(status)
-    use :: mrkiss_config, only: rk, ik
+    use :: mrkiss_config, only: ik
     implicit none
     ! Arguments
     integer(kind=ik), intent(in) :: status
@@ -622,7 +622,7 @@ contains
   !! @endverbatim
   !!
   character(len=128) function status_to_message(status)
-    use :: mrkiss_config, only: rk, ik
+    use :: mrkiss_config, only: ik
     implicit none
     ! Arguments
     integer(kind=ik), intent(in) :: status

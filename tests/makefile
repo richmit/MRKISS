@@ -53,7 +53,6 @@ EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt statuscodes
 
 all : $(EXE_TARGETS)
 
-
 ####################################################################################################
 statuscodes : statuscodes.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) statuscodes.f90 $(MRKISS_OBJ_FILES) -o $@
