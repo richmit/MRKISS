@@ -492,6 +492,10 @@ of higher level routines to indicate an error condition.
     - This method has no guarantee for correctness, but generally works well in practice.
     - Can operate on every step or just steps that are too long.  
     - Most common use: ~steps_fixed_stab_*t()~ results have a few steps that are "too long"
+  - ~steps_points_stab_*t()~ takes a seto of \(t\) values at which to find solutions ::
+    - Used several fixed RK steps to go from each \(t\) value to the next.
+    - Most common use: Produce a higher accuracy solution based on a previous solution.  
+    - Most common use: Physical problems requiring solutions at specific time points.
 
 ** High Level Solver Common Arguments
 :PROPERTIES:

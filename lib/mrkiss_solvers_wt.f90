@@ -432,6 +432,32 @@ contains
     status = 0
   end subroutine one_step_dp54_wt
 
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Take a solution with t values pre-populated, and take steps_per_pnt RK steps between each t value.
+  !!
+  !! @verbatim
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 1348-1364 .. Error in this routine
+  !! istats(:) ................... Integer statistics for run
+  !!                                - istats(1): number of computed solution points stored in solution.
+  !!                                - istats(2): number of one_step_* calls not triggered by an event
+  !! solution(:,:) ............... Array for solution.  
+  !!                                Each COLUMN is a solution:
+  !!                                 - First element is the t variable if sol_w_t_o==.true..
+  !!                                 - This array *must* have a populated t sequence in new_solution(1,:)
+  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
+  !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
+  !! deq ......................... Equation subroutine
+  !! y(:) ........................ Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b(:), c(:) .......... The butcher tableau
+  !! steps_per_pnt ............... Number of RK steps to reach each point
+  !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
+  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
+  !! sol_w_dy_o .................. Solution will have dy when .true.  Default: .true.
+  !! @endverbatim
+  !!
   subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o, sol_y_idx_o, sol_w_dy_o)
     use mrkiss_config, only: rk, ik, bk, t_delta_ai, istats_size
     implicit none

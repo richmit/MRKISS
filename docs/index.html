@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-05 Tue 23:11 -->
+<!-- 2025-08-05 Tue 23:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-05 23:11:11</i></td>
+<td class="org-left"><i>2025-08-05 23:37:30</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-05 23:11:12</i></td>
+<td class="org-left"><i>2025-08-05 23:37:31</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org5b12040">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#orgdce7150">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orgebdb3b1">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org72ef7dd">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orgfbc9b78">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org244336f">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -369,7 +369,7 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
 <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
 <span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">minimal</span>
 
-  <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, ik
+  <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, ik, istats_size
   <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab_nt
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
@@ -503,8 +503,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-org5b12040" class="outline-2">
-<h2 id="org5b12040"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-orgdce7150" class="outline-2">
+<h2 id="orgdce7150"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -759,8 +759,8 @@ These worksheets contain the coefficients for the method's Butcher tableau, code
 method's stability region.
 </p>
 </div>
-<div id="outline-container-orgebdb3b1" class="outline-3">
-<h3 id="orgebdb3b1"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orgfbc9b78" class="outline-3">
+<h3 id="orgfbc9b78"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -849,8 +849,8 @@ method's stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org72ef7dd" class="outline-3">
-<h3 id="org72ef7dd"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org244336f" class="outline-3">
+<h3 id="org244336f"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1076,6 +1076,11 @@ to have them directly available.</li>
 <li>Can operate on every step or just steps that are too long.</li>
 <li>Most common use: <code>steps_fixed_stab_*t()</code> results have a few steps that are "too long"</li>
 </ul></dd>
+<dt><code>steps_points_stab_*t()</code> takes a seto of \(t\) values at which to find solutions</dt><dd><ul class="org-ul">
+<li>Used several fixed RK steps to go from each \(t\) value to the next.</li>
+<li>Most common use: Produce a higher accuracy solution based on a previous solution.</li>
+<li>Most common use: Physical problems requiring solutions at specific time points.</li>
+</ul></dd>
 </dl>
 </div>
 <div id="outline-container-hi-solvers-args" class="outline-3">
@@ -1247,7 +1252,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org7173874">
+<pre class="example" id="org06f6dec">
 changelog.html
 changelog.org
 dox
@@ -1286,7 +1291,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgdb6c5d6" class="figure">
+<div id="org1a242b6" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1566,7 +1571,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org33672c5" class="figure">
+<div id="orgb4fe4fd" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1615,7 +1620,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgab8d398" class="figure">
+<div id="orgc13ceaf" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1639,7 +1644,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgb0525c4" class="figure">
+<div id="org223ab31" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>

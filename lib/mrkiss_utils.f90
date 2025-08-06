@@ -537,7 +537,7 @@ contains
   !! - 1297-1313 ... subroutine analyze_solution
   !! - 1314:1330 ... subroutine seq
   !! - 1331:1347 ... subroutine interpolate_solution
-  !! - 1348-1364 ... Unallocated
+  !! - 1348-1364 ... subroutine steps_points_stab_*t
   !! - 1365-1381 ... Unallocated
   !! - 1382-1398 ... Unallocated
   !! - 1399-1415 ... Unallocated
@@ -601,6 +601,8 @@ contains
        status_to_origin = "subroutine seq"
     elseif ((status >= 1331) .and. (status <= 1347)) then
        status_to_origin = "subroutine interpolate_solution"
+    elseif ((status >= 1348) .and. (status <= 1364)) then
+       status_to_origin = "subroutine steps_points_stab_*t"
     else
        status_to_origin = "ERROR"
     end if
