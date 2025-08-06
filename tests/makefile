@@ -62,7 +62,7 @@ statuscodes.out &: statuscodes
 	statuscodes$(EXE_SUFFIX)
 
 test_statuscodes : statuscodes.out
-	$(TD) statuscodes.out data/statuscodes.out
+	$(TD) -Z statuscodes.out data/statuscodes.out
 
 ####################################################################################################
 short_b : short_b.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -72,10 +72,10 @@ short_b_all.out short_b_sub.out &: short_b
 	short_b$(EXE_SUFFIX)
 
 test_short_b_all_vs_sub : short_b_all.out short_b_sub.out
-	$(FD) -b -e 1e-10 short_b_all.out short_b_sub.out
+	$(FD) -Zdq -e 1e-10 short_b_all.out short_b_sub.out
 
 test_short_b_sub_vs_arc : short_b_sub.out
-	$(FD) -b -e 1e-10 short_b_sub.out data/short_b_sub.out
+	$(FD) -Zdq -e 1e-10 short_b_sub.out data/short_b_sub.out
 
 test_short_b : test_short_b_sub_vs_arc test_short_b_all_vs_sub
 
@@ -90,23 +90,23 @@ $(DP54_OUTS) &: dp54
 
 .PHONY: test_dp54_ref_vs_stab_5
 test_dp54_ref_vs_stab_5 : dp54_ref_5.out dp54_stab_5.out
-	$(FD) -b -e 1e-7 dp54_ref_5.out dp54_stab_5.out
+	$(FD) -Zdq -e 1e-7 dp54_ref_5.out dp54_stab_5.out
 
 .PHONY: test_dp54_ref_vs_stab_4
 test_dp54_ref_vs_stab_4 : dp54_ref_4.out dp54_stab_4.out
-	$(FD) -b -e 1e-7 dp54_ref_4.out dp54_stab_4.out
+	$(FD) -Zdq -e 1e-7 dp54_ref_4.out dp54_stab_4.out
 
 .PHONY: test_dp54_stab_vs_etab_5
 test_dp54_stab_vs_etab_5 : dp54_stab_5.out dp54_etab_5.out
-	$(FD) -b -e 1e-10 dp54_stab_5.out dp54_etab_5.out
+	$(FD) -Zdq -e 1e-10 dp54_stab_5.out dp54_etab_5.out
 
 .PHONY: test_dp54_stab_vs_etab_4
 test_dp54_stab_vs_etab_4 : dp54_stab_4.out dp54_etab_4.out
-	$(FD) -b -e 1e-10 dp54_stab_4.out dp54_etab_4.out
+	$(FD) -Zdq -e 1e-10 dp54_stab_4.out dp54_etab_4.out
 
 .PHONY: test_dp54_archive
 test_dp54_archive: $(DP54_OUTS)
-	$(foreach fil,$^,$(FD) -b $(fil) data/$(fil); )
+	$(foreach fil,$^,$(FD) -Zdq $(fil) data/$(fil); )
 
 .PHONY: test_dp54
 test_dp54 : test_dp54_ref_vs_stab_5 test_dp54_ref_vs_stab_4 test_dp54_stab_vs_etab_5 test_dp54_stab_vs_etab_4 test_dp54_archive
@@ -122,23 +122,23 @@ $(RKF45_OUTS) &: rkf45
 
 .PHONY: test_rkf45_ref_vs_stab_5
 test_rkf45_ref_vs_stab_5 : rkf45_ref_5.out rkf45_stab_5.out
-	$(FD) -b -e 1e-7 rkf45_ref_5.out rkf45_stab_5.out
+	$(FD) -Zdq -e 1e-7 rkf45_ref_5.out rkf45_stab_5.out
 
 .PHONY: test_rkf45_ref_vs_stab_4
 test_rkf45_ref_vs_stab_4 : rkf45_ref_4.out rkf45_stab_4.out
-	$(FD) -b -e 1e-7 rkf45_ref_4.out rkf45_stab_4.out
+	$(FD) -Zdq -e 1e-7 rkf45_ref_4.out rkf45_stab_4.out
 
 .PHONY: test_rkf45_stab_vs_etab_5
 test_rkf45_stab_vs_etab_5 : rkf45_stab_5.out rkf45_etab_5.out
-	$(FD) -b -e 1e-10 rkf45_stab_5.out rkf45_etab_5.out
+	$(FD) -Zdq -e 1e-10 rkf45_stab_5.out rkf45_etab_5.out
 
 .PHONY: test_rkf45_stab_vs_etab_4
 test_rkf45_stab_vs_etab_4 : rkf45_stab_4.out rkf45_etab_4.out
-	$(FD) -b -e 1e-10 rkf45_stab_4.out rkf45_etab_4.out
+	$(FD) -Zdq -e 1e-10 rkf45_stab_4.out rkf45_etab_4.out
 
 .PHONY: test_rkf45_archive
 test_rkf45_archive: $(RKF45_OUTS)
-	$(foreach fil,$^,$(FD) -b $(fil) data/$(fil); )
+	$(foreach fil,$^,$(FD) -Zdq $(fil) data/$(fil); )
 
 .PHONY: test_rkf45
 test_rkf45 : test_rkf45_ref_vs_stab_5 test_rkf45_ref_vs_stab_4 test_rkf45_stab_vs_etab_5 test_rkf45_stab_vs_etab_4 test_rkf45_archive
@@ -154,35 +154,35 @@ $(RK4_OUTS) &: rk4
 
 .PHONY: test_rk4_stab_vs_steps
 test_rk4_stab_vs_steps : rk4_steps.out rk4_stab.out 
-	$(FD) -b -e 1e-10 rk4_steps.out rk4_stab.out 
+	$(FD) -Zdq -e 1e-10 rk4_steps.out rk4_stab.out 
 
 .PHONY: test_rk4_ref_vs_stab
 test_rk4_ref_vs_stab : rk4_ref.out rk4_stab.out 
-	$(FD) -b -e 1e-10 rk4_ref.out rk4_stab.out 
+	$(FD) -Zdq -e 1e-10 rk4_ref.out rk4_stab.out 
 
 .PHONY: test_rk4_ref_vs_hnd
 test_rk4_ref_vs_hnd : rk4_ref.out rk4_hnd.out 
-	$(FD) -b -e 1e-6 rk4_ref.out rk4_hnd.out 
+	$(FD) -Zdq -e 1e-6 rk4_ref.out rk4_hnd.out 
 
 .PHONY: test_rk4_frog_d_vs_e
 test_rk4_frog_d_vs_e : rk4_frog.out rk4_frog_end.out
-	$(FD) -b -e 1e-10 rk4_frog.out rk4_frog_end.out
+	$(FD) -Zdq -e 1e-10 rk4_frog.out rk4_frog_end.out
 
 .PHONY: test_rk4_frog_vs_steps
 test_rk4_frog_vs_steps : rk4_frog.out rk4_steps.out 
-	$(FD) -b -e 1e-10 -r '^ +11 ' rk4_frog.out rk4_steps.out 
+	$(FD) -Zdq -e 1e-10 -k '^ +11 ' rk4_frog.out rk4_steps.out 
 
 .PHONY: test_rk4_steps_d_vs_e
 test_rk4_steps_d_vs_e : rk4_steps.out rk4_steps_end.out
-	$(FD) -b -e 1e-10 rk4_steps.out rk4_steps_end.out
+	$(FD) -Zdq -e 1e-10 rk4_steps.out rk4_steps_end.out
 
 .PHONY: test_rk4_steps_p10
-test_rk4_steps_d_vs_e : rk4_steps.out rk4_steps_end.out
-	$(FD) -b -e 1e-5 rk4_steps_end_points10.out rk4_steps_end.out
+test_rk4_steps_p10 : rk4_steps.out rk4_steps_end.out
+	$(FD) -Zdq -e 1e-5 rk4_steps_end_points10.out rk4_steps_end.out
 
 .PHONY: test_rk4_archive
 test_rk4_archive: $(RK4_OUTS)
-	$(foreach fil,$^,$(FD) -b $(fil) data/$(fil); )
+	$(foreach fil,$^,$(FD) -Zdq $(fil) data/$(fil); )
 
 .PHONY: test_rk4
 test_rk4 : test_rk4_stab_vs_steps test_rk4_ref_vs_stab test_rk4_ref_vs_hnd test_rk4_frog_d_vs_e test_rk4_steps_d_vs_e test_rk4_frog_vs_steps test_rk4_steps_p10 test_rk4_archive 
@@ -196,7 +196,7 @@ rich.out : rich
 
 .PHONY: test_rich
 test_rich : rich.out 
-	$(FD) -b -e 1e-10 rich.out data/rich.out
+	$(FD) -Zdq -e 1e-10 rich.out data/rich.out
 
 rich_sol.png rich_error.png &: rich.R rich.out
 	R --no-save --no-echo -q -f rich.R
@@ -242,7 +242,7 @@ seqt.out : seqt
 
 .PHONY: test_seqt
 test_seqt : seqt.out 
-	$(FD) -b -e 1e-10 seqt.out data/seqt.out
+	$(FD) -Zdq -e 1e-10 seqt.out data/seqt.out
 
 ####################################################################################################
 .PHONY: tests

@@ -1124,3 +1124,25 @@ graphs.  None of these tools are required to compile and use the package because
     - Generate logo images
   - rsync :: 
     - Deploy doxygen documentation to my web site
+
+** What is a "Release"?  How is it different from what's on =HEAD=?
+:PROPERTIES:
+:CUSTOM_ID: faq-rel-head
+:END:
+
+Releases are contained in commits with a tag that looks like this: "vYYYY-MM-DD" -- i.e. a ISO format date prefixed with the letter "v".  These commits differ
+from other commits in terms of quality control.  Release commits:
+  - Unit tests are all successful.
+  - Development documentation (changelog & roadmap) are both up to date.
+  - Example documentation is newer than the corrisponding example soruce.
+  - Doxygen documentation
+    - Has been generated after the most reciently modified source code file.
+    - Has a version number that matches the tag.
+    - Has been deployed to by web site.
+  - The repository is clean.
+  - The manifest file 
+    - Newer than all source code files
+    - Checksums match what is in repository
+    - It's checked into git
+
+That said, I generally try to only push working code to github so head should be reasonably safe.

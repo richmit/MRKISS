@@ -35,7 +35,7 @@ tc2_bogacki_shampine_3_2_b1.out : tc2_bogacki_shampine_3_2_b1
 
 .PHONY: test_bogacki_shampine_3_2_b1
 test_tc2_bogacki_shampine_3_2_b1 : tc2_bogacki_shampine_3_2_b1.out
-	$(FD) -e 1e-10 data/tc2_bogacki_shampine_3_2_b1.out tc2_bogacki_shampine_3_2_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_bogacki_shampine_3_2_b1.out tc2_bogacki_shampine_3_2_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_bogacki_shampine_3_2_b2 : tc2_bogacki_shampine_3_2_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -46,7 +46,7 @@ tc2_bogacki_shampine_3_2_b2.out : tc2_bogacki_shampine_3_2_b2
 
 .PHONY: test_bogacki_shampine_3_2_b2
 test_tc2_bogacki_shampine_3_2_b2 : tc2_bogacki_shampine_3_2_b2.out
-	$(FD) -e 1e-10 data/tc2_bogacki_shampine_3_2_b2.out tc2_bogacki_shampine_3_2_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_bogacki_shampine_3_2_b2.out tc2_bogacki_shampine_3_2_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_bogacki_shampine_4_5_b1 : tc2_bogacki_shampine_4_5_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -57,7 +57,7 @@ tc2_bogacki_shampine_4_5_b1.out : tc2_bogacki_shampine_4_5_b1
 
 .PHONY: test_bogacki_shampine_4_5_b1
 test_tc2_bogacki_shampine_4_5_b1 : tc2_bogacki_shampine_4_5_b1.out
-	$(FD) -e 1e-10 data/tc2_bogacki_shampine_4_5_b1.out tc2_bogacki_shampine_4_5_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_bogacki_shampine_4_5_b1.out tc2_bogacki_shampine_4_5_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_bogacki_shampine_4_5_b2 : tc2_bogacki_shampine_4_5_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -68,7 +68,7 @@ tc2_bogacki_shampine_4_5_b2.out : tc2_bogacki_shampine_4_5_b2
 
 .PHONY: test_bogacki_shampine_4_5_b2
 test_tc2_bogacki_shampine_4_5_b2 : tc2_bogacki_shampine_4_5_b2.out
-	$(FD) -e 1e-10 data/tc2_bogacki_shampine_4_5_b2.out tc2_bogacki_shampine_4_5_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_bogacki_shampine_4_5_b2.out tc2_bogacki_shampine_4_5_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_cash_karp_5_4_b1 : tc2_cash_karp_5_4_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -79,7 +79,7 @@ tc2_cash_karp_5_4_b1.out : tc2_cash_karp_5_4_b1
 
 .PHONY: test_cash_karp_5_4_b1
 test_tc2_cash_karp_5_4_b1 : tc2_cash_karp_5_4_b1.out
-	$(FD) -e 1e-10 data/tc2_cash_karp_5_4_b1.out tc2_cash_karp_5_4_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_cash_karp_5_4_b1.out tc2_cash_karp_5_4_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_cash_karp_5_4_b2 : tc2_cash_karp_5_4_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -90,7 +90,7 @@ tc2_cash_karp_5_4_b2.out : tc2_cash_karp_5_4_b2
 
 .PHONY: test_cash_karp_5_4_b2
 test_tc2_cash_karp_5_4_b2 : tc2_cash_karp_5_4_b2.out
-	$(FD) -e 1e-10 data/tc2_cash_karp_5_4_b2.out tc2_cash_karp_5_4_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_cash_karp_5_4_b2.out tc2_cash_karp_5_4_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_dormand_prince_5_4_b1 : tc2_dormand_prince_5_4_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -101,7 +101,7 @@ tc2_dormand_prince_5_4_b1.out : tc2_dormand_prince_5_4_b1
 
 .PHONY: test_dormand_prince_5_4_b1
 test_tc2_dormand_prince_5_4_b1 : tc2_dormand_prince_5_4_b1.out
-	$(FD) -e 1e-10 data/tc2_dormand_prince_5_4_b1.out tc2_dormand_prince_5_4_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_dormand_prince_5_4_b1.out tc2_dormand_prince_5_4_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_dormand_prince_5_4_b2 : tc2_dormand_prince_5_4_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -112,7 +112,7 @@ tc2_dormand_prince_5_4_b2.out : tc2_dormand_prince_5_4_b2
 
 .PHONY: test_dormand_prince_5_4_b2
 test_tc2_dormand_prince_5_4_b2 : tc2_dormand_prince_5_4_b2.out
-	$(FD) -e 1e-10 data/tc2_dormand_prince_5_4_b2.out tc2_dormand_prince_5_4_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_dormand_prince_5_4_b2.out tc2_dormand_prince_5_4_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_dormand_prince_7_8_b1 : tc2_dormand_prince_7_8_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -123,7 +123,7 @@ tc2_dormand_prince_7_8_b1.out : tc2_dormand_prince_7_8_b1
 
 .PHONY: test_dormand_prince_7_8_b1
 test_tc2_dormand_prince_7_8_b1 : tc2_dormand_prince_7_8_b1.out
-	$(FD) -e 1e-10 data/tc2_dormand_prince_7_8_b1.out tc2_dormand_prince_7_8_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_dormand_prince_7_8_b1.out tc2_dormand_prince_7_8_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_dormand_prince_7_8_b2 : tc2_dormand_prince_7_8_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -134,7 +134,7 @@ tc2_dormand_prince_7_8_b2.out : tc2_dormand_prince_7_8_b2
 
 .PHONY: test_dormand_prince_7_8_b2
 test_tc2_dormand_prince_7_8_b2 : tc2_dormand_prince_7_8_b2.out
-	$(FD) -e 1e-10 data/tc2_dormand_prince_7_8_b2.out tc2_dormand_prince_7_8_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_dormand_prince_7_8_b2.out tc2_dormand_prince_7_8_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_fehlberg_4_5_b1 : tc2_fehlberg_4_5_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -145,7 +145,7 @@ tc2_fehlberg_4_5_b1.out : tc2_fehlberg_4_5_b1
 
 .PHONY: test_fehlberg_4_5_b1
 test_tc2_fehlberg_4_5_b1 : tc2_fehlberg_4_5_b1.out
-	$(FD) -e 1e-10 data/tc2_fehlberg_4_5_b1.out tc2_fehlberg_4_5_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_fehlberg_4_5_b1.out tc2_fehlberg_4_5_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_fehlberg_4_5_b2 : tc2_fehlberg_4_5_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -156,7 +156,7 @@ tc2_fehlberg_4_5_b2.out : tc2_fehlberg_4_5_b2
 
 .PHONY: test_fehlberg_4_5_b2
 test_tc2_fehlberg_4_5_b2 : tc2_fehlberg_4_5_b2.out
-	$(FD) -e 1e-10 data/tc2_fehlberg_4_5_b2.out tc2_fehlberg_4_5_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_fehlberg_4_5_b2.out tc2_fehlberg_4_5_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_fehlberg_7_8_b1 : tc2_fehlberg_7_8_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -167,7 +167,7 @@ tc2_fehlberg_7_8_b1.out : tc2_fehlberg_7_8_b1
 
 .PHONY: test_fehlberg_7_8_b1
 test_tc2_fehlberg_7_8_b1 : tc2_fehlberg_7_8_b1.out
-	$(FD) -e 1e-10 data/tc2_fehlberg_7_8_b1.out tc2_fehlberg_7_8_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_fehlberg_7_8_b1.out tc2_fehlberg_7_8_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_fehlberg_7_8_b2 : tc2_fehlberg_7_8_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -178,7 +178,7 @@ tc2_fehlberg_7_8_b2.out : tc2_fehlberg_7_8_b2
 
 .PHONY: test_fehlberg_7_8_b2
 test_tc2_fehlberg_7_8_b2 : tc2_fehlberg_7_8_b2.out
-	$(FD) -e 1e-10 data/tc2_fehlberg_7_8_b2.out tc2_fehlberg_7_8_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_fehlberg_7_8_b2.out tc2_fehlberg_7_8_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_heun_euler_2_1_b1 : tc2_heun_euler_2_1_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -189,7 +189,7 @@ tc2_heun_euler_2_1_b1.out : tc2_heun_euler_2_1_b1
 
 .PHONY: test_heun_euler_2_1_b1
 test_tc2_heun_euler_2_1_b1 : tc2_heun_euler_2_1_b1.out
-	$(FD) -e 1e-10 data/tc2_heun_euler_2_1_b1.out tc2_heun_euler_2_1_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_heun_euler_2_1_b1.out tc2_heun_euler_2_1_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_heun_euler_2_1_b2 : tc2_heun_euler_2_1_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -200,7 +200,7 @@ tc2_heun_euler_2_1_b2.out : tc2_heun_euler_2_1_b2
 
 .PHONY: test_heun_euler_2_1_b2
 test_tc2_heun_euler_2_1_b2 : tc2_heun_euler_2_1_b2.out
-	$(FD) -e 1e-10 data/tc2_heun_euler_2_1_b2.out tc2_heun_euler_2_1_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_heun_euler_2_1_b2.out tc2_heun_euler_2_1_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_sofroniou_spaletta_4_3_b1 : tc2_sofroniou_spaletta_4_3_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -211,7 +211,7 @@ tc2_sofroniou_spaletta_4_3_b1.out : tc2_sofroniou_spaletta_4_3_b1
 
 .PHONY: test_sofroniou_spaletta_4_3_b1
 test_tc2_sofroniou_spaletta_4_3_b1 : tc2_sofroniou_spaletta_4_3_b1.out
-	$(FD) -e 1e-10 data/tc2_sofroniou_spaletta_4_3_b1.out tc2_sofroniou_spaletta_4_3_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_sofroniou_spaletta_4_3_b1.out tc2_sofroniou_spaletta_4_3_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_sofroniou_spaletta_4_3_b2 : tc2_sofroniou_spaletta_4_3_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -222,7 +222,7 @@ tc2_sofroniou_spaletta_4_3_b2.out : tc2_sofroniou_spaletta_4_3_b2
 
 .PHONY: test_sofroniou_spaletta_4_3_b2
 test_tc2_sofroniou_spaletta_4_3_b2 : tc2_sofroniou_spaletta_4_3_b2.out
-	$(FD) -e 1e-10 data/tc2_sofroniou_spaletta_4_3_b2.out tc2_sofroniou_spaletta_4_3_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_sofroniou_spaletta_4_3_b2.out tc2_sofroniou_spaletta_4_3_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_tsitouras_arkode_5_4_b1 : tc2_tsitouras_arkode_5_4_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -233,7 +233,7 @@ tc2_tsitouras_arkode_5_4_b1.out : tc2_tsitouras_arkode_5_4_b1
 
 .PHONY: test_tsitouras_arkode_5_4_b1
 test_tc2_tsitouras_arkode_5_4_b1 : tc2_tsitouras_arkode_5_4_b1.out
-	$(FD) -e 1e-10 data/tc2_tsitouras_arkode_5_4_b1.out tc2_tsitouras_arkode_5_4_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_tsitouras_arkode_5_4_b1.out tc2_tsitouras_arkode_5_4_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_tsitouras_arkode_5_4_b2 : tc2_tsitouras_arkode_5_4_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -244,7 +244,7 @@ tc2_tsitouras_arkode_5_4_b2.out : tc2_tsitouras_arkode_5_4_b2
 
 .PHONY: test_tsitouras_arkode_5_4_b2
 test_tc2_tsitouras_arkode_5_4_b2 : tc2_tsitouras_arkode_5_4_b2.out
-	$(FD) -e 1e-10 data/tc2_tsitouras_arkode_5_4_b2.out tc2_tsitouras_arkode_5_4_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_tsitouras_arkode_5_4_b2.out tc2_tsitouras_arkode_5_4_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_1978_6_5_b1 : tc2_verner_1978_6_5_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -255,7 +255,7 @@ tc2_verner_1978_6_5_b1.out : tc2_verner_1978_6_5_b1
 
 .PHONY: test_verner_1978_6_5_b1
 test_tc2_verner_1978_6_5_b1 : tc2_verner_1978_6_5_b1.out
-	$(FD) -e 1e-10 data/tc2_verner_1978_6_5_b1.out tc2_verner_1978_6_5_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_1978_6_5_b1.out tc2_verner_1978_6_5_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_1978_6_5_b2 : tc2_verner_1978_6_5_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -266,7 +266,7 @@ tc2_verner_1978_6_5_b2.out : tc2_verner_1978_6_5_b2
 
 .PHONY: test_verner_1978_6_5_b2
 test_tc2_verner_1978_6_5_b2 : tc2_verner_1978_6_5_b2.out
-	$(FD) -e 1e-10 data/tc2_verner_1978_6_5_b2.out tc2_verner_1978_6_5_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_1978_6_5_b2.out tc2_verner_1978_6_5_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_2010_6_5_b1 : tc2_verner_2010_6_5_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -277,7 +277,7 @@ tc2_verner_2010_6_5_b1.out : tc2_verner_2010_6_5_b1
 
 .PHONY: test_verner_2010_6_5_b1
 test_tc2_verner_2010_6_5_b1 : tc2_verner_2010_6_5_b1.out
-	$(FD) -e 1e-10 data/tc2_verner_2010_6_5_b1.out tc2_verner_2010_6_5_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_2010_6_5_b1.out tc2_verner_2010_6_5_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_2010_6_5_b2 : tc2_verner_2010_6_5_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -288,7 +288,7 @@ tc2_verner_2010_6_5_b2.out : tc2_verner_2010_6_5_b2
 
 .PHONY: test_verner_2010_6_5_b2
 test_tc2_verner_2010_6_5_b2 : tc2_verner_2010_6_5_b2.out
-	$(FD) -e 1e-10 data/tc2_verner_2010_6_5_b2.out tc2_verner_2010_6_5_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_2010_6_5_b2.out tc2_verner_2010_6_5_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_7_6_b1 : tc2_verner_7_6_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -299,7 +299,7 @@ tc2_verner_7_6_b1.out : tc2_verner_7_6_b1
 
 .PHONY: test_verner_7_6_b1
 test_tc2_verner_7_6_b1 : tc2_verner_7_6_b1.out
-	$(FD) -e 1e-10 data/tc2_verner_7_6_b1.out tc2_verner_7_6_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_7_6_b1.out tc2_verner_7_6_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_7_6_b2 : tc2_verner_7_6_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -310,7 +310,7 @@ tc2_verner_7_6_b2.out : tc2_verner_7_6_b2
 
 .PHONY: test_verner_7_6_b2
 test_tc2_verner_7_6_b2 : tc2_verner_7_6_b2.out
-	$(FD) -e 1e-10 data/tc2_verner_7_6_b2.out tc2_verner_7_6_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_7_6_b2.out tc2_verner_7_6_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_8_7_b1 : tc2_verner_8_7_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -321,7 +321,7 @@ tc2_verner_8_7_b1.out : tc2_verner_8_7_b1
 
 .PHONY: test_verner_8_7_b1
 test_tc2_verner_8_7_b1 : tc2_verner_8_7_b1.out
-	$(FD) -e 1e-10 data/tc2_verner_8_7_b1.out tc2_verner_8_7_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_8_7_b1.out tc2_verner_8_7_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_8_7_b2 : tc2_verner_8_7_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -332,7 +332,7 @@ tc2_verner_8_7_b2.out : tc2_verner_8_7_b2
 
 .PHONY: test_verner_8_7_b2
 test_tc2_verner_8_7_b2 : tc2_verner_8_7_b2.out
-	$(FD) -e 1e-10 data/tc2_verner_8_7_b2.out tc2_verner_8_7_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_8_7_b2.out tc2_verner_8_7_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_9_8_b1 : tc2_verner_9_8_b1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -343,7 +343,7 @@ tc2_verner_9_8_b1.out : tc2_verner_9_8_b1
 
 .PHONY: test_verner_9_8_b1
 test_tc2_verner_9_8_b1 : tc2_verner_9_8_b1.out
-	$(FD) -e 1e-10 data/tc2_verner_9_8_b1.out tc2_verner_9_8_b1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_9_8_b1.out tc2_verner_9_8_b1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_verner_9_8_b2 : tc2_verner_9_8_b2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -354,7 +354,7 @@ tc2_verner_9_8_b2.out : tc2_verner_9_8_b2
 
 .PHONY: test_verner_9_8_b2
 test_tc2_verner_9_8_b2 : tc2_verner_9_8_b2.out
-	$(FD) -e 1e-10 data/tc2_verner_9_8_b2.out tc2_verner_9_8_b2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_verner_9_8_b2.out tc2_verner_9_8_b2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_euler_1 : tc2_euler_1.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -365,7 +365,7 @@ tc2_euler_1.out : tc2_euler_1
 
 .PHONY: test_euler_1
 test_tc2_euler_1 : tc2_euler_1.out
-	$(FD) -e 1e-10 data/tc2_euler_1.out tc2_euler_1.out
+	$(FD) -Zdq -e 1e-10 data/tc2_euler_1.out tc2_euler_1.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_feagin_10 : tc2_feagin_10.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -376,7 +376,7 @@ tc2_feagin_10.out : tc2_feagin_10
 
 .PHONY: test_feagin_10
 test_tc2_feagin_10 : tc2_feagin_10.out
-	$(FD) -e 1e-10 data/tc2_feagin_10.out tc2_feagin_10.out
+	$(FD) -Zdq -e 1e-10 data/tc2_feagin_10.out tc2_feagin_10.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_knoth_wolke_3 : tc2_knoth_wolke_3.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -387,7 +387,7 @@ tc2_knoth_wolke_3.out : tc2_knoth_wolke_3
 
 .PHONY: test_knoth_wolke_3
 test_tc2_knoth_wolke_3 : tc2_knoth_wolke_3.out
-	$(FD) -e 1e-10 data/tc2_knoth_wolke_3.out tc2_knoth_wolke_3.out
+	$(FD) -Zdq -e 1e-10 data/tc2_knoth_wolke_3.out tc2_knoth_wolke_3.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_kutta_4 : tc2_kutta_4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -398,7 +398,7 @@ tc2_kutta_4.out : tc2_kutta_4
 
 .PHONY: test_kutta_4
 test_tc2_kutta_4 : tc2_kutta_4.out
-	$(FD) -e 1e-10 data/tc2_kutta_4.out tc2_kutta_4.out
+	$(FD) -Zdq -e 1e-10 data/tc2_kutta_4.out tc2_kutta_4.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_kutta_three_eight_4 : tc2_kutta_three_eight_4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -409,7 +409,7 @@ tc2_kutta_three_eight_4.out : tc2_kutta_three_eight_4
 
 .PHONY: test_kutta_three_eight_4
 test_tc2_kutta_three_eight_4 : tc2_kutta_three_eight_4.out
-	$(FD) -e 1e-10 data/tc2_kutta_three_eight_4.out tc2_kutta_three_eight_4.out
+	$(FD) -Zdq -e 1e-10 data/tc2_kutta_three_eight_4.out tc2_kutta_three_eight_4.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_midpoint_2 : tc2_midpoint_2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -420,7 +420,7 @@ tc2_midpoint_2.out : tc2_midpoint_2
 
 .PHONY: test_midpoint_2
 test_tc2_midpoint_2 : tc2_midpoint_2.out
-	$(FD) -e 1e-10 data/tc2_midpoint_2.out tc2_midpoint_2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_midpoint_2.out tc2_midpoint_2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_ralston_2 : tc2_ralston_2.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -431,7 +431,7 @@ tc2_ralston_2.out : tc2_ralston_2
 
 .PHONY: test_ralston_2
 test_tc2_ralston_2 : tc2_ralston_2.out
-	$(FD) -e 1e-10 data/tc2_ralston_2.out tc2_ralston_2.out
+	$(FD) -Zdq -e 1e-10 data/tc2_ralston_2.out tc2_ralston_2.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_ralston_3 : tc2_ralston_3.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -442,7 +442,7 @@ tc2_ralston_3.out : tc2_ralston_3
 
 .PHONY: test_ralston_3
 test_tc2_ralston_3 : tc2_ralston_3.out
-	$(FD) -e 1e-10 data/tc2_ralston_3.out tc2_ralston_3.out
+	$(FD) -Zdq -e 1e-10 data/tc2_ralston_3.out tc2_ralston_3.out
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 tc2_ralston_4 : tc2_ralston_4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -453,5 +453,5 @@ tc2_ralston_4.out : tc2_ralston_4
 
 .PHONY: test_ralston_4
 test_tc2_ralston_4 : tc2_ralston_4.out
-	$(FD) -e 1e-10 data/tc2_ralston_4.out tc2_ralston_4.out
+	$(FD) -Zdq -e 1e-10 data/tc2_ralston_4.out tc2_ralston_4.out
 

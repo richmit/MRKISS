@@ -74,7 +74,7 @@ contains
   !! start_o ...... Starting index to print in solution. Default: 1
   !! end_o ........ Ending index to print in solution.  Default: Number of columns in solution.
   !! step_o ....... Print only every step_o'th value in solution. Default: 1
-  !! no_titles_o .. If present, don't print titles.
+  !! titles_o ..... Print titles if .true.  Default: .true.
   !! separator_o .. String to place between fields.  Default: ',' if width_o missing, and ' ' otherwise.
   !! t_min_o ...... Print only solutions with time values >= t_min_o
   !! t_max_o ...... Print only solutions with time values <= t_min_o
@@ -84,7 +84,7 @@ contains
   !! sol_w_dy_o ... Solution has dy when .true.  Default: .true.
   !! @endverbatim
   !! 
-  subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, no_titles_o, &
+  subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, titles_o, &
                             t_min_o, t_max_o, y_dim_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik, bk
@@ -93,17 +93,19 @@ contains
     integer(kind=ik), intent(out)          :: status
     real(kind=rk),    intent(in)           :: solution(:,:)
     character(len=*), intent(in), optional :: filename_o, separator_o
-    integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o, no_titles_o
+    integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
     integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o
-    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o
+    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o, titles_o
     ! Local variables
     integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx
-    logical(kind=bk)                       :: sol_w_t, sol_w_dy
+    logical(kind=bk)                       :: sol_w_t, sol_w_dy, titles
     integer(kind=ik)                       :: i, out_io_stat, out_io_unit
     character(len=:), allocatable          :: fmt, separator
     character(len=512)                     :: digits_str, width_str, tmp_str
     ! Process arguments
+    titles = .true.
+    if (present(titles_o)) titles = titles_o
     step = 1
     if (present(step_o)) step = step_o
     digits = 15
@@ -150,7 +152,7 @@ contains
        out_io_unit = output_unit
     end if
     ! Print titles
-    if ( .not. (present(no_titles_o))) then
+    if (titles) then
        if (present(width_o)) then
           write(out_io_unit, fmt='(a' // trim(width_str) // ')', advance="no") "i"
           if (sol_w_t) then
@@ -267,7 +269,7 @@ contains
     sol_w_t = .true._bk
     if (present(sol_w_t_o)) sol_w_t = sol_w_t_o
     sol_w_dy = .true._bk
-    if (sol_w_dy_o) sol_w_dy = sol_w_dy_o
+    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     if (present(y_dim_o)) then
        y_dim = y_dim_o
     else ! If solution contains exactily one solution set with no extra columns and sol_y_idx_o==1, then we can guess y_dim
@@ -441,7 +443,7 @@ contains
   !!                                It must also have room for a new y solution series starting in at 
   !!                                column new_sol_y_idx_o, 2 by default.
   !! old_solution(:,:) ........... Array for old solution.  
-  !!                                This array *must* have t!  
+  !!                                This array *must* have t!  It must have at least two solution points.
   !! y_dim ....................... Number of elements in y.  Default infered from size of old_solution.
   !! new_sol_y_idx_o ............. Index of y in new_solution.  Default: 2
   !! old_sol_y_idx_o ............. Index of y in old_solution.  Default: 2
@@ -473,7 +475,7 @@ contains
     old_sol_y_idx = 2
     if (present(old_sol_y_idx_o)) old_sol_y_idx = old_sol_y_idx_o
     sol_w_dy = .true._bk
-    if (sol_w_dy_o) sol_w_dy = sol_w_dy_o
+    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     if (present(y_dim_o)) then
        y_dim = y_dim_o
     else ! The old_solution *must* have both t

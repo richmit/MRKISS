@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-05 Tue 23:37 -->
+<!-- 2025-08-06 Wed 18:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-05 23:37:30</i></td>
+<td class="org-left"><i>2025-08-06 18:15:40</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-05 23:37:31</i></td>
+<td class="org-left"><i>2025-08-06 18:15:43</i></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +286,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#orgdce7150">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#org5ec77ed">3. Vocabulary &amp; Definitions</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,8 +295,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orgfbc9b78">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org244336f">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#orgdf5a9d7">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org4734a7c">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
 <li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
@@ -339,6 +339,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <li><a href="#faq-need-more">13.7. I need a more comprehensive solution.  Do you have advice?</a></li>
 <li><a href="#faq-need-fast">13.8. I need something faster.  Do you have advice?</a></li>
 <li><a href="#faq-deps">13.9. It seems like things are used other than Fortran.  Are there really no external dependencies?</a></li>
+<li><a href="#faq-rel-head">13.10. What is a "Release"?  How is it different from what's on <code>HEAD</code>?</a></li>
 </ul>
 </li>
 </ul>
@@ -503,8 +504,8 @@ couple significant ways:
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdce7150" class="outline-2">
-<h2 id="orgdce7150"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
+<div id="outline-container-org5ec77ed" class="outline-2">
+<h2 id="org5ec77ed"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
@@ -759,8 +760,8 @@ These worksheets contain the coefficients for the method's Butcher tableau, code
 method's stability region.
 </p>
 </div>
-<div id="outline-container-orgfbc9b78" class="outline-3">
-<h3 id="orgfbc9b78"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-orgdf5a9d7" class="outline-3">
+<h3 id="orgdf5a9d7"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -849,8 +850,8 @@ method's stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org244336f" class="outline-3">
-<h3 id="org244336f"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org4734a7c" class="outline-3">
+<h3 id="org4734a7c"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -1252,7 +1253,7 @@ ls
 </pre>
 </div>
 
-<pre class="example" id="org06f6dec">
+<pre class="example" id="org94f18b7">
 changelog.html
 changelog.org
 dox
@@ -1291,7 +1292,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org1a242b6" class="figure">
+<div id="orgb285202" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1571,7 +1572,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgb4fe4fd" class="figure">
+<div id="org123ad78" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1620,7 +1621,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgc13ceaf" class="figure">
+<div id="orgf5889e4" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1644,7 +1645,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org223ab31" class="figure">
+<div id="orgc068283" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1872,6 +1873,37 @@ graphs.  None of these tools are required to compile and use the package because
 <li>Deploy doxygen documentation to my web site</li>
 </ul></dd>
 </dl>
+</div>
+</div>
+<div id="outline-container-faq-rel-head" class="outline-3">
+<h3 id="faq-rel-head"><span class="section-number-3">13.10.</span> What is a "Release"?  How is it different from what's on <code>HEAD</code>?</h3>
+<div class="outline-text-3" id="text-faq-rel-head">
+<p>
+Releases are contained in commits with a tag that looks like this: "vYYYY-MM-DD" &#x2013; i.e. a ISO format date prefixed with the letter "v".  These commits differ
+from other commits in terms of quality control.  Release commits:
+</p>
+<ul class="org-ul">
+<li>Unit tests are all successful.</li>
+<li>Development documentation (changelog &amp; roadmap) are both up to date.</li>
+<li>Example documentation is newer than the corrisponding example soruce.</li>
+<li>Doxygen documentation
+<ul class="org-ul">
+<li>Has been generated after the most reciently modified source code file.</li>
+<li>Has a version number that matches the tag.</li>
+<li>Has been deployed to by web site.</li>
+</ul></li>
+<li>The repository is clean.</li>
+<li>The manifest file 
+<ul class="org-ul">
+<li>Newer than all source code files</li>
+<li>Checksums match what is in repository</li>
+<li>It's checked into git</li>
+</ul></li>
+</ul>
+
+<p>
+That said, I generally try to only push working code to github so head should be reasonably safe.
+</p>
 </div>
 </div>
 </div>

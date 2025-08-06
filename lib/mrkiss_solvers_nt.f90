@@ -786,7 +786,7 @@ contains
           do while (abs(bs_tmpc_y_delta_len - y_delta_len_targ) > y_delta_len_tol)
              if (biter >  max_bisect) then
                 istats(7) = istats(7) + 1
-                if (no_bisect_error_o) then
+                if (no_bisect_error) then
                    exit
                 else
                    status = 1025
@@ -813,7 +813,7 @@ contains
           end do
        else
           istats(8) = istats(8) + 1
-          if (no_bisect_error_o) then
+          if (no_bisect_error) then
              status = 1024
              return
           end if
@@ -1234,7 +1234,7 @@ contains
                    bs_itr = bs_itr + 1;
                    if (bs_itr > max_bisect) then
                       istats(7) = istats(7) + 1
-                      if (no_bisect_error_o) then
+                      if (no_bisect_error) then
                          exit
                       else
                          status = 1025

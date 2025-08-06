@@ -49,7 +49,9 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :CUSTOM_ID: latest
 :END:
   - Fixed Bugs
-    - N/A
+    - print_solution: Fixed bug with
+    - interpolate_solution: Fixed bug with optional argument
+    - steps_condy_stab_*t & steps_adapt_etab_*t: : Fixed bug with optional argument
   - Known Issues
     - N/A
   - API breaking Changes
@@ -61,6 +63,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
       - Usage is inverted (went from without to with)
     - no_bisect_error_o is not logical, and it's value matters.
     - Richardson extrapolation used in steps_fixed_stab_wt() when when p_o>0 -- not just present().
+    - no_titles_o => titles_o in print_solution.  Value now used.  Usage inverted.
   - Deprecated functionality
     - N/A
   - New functionality
