@@ -45,38 +45,42 @@ ignore_ws_cnt  = false
 ignore_ws_all  = false
 dump           = false
 ignore_non_num = false
-lines_matching = Regexp.new('.*')
+lines_re       = Regexp.new('.*')
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: float_diff.rb [options] file1 file2"
   opts.separator ""
   opts.separator "Options:"
-  opts.on("-h",         "--help",                   "Show this message")                           { puts opts; exit 1;                }
-  opts.on("-e epsilon", "--epsilon epsilon",        "Set floating point epsilon")                  { |v| epsilon=v.to_f;               }
-  opts.on("-D",         "--dump-diffs",             "Print string differences with .dump")         { |v| dump=true;                    }
-  opts.on("-q",         "--brief",                  "Print just first difference")                 { |v| brief=true;                   }
-  opts.on("-s",         "--report-identical-files", "Report identical files")                      { |v| identical=true;               }
-  opts.on("-Z",         "--ignore-trailing-space",  "ignore white space at line end")              { |v| ignore_ws_end=true;           }
-  opts.on("-b",         "--ignore-space-change",    "ignore changes in the amount of white space") { |v| ignore_ws_cnt=true;           }
-  opts.on("-w",         "--ignore-all-space",       "ignore all white space")                      { |v| ignore_ws_all=true;           }
-  opts.on("-a",         "--ignore-non-numeric",     "ignore non-numeric differences")              { |v| ignore_non_num=true;          }
-  opts.on("-r regexp",  "--lines-matching regexp",  "Only compare matching lines")                 { |v| lines_matching=Regexp.new(v); }
+  opts.separator "  Output Options:"
+  opts.on("-h",         "--help",                   "Show this message")                           { puts opts; exit 1;          }
+  opts.on("-D",         "--dump-diffs",             "Print string differences with .dump")         { |v| dump=true;              }
+  opts.on("-q",         "--brief",                  "Print just first difference")                 { |v| brief=true;             }
+  opts.separator "  Content Options:"
+  opts.on("-e epsilon", "--epsilon epsilon",        "Set floating point epsilon")                  { |v| epsilon=v.to_f;         }
+  opts.on("-s",         "--report-identical-files", "Report identical files")                      { |v| identical=true;         }
+  opts.on("-Z",         "--ignore-trailing-space",  "ignore white space at line end")              { |v| ignore_ws_end=true;     }
+  opts.on("-b",         "--ignore-space-change",    "ignore changes in the amount of white space") { |v| ignore_ws_cnt=true;     }
+  opts.on("-w",         "--ignore-all-space",       "ignore all white space")                      { |v| ignore_ws_all=true;     }
+  opts.on("-a",         "--ignore-non-numeric",     "ignore non-numeric differences")              { |v| ignore_non_num=true;    }
+  opts.separator "  Filter Options:"
+  opts.separator "    Filtering occurs upon file read just as if the files had prepossessed."
+  opts.separator "    Line numbers in output refer to the line numbers in the filtered result."
+  opts.on("-k regexp",  "--keep-lines regexp",      "Filter out non-matching lines")               { |v| lines_re=Regexp.new(v); }
   opts.separator ""
   opts.separator "Super simple file diff that ignores small differences in floating"
   opts.separator "point values.  A non-zero exit code is returned if the files are"
-  opts.separator "different or an error occurs.  If -a is provided, then all differences"
-  opts.separator "are printed.  Otherwise just the fist is printed."
+  opts.separator "different or an error occurs."
   opts.separator ""
 end
 opts.parse!(ARGV)
 
-if (ARGV.length < 2) then
-  puts("ERROR: Two files must be provided as arguments!")
+if (ARGV.length != 2) then
+  puts("ERROR: Two, and no more, files must be provided as arguments!")
   exit 2
 end
 
 file_lines = ARGV.map { |fname|
   open(fname, "r") do |file|
-    file.readlines().select { |line| line.match(lines_matching) }
+    file.readlines().select { |line| line.match(lines_re) }
   end
 }
 
@@ -90,9 +94,7 @@ fpre = Regexp.new(/([-+]{0,1}[0-9]\.[0-9]+(e[-+]{0,1}[0-9]+){0,1})/);
 num_diffs = 0
 file_lines[0].each_index do |idx|
   line_num = idx + 1
-
   line_floats = [0, 1].map { |i| file_lines[i][idx].scan(fpre).map { |m| m[0].to_f } }
-
   if (line_floats[0].size != line_floats[1].size) then
     puts("Files have different float counts on line #{line_num}");
     puts("  <<<#{file_lines[0][idx]}")
@@ -124,7 +126,6 @@ file_lines[0].each_index do |idx|
       num_diffs += 1;
     end
   end
-
 end
 
 if (num_diffs > 0) then

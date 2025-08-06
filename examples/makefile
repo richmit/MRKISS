@@ -45,7 +45,7 @@ IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
 
-EXE_TARGETS = three_body lorenz minimal brusselator
+EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -126,6 +126,36 @@ lorenz_test: $(LORENZ_CSVS)
 	$(foreach fil,$^,$(FD) -q $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
+step_order_vs_error : step_order_vs_error.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) step_order_vs_error.f90 $(MRKISS_OBJ_FILES) -o $@
+
+STEP_ORDER_VS_ERROR_CSVS = step_order_vs_error_04_01.csv step_order_vs_error_04_02.csv step_order_vs_error_04_03.csv step_order_vs_error_04_04.csv step_order_vs_error_04_05.csv step_order_vs_error_04_06.csv step_order_vs_error_04_07.csv step_order_vs_error_04_08.csv step_order_vs_error_04_09.csv step_order_vs_error_04_10.csv step_order_vs_error_09_01.csv step_order_vs_error_09_02.csv step_order_vs_error_09_03.csv step_order_vs_error_09_04.csv step_order_vs_error_09_05.csv step_order_vs_error_09_06.csv step_order_vs_error_09_07.csv step_order_vs_error_09_08.csv step_order_vs_error_09_09.csv step_order_vs_error_09_10.csv
+
+.PHONY: step_order_vs_error_csv
+step_order_vs_error_csv : $(STEP_ORDER_VS_ERROR_CSVS)
+
+$(STEP_ORDER_VS_ERROR_CSVS) &: step_order_vs_error
+	./step_order_vs_error$(EXE_SUFFIX)
+	head -n 15 $@
+
+STEP_ORDER_VS_ERROR_PNGS = step_order_vs_error_soly.png step_order_vs_error_sold.png step_order_vs_error_err.png
+
+$(STEP_ORDER_VS_ERROR_PNGS) &: $(STEP_ORDER_VS_ERROR_CSVS) step_order_vs_error.R
+	R --no-save --no-echo -q -f step_order_vs_error.R
+
+.PHONY: step_order_vs_error_png
+step_order_vs_error_png : $(STEP_ORDER_VS_ERROR_PNGS)
+	$(IMG_VIEWER) $(STEP_ORDER_VS_ERROR_PNGS) &
+
+.PHONY: step_order_vs_error_clean
+step_order_vs_error_clean :
+	rm -f $(STEP_ORDER_VS_ERROR_PNGS) $(STEP_ORDER_VS_ERROR_CSVS) step_order_vs_error.exe step_order_vs_error step_order_vs_error.o step_order_vs_error.obj
+
+.PHONY: step_order_vs_error_test
+step_order_vs_error_test: $(STEP_ORDER_VS_ERROR_CSVS)
+	$(foreach fil,$^,$(FD) -q $(fil) tdata/$(fil); )
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
 brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) brusselator.f90 $(MRKISS_OBJ_FILES) -o $@
 
@@ -164,7 +194,7 @@ minimal_test: minimal.csv
 	$(FD) -q minimal.csv tdata/minimal.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-tests : minimal_test brusselator_test lorenz_test three_body_test
+tests : minimal_test brusselator_test lorenz_test three_body_test step_order_vs_error_test
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 clean : clean_multi_mrkiss

@@ -1,0 +1,220 @@
+# -*- Mode:Org; Coding:utf-8; fill-column:158 -*-
+# ######################################################################################################################################################.H.S.##
+# FILE:        ex_step_order_vs_error.f90
+#+TITLE:       MRKISS Library Example
+#+SUBTITLE:    Step Size & Order Vs Accuracy
+#+AUTHOR:      Mitch Richling
+#+EMAIL:       http://www.mitchr.me/
+#+DESCRIPTION: MRKISS Documentation Examples
+#+KEYWORDS:    RK runge kutta ode ivp
+#+LANGUAGE:    en
+#+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil 
+# FIXME: When uncommented the following line will render latex equations as images embedded into exported HTML, when commented MathJax will be used
+# #+OPTIONS:     tex:dvipng
+# FIXME: Select ONE of the three TODO lines below
+# #+SEQ_TODO:    ACTION:NEW(t!) ACTION:ASSIGNED(a!@) ACTION:WORK(w!) ACTION:HOLD(h@) | ACTION:FUTURE(f) ACTION:DONE(d!) ACTION:CANCELED(c!)
+# #+SEQ_TODO:    TODO:NEW(T!)                        TODO:WORK(W!)   TODO:HOLD(H@)   |                  TODO:DONE(D!)   TODO:CANCELED(C!)
+#+SEQ_TODO:    TODO:NEW(t)                         TODO:WORK(w)    TODO:HOLD(h)    | TODO:FUTURE(f)   TODO:DONE(d)    TODO:CANCELED(c)
+#+PROPERTY: header-args :eval never-export
+#+HTML_HEAD: <style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+# Change max-width to get wider output -- also note #content style below
+#+HTML_HEAD: <style>body { min-width: 500px; max-width: 1024px; }</style>
+#+HTML_HEAD: <style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+#+HTML_HEAD: <style>h1,h2,h3 { line-height: 1.4em; }</style>
+#+HTML_HEAD: <style>h1.title { font-size: 3em; }</style>
+#+HTML_HEAD: <style>.subtitle { font-size: 0.6em; }</style>
+#+HTML_HEAD: <style>h4,h5,h6 { font-size: 1em; }</style>
+#+HTML_HEAD: <style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+#+HTML_HEAD: <style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+#+HTML_HEAD: <style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+# Change the following to get wider output -- also note body style above
+#+HTML_HEAD: <style>#content { max-width: 60em; }</style>
+#+HTML_LINK_HOME: https://www.mitchr.me/
+#+HTML_LINK_UP: https://github.com/richmit/MRKISS/
+# ######################################################################################################################################################.H.E.##
+
+#+ATTR_HTML: :border 2 solid #ccc :frame hsides :align center
+|          <r> | <l>                                          |
+|    *Author:* | /{{{author}}}/                               |
+|   *Updated:* | /{{{modification-time(%Y-%m-%d %H:%M:%S)}}}/ |
+| *Generated:* | /{{{time(%Y-%m-%d %H:%M:%S)}}}/              |
+#+ATTR_HTML: :align center
+Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
+
+#+TOC: headlines 2
+
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#   010  #    020  #    030  #    040  #    050  #    060  #    070  #    080  #    090  #    100  #    110  #    120  #    130  #    140  #    150  #    160  #    170  #    180  #    190  #    200  #    210  #    220  #    230  #    240  #    250  #    260  #    270  #    280  #    290  #
+# 345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+
+* Results
+:PROPERTIES:
+:CUSTOM_ID: Results
+:END:
+
+The code for this example is found in [[https://github.com/richmit/MRKISS/blob/master/examples/step_order_vs_error.f90][~examples/step_order_vs_error.f90~]].
+Additionally the code may be found at the end of this document in the section [[#full-code][Full Code Listing]].
+
+This example solves a smple test system:
+
+\[ y'=t\cos(t^2) \,\,\,\mathrm{with}\,\,\, y(0)=0 \]  
+
+Here are a copule plots
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/step_order_vs_error_soly.png
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/step_order_vs_error_sold.png
+
+The system is solved at 10 points, using order 4 and 9 methods with between 1 and 10 steps per point.  The impact on accuracy is summarized in the following
+plot:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/step_order_vs_error_err.png
+
+* Full Code Listing
+:PROPERTIES:
+:CUSTOM_ID: full-code
+:END:
+
+** Fortran Code
+:PROPERTIES:
+:CUSTOM_ID: fortrancode
+:END:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/step_order_vs_error.f90 | sed 's/; zotero.*$//; s/---------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+
+!-------------------------------------------------------------------------------------------------
+program step_order_vs_error
+
+  use :: mrkiss_config,          only: rk, ik, istats_size
+  use :: mrkiss_solvers_wt,      only: steps_fixed_stab_wt, steps_points_stab_wt
+  use :: mrkiss_utils,           only: print_solution, seq
+  use :: mrkiss_erk_kutta_4,     only: a4=>a, b4=>b, c4=>c
+  use :: mrkiss_eerk_verner_9_8, only: a9=>a, b9=>b1, c9=>c
+
+  implicit none
+
+  integer,        parameter :: deq_dim       = 1
+  integer,        parameter :: num_points    = 10
+  real(kind=rk),  parameter :: y_iv(deq_dim) = [0.0_rk]
+  real(kind=rk),  parameter :: param(2)      = [1.0_rk, 1.0_rk]
+  real(kind=rk),  parameter :: pi            = 4.0_rk * atan(1.0_rk)
+  real(kind=rk),  parameter :: t_start       = 0.0_rk
+  real(kind=rk),  parameter :: t_end         = 2.0_rk * pi
+
+  real(kind=rk)             :: solution(1+2*deq_dim, num_points)
+  integer(kind=ik)          :: status, istats(istats_size), spp
+  character(len=512)        :: filename
+
+  call seq(status, solution(1,:), from_o=t_start, to_o=t_end)
+
+  do spp = 1,10
+     call steps_points_stab_wt(status, istats, solution, eq, y_iv, param, a4, b4, c4, spp)
+     write (filename, '("step_order_vs_error_04_",i2.2,".csv")') spp
+     call print_solution(status, solution, filename_o=trim(filename))
+
+     call steps_points_stab_wt(status, istats, solution, eq, y_iv, param, a9, b9, c9, spp)
+     write (filename, '("step_order_vs_error_09_",i2.2,".csv")') spp
+     call print_solution(status, solution, filename_o=trim(filename))
+  end do
+
+contains
+  
+  subroutine eq(status, dydt, t, y, param)
+    integer(kind=ik), intent(out) :: status
+    real(kind=rk),    intent(out) :: dydt(:)
+    real(kind=rk),    intent(in)  :: t
+    real(kind=rk),    intent(in)  :: y(:)
+    real(kind=rk),    intent(in)  :: param(:)
+    dydt = [ t * param(1)*cos(param(2) * t * t) ]
+    status = 0
+  end subroutine eq
+
+end program step_order_vs_error
+#+end_src
+
+** R Code
+:PROPERTIES:
+:CUSTOM_ID: rcode
+:END:
+
+The images were produced with R.
+
+#+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/step_order_vs_error.R | sed 's/; zotero.*$//; s/---------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src R :eval never :tangle no
+
+#------------------------------------------------------------------------------------------------------------------------------
+crvDat <- data.table(t=seq(0,2*pi, length.out=500)) %>% mutate(truy1=sin(t*t)/2)
+drvDat <- data.table(t=seq(0,2*pi, length.out=500)) %>% mutate(trudy1=t*cos(t*t))
+
+#------------------------------------------------------------------------------------------------------------------------------
+truDat <- data.table(t=seq(0,2*pi, length.out=10)) %>% transmute(truy1=sin(t*t)/2)
+
+#------------------------------------------------------------------------------------------------------------------------------
+solDat <- rbind(cbind(fread('step_order_vs_error_04_01.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='01'),
+                cbind(fread('step_order_vs_error_04_02.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='02'),
+                cbind(fread('step_order_vs_error_04_03.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='03'),
+                cbind(fread('step_order_vs_error_04_04.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='04'),
+                cbind(fread('step_order_vs_error_04_05.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='05'),
+                cbind(fread('step_order_vs_error_04_06.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='06'),
+                cbind(fread('step_order_vs_error_04_07.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='07'),
+                cbind(fread('step_order_vs_error_04_08.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='08'),
+                cbind(fread('step_order_vs_error_04_09.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='09'),
+                cbind(fread('step_order_vs_error_04_10.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='10'),
+                cbind(fread('step_order_vs_error_09_01.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='01'),
+                cbind(fread('step_order_vs_error_09_02.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='02'),
+                cbind(fread('step_order_vs_error_09_03.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='03'),
+                cbind(fread('step_order_vs_error_09_04.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='04'),
+                cbind(fread('step_order_vs_error_09_05.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='05'),
+                cbind(fread('step_order_vs_error_09_06.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='06'),
+                cbind(fread('step_order_vs_error_09_07.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='07'),
+                cbind(fread('step_order_vs_error_09_08.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='08'),
+                cbind(fread('step_order_vs_error_09_09.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='09'),
+                cbind(fread('step_order_vs_error_09_10.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='10')) %>% filter(i>1 & steps_per_point!='01')
+
+#------------------------------------------------------------------------------------------------------------------------------
+gp <- ggplot(crvDat) +
+  geom_line(aes(x=t, y=truy1)) +
+  labs(title='Solution', x='t', y='y') 
+ggsave(filename='step_order_vs_error_soly.png', plot=gp, width=1024, height=800, units='px', dpi=150)
+
+#------------------------------------------------------------------------------------------------------------------------------
+gp <- ggplot(drvDat) +
+  geom_line(aes(x=t, y=trudy1)) +
+  labs(title='Solution Derivative', x='t', y='y') 
+ggsave(filename='step_order_vs_error_sold.png', plot=gp, width=1024, height=800, units='px', dpi=150)
+
+#------------------------------------------------------------------------------------------------------------------------------
+gp <- ggplot(solDat) +
+  geom_line( aes(x=t, y=err, shape=order, col=steps_per_point)) +
+  geom_point(aes(x=t, y=err, shape=order, col=steps_per_point)) +
+  annotate("text", x = 2, y = 1e-8, label = "4th Order\n\n9th Order", color = "black", size = 6) +
+  annotate("segment", 
+           x    = min(solDat$t), 
+           xend = max(solDat$t), 
+           y    = 1e-9,
+           yend = 1e-5,
+           linewidth=3) +
+  scale_y_log10() +
+  labs(title='Accuracy: Step Size & Order', x='t', y='y') +
+  guides(shape = "none")
+print(gp)
+ggsave(filename='step_order_vs_error_err.png', plot=gp, width=1024, height=1024, units='px', dpi=150)
+#+end_src
+
