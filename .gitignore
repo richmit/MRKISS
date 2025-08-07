@@ -4,6 +4,7 @@
 /lib/*.dll
 /lib/*.o
 /lib/*.obj
+/lib/*.mod
 /lib/*.so
 
 /examples/*.csv
