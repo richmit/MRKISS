@@ -49,13 +49,21 @@ module mrkiss_eerk_heun_euler_2_1
   use mrkiss_config, only: rk, ik
   implicit none
   public
+  !> The order of the overall method
   integer(kind=ik), parameter :: s      = 2
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk,  0.0_rk, &
                                                      1.0_rk,  0.0_rk], [s, s]) / 1.0_rk
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  1.0_rk]          / 1.0_rk
+  !> The order of the @f$\mathbf{b_1}@f$ method
   integer(kind=ik), parameter :: p1     = 2
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [          1.0_rk,  1.0_rk]          / 2.0_rk
+  !> The order of the @f$\mathbf{b_2}@f$ method
   integer(kind=ik), parameter :: p2     = 1
+  !> Number of stages for the @f$\mathbf{b_2}@f$ method
   integer(kind=ik), parameter :: s2     = 1
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [          1.0_rk,  0.0_rk]          / 1.0_rk
 end module mrkiss_eerk_heun_euler_2_1

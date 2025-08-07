@@ -47,10 +47,15 @@ module mrkiss_erk_midpoint_2
   use mrkiss_config, only: rk, ik
   implicit none
   public
+  !> The order of the overall method
   integer(kind=ik), parameter :: s      = 2
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0_rk,  0.0_rk, &
                                                     1.0_rk,  0.0_rk], [s, s]) / 2.0_rk
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  1.0_rk]         / 2.0_rk
+  !> The order of the method
   integer(kind=ik), parameter :: p      = 2
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b(s)   = [          0.0_rk,  1.0_rk]         / 1.0_rk
 end module mrkiss_erk_midpoint_2

@@ -50,7 +50,9 @@ module mrkiss_eerk_fehlberg_7_8
   use mrkiss_config, only: rk, ik
   implicit none
   public
+  !> The order of the overall method
   integer(kind=ik), parameter :: s          = 13
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([      0.0_rk,     0.0_rk,       0.0_rk,        0.0_rk,        0.0_rk,        0.0_rk,       0.0_rk,       0.0_rk,      0.0_rk,      0.0_rk,   0.0_rk,      0.0_rk,   0.0_rk, &
                                                      32800.0_rk,     0.0_rk,       0.0_rk,        0.0_rk,        0.0_rk,        0.0_rk,       0.0_rk,       0.0_rk,      0.0_rk,      0.0_rk,   0.0_rk,      0.0_rk,   0.0_rk, &
                                                      12300.0_rk, 36900.0_rk,       0.0_rk,        0.0_rk,        0.0_rk,        0.0_rk,       0.0_rk,       0.0_rk,      0.0_rk,      0.0_rk,   0.0_rk,      0.0_rk,   0.0_rk, &
@@ -64,10 +66,16 @@ module mrkiss_eerk_fehlberg_7_8
                                                     257364.0_rk,     0.0_rk,       0.0_rk,  -920700.0_rk,  1942272.0_rk, -1625400.0_rk,  230364.0_rk,  243000.0_rk, 121500.0_rk, 194400.0_rk,   0.0_rk,      0.0_rk,   0.0_rk, &
                                                       6480.0_rk,     0.0_rk,       0.0_rk,        0.0_rk,        0.0_rk,   -64800.0_rk,   -6480.0_rk,  -32400.0_rk,  32400.0_rk,  64800.0_rk,   0.0_rk,      0.0_rk,   0.0_rk, &
                                                    -191916.0_rk,     0.0_rk,       0.0_rk,  -920700.0_rk,  1942272.0_rk, -1560600.0_rk,  236844.0_rk,  275400.0_rk,  89100.0_rk, 129600.0_rk,   0.0_rk, 442800.0_rk,   0.0_rk], [s, s]) / 442800.0_rk
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [              0.0_rk,     8.0_rk,      12.0_rk,       18.0_rk,       45.0_rk,       54.0_rk,      90.0_rk,      18.0_rk,     72.0_rk,     36.0_rk, 108.0_rk,      0.0_rk, 108.0_rk]          /    108.0_rk
+  !> The order of the @f$\mathbf{b_1}@f$ method
   integer(kind=ik), parameter :: p1     = 7
+  !> Number of stages for the @f$\mathbf{b_1}@f$ method
   integer(kind=ik), parameter :: s1     = 11
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [              41.0_rk,    0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,  41.0_rk,      0.0_rk,   0.0_rk]          /    840.0_rk
+  !> The order of the @f$\mathbf{b_2}@f$ method
   integer(kind=ik), parameter :: p2     = 8
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [              0.0_rk,     0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,   0.0_rk,     41.0_rk,  41.0_rk]          /    840.0_rk
 end module mrkiss_eerk_fehlberg_7_8

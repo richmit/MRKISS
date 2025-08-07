@@ -49,23 +49,35 @@ module mrkiss_eerk_cash_karp_5_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
+  !> The order of the overall method
   integer(kind=ik), parameter :: s      = 6
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([      0.0_rk,       0.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
                                                     110592.0_rk,       0.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
                                                      41472.0_rk,  124416.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
                                                     165888.0_rk, -497664.0_rk,   663552.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
                                                    -112640.0_rk, 1382400.0_rk, -1433600.0_rk, 716800.0_rk,     0.0_rk,     0.0_rk, &
                                                      16310.0_rk,  189000.0_rk,    23000.0_rk, 221375.0_rk, 34155.0_rk,     0.0_rk], [s, s]) / 552960.0_rk
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [              0.0_rk,       8.0_rk,       12.0_rk,     24.0_rk,    40.0_rk,    35.0_rk]          /     40.0_rk
+  !> The order of the @f$\mathbf{b_1}@f$ method
   integer(kind=ik), parameter :: p1     = 5
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [           9361.0_rk,       0.0_rk,    38500.0_rk,  20125.0_rk,     0.0_rk, 27648.0_rk]          /  95634.0_rk
+  !> The order of the @f$\mathbf{b_2}@f$ method
   integer(kind=ik), parameter :: p2     = 4
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [          39550.0_rk,       0.0_rk,   148600.0_rk,  94675.0_rk,  7479.0_rk, 96768.0_rk]          / 387072.0_rk
+  !> The order of the @f$\mathbf{b_3}@f$ method
   integer(kind=ik), parameter :: p3     = 3
+  !> The @f$\mathbf{b_3}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b3(s)  = [             19.0_rk,       0.0_rk,      -20.0_rk,     55.0_rk,     0.0_rk,     0.0_rk]          /     54.0_rk
+  !> The order of the @f$\mathbf{b_4}@f$ method
   integer(kind=ik), parameter :: p4     = 2
+  !> The @f$\mathbf{b_4}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b4(s)  = [             -3.0_rk,       5.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk]          /      2.0_rk
+  !> The order of the @f$\mathbf{b_5}@f$ method
   integer(kind=ik), parameter :: p5     = 1
+  !> The @f$\mathbf{b_5}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b5(s)  = [              1.0_rk,       0.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk]          /      1.0_rk
-
 end module mrkiss_eerk_cash_karp_5_4

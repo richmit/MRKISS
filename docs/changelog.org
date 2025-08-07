@@ -75,6 +75,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - Doxygen links in main README & mainpage.
     - Better mainpage markup
     - Consolidated list of status assignments
+    - Documented parameters in eerk & erk modules.
   - Examples
     - New
       - step_order_vs_error.f90
