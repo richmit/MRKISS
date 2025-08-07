@@ -45,6 +45,7 @@ ignore_ws_cnt  = false
 ignore_ws_all  = false
 dump           = false
 ignore_non_num = false
+pnames         = false
 lines_re       = Regexp.new('.*')
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: float_diff.rb [options] file1 file2"
@@ -54,6 +55,7 @@ opts = OptionParser.new do |opts|
   opts.on("-h",         "--help",                   "Show this message")                           { puts opts; exit 1;          }
   opts.on("-D",         "--dump-diffs",             "Print string differences with .dump")         { |v| dump=true;              }
   opts.on("-q",         "--brief",                  "Print just first difference")                 { |v| brief=true;             }
+  opts.on("-n",         "--names",                  "Include file names in output")                { |v| pnames=true;            }
   opts.separator "  Content Options:"
   opts.on("-e epsilon", "--epsilon epsilon",        "Set floating point epsilon")                  { |v| epsilon=v.to_f;         }
   opts.on("-s",         "--report-identical-files", "Report identical files")                      { |v| identical=true;         }
@@ -78,6 +80,12 @@ if (ARGV.length != 2) then
   exit 2
 end
 
+msgPfx = 'Files'
+if (pnames) then
+  msgPfx = "#{ARGV[0]} & #{ARGV[1]}"
+end
+
+
 file_lines = ARGV.map { |fname|
   open(fname, "r") do |file|
     file.readlines().select { |line| line.match(lines_re) }
@@ -85,7 +93,7 @@ file_lines = ARGV.map { |fname|
 }
 
 if (file_lines[0].length != file_lines[1].length) then
-  puts("#{ARGV[0]} & #{ARGV[1]} have different line counts");
+  puts("#{msgPfx} have different line counts");
   exit 5
 end
 
@@ -96,13 +104,13 @@ file_lines[0].each_index do |idx|
   line_num = idx + 1
   line_floats = [0, 1].map { |i| file_lines[i][idx].scan(fpre).map { |m| m[0].to_f } }
   if (line_floats[0].size != line_floats[1].size) then
-    puts("Files have different float counts on line #{line_num}");
+    puts("#{msgPfx} have different float counts on line #{line_num}");
     puts("  <<<#{file_lines[0][idx]}")
     puts("  >>>#{file_lines[1][idx]}")
     exit 6 if brief
     num_diffs += 1;
   elsif (line_floats[0].zip(line_floats[1]).any? { |f0, f1| (f0-f1).abs>=epsilon }) then
-    puts("Files have different float values on line #{line_num}");
+    puts("#{msgPfx} have different float values on line #{line_num}");
     puts("  <<<#{file_lines[0][idx]}")
     puts("  >>>#{file_lines[1][idx]}")
     exit 7 if brief
@@ -114,7 +122,7 @@ file_lines[0].each_index do |idx|
     cmp_strs = cmp_strs.map { |v| v.gsub(/\s+$/, '') } if ignore_ws_end
     cmp_strs = cmp_strs.map { |v| v.gsub(/\s+/,  '') } if ignore_ws_all
     if (cmp_strs[0] != cmp_strs[1]) then
-      puts("#{ARGV[0]} & #{ARGV[1]} have different non-float content on line #{line_num}");
+      puts("#{msgPfx} have different non-float content on line #{line_num}");
       if (dump) then
         puts("  <<<#{file_lines[0][idx].dump}")
         puts("  >>>#{file_lines[1][idx].dump}")
@@ -131,6 +139,6 @@ end
 if (num_diffs > 0) then
   exit 9
 else
-  puts("#{ARGV[0]} & #{ARGV[1]} are identical!") if identical
+  puts("#{msgPfx} are identical!") if identical
   exit 0
 end
