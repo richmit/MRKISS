@@ -1130,8 +1130,8 @@ graphs.  None of these tools are required to compile and use the package because
 :CUSTOM_ID: faq-rel-head
 :END:
 
-Releases are contained in commits with a tag that looks like this: "vYYYY-MM-DD" -- i.e. a ISO format date prefixed with the letter "v".  These commits differ
-from other commits in terms of quality control.  Release commits:
+Releases are contained in commits with a tag that looks like this: "vYYYY-MM-DD" -- i.e. an ISO 8601 format date prefixed with the letter "v".  These commits
+differ from other commits in terms of quality control.  Release commits:
   - Unit tests are all successful.
   - Development documentation (changelog & roadmap) are both up to date.
   - Example documentation is newer than the corrisponding example soruce.
@@ -1145,4 +1145,5 @@ from other commits in terms of quality control.  Release commits:
     - Checksums match what is in repository
     - It's checked into git
 
-That said, I generally try to only push working code to github so head should be reasonably safe.
+That said, I generally try to only push working code to github so ~HEAD~ should be reasonably safe.  You can see what changes have been made on ~HEAD~
+by taking a look at the [[https://richmit.github.io/MRKISS/changelog.html#latest][latest changelog section]].

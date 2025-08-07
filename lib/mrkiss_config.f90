@@ -79,6 +79,7 @@ end module mrkiss_config
 !! A couple of the examples in the repository have longer explanatory documentation:
 !!    - [Three Body Problem](https://richmit.github.io/MRKISS/ex_three_body.html)
 !!    - [Lornez Attracter](https://richmit.github.io/MRKISS/ex_lorenz.html)
+!!    - [Step Size & Order Vs. Accuracy](https://richmit.github.io/MRKISS/ex_step_order_vs_error.html)
 !! 
 !! Generated [API documentation](https://www.mitchr.me/SS/MRKISS/doc-lib/html/index.html) is viable as well.
 !! 
