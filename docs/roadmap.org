@@ -48,16 +48,17 @@ Right now everything that is implemented seems to work.  Test coverage is poor f
 have a few functionality improvements I want to implement, but I don't forsee any API changes.  I also have a few examples I would like to add.
 
  - Add dy to a solution without it already
- - Add status -> message function in mrkiss_utils
- - Example showing error V with t_delta size
- - Example showing error vs. order
- - Solver that takes a t-vec, and computes solution using those points
- - Multi-solver
-   - Give it multiple IVs and produce a steps_fixed_* multi-solution
-   - Give it multiple PARAMs and produce a steps_fixed_* multi-solution
-   - Run parallel across cores using OpenMP
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
+ - +Add status -> message function in mrkiss_utils+ *DONE*
+ - +Solver that takes a t-vec, and computes solution using those points+ *DONE*
+ - +step size & order vs accuracy+ *DONE*
+ - +Example showing error V with t_delta size+ *CANCELED*
+ - +Example showing error vs. order+ *CANCELED*
+ - +Multi-solver+ *CANCELED*
+   - +Give it multiple IVs and produce a steps_fixed_* multi-solution+ *CANCELED*
+   - +Give it multiple PARAMs and produce a steps_fixed_* multi-solution+ *CANCELED*
+   - +Run parallel across cores using OpenMP+ *CANCELED*
  - +Message table+
    - +status -> source: ~status_to_origin~+ *DONE*
    - +status -> message: ~status_to_message~+ *DONE*

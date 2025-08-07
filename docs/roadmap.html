@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-05 Tue 10:50 -->
+<!-- 2025-08-07 Thu 18:56 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -232,20 +232,20 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-05 10:47:39</i></td>
+<td class="org-left"><i>2025-08-07 18:55:59</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-05 10:50:19</i></td>
+<td class="org-left"><i>2025-08-07 18:56:01</i></td>
 </tr>
 </tbody>
 </table>
 <p align="center">
 Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </p>
-<div id="outline-container-orgee65916" class="outline-2">
-<h2 id="orgee65916"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-orgc96270f" class="outline-2">
+<h2 id="orgc96270f"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Right now everything that is implemented seems to work.  Test coverage is poor for the high level solvers, but solid for the one step solvers and tableaux.  I
@@ -254,18 +254,19 @@ have a few functionality improvements I want to implement, but I don't forsee an
 
 <ul class="org-ul">
 <li>Add dy to a solution without it already</li>
-<li>Add status -&gt; message function in mrkiss_utils</li>
-<li>Example showing error V with t_delta size</li>
-<li>Example showing error vs. order</li>
-<li>Solver that takes a t-vec, and computes solution using those points</li>
-<li>Multi-solver
-<ul class="org-ul">
-<li>Give it multiple IVs and produce a steps_fixed_* multi-solution</li>
-<li>Give it multiple PARAMs and produce a steps_fixed_* multi-solution</li>
-<li>Run parallel across cores using OpenMP</li>
-</ul></li>
 <li>Finalize step-size and error computation in <code>steps_adapt_etab_*t()</code></li>
 <li>Add tests for high level solvers</li>
+<li><del>Add status -&gt; message function in mrkiss_utils</del> <b>DONE</b></li>
+<li><del>Solver that takes a t-vec, and computes solution using those points</del> <b>DONE</b></li>
+<li><del>step size &amp; order vs accuracy</del> <b>DONE</b></li>
+<li><del>Example showing error V with t_delta size</del> <b>CANCELED</b></li>
+<li><del>Example showing error vs. order</del> <b>CANCELED</b></li>
+<li><del>Multi-solver</del> <b>CANCELED</b>
+<ul class="org-ul">
+<li><del>Give it multiple IVs and produce a steps_fixed_* multi-solution</del> <b>CANCELED</b></li>
+<li><del>Give it multiple PARAMs and produce a steps_fixed_* multi-solution</del> <b>CANCELED</b></li>
+<li><del>Run parallel across cores using OpenMP</del> <b>CANCELED</b></li>
+</ul></li>
 <li><del>Message table</del>
 <ul class="org-ul">
 <li><del>status -&gt; source: <code>status_to_origin</code></del> <b>DONE</b></li>
