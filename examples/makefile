@@ -75,7 +75,7 @@ three_body_clean :
 
 .PHONY: three_body_test
 three_body_test: $(THREE_BODY_CSVS)
-	$(foreach fil,$^,$(FD) -Zdq $(fil) tdata/$(fil); )
+	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -123,7 +123,43 @@ lorenz_clean :
 
 .PHONY: lorenz_test
 lorenz_test: $(LORENZ_CSVS)
-	$(foreach fil,$^,$(FD) -Zdq $(fil) tdata/$(fil); )
+	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+langford : langford.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) langford.f90 $(MRKISS_OBJ_FILES) -o $@
+
+LANGFORD_CSVS = langford_fixed.csv langford_00.csv langford_01.csv langford_02.csv langford_03.csv langford_04.csv langford_05.csv langford_06.csv langford_07.csv langford_08.csv langford_09.csv
+
+.PHONY: langford_csv
+langford_csv : $(LANGFORD_CSVS)
+
+$(LANGFORD_CSVS) &: langford
+	./langford$(EXE_SUFFIX)
+
+LANGFORD_SVGS = langford_fixed.svg langford_multi.svg
+
+$(LANGFORD_SVGS) &: $(LANGFORD_CSVS) langford.gplt
+	gnuplot -p < langford.gplt
+
+langford_fixed.png : langford_fixed.svg
+	magick -density 200 -background white langford_fixed.svg langford_fixed.png
+
+langford_multi.png : langford_multi.svg
+	magick -density 200 -background white langford_multi.svg langford_multi.png
+
+LANGFORD_PNGS = langford_fixed.png langford_multi.png
+
+langford_png : $(LANGFORD_PNGS)
+	$(IMG_VIEWER) $(LANGFORD_PNGS)
+
+.PHONY: langford_clean
+langford_clean :
+	rm -f $(LANGFORD_PNGS) $(LANGFORD_CSVS) $(LANGFORD_SVGS) langford.exe langford langford.o langford.obj
+
+.PHONY: langford_test
+langford_test: $(LANGFORD_CSVS)
+	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 step_order_vs_error : step_order_vs_error.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -153,7 +189,7 @@ step_order_vs_error_clean :
 
 .PHONY: step_order_vs_error_test
 step_order_vs_error_test: $(STEP_ORDER_VS_ERROR_CSVS)
-	$(foreach fil,$^,$(FD) -Zdq $(fil) tdata/$(fil); )
+	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -174,7 +210,7 @@ brusselator_clean :
 
 .PHONY: brusselator_test
 brusselator_test: brusselator.csv
-	$(FD) -Zdq brusselator.csv tdata/brusselator.csv
+	$(FD) -Zdqn brusselator.csv tdata/brusselator.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 minimal : minimal.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -191,7 +227,7 @@ minimal_clean :
 
 .PHONY: minimal_test
 minimal_test: minimal.csv
-	$(FD) -Zdq minimal.csv tdata/minimal.csv
+	$(FD) -Zdqn minimal.csv tdata/minimal.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 tests : minimal_test brusselator_test lorenz_test three_body_test step_order_vs_error_test

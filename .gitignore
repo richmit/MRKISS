@@ -8,6 +8,7 @@
 /lib/*.so
 
 /examples/*.csv
+/examples/*.vtu
 /examples/*.exe
 /examples/*.mod
 /examples/*.o
@@ -17,6 +18,7 @@
 /examples/*.svg
 
 /tests/*.csv
+/tests/*.vtu
 /tests/*.exe
 /tests/*.mod
 /tests/*.o
