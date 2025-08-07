@@ -492,13 +492,14 @@ contains
     istats = 0
     solution(sol_y_idx:(sol_y_idx+y_dim-1), 1) = y
     if (sol_w_dy) then
-       call deq(status, dy, y, param)
+       call deq(status, dy, &        ! NL to suppress wt2nt sed processing.
+                y, param)
        if (status > 0) return
        solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), 1) = dy
     end if
     do cur_pnt_idx=2,size(solution, 2)
-       call steps_fixed_stab_nt(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), &
-                                deq,  &
+       call steps_fixed_stab_nt( &                                                             ! NL to suppress wt2nt sed processing.
+                                status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &
                                 solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx-1), param, a, b, c, p,             &
                                 t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1, sol_y_idx_o=sol_y_idx, sol_w_dy_o=sol_w_dy)
        istats = istats + jstats

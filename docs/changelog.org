@@ -91,6 +91,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Miscellaneous
     - Release automation complete
     - Added makefile to scripts directory to update them from primary copies
+    - Added 'wt2nt:DELETE' tags to mrkiss_solvers_wt -> mrkiss_solvers_nt code
 
 * 2025-08-04: Initial Release
 :PROPERTIES:
