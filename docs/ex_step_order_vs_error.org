@@ -60,9 +60,13 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 The code for this example is found in [[https://github.com/richmit/MRKISS/blob/master/examples/step_order_vs_error.f90][~examples/step_order_vs_error.f90~]].
 Additionally the code may be found at the end of this document in the section [[#full-code][Full Code Listing]].
 
-This example solves a smple test system:
+This example solves a test system:
 
 \[ y'=t\cos(t^2) \,\,\,\mathrm{with}\,\,\, y(0)=0 \]  
+
+We can solve this equation symbolically:
+
+\[ y'\frac{\sin(t^2)}{2} \]  
 
 Here are a copule plots
 
@@ -153,54 +157,41 @@ end program step_order_vs_error
 The images were produced with R.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
-~/core/codeBits/bin/src2noHeader ../examples/step_order_vs_error.R | sed 's/; zotero.*$//; s/---------------------------------$//;'
+~/core/codeBits/bin/src2noHeader ../examples/step_order_vs_error.R | sed 's/; zotero.*$//; s/------------------------------------$//;'
 #+end_src
 
 #+RESULTS:
 #+begin_src R :eval never :tangle no
 
-#------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------
 crvDat <- data.table(t=seq(0,2*pi, length.out=500)) %>% mutate(truy1=sin(t*t)/2)
 drvDat <- data.table(t=seq(0,2*pi, length.out=500)) %>% mutate(trudy1=t*cos(t*t))
 
-#------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------
 truDat <- data.table(t=seq(0,2*pi, length.out=10)) %>% transmute(truy1=sin(t*t)/2)
 
-#------------------------------------------------------------------------------------------------------------------------------
-solDat <- rbind(cbind(fread('step_order_vs_error_04_01.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='01'),
-                cbind(fread('step_order_vs_error_04_02.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='02'),
-                cbind(fread('step_order_vs_error_04_03.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='03'),
-                cbind(fread('step_order_vs_error_04_04.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='04'),
-                cbind(fread('step_order_vs_error_04_05.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='05'),
-                cbind(fread('step_order_vs_error_04_06.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='06'),
-                cbind(fread('step_order_vs_error_04_07.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='07'),
-                cbind(fread('step_order_vs_error_04_08.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='08'),
-                cbind(fread('step_order_vs_error_04_09.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='09'),
-                cbind(fread('step_order_vs_error_04_10.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='10'),
-                cbind(fread('step_order_vs_error_09_01.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='01'),
-                cbind(fread('step_order_vs_error_09_02.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='02'),
-                cbind(fread('step_order_vs_error_09_03.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='03'),
-                cbind(fread('step_order_vs_error_09_04.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='04'),
-                cbind(fread('step_order_vs_error_09_05.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='05'),
-                cbind(fread('step_order_vs_error_09_06.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='06'),
-                cbind(fread('step_order_vs_error_09_07.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='07'),
-                cbind(fread('step_order_vs_error_09_08.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='08'),
-                cbind(fread('step_order_vs_error_09_09.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='09'),
-                cbind(fread('step_order_vs_error_09_10.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='10')) %>% filter(i>1 & steps_per_point!='01')
+#---------------------------------------------------------------------------------------------------------------------------
+solDat <- do.call(rbind, lapply(list.files(pattern = "^step_order_vs_error_[0-9][0-9]_[0-9][0-9]\\.csv$"), 
+                                function(f) { 
+                                  rko=first(strsplit(f, "[_.]"))[5];
+                                  spp=first(strsplit(f, "[_.]"))[6];
+                                  cbind(fread(f), truDat) %>% 
+                                    mutate(err=abs(y1-truy1), order=rko, steps_per_point=spp); })) %>% 
+  filter(i>1 & steps_per_point!='01')
 
-#------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------
 gp <- ggplot(crvDat) +
   geom_line(aes(x=t, y=truy1)) +
   labs(title='Solution', x='t', y='y') 
 ggsave(filename='step_order_vs_error_soly.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
-#------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------
 gp <- ggplot(drvDat) +
   geom_line(aes(x=t, y=trudy1)) +
   labs(title='Solution Derivative', x='t', y='y') 
 ggsave(filename='step_order_vs_error_sold.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
-#------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------
 gp <- ggplot(solDat) +
   geom_line( aes(x=t, y=err, shape=order, col=steps_per_point)) +
   geom_point(aes(x=t, y=err, shape=order, col=steps_per_point)) +
@@ -212,7 +203,7 @@ gp <- ggplot(solDat) +
            yend = 1e-5,
            linewidth=3) +
   scale_y_log10() +
-  labs(title='Accuracy: Step Size & Order', x='t', y='y') +
+  labs(title='Accuracy: Step Size & Order', x='t', y='Absolute Error') +
   guides(shape = "none")
 print(gp)
 ggsave(filename='step_order_vs_error_err.png', plot=gp, width=1024, height=1024, units='px', dpi=150)

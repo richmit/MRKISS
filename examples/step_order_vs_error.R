@@ -39,26 +39,13 @@ drvDat <- data.table(t=seq(0,2*pi, length.out=500)) %>% mutate(trudy1=t*cos(t*t)
 truDat <- data.table(t=seq(0,2*pi, length.out=10)) %>% transmute(truy1=sin(t*t)/2)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-solDat <- rbind(cbind(fread('step_order_vs_error_04_01.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='01'),
-                cbind(fread('step_order_vs_error_04_02.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='02'),
-                cbind(fread('step_order_vs_error_04_03.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='03'),
-                cbind(fread('step_order_vs_error_04_04.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='04'),
-                cbind(fread('step_order_vs_error_04_05.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='05'),
-                cbind(fread('step_order_vs_error_04_06.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='06'),
-                cbind(fread('step_order_vs_error_04_07.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='07'),
-                cbind(fread('step_order_vs_error_04_08.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='08'),
-                cbind(fread('step_order_vs_error_04_09.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='09'),
-                cbind(fread('step_order_vs_error_04_10.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='4th Order', steps_per_point='10'),
-                cbind(fread('step_order_vs_error_09_01.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='01'),
-                cbind(fread('step_order_vs_error_09_02.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='02'),
-                cbind(fread('step_order_vs_error_09_03.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='03'),
-                cbind(fread('step_order_vs_error_09_04.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='04'),
-                cbind(fread('step_order_vs_error_09_05.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='05'),
-                cbind(fread('step_order_vs_error_09_06.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='06'),
-                cbind(fread('step_order_vs_error_09_07.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='07'),
-                cbind(fread('step_order_vs_error_09_08.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='08'),
-                cbind(fread('step_order_vs_error_09_09.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='09'),
-                cbind(fread('step_order_vs_error_09_10.csv'), truDat) %>% mutate(err=abs(y1-truy1), order='9th Order', steps_per_point='10')) %>% filter(i>1 & steps_per_point!='01')
+solDat <- do.call(rbind, lapply(list.files(pattern = "^step_order_vs_error_[0-9][0-9]_[0-9][0-9]\\.csv$"), 
+                                function(f) { 
+                                  rko=first(strsplit(f, "[_.]"))[5];
+                                  spp=first(strsplit(f, "[_.]"))[6];
+                                  cbind(fread(f), truDat) %>% 
+                                    mutate(err=abs(y1-truy1), order=rko, steps_per_point=spp); })) %>% 
+  filter(i>1 & steps_per_point!='01')
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 gp <- ggplot(crvDat) +
@@ -84,7 +71,7 @@ gp <- ggplot(solDat) +
            yend = 1e-5,
            linewidth=3) +
   scale_y_log10() +
-  labs(title='Accuracy: Step Size & Order', x='t', y='y') +
+  labs(title='Accuracy: Step Size & Order', x='t', y='Absolute Error') +
   guides(shape = "none")
 print(gp)
 ggsave(filename='step_order_vs_error_err.png', plot=gp, width=1024, height=1024, units='px', dpi=150)

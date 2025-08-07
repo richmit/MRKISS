@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-06 Wed 23:27 -->
+<!-- 2025-08-07 Thu 14:47 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-06 23:27:06</i></td>
+<td class="org-left"><i>2025-08-07 14:47:50</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-06 23:27:07</i></td>
+<td class="org-left"><i>2025-08-07 14:47:52</i></td>
 </tr>
 </tbody>
 </table>
@@ -303,7 +303,7 @@ Additionally the code may be found at the end of this document in the section <a
 </p>
 
 <p>
-This example solves a smple test system:
+This example solves a test system:
 </p>
 
 <p>
@@ -311,17 +311,25 @@ This example solves a smple test system:
 </p>
 
 <p>
+We can solve this equation symbolically:
+</p>
+
+<p>
+\[ y'\frac{\sin(t^2)}{2} \]  
+</p>
+
+<p>
 Here are a copule plots
 </p>
 
 
-<div id="orgffeaeb3" class="figure">
+<div id="org7aedd84" class="figure">
 <p><img src="pics/step_order_vs_error_soly.png" alt="step_order_vs_error_soly.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="orgd16a3b2" class="figure">
+<div id="org66bcbda" class="figure">
 <p><img src="pics/step_order_vs_error_sold.png" alt="step_order_vs_error_sold.png" width="90%" align="center" />
 </p>
 </div>
@@ -332,7 +340,7 @@ plot:
 </p>
 
 
-<div id="orgb9c482f" class="figure">
+<div id="org6339a57" class="figure">
 <p><img src="pics/step_order_vs_error_err.png" alt="step_order_vs_error_err.png" width="90%" align="center" />
 </p>
 </div>
@@ -408,48 +416,35 @@ The images were produced with R.
 
 <div class="org-src-container">
 <pre class="src src-R">
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 crvDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(t=seq(0,2*pi, length.out=500)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(truy1=sin(t*t)/2)
 drvDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(t=seq(0,2*pi, length.out=500)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(trudy1=t*cos(t*t))
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 truDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(t=seq(0,2*pi, length.out=10)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> transmute(truy1=sin(t*t)/2)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
-solDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> rbind(cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_01.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'01'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_02.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'02'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_03.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'03'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_04.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'04'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_05.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'05'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_06.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'06'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_07.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'07'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_08.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'08'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_09.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'09'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_04_10.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'4th Order'</span>, steps_per_point=<span style="color: #fa8072;">'10'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_01.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'01'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_02.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'02'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_03.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'03'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_04.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'04'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_05.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'05'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_06.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'06'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_07.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'07'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_08.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'08'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_09.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'09'</span>),
-                cbind(fread(<span style="color: #fa8072;">'step_order_vs_error_09_10.csv'</span>), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(err=abs(y1-truy1), order=<span style="color: #fa8072;">'9th Order'</span>, steps_per_point=<span style="color: #fa8072;">'10'</span>)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> filter(i&gt;1 &amp; steps_per_point!=<span style="color: #fa8072;">'01'</span>)
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
+solDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> do.call(rbind, lapply(list.files(pattern = <span style="color: #fa8072;">"^step_order_vs_error_[0-9][0-9]_[0-9][0-9]\\.csv$"</span>), 
+                                <span style="color: #00ffff;">function</span>(f) { 
+                                  rko=first(strsplit(f, <span style="color: #fa8072;">"[_.]"</span>))[5];
+                                  spp=first(strsplit(f, <span style="color: #fa8072;">"[_.]"</span>))[6];
+                                  cbind(fread(f), truDat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
+                                    mutate(err=abs(y1-truy1), order=rko, steps_per_point=spp); })) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
+  filter(i&gt;1 &amp; steps_per_point!=<span style="color: #fa8072;">'01'</span>)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(crvDat) +
   geom_line(aes(x=t, y=truy1)) +
   labs(title=<span style="color: #fa8072;">'Solution'</span>, x=<span style="color: #fa8072;">'t'</span>, y=<span style="color: #fa8072;">'y'</span>) 
 ggsave(filename=<span style="color: #fa8072;">'step_order_vs_error_soly.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(drvDat) +
   geom_line(aes(x=t, y=trudy1)) +
   labs(title=<span style="color: #fa8072;">'Solution Derivative'</span>, x=<span style="color: #fa8072;">'t'</span>, y=<span style="color: #fa8072;">'y'</span>) 
 ggsave(filename=<span style="color: #fa8072;">'step_order_vs_error_sold.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">------------------------------------------------------------------------------------------------------------------------------</span>
+<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(solDat) +
   geom_line( aes(x=t, y=err, shape=order, col=steps_per_point)) +
   geom_point(aes(x=t, y=err, shape=order, col=steps_per_point)) +
@@ -461,7 +456,7 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(solDat) 
            yend = 1e-5,
            linewidth=3) +
   scale_y_log10() +
-  labs(title=<span style="color: #fa8072;">'Accuracy: Step Size &amp; Order'</span>, x=<span style="color: #fa8072;">'t'</span>, y=<span style="color: #fa8072;">'y'</span>) +
+  labs(title=<span style="color: #fa8072;">'Accuracy: Step Size &amp; Order'</span>, x=<span style="color: #fa8072;">'t'</span>, y=<span style="color: #fa8072;">'Absolute Error'</span>) +
   guides(shape = <span style="color: #fa8072;">"none"</span>)
 print(gp)
 ggsave(filename=<span style="color: #fa8072;">'step_order_vs_error_err.png'</span>, plot=gp, width=1024, height=1024, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
