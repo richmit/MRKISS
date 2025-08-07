@@ -80,12 +80,14 @@ contains
   !! t_max_o ...... Print only solutions with time values <= t_min_o
   !! y_dim ........ Number of elements in y.  Infered from solution, sol_w_t_o, & sol_w_dy_o when sol_y_idx_o==2
   !! sol_y_idx_o .. Index of y in solution.  Default: 2
+  !! tag_o ........ If non-negative, this integer that will become the first column of the output.
+  !! step_num_o ... Include step number in output if .true.  Default: .true.
   !! sol_w_t_o .... Solution has t when .true.  Default: .true.
   !! sol_w_dy_o ... Solution has dy when .true.  Default: .true.
   !! @endverbatim
   !! 
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, titles_o, &
-                            t_min_o, t_max_o, y_dim_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
+                            t_min_o, t_max_o, y_dim_o, sol_y_idx_o, tag_o, sol_w_t_o, sol_w_dy_o, step_num_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik, bk
     implicit none
@@ -95,15 +97,19 @@ contains
     character(len=*), intent(in), optional :: filename_o, separator_o
     integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
-    integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o
-    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o, titles_o
+    integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o, tag_o
+    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o, titles_o, step_num_o
     ! Local variables
-    integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx
-    logical(kind=bk)                       :: sol_w_t, sol_w_dy, titles
-    integer(kind=ik)                       :: i, out_io_stat, out_io_unit
+    integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx, tag
+    logical(kind=bk)                       :: sol_w_t, sol_w_dy, titles, step_num, sep_req
+    integer(kind=ik)                       :: i, out_io_stat, out_io_unit, num_int, num_real
     character(len=:), allocatable          :: fmt, separator
     character(len=512)                     :: digits_str, width_str, tmp_str
     ! Process arguments
+    step_num = .true.
+    if (present(step_num_o)) step_num = step_num_o
+    tag = -1
+    if (present(tag_o)) tag = tag_o
     titles = .true.
     if (present(titles_o)) titles = titles_o
     step = 1
@@ -141,6 +147,13 @@ contains
     ! Create string from for format bits
     write (digits_str, '(i0)') digits
     write (width_str,  '(i0)') width
+    ! Figure out how many items per line
+    num_real = y_dim
+    if (sol_w_dy) num_real = num_real + y_dim
+    if (sol_w_t)  num_real = num_real + 1
+    num_int = 0
+    if (tag>=0) num_int = num_int + 1
+    if (step_num)  num_int = num_int + 1
     ! Open file
     if (present(filename_o)) then
        open(newunit=out_io_unit, file=filename_o, form='formatted', action='write', iostat=out_io_stat)
@@ -154,40 +167,45 @@ contains
     ! Print titles
     if (titles) then
        if (present(width_o)) then
-          write(out_io_unit, fmt='(a' // trim(width_str) // ')', advance="no") "i"
-          if (sol_w_t) then
-             write(out_io_unit, fmt='("' // separator // '",a' // trim(width_str) // ')', advance="no") "t" 
-          end if
-          do i=1,y_dim
-             write (tmp_str, '("y",i0)') i
-             write(out_io_unit, fmt='("' // separator // '",a' // trim(width_str) // ')', advance="no") trim(tmp_str)
-          end do
+          fmt='(a' // trim(width_str) // ')'
+       else
+          fmt='(a)'
+       end if
+       sep_req = .false.
+       if (tag>=0)   then
+          write(out_io_unit, fmt=fmt, advance="no") "tag"
+          sep_req = .true.
+       end if
+       if (sep_req) write(out_io_unit, fmt='(a)', advance="no") separator
+       if (step_num) then
+          write(out_io_unit, fmt=fmt, advance="no") "i"
+          sep_req = .true.
+       end if
+       if (sep_req) write(out_io_unit, fmt='(a)', advance="no") separator
+       if (sol_w_t)  then
+          write(out_io_unit, fmt=fmt, advance="no") "t" 
+          sep_req = .true.
+       end if
+       do i=1,y_dim
+          if (sep_req) write(out_io_unit, fmt='(a)', advance="no") separator
+          write(tmp_str, fmt='("y",i0)') i
+          write(out_io_unit, fmt=fmt, advance="no") trim(tmp_str)
+          sep_req = .true.
+       end do
        if (sol_w_dy) then
           do i=1,y_dim
-             write (tmp_str, '("dy",i0)') i
-             write(out_io_unit, fmt='("' // separator // '",a' // trim(width_str) // ')', advance="no") trim(tmp_str)
+             write(out_io_unit, fmt='(a)', advance="no") separator
+             write(tmp_str, fmt='("dy",i0)') i
+             write(out_io_unit, fmt=fmt, advance="no") trim(tmp_str)
           end do
-       end if
-       else
-          write(out_io_unit, fmt='(a)', advance="no") "i"
-          if (sol_w_t) then
-             write(out_io_unit, fmt='("' // separator // '",a)', advance="no") "t" 
-          end if
-          do i=1,y_dim
-             write(out_io_unit, fmt='("' // separator // '","y",i0)', advance="no") i
-          end do
-          if (sol_w_dy) then
-             do i=1,y_dim
-                write(out_io_unit, fmt='("' // separator // '","dy",i0)', advance="no") i
-             end do
-          end if
        end if
        write(out_io_unit, fmt='()')
     end if
-    i = y_dim
-    if (sol_w_t)  i = i + 1
-    if (sol_w_dy) i = i + y_dim
-    fmt = ('(i' // trim(width_str) // repeat(',"' // separator // '",' // 'f' // trim(width_str) // '.' // trim(digits_str), i) // ')')
+    fmt = '('
+    if (num_int > 0) fmt = fmt // repeat('i' // trim(width_str) // ',"' // separator // '",', num_int)
+    fmt = fmt // 'f' // trim(width_str) // '.' // trim(digits_str)
+    fmt = fmt // repeat(',"' // separator // '",' // 'f' // trim(width_str) // '.' // trim(digits_str), num_real-1)
+    fmt = fmt // ')'
     do i=start_idx,end_idx,step
        if (present(t_min_o)) then
           if (solution(1, i) < t_min_o) cycle
@@ -197,15 +215,31 @@ contains
        end if
        if (sol_w_t) then
           if (sol_w_dy) then
-             write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             if (tag<0) then
+                write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             else
+                write (out_io_unit, fmt=fmt) tag, i, solution(1, i), solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             end if
           else
-             write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+             if (tag<0) then
+                write (out_io_unit, fmt=fmt) i, solution(1, i), solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+             else
+                write (out_io_unit, fmt=fmt) tag, i, solution(1, i), solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+             end if
           end if
        else
           if (sol_w_dy) then
-             write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             if (tag<0) then
+                write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             else
+                write (out_io_unit, fmt=fmt) tag, i, solution(sol_y_idx:(sol_y_idx+2*y_dim-1), i)
+             end if
           else
-             write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+             if (tag<0) then
+                write (out_io_unit, fmt=fmt) i, solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+             else
+                write (out_io_unit, fmt=fmt) tag, i, solution(sol_y_idx:(sol_y_idx+y_dim-1), i)
+             end if
           end if
        end if
     end do
