@@ -131,9 +131,10 @@ module mrkiss_solvers_nt
      end subroutine sdf_iface_nt
   end interface
 
-  public :: one_step_etab_nt, one_step_stab_nt, one_richardson_step_stab_nt
-  public :: one_step_rk4_nt, one_step_rkf45_nt, one_step_dp54_nt
-  public :: steps_fixed_stab_nt, steps_condy_stab_nt, steps_sloppy_condy_stab_nt, steps_adapt_etab_nt, steps_points_stab_nt
+  public :: one_step_rk4_nt, one_step_rkf45_nt, one_step_dp54_nt                                         ! Test one step solvers
+  public :: one_step_etab_nt, one_step_stab_nt, one_richardson_step_stab_nt                              ! One step solvers
+  public :: steps_fixed_stab_nt, steps_condy_stab_nt, steps_sloppy_condy_stab_nt, steps_adapt_etab_nt    ! Many step solvers
+  public :: steps_points_stab_nt !, multi_iv_steps_fixed_stab_nt, multi_param_steps_fixed_stab_nt        ! Meta-many step solvers
 
 contains
 
@@ -451,7 +452,7 @@ contains
   !!                                - istats(2): number of one_step_* calls not triggered by an event
   !! solution(:,:) ............... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true..
+  !!                                 - First element is the t variable if sol_w_t_o==.true.
   !!                                 - This array *must* have a populated t sequence in new_solution(1,:)
   !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
   !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
@@ -521,7 +522,7 @@ contains
   !!                                - istats(2): number of one_step_* calls not triggered by an event
   !! solution(:,:) ............... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true..
+  !!                                 - First element is the t variable if sol_w_t_o==.true.
   !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
   !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
   !! deq ......................... Equation subroutine
@@ -663,7 +664,7 @@ contains
   !!                                - istats(8): number of times bisection failed because target was not contained
   !! solution .................... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true..
+  !!                                 - First element is the t variable if sol_w_t_o==.true.
   !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
   !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
   !! deq ......................... Equation subroutine
@@ -870,7 +871,7 @@ contains
   !!                                - istats(3): number of one_step_* calls triggered by y_delta length constraint
   !! solution .................... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true..
+  !!                                 - First element is the t variable if sol_w_t_o==.true.
   !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
   !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
   !! deq ......................... Equation subroutine
@@ -1012,7 +1013,7 @@ contains
   !!                                istats(8): number of times bisection failed because target was not contained
   !! solution(:,:) ............... Array for solution.
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true..
+  !!                                 - First element is the t variable if sol_w_t_o==.true.
   !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
   !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
   !! deq ......................... Equation subroutine
