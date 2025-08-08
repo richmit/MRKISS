@@ -71,6 +71,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - status_to_message(): Returns message for status code
     - istats_size: Constant for istats size
     - steps_points_stab_wt(): Solutions at given t values.
+    - print_solution(): Added append_o option.
   - Documentation
     - Doxygen links in main README & mainpage.
     - Better mainpage markup

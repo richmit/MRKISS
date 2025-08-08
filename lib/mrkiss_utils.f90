@@ -84,10 +84,11 @@ contains
   !! step_num_o ... Include step number in output if .true.  Default: .true.
   !! sol_w_t_o .... Solution has t when .true.  Default: .true.
   !! sol_w_dy_o ... Solution has dy when .true.  Default: .true.
+  !! append_o ..... Append to file instead of overwriting.  Ignored if filename_o not present. Default: .false.
   !! @endverbatim
   !! 
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, titles_o, &
-                            t_min_o, t_max_o, y_dim_o, sol_y_idx_o, tag_o, sol_w_t_o, sol_w_dy_o, step_num_o)
+                            t_min_o, t_max_o, y_dim_o, sol_y_idx_o, tag_o, sol_w_t_o, sol_w_dy_o, append_o, step_num_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik, bk
     implicit none
@@ -98,14 +99,20 @@ contains
     integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
     integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o, tag_o
-    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o, titles_o, step_num_o
+    logical(kind=bk), intent(in), optional :: sol_w_t_o, sol_w_dy_o, titles_o, step_num_o, append_o
     ! Local variables
     integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx, tag
     logical(kind=bk)                       :: sol_w_t, sol_w_dy, titles, step_num, sep_req
     integer(kind=ik)                       :: i, out_io_stat, out_io_unit, num_int, num_real
-    character(len=:), allocatable          :: fmt, separator
+    character(len=:), allocatable          :: fmt, separator, access_mode
     character(len=512)                     :: digits_str, width_str, tmp_str
     ! Process arguments
+    access_mode = 'SEQUENTIAL'
+    if (present(append_o)) then
+       if (append_o) then
+          access_mode = 'APPEND'
+       end if
+    end if
     step_num = .true.
     if (present(step_num_o)) step_num = step_num_o
     tag = -1
@@ -156,7 +163,7 @@ contains
     if (step_num)  num_int = num_int + 1
     ! Open file
     if (present(filename_o)) then
-       open(newunit=out_io_unit, file=filename_o, form='formatted', action='write', iostat=out_io_stat)
+       open(newunit=out_io_unit, file=filename_o, form='formatted', action='write', access=access_mode, iostat=out_io_stat)
        if (out_io_stat /= 0) then
           status = 1152
           return
