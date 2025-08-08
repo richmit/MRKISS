@@ -64,9 +64,10 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
-  use            :: mrkiss_config,                  only: rk, ik, bk, t_delta_tiny, istats_size
-  use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, steps_sloppy_condy_stab_wt
-  use            :: mrkiss_utils,                   only: print_solution, seq, interpolate_solution
+  use            :: mrkiss_config,                  only: rk, ik, bk, istats_size
+  use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, &
+                                                          steps_sloppy_condy_stab_wt, interpolate_solution
+  use            :: mrkiss_utils,                   only: print_solution, seq
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
   use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
 
@@ -81,11 +82,9 @@ program three_body
   real(kind=rk),    parameter :: param(1)      = [1.0_rk / 81.45_rk]
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
-  real(kind=rk)               :: solution(1+2*deq_dim, num_points), isolution(1+deq_dim, num_points)
+  real(kind=rk)               :: solution(1+2*deq_dim, num_points), isolution(1+2*deq_dim, num_points)
   integer(kind=ik)            :: status, istats(istats_size)
   integer                     :: c_beg, c_end, c_rate
-
-  real(kind=rk)               :: dy(deq_dim)
 
   call system_clock(count_rate=c_rate)
 
@@ -162,24 +161,23 @@ program three_body
   ! BEGIN: steps_adapt_int
   call system_clock(c_beg)
   isolution = 0
-  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);            ! Create new t values
-  call interpolate_solution(status, isolution, solution, end_o=istats(1)) ! Preform the interpolation
+  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);                               ! Create new t values
+  call interpolate_solution(status, isolution, solution, eq, param, num_src_pts_o=istats(1)) ! Preform the interpolation
   call system_clock(c_end)
   print '(a)',       "Adaptive hermite interpolation run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
-  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv", sol_w_dy_o=.false._bk)
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv")
 
   call system_clock(c_beg)
   isolution = 0
   call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
-  ! Note we must provide y_dim_o because solution really contains dy.  
-  call interpolate_solution(status, isolution, solution, end_o=istats(1), y_dim_o=deq_dim, sol_w_dy_o=.false._bk)
+  call interpolate_solution(status, isolution, solution, eq, param, num_src_pts_o=istats(1), linear_interp_o=.true._bk)
   call system_clock(c_end)
   print '(a)',       "Adaptive linear interpolation run: "
   print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
   print '(a,i10)',   "                        Status: ", status
-  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv", sol_w_dy_o=.false._bk)
+  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
   ! END: steps_adapt_int
 
   ! BEGIN: steps_adapt_etab_wt-fix-delta-steps

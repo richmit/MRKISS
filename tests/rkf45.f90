@@ -37,7 +37,7 @@ program rkf45
   use :: mrkiss_config,            only: rk, ik
   use :: mrkiss_solvers_wt,        only: one_step_rkf45_wt, one_step_etab_wt, one_step_stab_wt
   use :: mrkiss_utils,             only: print_solution
-  use :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, p1, p2, c
+  use :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, c
 
   implicit none
 

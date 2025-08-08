@@ -123,7 +123,7 @@ If you just want to jump in, then take a look at the [[#qs-min][Quick Start]] se
 
 The IVPs I work with are generally pretty well behavied:
 
- - Generally non-stiff
+ - Non-stiff
  - Time forward (\(\Delta{t} \ge 0\))
  - Defined by a small (<50) set of equations expressable in closed form.
 
@@ -142,7 +142,7 @@ Things I care about:
  - Easy to use, hardwired methods for /fixed step size/ visualization use cases:
    - Fixed \(t\) step size solvers
    - Fixed \(\mathbf{y}\) space step size solvers
- - Solutions include derivative values by default for visualization tools that perform Hermite interpolation.
+ - Solutions include derivative values so visualization tools can perform Hermite interpolation.
  - Interpolate entire solutions to new time points (Hermite & linear).
  - Programmable step processing.  Examples:
    - Stop the routine if the solution curve is too long in y-space
@@ -159,24 +159,24 @@ Things I care about:
    - Directly accessible one step routines for assembling custom solvers.
    - Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.
    - Individual access to each method in an embedded tableau, and control over how each is used.
-   - Maple worksheets rational values, variable floating point approximations, and stability graphs for every Tableau.
-   - I have included a few RK methods more for research interests than practical usefulness.
+   - Maple worksheets with rational values, variable floating point approximations, and stability graphs for every Tableau.
+   - A few of the RK methods included are of historical or research interest -- not necessarily very practical.
  - Easy deployment & sharing
-   - Easy to compile and tune for a new architecture.
+   - Easy to compile and tune for a new hardware architectures.
    - Zero external dependencies[[#faq-deps][[*]]] except a Fortran compiler.
-   - 100% standard Fortran that works with various compilers (Intel, Cray, NAG, gfortran, clang fortran, Nvidia, etc...).
+   - 100% standard Fortran that works with various compilers.
    - Simple text output that can be compressed and sent back home or shared with others.
 
 Things I don't care about:
 
- - Usage error checking.  For example, the code makes no attempt to check that the user has supplied consistent Butcher tableau arguments, or that ~t_delta~
-   values are positive, etc...
- - Performance.  I can generally perform hundreds of thousands of RK steps in a few milliseconds for the problems I work with.  This gives me a lot of
-   performance headroom allowing me to not worry about sophisticated techniques to avoid RK steps.  In fact, this library diverges from best practices in a
-   couple significant ways:
-    - I don't use interpolating polynomials for intrastep approximations.  I even have a bisection routine that takes an RK step for every bisection!
-    - I use generic loops to compute RK steps over the Butcher tableau instead of optimized formulas.
-    - Butcher tableau arrays are not sparse.  In fact, I even include the top and final row full of zeros!
+ - Usage error checking.  
+   - I don't check for stuff like making sure the user has supplied consistent Butcher tableau arguments...
+ - Avoiding derivative function evaluations.
+   - I can generally perform hundreds of thousands of RK steps in a few milliseconds for the problems I work with.
+   - This library diverges from common practice in a few significant ways:
+     - I don't use interpolating polynomials for intrastep approximations.  I even have a bisection routine that takes an RK step for every bisection!
+     - I use generic loops to compute RK steps over the Butcher tableau instead of optimized formulas.
+     - Butcher tableau arrays are not sparse.  In fact, I even include the top and final row full of zeros!
 
 * Vocabulary & Definitions
 
@@ -187,12 +187,12 @@ Within the confines of this software, we define a system of ODEs as:
    \frac{\mathrm{d}y_1}{\mathrm{d}t} \\
    \vdots                            \\
    \frac{\mathrm{d}y_n}{\mathrm{d}t} \\
-  \end{array}\right]                                                           =
+  \end{array}\right]                                                     =
   \left[\begin{array}{c}
    f_1(t, \mathbf{y}) \\
    \vdots             \\
    f_n(t, \mathbf{y}) \\
-  \end{array}\right]                                                           =
+  \end{array}\right]                                                     =
   \left[\begin{array}{c}
    f_1(t, [y_1, \cdots, y_n]^\mathrm{T}) \\
    \vdots                                \\
@@ -257,14 +257,7 @@ subroutines.
  - ~p~  -- The order of the method
  - ~b~  -- The \(\mathbf{\check{b}}\) vector.
 
-Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes:
-
- - ~size(a, 1) > 0~
- - ~size(a, 1) == size(a, 2)~
- - ~size(b, 1) == size(a, 1)~
- - ~size(c, 1) == size(a, 1)~
-
-The value of ~p~ must be a positive integer.
+Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes, and the value of ~p~ must be a positive integer.
 
 ** Embedded Method
 :PROPERTIES:
@@ -280,15 +273,7 @@ Instead of a single ~b~ and ~p~ argument, we have ~b1~, ~p1~, ~b2~, and ~p2~.
  - ~p2~ -- The order of the method associated with the \(\mathbf{\hat{b}}\) vector (only for embedded methods).
  - ~b2~ -- The \(\mathbf{\hat{b}}\) vector (only for embedded methods).
 
-Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes:
-
- - ~size(a, 1) > 0~
- - ~size(a, 1) == size(a, 2)~
- - ~size(b1, 1) == size(a, 1)~
- - ~size(b2, 1) == size(a, 1)~
- - ~size(c, 1) == size(a, 1)~
-
-The values of ~p1~ and ~p2~ must be a positive integers.
+Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes, and the values of ~p1~ and ~p2~ must be a positive integers.
 
 * Predefined Runge-Kutta Methods in [[https://github.com/richmit/MRKISS][~MRKISS~]]
 :PROPERTIES:
@@ -311,7 +296,8 @@ The modules follow a simple naming conventions:
   - They have one of two prefixes:
     - ~mrkiss_eerk_~ :: The module contains an /embedded explicit Runge Kutta method/.
     - ~mrkiss_erk_~  :: The module contains an /explicit Runge Kutta method/  -- i.e. it is *not* embedded.
-  - The names end with numbers indicating the orders of the ~b1~ and ~b2~ methods.  These numbers are separated from the rest of the name by an underscore.
+  - The names end with numbers indicating the orders of the \(\mathbf{\check{b}}\) and \(\mathbf{\hat{b}}\)  methods.  
+    These numbers are separated from the rest of the name by an underscore.
 
 In addition to the parameters, the comments in these files normally include at least the following three sections:
  - ~IMO~ :: Personal commentary about the method in question.  Please note this material is simply my personal opinion.
@@ -343,13 +329,18 @@ module mrkiss_erk_kutta_4
   use mrkiss_config, only: rk, ik
   implicit none
   public
+  !> The order of the overall method
   integer(kind=ik), parameter :: s      = 4
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  &
                                                     1.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  &
                                                     0.0_rk, 1.0_rk, 0.0_rk, 0.0_rk,  &
                                                     0.0_rk, 0.0_rk, 2.0_rk, 0.0_rk], [s, s]) / 2.0_rk
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [         0.0_rk, 1.0_rk, 1.0_rk, 2.0_rk]          / 2.0_rk
+  !> The order of the method
   integer(kind=ik), parameter :: p      = 4
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b(s)   = [         1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk]          / 6.0_rk
 end module mrkiss_erk_kutta_4
 #+end_src
@@ -492,10 +483,13 @@ of higher level routines to indicate an error condition.
     - This method has no guarantee for correctness, but generally works well in practice.
     - Can operate on every step or just steps that are too long.  
     - Most common use: ~steps_fixed_stab_*t()~ results have a few steps that are "too long"
-  - ~steps_points_stab_*t()~ takes a seto of \(t\) values at which to find solutions ::
+  - ~steps_points_stab_*t()~ takes a set of \(t\) values at which to find solutions ::
     - Used several fixed RK steps to go from each \(t\) value to the next.
     - Most common use: Produce a higher accuracy solution based on a previous solution.  
     - Most common use: Physical problems requiring solutions at specific time points.
+  - ~interpolate_solution~ interpolates an existing solution to a new solution ::
+    - Not a RK method; however, it provides O(3) accuracy when using Hermite interpolation.
+    - Derivative values are freshly computed for the interpolated points
 
 ** High Level Solver Common Arguments
 :PROPERTIES:
@@ -504,12 +498,17 @@ of higher level routines to indicate an error condition.
 
 The first several arguments are common across the higher level solvers.
 
-*** Results (first three arguments):
+*** Status: ~status~ & ~istats~
 :PROPERTIES:
-:CUSTOM_ID: hi-solvers-args-out
+:CUSTOM_ID: hi-solvers-args-status
 :END:
 
-  - ~status~ :: This is an integer return code.  A positive value means failure -- see the documentation for each routine for details.
+  - ~status~ :: This is an integer return code.  
+    - A positive value means failure.
+    - Usually ~0~ is returned for success; however, negative values are also acceptable.
+    - Each routine has a well defined block of positive status values assigned to it.
+    - The documentation for each routine details possible positive status return values.
+    - See: ~status_to_origin()~  & ~status_to_message()~ in the [[#utils][Utilities section]]
   - ~istats~ :: Statistics regarding the solver run.                
     - ~istats(1)~: number of computed solution points
     - ~istats(2)~: number of one_step_* calls not triggerd by an event
@@ -519,15 +518,19 @@ The first several arguments are common across the higher level solvers.
     - ~istats(6)~: number of one_step_* calls triggered by SDF bisection
     - ~istats(7)~: number of times bisection failed because of max_bisect_o
     - ~istats(8)~: number of times bisection failed because target was not contained
-  - ~solution~ :: Array for solution.  \\
-    - Each *column* is a solution containing, by default, \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).
-    - By default the first column contains \(t\).  
-      - The inclusion of \(t\) may be suppressed via ~sol_w_t_o=0~
-    - The coordinates of \(\mathbf{y}\) start in column ~sol_y_idx_o~, by default ~2~. 
-    - By default the coordinates \(\mathbf{y'}\) are included, and begin immediatly after the coordinates of \(\mathbf{y}\). 
-      - The inclusion of the derivatives may be suppressed via ~sol_w_dy_o=0~.
 
-*** The IVP
+*** The Solution: ~solution~
+:PROPERTIES:
+:CUSTOM_ID: hi-solvers-args-sol
+:END:
+
+  - ~solution~ :: Array for solution.  \\
+    - Each *column* is a solution containing \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).
+    - The first column contains \(t\).  
+    - The coordinates of \(\mathbf{y}\) start in column ~2~. 
+    - The coordinates \(\mathbf{y'}\) begin immediatly after the coordinates of \(\mathbf{y}\).
+
+*** The IVP: ~deq~, ~t~, ~y~, ~param~
 :PROPERTIES:
 :CUSTOM_ID: hi-solvers-args-ivp
 :END:
@@ -551,11 +554,27 @@ These arguments vary a bit, but mirror the names documented in the [[#def-method
 
 Behind all of the above high level solvers are single step routines to carry out the step calculations.  These are handy for creating DIY solvers.  
 
-  - ~one_step_stab_*t()~  non-embedded RK methods
+  - ~one_step_stab_*t()~  non-embedded RK methods 
   - ~one_richardson_step_stab_*t()~ uses Richardson extrapolation with non-embedded RK methods
   - ~one_step_etab_*t()~ embedded RK methods
   - ~one_step_rk4_*t()~ hardwired RK4 for unit tests
   - ~one_step_rkf45_*t()~ hardwired RKF45 for unit tests
+
+* Utilities
+:PROPERTIES:
+:CUSTOM_ID: utils
+:END:
+
+*[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides a few utilities:
+
+  - Output
+    - ~print_solution()~ Print a solution to a file or STDOUT
+  - Miscilanious
+    - ~analyze_solution()~ Compute statstics related to the solution
+    - ~seq()~ Compute a fixed delta sequence of values in the same way steps are comptued in ~steps_fixed_stab_*t()~
+  - Status Codes
+    - ~status_to_origin()~ Returns the subroutine or interface name assigned the given status code
+    - ~status_to_message()~ Returns the error message for the given status code
 
 * Quick Start -- The Absolute Minimum
 :PROPERTIES:
@@ -646,29 +665,11 @@ completely unnecessary for making full use of the modules, so you you can safely
 Once you have the ~makefile~ worked out, pick an example to build.  For example, we might try this one:
 [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~lorenz.f90~]].
 
-#+begin_src sh :results output verbatum :exports both
+#+begin_src sh :exports code :eval never :tangle no
 make lorenz
-ls
 #+end_src
 
 #+RESULTS:
-#+begin_example
-changelog.html
-changelog.org
-dox
-ex_lorenz.html
-ex_lorenz.org
-ex_three_body.html
-ex_three_body.org
-index.html
-index.org
-logo
-MRKISS
-pics
-README.org
-roadmap.html
-roadmap.org
-#+end_example
 
 Assuming the build worked, we can now run the code.  On UNIX systems the binary will be called ~lorenz~ and on Windows it will be called ~lorenz.exe~.  On
 Windows running it looks like this:
@@ -682,7 +683,7 @@ Windows running it looks like this:
 That's not very interesting.  The fun part is what it did in the background.  The program should produce a file called ~lorenz.csv~ that has the solution
 curve.  If you have GNU Plot, you can graph it with something like this:
 
-#+begin_src sh
+#+begin_src sh :exports code :eval never :tangle no
 gnuplot -p < lorenz.gplt
 #+end_src
 
@@ -703,7 +704,7 @@ You can do that by just listing all the source files on the command line with mo
 [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~lorenz.f90~]] example in the
 [[https://github.com/richmit/MRKISS/blob/master/examples/][~MRKISS/examples/~]] directly like this:
 
-#+begin_src sh :results output verbatum :exports code
+#+begin_src sh :exports code :eval never :tangle no
 cd examples
 gfortran.exe lorenz.f90 ../src/*.f90
 #+end_src
@@ -723,7 +724,7 @@ That said, most people will probably want to use a build system.  If GNU Make is
 
 Your makefile will look something like this:
 
-#+begin_src makefile :eval never :tangle no
+#+begin_src makefile :exports code :eval never :tangle no
 MRKISS_PATH = ../MRKISS
 
 # Set FC, FFLAGS, & AR here.  The include below has the settings I use on my system.
@@ -739,7 +740,7 @@ Note the rule for ~your_program~ in the makefile above takes the lazy approach o
 dependency regardless of if your program actually needs them all.  This is how most people use the modules because it's simple.  The cost might be a couple
 seconds of extra compile time.  You can explicitly list out the modules in the makefile if you wish.  Such a rule might look like the following:
 
-#+begin_src makefile :eval never :tangle no
+#+begin_src makefile :exports code :eval never :tangle no
 your_program : your_program.f90 mrkiss_config$(OBJ_SUFFIX) mrkiss_solvers_wt(OBJ_SUFFIX) mrkiss_utils$(OBJ_SUFFIX)
     $(FC) $(FFLAGS) $^ -o $@
 #+end_src
@@ -1132,7 +1133,7 @@ graphs.  None of these tools are required to compile and use the package because
 
 Releases are contained in commits with a tag that looks like this: "vYYYY-MM-DD" -- i.e. an ISO 8601 format date prefixed with the letter "v".  These commits
 differ from other commits in terms of quality control.  Release commits:
-  - Unit tests are all successful.
+  - Unit tests are all successful.  For information on platforms tested, see [[#faq-rel-platforms][What platforms are known to work?]].
   - Development documentation (changelog & roadmap) are both up to date.
   - Example documentation is newer than the corrisponding example soruce.
   - Doxygen documentation
@@ -1147,3 +1148,29 @@ differ from other commits in terms of quality control.  Release commits:
 
 That said, I generally try to only push working code to github so ~HEAD~ should be reasonably safe.  You can see what changes have been made on ~HEAD~
 by taking a look at the [[https://richmit.github.io/MRKISS/changelog.html#latest][latest changelog section]].
+
+** What platforms are known to work?
+:PROPERTIES:
+:CUSTOM_ID: faq-rel-platforms
+:END:
+
+I have used *[[https://github.com/richmit/MRKISS][~MRKISS~]]* on a variety of platforms including:
+  - Various supercomputers and HPC platforms.
+  - Cloud hosted linux systems using various distributions: RH, SuSE, Debian, Ubuntu, & Arch.
+
+When performing a release I test on my primary development system which changes over time.  Below are the platforms I tested for each release:
+
+ - ~v2025-08-08~
+   - Microsoft Windows 11 Pro 10.0.26100 Build 26100 running MSYS2
+     - GNU Fortran (Rev6, Built by MSYS2 project) 15.1.0
+     - Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2024.1.0 Build 20240308
+     - flang version 20.1.7 x86_64-w64-windows-gnu posix (lorenz_test fails, but it's OK.)
+   - Debian 13.0
+     - GNU Fortran (Debian 14.2.0-19) 14.2.0
+     - nvfortran 24.11-0 64-bit target on x86-64 Linux -tp tigerlake (requires reformatting the code to line length limitations)
+     - ifx (IFX) 2025.0.4 20241205 (lorenz_test fails, but it's OK.)
+     - Debian flang-new version 19.1.7 (3) x86_64-pc-linux-gnu posix (lorenz_test fails, but it's OK.)
+ - ~v2025-08-04~
+   - Microsoft Windows 11 Pro 10.0.26100 Build 26100 running MSYS2
+     - GNU Fortran (Rev6, Built by MSYS2 project) 15.1.0
+     - Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2024.1.0 Build 20240308

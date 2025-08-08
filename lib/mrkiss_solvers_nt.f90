@@ -134,8 +134,8 @@ module mrkiss_solvers_nt
   public :: one_step_rk4_nt, one_step_rkf45_nt, one_step_dp54_nt                                         ! Test one step solvers
   public :: one_step_etab_nt, one_step_stab_nt, one_richardson_step_stab_nt                              ! One step solvers
   public :: steps_fixed_stab_nt, steps_condy_stab_nt, steps_sloppy_condy_stab_nt, steps_adapt_etab_nt    ! Many step solvers
-  public :: steps_points_stab_nt !, multi_iv_steps_fixed_stab_nt, multi_param_steps_fixed_stab_nt        ! Meta-many step solvers
-
+  public :: steps_points_stab_nt                                                                         ! Meta-many step solvers
+  public :: interpolate_solution
 contains
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -452,22 +452,20 @@ contains
   !!                                - istats(2): number of one_step_* calls not triggered by an event
   !! solution(:,:) ............... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true.
+  !!                                 - First element is the t variable if
   !!                                 - This array *must* have a populated t sequence in new_solution(1,:)
-  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
-  !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
+  !!                                 - size(y, 1) elements starting with 2 have y values
+  !!                                 - The next size(y, 1) elements have dy values
   !! deq ......................... Equation subroutine
   !! y(:) ........................ Initial conditions.  y is a column vector!
   !! param(:) .................... Data payload passed to deq
   !! a(:,:), b(:), c(:) .......... The butcher tableau
   !! steps_per_pnt ............... Number of RK steps to reach each point
   !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
-  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
-  !! sol_w_dy_o .................. Solution will have dy when .true.  Default: .true.
   !! @endverbatim
   !!
-  subroutine steps_points_stab_nt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o, sol_y_idx_o, sol_w_dy_o)
-    use mrkiss_config, only: rk, ik, bk, istats_size
+  subroutine steps_points_stab_nt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o)
+    use mrkiss_config, only: rk, ik, istats_size
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(istats_size)
@@ -475,34 +473,25 @@ contains
     procedure(deq_iface_nt)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer(kind=ik),           intent(in)  :: steps_per_pnt
-    integer(kind=ik), optional, intent(in)  :: p_o, sol_y_idx_o
-    logical(kind=bk), optional, intent(in)  :: sol_w_dy_o
+    integer(kind=ik), optional, intent(in)  :: p_o
     ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, y_dim, sol_y_idx, jstats(istats_size), p
-    logical(kind=bk)                        :: sol_w_dy
+    integer(kind=ik)                        :: cur_pnt_idx, y_dim, jstats(istats_size), p
     real(kind=rk)                           :: dy(size(y, 1))
     ! Process arguments
-    sol_y_idx = 2
-    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
-    sol_w_dy = .true._bk
-    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     p = 0_ik
     if (present(p_o)) p = p_o
     ! Compute Solution
     y_dim = size(y, 1)
     istats = 0
-    solution(sol_y_idx:(sol_y_idx+y_dim-1), 1) = y
-    if (sol_w_dy) then
-       call deq(status, dy, &        ! NL to suppress wt2nt sed processing.
-                y, param)
-       if (status > 0) return
-       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), 1) = dy
-    end if
+    solution(2:(2+y_dim-1), 1) = y
+    call deq(status, dy, &    ! wt2nt:IGNORE
+         y, param)
+    if (status > 0) return
+    solution((2+y_dim):(2+2*y_dim-1), 1) = dy
     do cur_pnt_idx=2,size(solution, 2)
-       call steps_fixed_stab_nt( &                                                             ! NL to suppress wt2nt sed processing.
-                                status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &
-                                solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx-1), param, a, b, c, p,             &
-                                t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1, sol_y_idx_o=sol_y_idx, sol_w_dy_o=sol_w_dy)
+       call steps_fixed_stab_nt(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &   ! wt2nt:IGNORE
+                                solution(2:(2+y_dim-1), cur_pnt_idx-1), param, a, b, c, p, &
+                                t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1)
        istats = istats + jstats
        if (status > 0) return
     end do
@@ -522,9 +511,9 @@ contains
   !!                                - istats(2): number of one_step_* calls not triggered by an event
   !! solution(:,:) ............... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true.
-  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
-  !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
+  !!                                 - First element is the t variable
+  !!                                 - size(y, 1) elements starting with 2 have y values
+  !!                                 - The next size(y, 1) elements have dy values
   !! deq ......................... Equation subroutine
   !! t, y(:) ..................... Initial conditions.  y is a column vector!
   !! param(:) .................... Data payload passed to deq
@@ -538,14 +527,11 @@ contains
   !!                                If t_end_o not provided: Default: mrkiss_config::t_delta_ai
   !! t_end_o ..................... End point for last step.  Silently ignored if t_delta_o is provided.
   !! t_max_o ..................... Maximum value for t
-  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
-  !! sol_w_t_o ................... Solution will have t when .true.  Default: .true.
-  !! sol_w_dy_o .................. Solution will have dy when .true.  Default: .true.
   !! @endverbatim
   !!
   subroutine steps_fixed_stab_nt(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
-                                 t_end_o, t_max_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
-    use mrkiss_config, only: rk, ik, bk, t_delta_ai, istats_size
+                                 t_end_o, t_max_o)
+    use mrkiss_config, only: rk, ik, t_delta_ai, istats_size
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(istats_size)
@@ -554,17 +540,12 @@ contains
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer(kind=ik), optional, intent(in)  :: p_o, max_pts_o
     real(kind=rk),    optional, intent(in)  :: t_delta_o, t_end_o, t_max_o
-    integer(kind=ik), optional, intent(in)  :: sol_y_idx_o
-    logical(kind=bk), optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, y_dim, sol_y_idx, cur_step, max_steps, p
-    logical(kind=bk)                        :: sol_w_t, sol_w_dy
+    integer(kind=ik)                        :: cur_pnt_idx, y_dim, cur_step, max_steps, p
     real(kind=rk)                           :: t_cv, t_delta
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
     logical                                 :: lotsopnts 
     ! Process arguments
-    sol_y_idx = 2
-    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
     max_steps = size(solution, 2) - 1
     lotsopnts = .true.
     if (present(max_pts_o)) then
@@ -586,10 +567,6 @@ contains
     end if
     p = 0_ik
     if (present(p_o)) p = p_o
-    sol_w_t = .true._bk
-    if (present(sol_w_t_o)) sol_w_t = sol_w_t_o
-    sol_w_dy = .true._bk
-    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     ! Compute Solution
     y_dim = size(y, 1)
     istats = 0
@@ -597,8 +574,8 @@ contains
     y_cv = y
     cur_step = 0
     cur_pnt_idx = 1
-    if (sol_w_t) solution(1,  cur_pnt_idx) = t_cv
-    solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+    solution(1,  cur_pnt_idx) = t_cv
+    solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
     do 
        cur_step = cur_step + 1
        if (p > 0) then
@@ -613,10 +590,10 @@ contains
        t_cv = t_cv + t_delta
        if (lotsopnts) then
           cur_pnt_idx = cur_pnt_idx + 1
-          if (sol_w_dy) solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx-1) = dy
+          solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx-1) = dy
        end if
-       if (sol_w_t) solution(1, cur_pnt_idx) = t_cv
-       solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+       solution(1, cur_pnt_idx) = t_cv
+       solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        status = 0
        if (present(t_max_o)) then
@@ -625,11 +602,9 @@ contains
        if (cur_step >= max_steps) exit
     end do
     ! Compute derivative for final solution point
-    if (sol_w_dy) then
-       call deq(status, dy, y_cv, param)  ! This sets return status
-       if (status > 0) return
-       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
-    end if
+    call deq(status, dy, y_cv, param)  ! This sets return status
+    if (status > 0) return
+    solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(1) = istats(1) + 1
   end subroutine steps_fixed_stab_nt
 
@@ -664,9 +639,9 @@ contains
   !!                                - istats(8): number of times bisection failed because target was not contained
   !! solution .................... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true.
-  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
-  !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
+  !!                                 - First element is the t variable
+  !!                                 - size(y, 1) elements starting with 2 have y values
+  !!                                 - The next size(y, 1) elements have dy values if
   !! deq ......................... Equation subroutine
   !! t, y(:) ..................... Initial conditions.  y is a column vector!
   !! param(:) .................... Data payload passed to deq
@@ -681,15 +656,11 @@ contains
   !! no_bisect_error_o ........... If .true., then do not exit on bisection errors
   !! y_sol_len_max_o ............. Maximum length of the solution curve
   !! t_max_o ..................... Maximum value for t
-  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
-  !! sol_w_t_o ................... Solution will have t when .true.  Default: .true.
-  !! sol_w_dy_o .................. Solution will have dy when .true.  Default: .true.
   !! @endverbatim
   !!
   subroutine steps_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
-                                 y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o,                        &
-                                 sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
+                                 y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
     use mrkiss_config, only: rk, ik, bk, t_delta_tiny, max_bisect_ai, istats_size
     implicit none
     ! Arguments
@@ -701,11 +672,9 @@ contains
     integer(kind=ik), optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
     logical(kind=bk), optional, intent(in)  :: no_bisect_error_o
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
-    integer(kind=ik), optional, intent(in)  :: sol_y_idx_o
-    logical(kind=bk), optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     ! Variables
-    integer(kind=ik)                        :: max_bisect, max_pts, cur_pnt_idx, biter, y_dim, sol_y_idx
-    logical(kind=bk)                        :: sol_w_t, sol_w_dy, no_bisect_error
+    integer(kind=ik)                        :: max_bisect, max_pts, cur_pnt_idx, biter, y_dim
+    logical(kind=bk)                        :: no_bisect_error
     real(kind=rk)                           :: y_delta_len_tol, t_delta_min, y_sol_len, bs_tmp1_y_delta_len
     real(kind=rk)                           :: bs_tmp1_t_delta, bs_tmp2_t_delta, t_cv, dy(size(y, 1))
     real(kind=rk)                           :: bs_tmpc_dy(size(y, 1)), bs_tmp1_dy(size(y, 1)), bs_tmp2_dy(size(y, 1))
@@ -721,14 +690,8 @@ contains
     if (present(max_bisect_o)) max_bisect = max_bisect_o
     y_delta_len_tol = y_delta_len_targ / 100.0_rk
     if (present(y_delta_len_tol_o)) y_delta_len_tol = y_delta_len_tol_o
-    sol_y_idx = 2
-    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
     max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
-    sol_w_t = .true._bk
-    if (present(sol_w_t_o)) sol_w_t = sol_w_t_o
-    sol_w_dy = .true._bk
-    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     no_bisect_error = .false._bk
     if (present(no_bisect_error_o)) no_bisect_error = no_bisect_error_o
     ! Compute Solution
@@ -738,8 +701,8 @@ contains
     t_cv = 0.0_rk
     y_cv = y
     cur_pnt_idx = 1
-    if (sol_w_t) solution(1, cur_pnt_idx) = t_cv
-    solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+    solution(1, cur_pnt_idx) = t_cv
+    solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
     do 
        cur_pnt_idx = cur_pnt_idx  + 1
        ! Compute t_delta 1
@@ -822,9 +785,9 @@ contains
        ! Update solution
        y_cv = y_cv + bs_tmpc_y_delta
        t_cv = t_cv + bs_tmpc_t_delta
-       if (sol_w_t) solution(1, cur_pnt_idx) = t_cv
-       if (sol_w_dy) solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx-1) = bs_tmpc_dy
-       solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+       solution(1, cur_pnt_idx) = t_cv
+       solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx-1) = bs_tmpc_dy
+       solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        status = 0
        if (present(y_sol_len_max_o)) then
@@ -837,11 +800,9 @@ contains
        if (cur_pnt_idx >= max_pts) exit
     end do
     ! Compute derivative for final solution point
-    if (sol_w_dy) then
-       call deq(status, dy, y_cv, param)  ! This sets return status
-       if (status > 0) return
-       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
-    end if
+    call deq(status, dy, y_cv, param)  ! This sets return status
+    if (status > 0) return
+    solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(1) = istats(1) + 1
   end subroutine steps_condy_stab_nt
 
@@ -871,9 +832,9 @@ contains
   !!                                - istats(3): number of one_step_* calls triggered by y_delta length constraint
   !! solution .................... Array for solution.  
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true.
-  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
-  !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
+  !!                                 - First element is the t variable
+  !!                                 - size(y, 1) elements starting with 2 have y values
+  !!                                 - The next size(y, 1) elements have dy values
   !! deq ......................... Equation subroutine
   !! t, y(:) ..................... Initial conditions.  y is a column vector!
   !! param(:) .................... Data payload passed to deq
@@ -887,15 +848,12 @@ contains
   !! max_pts_o ................... Maximum number of solutions to put in solution.
   !! y_sol_len_max_o ............. Maximum length of the solution curve
   !! t_max_o ..................... Maximum value for t
-  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
-  !! sol_w_t_o ................... Solution will have t when .true.  Default: .true.
-  !! sol_w_dy_o .................. Solution will have dy when .true.  Default: .true.
   !! @endverbatim
   !!
   subroutine steps_sloppy_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
-                                        y_sol_len_max_o, t_max_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
-    use mrkiss_config, only: rk, ik, bk, t_delta_tiny, istats_size
+                                        y_sol_len_max_o, t_max_o)
+    use mrkiss_config, only: rk, ik, t_delta_tiny, istats_size
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(istats_size)
@@ -905,11 +863,8 @@ contains
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, t_delta_max_o
     integer(kind=ik), optional, intent(in)  :: max_pts_o, y_delta_len_idxs_o(:), adj_short_o
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
-    integer(kind=ik), optional, intent(in)  :: sol_y_idx_o
-    logical(kind=bk), optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     ! Variables
-    integer(kind=ik)                        :: max_pts, cur_pnt_idx, sol_y_idx, y_dim
-    logical(kind=bk)                        :: sol_w_t, sol_w_dy
+    integer(kind=ik)                        :: max_pts, cur_pnt_idx, y_dim
     real(kind=rk)                           :: t_delta_min, y_sol_len, t_cv, t_delta, y_delta_len
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
     ! Process arguments
@@ -917,12 +872,6 @@ contains
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
     t_delta_min = t_delta_tiny
     if (present(t_delta_min_o)) t_delta_min = t_delta_min_o
-    sol_y_idx = 2
-    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
-    sol_w_t = .true._bk
-    if (present(sol_w_t_o)) sol_w_t = sol_w_t_o
-    sol_w_dy = .true._bk
-    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     ! Compute Solution
     y_dim = size(y, 1)
     y_sol_len = 0.0_rk
@@ -930,8 +879,8 @@ contains
     t_cv = 0.0_rk
     y_cv = y
     cur_pnt_idx = 1
-    if (sol_w_t) solution(1, cur_pnt_idx) = t_cv
-    solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+    solution(1, cur_pnt_idx) = t_cv
+    solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
     do 
        cur_pnt_idx = cur_pnt_idx  + 1
        ! Compute Initial step
@@ -959,9 +908,9 @@ contains
        ! Update state
        y_cv = y_cv + y_delta
        t_cv = t_cv + t_delta
-       if (sol_w_t) solution(1, cur_pnt_idx) = t_cv
-       if (sol_w_dy) solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx-1) = dy
-       solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+       solution(1, cur_pnt_idx) = t_cv
+       solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx-1) = dy
+       solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        status = 0
        ! Process solution length limit
@@ -981,11 +930,9 @@ contains
        if (cur_pnt_idx >= max_pts) exit
     end do
     ! Compute derivative for final solution point
-    if (sol_w_dy) then
-       call deq(status, dy, y_cv, param)  ! This sets return status
-       if (status > 0) return
-       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
-    end if
+    call deq(status, dy, y_cv, param)  ! This sets return status
+    if (status > 0) return
+    solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(1) = istats(1) + 1
   end subroutine steps_sloppy_condy_stab_nt
 
@@ -1013,9 +960,9 @@ contains
   !!                                istats(8): number of times bisection failed because target was not contained
   !! solution(:,:) ............... Array for solution.
   !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if sol_w_t_o==.true.
-  !!                                 - size(y, 1) elements starting with sol_y_idx_o, 2 by default, have y values
-  !!                                 - The next size(y, 1) elements have dy values if sol_w_dy_o==.true.
+  !!                                 - First element is the t variable
+  !!                                 - size(y, 1) elements starting with 2 have y values
+  !!                                 - The next size(y, 1) elements have dy values
   !! deq ......................... Equation subroutine
   !! t, y(:) ..................... Initial conditions.  y is a column vector!
   !! param(:) .................... Data payload passed to deq
@@ -1043,15 +990,12 @@ contains
   !!                                - end_run>0     => routine returns after this step is complete.
   !! sdf_tol_o ................... How close we have to get to accept an sdf solution. Default: sdf_tol_ai
   !! stepp_o ..................... Step processing subroutine.  Called after each step.
-  !! sol_y_idx_o ................. Index of y in solution.  Default: 2
-  !! sol_w_t_o ................... Solution will have t when .true.  Default: .true.
-  !! sol_w_dy_o .................. Solution will have dy when .true.  Default: .true.
   !! @endverbatim
   !! 
   subroutine steps_adapt_etab_nt(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
                                  t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,      &
-                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o, sol_y_idx_o, sol_w_t_o, sol_w_dy_o)
+                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
     use mrkiss_config
     implicit none
     ! Arguments
@@ -1063,16 +1007,15 @@ contains
     real(kind=rk),             optional, intent(in)  :: t_max_o, t_end_o, t_delta_ini_o, t_delta_min_o, t_delta_max_o
     real(kind=rk),             optional, intent(in)  :: t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o
     real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
-    integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisect_o, sol_y_idx_o
+    integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisect_o
     logical(kind=bk),          optional, intent(in)  :: no_bisect_error_o
     procedure(sdf_iface_nt),   optional              :: sdf_o
     real(kind=rk),             optional, intent(in)  :: sdf_tol_o
-    logical(kind=bk),          optional, intent(in)  :: sol_w_t_o, sol_w_dy_o
     procedure(stepp_iface_nt), optional              :: stepp_o
     ! Variables
-    integer(kind=ik)                                 :: max_pts, cur_pnt_idx, adj_cnt, sol_y_idx, y_dim
+    integer(kind=ik)                                 :: max_pts, cur_pnt_idx, adj_cnt, y_dim
     integer(kind=ik)                                 :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
-    logical(kind=bk)                                 :: sol_w_t, sol_w_dy, no_bisect_error
+    logical(kind=bk)                                 :: no_bisect_error
     real(kind=rk)                                    :: t_delta_fac, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
     real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min
     real(kind=rk)                                    :: y_delta_delta(size(y, 1)), t_delta_fac_max, t_delta_fac_min
@@ -1118,12 +1061,6 @@ contains
     end if
     max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
-    sol_y_idx = 2
-    if (present(sol_y_idx_o)) sol_y_idx = sol_y_idx_o
-    sol_w_t = .true._bk
-    if (present(sol_w_t_o)) sol_w_t = sol_w_t_o
-    sol_w_dy = .true._bk
-    if (present(sol_w_dy_o)) sol_w_dy = sol_w_dy_o
     no_bisect_error = .false._bk
     if (present(no_bisect_error_o)) no_bisect_error = no_bisect_error_o
     ! Compute solution
@@ -1133,8 +1070,8 @@ contains
     t_cv = 0.0_rk
     y_cv = y
     cur_pnt_idx = 1
-    if (sol_w_t) solution(1, cur_pnt_idx) = t_cv
-    solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+    solution(1, cur_pnt_idx) = t_cv
+    solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
     do 
        cur_pnt_idx = cur_pnt_idx  + 1
        ! If close to the end, adjust t_delta to hit t_end_o
@@ -1253,9 +1190,9 @@ contains
        y_cv = y_cv + y1_delta
        t_cv = t_cv + t_delta
        t_delta = t_delta_nxt
-       if (sol_w_t) solution(1, cur_pnt_idx) = t_cv
-       if (sol_w_dy) solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx-1) = dy
-       solution(sol_y_idx:(sol_y_idx+y_dim-1), cur_pnt_idx) = y_cv
+       solution(1, cur_pnt_idx) = t_cv
+       solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx-1) = dy
+       solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
        istats(1) = istats(1) + 1
        status = 0;
        if (present(stepp_o)) then
@@ -1267,14 +1204,86 @@ contains
        if (t_delta_end_p) exit
     end do
     ! Compute derivative for final solution point
-    if (sol_w_dy) then
-       call deq(status, dy, y_cv, param)  ! This sets return status
-       if (status > 0) return
-       solution((sol_y_idx+y_dim):(sol_y_idx+2*y_dim-1), cur_pnt_idx) = dy
-    end if
+    call deq(status, dy, y_cv, param)  ! This sets return status
+    if (status > 0) return
+    solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(1) = istats(1) + 1
   end subroutine steps_adapt_etab_nt
 
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Create an interpolated solution from a source colution.
+  !! 
+  !! @verbatim
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 1331:1347 .. Error in this routine
+  !!                                   - 1331 ...... solution t value out of bounds
+  !!                                - others ..... Other values are not allowed
+  !! solution(:,:) ............... Array for new solution.  
+  !!                                This array *must* have a populated t sequence in solution(1,:)
+  !!                                It must also have room for a new y & dy coordinates.
+  !!                                New y values are interpolated.  New dy values are coputed from deq.
+  !! src_solution(:,:) ........... Array for old solution.  
+  !!                                This array *must* have t!  It must have at least two solution points.
+  !! num_src_pts_o ............... The number of solutions in src_solution.  Default infered from size of src_solution.
+  !! linear_interp_o ............. If .true. do linear interpolation, and hermite otherwise.  Default: .false.
+  !! @endverbatim
+  !!
+  subroutine interpolate_solution(status, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o)
+    use :: mrkiss_config, only: rk, ik, bk
+    implicit none
+    ! Arguments
+    integer(kind=ik),           intent(out)   :: status
+    real(kind=rk),              intent(inout) :: solution(:,:)
+    real(kind=rk),              intent(in)    :: src_solution(:,:)
+    integer(kind=ik), optional, intent(in)    :: num_src_pts_o
+    procedure(deq_iface_nt)                   :: deq
+    real(kind=rk),              intent(in)    :: param(:)
+    logical(kind=bk), optional, intent(in)    :: linear_interp_o
+    ! Variables
+    integer(kind=ik)                          :: new_sol_idx, old_sol_idx, max_idx, num_src_pts, y_dim
+    logical(kind=bk)                          :: linear_interp
+    real(kind=rk)                             :: t, t0, t1, tu, td
+    real(kind=rk), allocatable                :: y0(:), y1(:), dy0(:), dy1(:), yat(:)
+    ! Process Arguments
+    linear_interp = .false.
+    if (present(linear_interp_o)) linear_interp = linear_interp_o
+    num_src_pts = size(src_solution, 2)
+    if (present(num_src_pts_o)) num_src_pts = min(num_src_pts_o, size(src_solution, 2))
+    ! Compute value
+    y_dim = (size(src_solution, 1) - 1) /2
+    max_idx = size(solution, 2)
+    old_sol_idx = 2
+    do new_sol_idx=1, max_idx
+       t = solution(1, new_sol_idx)
+       do while (t > src_solution(1, old_sol_idx))
+          old_sol_idx = old_sol_idx + 1
+          if (old_sol_idx > num_src_pts) then
+             status = 1331
+             return
+          end if
+       end do
+       ! If we get here, we are in the interval we want
+       t0 = src_solution(1, old_sol_idx-1)
+       t1 = src_solution(1, old_sol_idx)
+       y0 = src_solution(2:(2+y_dim-1), old_sol_idx-1)
+       y1 = src_solution(2:(2+y_dim-1), old_sol_idx)
+       td = (t1 - t0)
+       if (linear_interp) then
+          yat = (y0 * (t1 - t) + y1 * (t - t0)) / td
+       else
+          dy0 = td * src_solution((2+y_dim):(2+2*y_dim-1), old_sol_idx-1)
+          dy1 = td * src_solution((2+y_dim):(2+2*y_dim-1), old_sol_idx)
+          tu  = (t - t0) / td
+          yat = tu * (tu * (tu * (2 * y0 + dy0 - 2 * y1 + dy1) - 2 * dy0 - 3 * y0 + 3 * y1 - dy1) + dy0) + y0
+       end if
+       solution(2:(2+y_dim-1),           new_sol_idx) = yat
+       call deq(status, solution((2+y_dim):(2+2*y_dim-1), new_sol_idx), & ! wt2nt:IGNORE
+                yat, param)
+    end do
+    status = 0;
+  end subroutine interpolate_solution
+  
 end module mrkiss_solvers_nt
 
 

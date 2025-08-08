@@ -45,7 +45,7 @@ IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
 
-EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error
+EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error langford
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)

@@ -59,8 +59,7 @@ program rk4
                                                                          0.9000000000_rk, 1.0246280460_rk,  0.4414926096_rk, &
                                                                          1.0000000000_rk, 1.0715783953_rk,  0.4949291477_rk], [1+2*deq_dim, max_pts])
   integer(kind=ik)            :: step, status, istats(istats_size)
-  real(kind=rk)               :: y_delta(deq_dim), y_cv(deq_dim), t_cv, sol(1+2*deq_dim, max_pts), dy(deq_dim)
-  integer                      :: out_io_stat, out_io_unit
+  real(kind=rk)               :: y_delta(deq_dim), sol(1+2*deq_dim, max_pts)
 
   call print_solution(status, sol_h, filename_o="rk4_hnd.out", width_o=20)
 

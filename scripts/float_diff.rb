@@ -97,7 +97,7 @@ if (file_lines[0].length != file_lines[1].length) then
   exit 5
 end
 
-fpre = Regexp.new(/([-+]{0,1}[0-9]\.[0-9]+(e[-+]{0,1}[0-9]+){0,1})/);
+fpre = Regexp.new(/[+-]?((\d+\.\d*|\d*\.\d+)([eE][+-]?\d+)?|\d+[eE][+-]?\d+)/)
 
 num_diffs = 0
 file_lines[0].each_index do |idx|

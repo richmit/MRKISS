@@ -117,7 +117,7 @@ open("#{tgroup}.mk", "wb") do |mk_file|
     mk_file.puts
     mk_file.puts(".PHONY: test_#{tcase}")
     mk_file.puts("test_#{tgroup}_#{tcase} : #{tgroup}_#{tcase}.out")
-    mk_file.puts("\t$(FD) -Zdq -e 1e-10 data/#{tgroup}_#{tcase}.out #{tgroup}_#{tcase}.out")
+    mk_file.puts("\t$(FD) -Zdqn -e 1e-10 data/#{tgroup}_#{tcase}.out #{tgroup}_#{tcase}.out")
     mk_file.puts
   end
 end

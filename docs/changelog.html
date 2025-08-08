@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-07 Thu 19:20 -->
+<!-- 2025-08-08 Fri 13:06 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS changelog</title>
@@ -232,12 +232,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-07 19:20:35</i></td>
+<td class="org-left"><i>2025-08-08 13:06:13</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-07 19:20:37</i></td>
+<td class="org-left"><i>2025-08-08 13:06:35</i></td>
 </tr>
 </tbody>
 </table>
@@ -249,14 +249,72 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#latest">1. Changes On HEAD Since Last Release</a></li>
-<li><a href="#v2025-08-04">2. 2025-08-04: Initial Release</a></li>
+<li><a href="#latest">1. Changes On HEAD Since Last Release TEMPLATE</a></li>
+<li><a href="#v2025-08-08">2. v2025-08-04: Feature Release</a></li>
+<li><a href="#v2025-08-04">3. v2025-08-04: Initial Release</a></li>
 </ul>
 </div>
 </div>
 <div id="outline-container-latest" class="outline-2">
-<h2 id="latest"><span class="section-number-2">1.</span> Changes On HEAD Since Last Release</h2>
+<h2 id="latest"><span class="section-number-2">1.</span> Changes On HEAD Since Last Release TEMPLATE</h2>
 <div class="outline-text-2" id="text-latest">
+<ul class="org-ul">
+<li>Fixed Bugs
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>Known Issues
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>API breaking Changes
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>Deprecated functionality
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>New functionality
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>Documentation
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>Examples
+<ul class="org-ul">
+<li>New
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>Updated
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+</ul></li>
+<li>Tests
+<ul class="org-ul">
+<li>New
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+<li>Updated
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+</ul></li>
+<li>Miscellaneous
+<ul class="org-ul">
+<li>N/A</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-v2025-08-08" class="outline-2">
+<h2 id="v2025-08-08"><span class="section-number-2">2.</span> v2025-08-04: Feature Release</h2>
+<div class="outline-text-2" id="text-v2025-08-08">
 <ul class="org-ul">
 <li>Fixed Bugs
 <ul class="org-ul">
@@ -271,13 +329,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <li>API breaking Changes
 <ul class="org-ul">
 <li>Removed 'version' from mrkiss_config</li>
-<li>sol_no_dy_o &amp; sol_no_t_o arguments removed
-<ul class="org-ul">
-<li>Replaced by sol_w_dy_o &amp; sol_w_t_o</li>
-<li>Old arguments were integer, new ones are logical</li>
-<li>Old argument values were not used, just present().</li>
-<li>Usage is inverted (went from without to with)</li>
-</ul></li>
+<li>Removed all sol_no_dy_o, sol_no_t_o, sol_w_dy_o, sol_w_t_o, sol_y_idx_o arguments.</li>
 <li>no_bisect_error_o is not logical, and it's value matters.</li>
 <li>Richardson extrapolation used in steps_fixed_stab_wt() when when p_o&gt;0 &#x2013; not just present().</li>
 <li>no_titles_o =&gt; titles_o in print_solution.  Value now used.  Usage inverted.</li>
@@ -335,7 +387,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </div>
 </div>
 <div id="outline-container-v2025-08-04" class="outline-2">
-<h2 id="v2025-08-04"><span class="section-number-2">2.</span> 2025-08-04: Initial Release</h2>
+<h2 id="v2025-08-04"><span class="section-number-2">3.</span> v2025-08-04: Initial Release</h2>
 <div class="outline-text-2" id="text-v2025-08-04">
 </div>
 </div>
