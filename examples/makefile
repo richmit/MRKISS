@@ -153,6 +153,10 @@ LANGFORD_PNGS = langford_fixed.png langford_multi.png
 langford_png : $(LANGFORD_PNGS)
 	$(IMG_VIEWER) $(LANGFORD_PNGS)
 
+.PHONY: langford_gp_interactive
+langford_gp_interactive &: $(LANGFORD_CSVS) langford_interactive.gplt
+	gnuplot -c langford_interactive.gplt
+
 .PHONY: langford_clean
 langford_clean :
 	rm -f $(LANGFORD_PNGS) $(LANGFORD_CSVS) $(LANGFORD_SVGS) langford.exe langford langford.o langford.obj
