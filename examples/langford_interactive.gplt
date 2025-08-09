@@ -47,6 +47,6 @@ set view equal xyz
 set view 160, 90
 
 set title "Langford"
-splot 'langford_00.csv' using 3:4:5 with lines title "",'langford_01.csv' using 3:4:5 with lines title "",'langford_02.csv' using 3:4:5 with lines title "",'langford_03.csv' using 3:4:5 with lines title "",'langford_04.csv' using 3:4:5 with lines title "",'langford_05.csv' using 3:4:5 with lines title "",'langford_06.csv' using 3:4:5 with lines title "",'langford_07.csv' using 3:4:5 with lines title "", 'langford_08.csv' using 3:4:5 with lines title "", 'langford_09.csv' using 3:4:5 with lines title ""
+splot for [i=1:20] sprintf("langford_%02d.csv", i) using 4:5:6 with lines title ""
 
 pause -1

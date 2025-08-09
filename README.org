@@ -12,7 +12,7 @@ A couple of the examples in the repository have longer explanatory documentation
    - [[https://richmit.github.io/MRKISS/ex_three_body.html][Three Body Problem]]
    - [[https://richmit.github.io/MRKISS/ex_lorenz.html][Lornez Attracter]]
    - [[https://richmit.github.io/MRKISS/ex_step_order_vs_error.html][Step Size & Order Vs. Accuracy]]
-
+   - [[https://richmit.github.io/MRKISS/ex_langford.html][Langford Attracter]]
 
 Generated [[https://www.mitchr.me/SS/MRKISS/doc-lib/html/index.html][API documentation]] is viable as well.
 

@@ -32,6 +32,8 @@
 ################################################################################################################################################################
 MRKISS_PATH = ..
 
+DO_OPENMP = NO
+
  include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
 # include $(MRKISS_PATH)/make_includes/tools_flang.mk
 # include $(MRKISS_PATH)/make_includes/tools_ifx.mk
@@ -238,6 +240,6 @@ tests : minimal_test brusselator_test lorenz_test three_body_test step_order_vs_
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 clean : clean_multi_mrkiss
-	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.svg
+	rm -f $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.svg *.obj *.o *.exe
 
 all : brusselator.png lorenz_png three_body_png minimal.csv

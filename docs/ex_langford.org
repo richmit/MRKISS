@@ -1,0 +1,242 @@
+# -*- Mode:Org; Coding:utf-8; fill-column:158 -*-
+# ######################################################################################################################################################.H.S.##
+# FILE:        ex_langford.org
+#+TITLE:       MRKISS Library Example
+#+SUBTITLE:    Langford Attractor
+#+AUTHOR:      Mitch Richling
+#+EMAIL:       http://www.mitchr.me/
+#+DESCRIPTION: MRKISS Documentation Examples
+#+KEYWORDS:    RK runge kutta ode ivp
+#+LANGUAGE:    en
+#+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil 
+# FIXME: When uncommented the following line will render latex equations as images embedded into exported HTML, when commented MathJax will be used
+# #+OPTIONS:     tex:dvipng
+# FIXME: Select ONE of the three TODO lines below
+# #+SEQ_TODO:    ACTION:NEW(t!) ACTION:ASSIGNED(a!@) ACTION:WORK(w!) ACTION:HOLD(h@) | ACTION:FUTURE(f) ACTION:DONE(d!) ACTION:CANCELED(c!)
+# #+SEQ_TODO:    TODO:NEW(T!)                        TODO:WORK(W!)   TODO:HOLD(H@)   |                  TODO:DONE(D!)   TODO:CANCELED(C!)
+#+SEQ_TODO:    TODO:NEW(t)                         TODO:WORK(w)    TODO:HOLD(h)    | TODO:FUTURE(f)   TODO:DONE(d)    TODO:CANCELED(c)
+#+PROPERTY: header-args :eval never-export
+#+HTML_HEAD: <style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+# Change max-width to get wider output -- also note #content style below
+#+HTML_HEAD: <style>body { min-width: 500px; max-width: 1024px; }</style>
+#+HTML_HEAD: <style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+#+HTML_HEAD: <style>h1,h2,h3 { line-height: 1.4em; }</style>
+#+HTML_HEAD: <style>h1.title { font-size: 3em; }</style>
+#+HTML_HEAD: <style>.subtitle { font-size: 0.6em; }</style>
+#+HTML_HEAD: <style>h4,h5,h6 { font-size: 1em; }</style>
+#+HTML_HEAD: <style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+#+HTML_HEAD: <style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+#+HTML_HEAD: <style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+# Change the following to get wider output -- also note body style above
+#+HTML_HEAD: <style>#content { max-width: 60em; }</style>
+#+HTML_LINK_HOME: https://www.mitchr.me/
+#+HTML_LINK_UP: https://github.com/richmit/MRKISS/
+# ######################################################################################################################################################.H.E.##
+
+#+ATTR_HTML: :border 2 solid #ccc :frame hsides :align center
+|          <r> | <l>                                          |
+|    *Author:* | /{{{author}}}/                               |
+|   *Updated:* | /{{{modification-time(%Y-%m-%d %H:%M:%S)}}}/ |
+| *Generated:* | /{{{time(%Y-%m-%d %H:%M:%S)}}}/              |
+#+ATTR_HTML: :align center
+Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
+
+#+TOC: headlines 2
+
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#   010  #    020  #    030  #    040  #    050  #    060  #    070  #    080  #    090  #    100  #    110  #    120  #    130  #    140  #    150  #    160  #    170  #    180  #    190  #    200  #    210  #    220  #    230  #    240  #    250  #    260  #    270  #    280  #    290  #
+# 345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+
+* Results
+:PROPERTIES:
+:CUSTOM_ID: Results
+:END:
+
+The code for this example is found in [[https://github.com/richmit/MRKISS/blob/master/examples/langford.f90][~examples/langford.f90~]].
+Additionally the code may be found at the end of this document in the section [[#full-code][Full Code Listing]].
+
+The Langford attractor is governed by the following equations:
+
+ \[ \begin{align*}
+      \frac{\mathrm{d}x}{\mathrm{d}t} & = (z - \beta) x - \omega y \\                                                  
+      \frac{\mathrm{d}y}{\mathrm{d}t} & = \omega x + (z - \beta) y \\                                                  
+      \frac{\mathrm{d}z}{\mathrm{d}t} & = \lambda + \alpha z - \frac{z^3}{3} - (x^2 + y^2) (1 + \rho z) + \epsilon z x^3
+ \end{align*} \]
+
+With the following parameter values:
+
+ \[ \begin{align*}
+      \alpha   & = 0.95 \\
+      \beta    & = 0.70 \\
+      \lambda  & = 0.60 \\
+      \omega   & = 3.50 \\
+      \rho     & = 0.25 \\
+      \epsilon & = 0.10
+ \end{align*} \]
+
+And with the following initial conditions:
+
+ \[ \begin{align*}
+      x(0) & = 0.1 \\                                                  
+      y(0) & = 0.0 \\                                                  
+      z(0) & = 0.0
+ \end{align*} \]
+
+Here is an image created with Paraview:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/langford_pv_fixed.png
+
+And another created with GNUplot:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/langford_fixed.png
+
+In this program we seed the IVP with 20 IVs on a circle, and trace all the solutions.  The result looks like this:
+
+#+ATTR_HTML: :align center
+file:pics/langford_mov_050.gif
+
+* Full Code Listing
+:PROPERTIES:
+:CUSTOM_ID: full-code
+:END:
+
+** Fortran Code
+:PROPERTIES:
+:CUSTOM_ID: fortrancode
+:END:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/langford.f90 | sed 's/; zotero.*$//; s/---------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+
+! bash -c 'export OMP_NUM_THREADS=16; time ./langford'
+! bash -c 'export OMP_NUM_THREADS=16; time ./langford.exe '
+! for f in langford_??.csv {~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb $f points:4:5:6 time:3 tag:1 step:2 derivative:7:8:9 > $(file-name-sans-extension f).vtu}
+
+!-------------------------------------------------------------------------------------------------
+program langford
+  use :: mrkiss_config,      only: rk, ik, istats_size
+  use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
+  use :: mrkiss_utils,       only: print_solution
+  use :: mrkiss_erk_kutta_4, only: a, b, c
+  use :: omp_lib
+
+  implicit none
+
+  real(kind=rk),  parameter :: pi         = 4.0_rk * atan(1.0_rk)
+  integer,        parameter :: num_lines  = 20
+  integer,        parameter :: deq_dim    = 3
+  integer,        parameter :: num_points = 100000
+  real(kind=rk),  parameter :: param(6)   = [0.95_rk, 0.7_rk, 0.6_rk, 3.5_rk, 0.25_rk, 0.1_rk]
+  real(kind=rk),  parameter :: t_delta    = 0.01_rk
+
+  real(kind=rk)             :: solution(1+2*deq_dim, num_points), y_iv(deq_dim)
+  integer(kind=ik)          :: status, istats(istats_size), i
+  character(len=512)        :: filename
+
+  y_iv = [0.1_rk, 0.0_rk, 0.0_rk]
+  call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
+  call print_solution(status, solution, filename_o="langford_fixed.csv", end_o=istats(1))
+
+  !$OMP PARALLEL DO private(solution, status, istats, filename, i, y_iv)
+  do i=0, num_lines-1
+     y_iv(1) = cos(i * 2 * pi / num_lines) * 0.15_rk + 0.2_rk
+     y_iv(2) = sin(i * 2 * pi / num_lines) * 0.15_rk
+     y_iv(3) = 0.05_rk
+     call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
+     write (filename, '("langford_",i2.2,".csv")') i
+     call print_solution(status, solution, filename_o=trim(filename), end_o=istats(1), tag_o=i)
+     print *, 'Line Complete: ', i
+  end do
+  !$OMP END PARALLEL DO
+
+contains
+  
+  subroutine eq(status, dydt, y, param)
+    integer(kind=ik), intent(out) :: status
+    real(kind=rk),    intent(out) :: dydt(:)
+    real(kind=rk),    intent(in)  :: y(:)
+    real(kind=rk),    intent(in)  :: param(:)
+    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), param(4) * y(1) + (y(3) - param(2)) * y(2), param(3) + param(1) * y(3) - (y(3)**3 / 3) - (y(1)**2 + y(2)**2) * (1 + param(5) * y(3)) + param(6) * y(3) * y(1)**3]
+    status = 0
+  end subroutine eq
+
+end program langford
+#+end_src
+
+** GNUplot Code
+:PROPERTIES:
+:CUSTOM_ID: gnuplotcode
+:END:
+
+The images were produced with GNUplot.
+
+#+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/langford.gplt | sed 's/; zotero.*$//; s/------------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src R :eval never :tangle no
+
+#---------------------------------------------------------------------------------------------------------------------------
+set encoding utf8
+set termoption noenhanced
+set datafile separator ','
+set margins 0, 0, 0, 0
+set view 50, 40, 1.3, 1.4
+set xyplane at 0
+unset border
+unset ytics
+unset ztics
+unset xtics
+set terminal svg
+set pointsize 0.2
+
+set title "Langford (fixed)"
+set output "langford_fixed.svg"
+splot 'langford_fixed.csv' using 3:4:5 with lines title ""
+
+set title "Langford (fixed)"
+set output "langford_multi.svg"
+splot for [i=1:20] sprintf("langford_%02d.csv", i) using 4:5:6 with lines title ""
+#+end_src
+
+The multiple curve graph may be explored interactively with the following code.
+
+#+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
+~/core/codeBits/bin/src2noHeader ../examples/langford_interactive.gplt | sed 's/; zotero.*$//; s/------------------------------------$//;'
+#+end_src
+
+#+RESULTS:
+#+begin_src R :eval never :tangle no
+
+#---------------------------------------------------------------------------------------------------------------------------
+set encoding utf8
+set termoption noenhanced
+set datafile separator ','
+unset xlabel
+unset ylabel
+unset zlabel
+unset grid
+unset border
+unset ytics
+unset ztics
+unset xtics
+set view equal xyz
+set view 160, 90
+
+set title "Langford"
+splot for [i=1:20] sprintf("langford_%02d.csv", i) using 4:5:6 with lines title ""
+
+pause -1
+#+end_src

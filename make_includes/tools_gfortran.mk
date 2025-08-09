@@ -32,10 +32,17 @@
 #########################################################################################################################################################.H.E.##
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-AR := ar
-FC := gfortran
-FFLAGS := -O3 -Wsurprising -W -std=f2023
-FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
+ifeq ($(DO_OPENMP),YES)
+  AR := ar	
+  FC := gfortran
+  FFLAGS := -fopenmp -O3 -Wsurprising -W -std=f2023
+  FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
+else
+  AR := ar	
+  FC := gfortran
+  FFLAGS := -O3 -Wsurprising -W -std=f2023
+  FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
+endif
 
 # -Wall -- Removed for bug in gfortran 15
 # Should work with: -fdefault-integer-8

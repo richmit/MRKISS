@@ -64,7 +64,9 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - New
       - N/A
     - Updated
-      - N/A
+      - Langford
+        - Updated for OpenMP
+        - Added writeup
   - Tests
     - New
       - N/A

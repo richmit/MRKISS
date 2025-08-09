@@ -34,10 +34,20 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 ifeq ($(OS),Windows_NT)
 	FC := ifx
-	FFLAGS := -stand:f23 -Qdiag-disable:5268
+	ifeq ($(DO_OPENMP),YES)
+      FFLAGS := -stand:f23 -Qdiag-disable:5268 -Qopenmp
+    else	
+      FFLAGS := -stand:f23 -Qdiag-disable:5268
+    endif
 	FSHFLG = -dll -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 else
 	FC := ifx
-	FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack
+	ifeq ($(DO_OPENMP),YES)
+      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack -qopenmp
+    else	
+      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack
+    endif
 	FSHFLG = -shared  -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 endif
+
+
