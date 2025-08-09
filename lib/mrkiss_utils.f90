@@ -39,12 +39,15 @@ module mrkiss_utils
   implicit none
   private
 
-  public :: print_solution, analyze_solution
+  public :: print_solution, print_istats, analyze_solution
   public :: seq
   public :: status_to_origin, status_to_message
 
 contains
   
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name I/O
+
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Output an RK solution matrix.
   !! 
@@ -210,6 +213,80 @@ contains
   end subroutine print_solution
 
   !--------------------------------------------------------------------------------------------------------------------------------
+  !> Output an istat array.
+  !! 
+  !! @verbatim
+  !! status ......... Exit status
+  !!                   - -inf-0 ..... Everything worked
+  !!                   - 1365-1381 .. Error in this routine
+  !!                                   - 1365 .. Could not open file for write
+  !!                                   - 1366 .. Could not close file         
+  !!                   - others ..... Other values are not allowed
+  !! istats(:) ...... Integer statistics from a solver run
+  !! @endverbatim
+  !! 
+  subroutine print_istats(status, istats, idxs_to_prt_o, filename_o)
+    use, intrinsic :: iso_fortran_env, only: output_unit
+    use            :: mrkiss_config,   only: ik, istats_size
+    implicit none
+    ! Arguments
+    integer(kind=ik), intent(out)          :: status
+    integer(kind=ik), intent(in)           :: istats(istats_size)
+    integer(kind=ik), intent(in), optional :: idxs_to_prt_o(:)
+    character(len=*), intent(in), optional :: filename_o
+    ! Local paramaters
+    integer, parameter                     :: ml = 73
+    character(len=ml), parameter           :: desc(istats_size) = [ "Computed solution points                                                 ", &
+                                                                    "Number of one_step_* calls not triggered by an event                     ", &
+                                                                    "Number of one_step_* calls triggered by y_delta length constraint        ", &
+                                                                    "Number of one_step_* calls triggered by y_delta error constraint         ", &
+                                                                    "Number of one_step_* calls triggered by step processing with new t_delta ", &
+                                                                    "Number of one_step_* calls triggered by SDF bisection                    ", &
+                                                                    "Bisection failures due to max_bisect_o                                   ", &
+                                                                    "Bisection failures due to target containment                             ", &
+                                                                    "                                                                         ", &
+                                                                    "                                                                         ", &
+                                                                    "                                                                         ", &
+                                                                    "                                                                         ", &
+                                                                    "                                                                         ", &
+                                                                    "                                                                         ", &
+                                                                    "                                                                         ", &
+                                                                    "                                                                         "  ]
+    ! Local variables
+    integer(kind=ik), allocatable          :: idxs_to_prt(:)
+    integer                                :: out_io_stat, out_io_unit, i
+    character(len=32)                      :: tmp_str1, tmp_str2
+    ! Process arguments
+    idxs_to_prt = [1, 2, 3, 4, 5, 6, 7, 8]
+    if (present(idxs_to_prt_o)) idxs_to_prt = idxs_to_prt_o
+    ! Open file
+    if (present(filename_o)) then
+       open(newunit=out_io_unit, file=filename_o, form='formatted', action='write', iostat=out_io_stat)
+       if (out_io_stat /= 0) then
+          status = 1365
+          return
+       end if
+    else
+       out_io_unit = output_unit
+    end if
+    ! Print 
+    write(tmp_str1, '("(a",i0,",i10)")') ml + 7 + 2 + 3 + 2 + 1
+    do i=1,size(idxs_to_prt)
+       write(tmp_str2, '(i2.2)') i
+       write (out_io_unit, fmt=tmp_str1) ("istats(" // trim(tmp_str2) // "): " // trim(desc(idxs_to_prt(i))) // ": "), istats(i)
+    end do
+    ! Close file
+    if (present(filename_o)) then
+       close(unit=out_io_unit, status='keep', iostat=out_io_stat)
+       if (out_io_stat /= 0) then
+          status = 1366
+          return
+       end if
+    end if
+    status = 0
+  end subroutine print_istats
+
+  !--------------------------------------------------------------------------------------------------------------------------------
   !> Analyze an RK solution matrix.
   !! 
   !! @verbatim
@@ -334,6 +411,9 @@ contains
     status = 0
   end subroutine analyze_solution
 
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Miscellaneous
+
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Produce a sequence of values with fixed seporation.  Modeled after R's seq() function.
   !!
@@ -394,6 +474,9 @@ contains
     end if
   end subroutine seq
 
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Status Codes
+
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Return, as a string, the source of a status code.
   !! 
@@ -420,7 +503,7 @@ contains
   !! - 1314:1330 ... subroutine seq
   !! - 1331:1347 ... subroutine interpolate_solution
   !! - 1348-1364 ... subroutine steps_points_stab_*t
-  !! - 1365-1381 ... Unallocated
+  !! - 1365-1381 ... subroutine print_istats
   !! - 1382-1398 ... Unallocated
   !! - 1399-1415 ... Unallocated
   !! 
@@ -485,6 +568,8 @@ contains
        status_to_origin = "subroutine interpolate_solution"
     elseif ((status >= 1348) .and. (status <= 1364)) then
        status_to_origin = "subroutine steps_points_stab_*t"
+    elseif ((status >= 1365) .and. (status <= 1381)) then
+       status_to_origin = "subroutine print_istats"
     else
        status_to_origin = "ERROR"
     end if
@@ -525,6 +610,10 @@ contains
        status_to_message = "Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v"
     elseif (status == 1331) then
        status_to_message = "... new_solution t value out of bounds"
+    elseif (status == 1365) then
+       status_to_message = "Could not open file for write"
+    elseif (status == 1366) then
+       status_to_message = "Could not close file"
     else
        status_to_message = status_to_origin(status)
     end if

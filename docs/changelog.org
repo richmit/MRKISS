@@ -57,7 +57,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Deprecated functionality
     - N/A
   - New functionality
-    - N/A
+    - print_istats()
   - Documentation
     - N/A
   - Examples
@@ -67,6 +67,8 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
       - Langford
         - Updated for OpenMP
         - Added writeup
+      - three_body
+        - Now demos print_istats() & status_to_message()
   - Tests
     - New
       - N/A

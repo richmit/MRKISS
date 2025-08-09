@@ -125,6 +125,9 @@ module mrkiss_solvers_wt
   public :: interpolate_solution
 contains
 
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name One Step Solvers
+
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of a embedded RK method expressed as a Butcher Tableau.
   !!
@@ -294,6 +297,9 @@ contains
     status = 0
   end subroutine one_richardson_step_stab_wt
 
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name One Step Test Solvers
+
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of RK (mrkiss_erk_kutta_4)
   !!
@@ -433,64 +439,8 @@ contains
     status = 0
   end subroutine one_step_dp54_wt
 
-  !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take a solution with t values pre-populated, and take steps_per_pnt RK steps between each t value.
-  !!
-  !! @verbatim
-  !! status ...................... Exit status
-  !!                                - -inf-0 ..... Everything worked
-  !!                                - 1348-1364 .. Error in this routine
-  !! istats(:) ................... Integer statistics for run
-  !!                                - istats(1): number of computed solution points stored in solution.
-  !!                                - istats(2): number of one_step_* calls not triggered by an event
-  !! solution(:,:) ............... Array for solution.  
-  !!                                Each COLUMN is a solution:
-  !!                                 - First element is the t variable if
-  !!                                 - This array *must* have a populated t sequence in new_solution(1,:)
-  !!                                 - size(y, 1) elements starting with 2 have y values
-  !!                                 - The next size(y, 1) elements have dy values
-  !! deq ......................... Equation subroutine
-  !! y(:) ........................ Initial conditions.  y is a column vector!
-  !! param(:) .................... Data payload passed to deq
-  !! a(:,:), b(:), c(:) .......... The butcher tableau
-  !! steps_per_pnt ............... Number of RK steps to reach each point
-  !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
-  !! @endverbatim
-  !!
-  subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o)
-    use mrkiss_config, only: rk, ik, istats_size
-    implicit none
-    ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(istats_size)
-    real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface_wt)                 :: deq
-    real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
-    integer(kind=ik),           intent(in)  :: steps_per_pnt
-    integer(kind=ik), optional, intent(in)  :: p_o
-    ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, y_dim, jstats(istats_size), p
-    real(kind=rk)                           :: dy(size(y, 1))
-    ! Process arguments
-    p = 0_ik
-    if (present(p_o)) p = p_o
-    ! Compute Solution
-    y_dim = size(y, 1)
-    istats = 0
-    solution(2:(2+y_dim-1), 1) = y
-    call deq(status, dy, &    ! wt2nt:IGNORE
-         solution(1, 1), &    ! wt2nt:DELETE
-         y, param)
-    if (status > 0) return
-    solution((2+y_dim):(2+2*y_dim-1), 1) = dy
-    do cur_pnt_idx=2,size(solution, 2)
-       call steps_fixed_stab_wt(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &   ! wt2nt:IGNORE
-                                solution(1, cur_pnt_idx-1),                                &   ! wt2nt:DELETE
-                                solution(2:(2+y_dim-1), cur_pnt_idx-1), param, a, b, c, p, &
-                                t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1)
-       istats = istats + jstats
-       if (status > 0) return
-    end do
-  end subroutine steps_points_stab_wt
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Multistep Solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
@@ -1208,6 +1158,68 @@ contains
     solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(1) = istats(1) + 1
   end subroutine steps_adapt_etab_wt
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Multistep Meta Solvers
+
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !> Take a solution with t values pre-populated, and take steps_per_pnt RK steps between each t value.
+  !!
+  !! @verbatim
+  !! status ...................... Exit status
+  !!                                - -inf-0 ..... Everything worked
+  !!                                - 1348-1364 .. Error in this routine
+  !! istats(:) ................... Integer statistics for run
+  !!                                - istats(1): number of computed solution points stored in solution.
+  !!                                - istats(2): number of one_step_* calls not triggered by an event
+  !! solution(:,:) ............... Array for solution.  
+  !!                                Each COLUMN is a solution:
+  !!                                 - First element is the t variable if
+  !!                                 - This array *must* have a populated t sequence in new_solution(1,:)
+  !!                                 - size(y, 1) elements starting with 2 have y values
+  !!                                 - The next size(y, 1) elements have dy values
+  !! deq ......................... Equation subroutine
+  !! y(:) ........................ Initial conditions.  y is a column vector!
+  !! param(:) .................... Data payload passed to deq
+  !! a(:,:), b(:), c(:) .......... The butcher tableau
+  !! steps_per_pnt ............... Number of RK steps to reach each point
+  !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
+  !! @endverbatim
+  !!
+  subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o)
+    use mrkiss_config, only: rk, ik, istats_size
+    implicit none
+    ! Arguments
+    integer(kind=ik),           intent(out) :: status, istats(istats_size)
+    real(kind=rk),              intent(out) :: solution(:,:)
+    procedure(deq_iface_wt)                 :: deq
+    real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
+    integer(kind=ik),           intent(in)  :: steps_per_pnt
+    integer(kind=ik), optional, intent(in)  :: p_o
+    ! Vars
+    integer(kind=ik)                        :: cur_pnt_idx, y_dim, jstats(istats_size), p
+    real(kind=rk)                           :: dy(size(y, 1))
+    ! Process arguments
+    p = 0_ik
+    if (present(p_o)) p = p_o
+    ! Compute Solution
+    y_dim = size(y, 1)
+    istats = 0
+    solution(2:(2+y_dim-1), 1) = y
+    call deq(status, dy, &    ! wt2nt:IGNORE
+         solution(1, 1), &    ! wt2nt:DELETE
+         y, param)
+    if (status > 0) return
+    solution((2+y_dim):(2+2*y_dim-1), 1) = dy
+    do cur_pnt_idx=2,size(solution, 2)
+       call steps_fixed_stab_wt(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &   ! wt2nt:IGNORE
+                                solution(1, cur_pnt_idx-1),                                &   ! wt2nt:DELETE
+                                solution(2:(2+y_dim-1), cur_pnt_idx-1), param, a, b, c, p, &
+                                t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1)
+       istats = istats + jstats
+       if (status > 0) return
+    end do
+  end subroutine steps_points_stab_wt
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Create an interpolated solution from a source colution.

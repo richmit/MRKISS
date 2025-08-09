@@ -40,19 +40,23 @@ module mrkiss_config
   implicit none
   private
 
-  ! Real & integer types for externally viable interfaces and arguments
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Real & integer types for externally viable interfaces and arguments
   integer,          parameter, public :: ik                 = c_int32_t                       !< Integer kinds used in interfaces
   integer,          parameter, public :: rk                 = c_double                        !< Real kind used in interfaces
   integer,          parameter, public :: bk                 = c_bool                          !< Integer kind for boolean
 
-  ! Constants related to the library
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Constants related to the library
   integer,          parameter, public :: istats_size        = 16                              !< Number of elements in istats(:)
 
-  ! Absolute constants
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Absolute constants
   real(kind=rk),    parameter, public :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero
   real(kind=rk),    parameter, public :: t_delta_tiny       = tiny(zero_epsilon) * 1.0e18_rk  !< Smallest value for t_delta
 
-  ! ab initio parameters for defaults when we know nothing
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name ab initio parameters for defaults when we know nothing
   real(kind=rk),    parameter, public :: t_delta_ai         = 1.0e-4_rk                       !< t_delta ai default
   real(kind=rk),    parameter, public :: error_tol_abs_ai   = 1.0e-5_rk                       !< error_tol_abs ai default
   real(kind=rk),    parameter, public :: error_tol_rel_ai   = 1.0e-3_rk                       !< error_tol_rel ai default

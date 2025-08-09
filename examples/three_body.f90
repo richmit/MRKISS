@@ -67,7 +67,7 @@ program three_body
   use            :: mrkiss_config,                  only: rk, ik, bk, istats_size
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, &
                                                           steps_sloppy_condy_stab_wt, interpolate_solution
-  use            :: mrkiss_utils,                   only: print_solution, seq
+  use            :: mrkiss_utils,                   only: print_solution, seq, print_istats, status_to_message
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
   use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
 
@@ -82,153 +82,113 @@ program three_body
   real(kind=rk),    parameter :: param(1)      = [1.0_rk / 81.45_rk]
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
-  real(kind=rk)               :: solution(1+2*deq_dim, num_points), isolution(1+2*deq_dim, num_points)
-  integer(kind=ik)            :: status, istats(istats_size)
-  integer                     :: c_beg, c_end, c_rate
+  real(kind=rk)               :: sol1(1+2*deq_dim, num_points), sol2(1+2*deq_dim, num_points)
+  integer(kind=ik)            :: status, istats1(istats_size)
 
-  call system_clock(count_rate=c_rate)
-
+  print '(a)', repeat('*', 120)
+  print '(a)', "Fixed t_delta run V(9)"
   ! BEGIN: steps_fixed_stab_wt
-  call system_clock(c_beg)
-  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
-  call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run V(9): "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  call print_solution(status, solution, filename_o="tree_body_steps_fixed_stab_wt.csv", end_o=istats(1))
+  call steps_fixed_stab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2])
+  call print_solution(status, sol1, filename_o="tree_body_steps_fixed_stab_wt.csv", end_o=istats1(1))
   ! END: steps_fixed_stab_wt
 
-
+  print '(a)', repeat('*', 120)
+  print '(a)', "Fixed t_delta run DP(5)"
   ! BEGIN: steps_fixed_stab_wt-dp
-  call system_clock(c_beg)
-  call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
-  call system_clock(c_end)
-  print '(a)',       "Fixed t_delta run DP(5): "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  call print_solution(status, solution, filename_o="steps_fixed_stab_wt-dp.csv", end_o=istats(1))
+  call steps_fixed_stab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2])
+  call print_solution(status, sol1, filename_o="steps_fixed_stab_wt-dp.csv", end_o=istats1(1))
   ! END: steps_fixed_stab_wt-dp
 
-    ! BEGIN: steps_condy_stab_wt
-  call system_clock(c_beg)
-  call steps_condy_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  print '(a)', repeat('*', 120)
+  print '(a)', "Fixed y_delta run"
+  ! BEGIN: steps_condy_stab_wt
+  call steps_condy_stab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
-  call system_clock(c_end)
-  print '(a)',       "Fixed y_delta run: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
-  print '(a,i10)',   "              bisection limits: ", istats(7)
-  print '(a,i10)',   "           bad bisection start: ", istats(8)
-  call print_solution(status, solution, filename_o="three_body_steps_condy_stab_wt.csv", end_o=istats(1))
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 3, 7, 8])
+
+  call print_solution(status, sol1, filename_o="three_body_steps_condy_stab_wt.csv", end_o=istats1(1))
   ! END: steps_condy_stab_wt
 
+  print '(a)', repeat('*', 120)
+  print '(a)', "Sloppy Fixed y_delta run"
   ! BEGIN: steps_sloppy_condy_stab_wt
-  call system_clock(c_beg)
-  call steps_sloppy_condy_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  call steps_sloppy_condy_stab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
-  call system_clock(c_end)
-  print '(a)',       "Sloppy Fixed y_delta run: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-len Adjust one_step calls: ", istats(3)
-  call print_solution(status, solution, filename_o="steps_sloppy_condy_stab_wt.csv", end_o=istats(1))
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 3])
+  call print_solution(status, sol1, filename_o="steps_sloppy_condy_stab_wt.csv", end_o=istats1(1))
   ! END: steps_sloppy_condy_stab_wt
 
+  print '(a)', repeat('*', 120)
+  print '(a)', "Adaptive run"
   ! BEGIN: steps_adapt_etab_wt-std
-  call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
-  call system_clock(c_end)
-  print '(a)',       "Adaptive run: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
-  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-std.csv", end_o=istats(1))
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4])
+  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab_wt-std.csv", end_o=istats1(1))
   ! END: steps_adapt_etab_wt-std
 
-  ! BEGIN: steps_adapt_int
-  call system_clock(c_beg)
-  isolution = 0
-  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);                               ! Create new t values
-  call interpolate_solution(status, isolution, solution, eq, param, num_src_pts_o=istats(1)) ! Preform the interpolation
-  call system_clock(c_end)
-  print '(a)',       "Adaptive hermite interpolation run: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated.csv")
+  print '(a)', repeat('*', 120)
+  print '(a)', "Adaptive hermite interpolation run"
+  sol2 = 0
+  ! BEGIN: steps_adapt_int_hermite
+  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                            ! Create new t values
+  print '(a)', status_to_message(status)
+  call interpolate_solution(status, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) ! Preform the interpolation
+  call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated.csv")
+  ! END: steps_adapt_int_hermite
 
-  call system_clock(c_beg)
-  isolution = 0
-  call seq(status, isolution(1,:), from_o=0.0_rk, to_o=t_end);
-  call interpolate_solution(status, isolution, solution, eq, param, num_src_pts_o=istats(1), linear_interp_o=.true._bk)
-  call system_clock(c_end)
-  print '(a)',       "Adaptive linear interpolation run: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  call print_solution(status, isolution, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
-  ! END: steps_adapt_int
+  print '(a)', repeat('*', 120)
+  print '(a)', "Adaptive linear interpolation run"
+  sol2 = 0
+  ! BEGIN: steps_adapt_int_linear
+  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);
+  call interpolate_solution(status, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true._bk)
+  print '(a)', status_to_message(status)
+  call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
+  ! END: steps_adapt_int_linear
 
+  print '(a)', repeat('*', 120)
+  print '(a)', "Adaptive run w max y_delta length"
   ! BEGIN: steps_adapt_etab_wt-fix-delta-steps
-  call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_sloppy_y_delta_len_max);
-  call system_clock(c_end)
-  print '(a)',       "Adaptive run w max y_delta length: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
-  print '(a,i10)',   "  stepp t_delta one_step calls: ", istats(5)
-  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-fix-delta-steps.csv", end_o=istats(1))
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4, 5])
+  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab_wt-fix-delta-steps.csv", end_o=istats1(1))
   ! END: steps_adapt_etab_wt-fix-delta-steps
 
+  print '(a)', repeat('*', 120)
+  print '(a)', "Adaptive run w max t"
   ! BEGIN: steps_adapt_etab_wt-pho-t-max
-  call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_max_t);
-  call system_clock(c_end)
-  print '(a)',       "Adaptive run w max t: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
-  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-pho-t-max.csv", end_o=istats(1))
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4])
+  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab_wt-pho-t-max.csv", end_o=istats1(1))
   ! END: steps_adapt_etab_wt-pho-t-max
 
+  print '(a)', repeat('*', 120)
+  print '(a)', "Adaptive run w moon orbit hit"
   ! BEGIN: steps_adapt_etab_wt-isct
-  call system_clock(c_beg)
-  call steps_adapt_etab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call steps_adapt_etab_wt(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
-  call system_clock(c_end)
-  print '(a)',       "Adaptive run w moon orbit hit: "
-  print '(a,f10.3)', "                  Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "                        Status: ", status
-  print '(a,i10)',   "               Solution Points: ", istats(1)
-  print '(a,i10)',   "          Total one_step calls: ", istats(2)
-  print '(a,i10)',   "   y-err Adjust one_step calls: ", istats(4)
-  print '(a,i10)',   "              bisection limits: ", istats(7)
-  print '(a,i10)',   "           bad bisection start: ", istats(8)
-  call print_solution(status, solution, filename_o="three_body_steps_adapt_etab_wt-isct.csv", end_o=istats(1))
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4, 7, 8])
+  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab_wt-isct.csv", end_o=istats1(1))
   ! END: steps_adapt_etab_wt-isct
 
 contains
