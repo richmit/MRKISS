@@ -119,10 +119,6 @@ file:pics/langford_mov_050.gif
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
 
-! bash -c 'export OMP_NUM_THREADS=16; time ./langford'
-! bash -c 'export OMP_NUM_THREADS=16; time ./langford.exe '
-! for f in langford_??.csv {~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb $f points:4:5:6 time:3 tag:1 step:2 derivative:7:8:9 > $(file-name-sans-extension f).vtu}
-
 !-------------------------------------------------------------------------------------------------
 program langford
   use :: mrkiss_config,      only: rk, ik, istats_size

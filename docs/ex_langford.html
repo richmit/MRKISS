@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-09 Sat 10:41 -->
+<!-- 2025-08-09 Sat 10:56 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-09 10:41:25</i></td>
+<td class="org-left"><i>2025-08-09 10:56:24</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-09 10:41:28</i></td>
+<td class="org-left"><i>2025-08-09 10:56:25</i></td>
 </tr>
 </tbody>
 </table>
@@ -346,7 +346,7 @@ Here is an image created with Paraview:
 </p>
 
 
-<div id="org498ae4f" class="figure">
+<div id="org59318c5" class="figure">
 <p><img src="pics/langford_pv_fixed.png" alt="langford_pv_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -356,7 +356,7 @@ And another created with GNUplot:
 </p>
 
 
-<div id="orgd79d62e" class="figure">
+<div id="org3977bd4" class="figure">
 <p><img src="pics/langford_fixed.png" alt="langford_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -366,7 +366,7 @@ In this program we seed the IVP with 20 IVs on a circle, and trace all the solut
 </p>
 
 
-<div id="orgdc74b1b" class="figure">
+<div id="org8710ef3" class="figure">
 <p><img src="pics/langford_mov_050.gif" alt="langford_mov_050.gif" align="center" />
 </p>
 </div>
@@ -381,10 +381,6 @@ In this program we seed the IVP with 20 IVs on a circle, and trace all the solut
 <div class="outline-text-3" id="text-fortrancode">
 <div class="org-src-container">
 <pre class="src src-f90">
-<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">bash -c 'export OMP_NUM_THREADS=16; time ./langford'</span>
-<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">bash -c 'export OMP_NUM_THREADS=16; time ./langford.exe '</span>
-<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">for f in langford_??.csv {~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb $f points:4:5:6 time:3 tag:1 step:2 derivative:7:8:9 &gt; $(file-name-sans-extension f).vtu}</span>
-
 <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
 <span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">langford</span>
   <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, ik, istats_size
