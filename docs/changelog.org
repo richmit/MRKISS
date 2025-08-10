@@ -53,10 +53,11 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Known Issues
     - N/A
   - API breaking Changes
-    - interpolate_solution(): Add istats() argument and renamed to interpolate_solution_*t().
+    - interpolate_solution(): Add istats() argument.
     - Removed logical kind from library.
     - Removed integer kind from library.
     - status_to_origin() return changed from len=64 to len=32
+    - Removed _wt & _nt suffixes on contents of mrkiss_solvers_wt & mrkiss_solvers_nt
   - Deprecated functionality
     - N/A
   - New functionality

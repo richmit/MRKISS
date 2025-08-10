@@ -37,7 +37,7 @@
 program brusselator
   use, intrinsic :: iso_fortran_env,                 only: output_unit, error_unit
   use            :: mrkiss_config,                   only: rk, istats_size
-  use            :: mrkiss_solvers_nt,               only: steps_fixed_stab_nt, steps_condy_stab_nt, steps_sloppy_condy_stab_nt, steps_adapt_etab_nt
+  use            :: mrkiss_solvers_nt,               only: steps_fixed_stab, steps_condy_stab, steps_sloppy_condy_stab, steps_adapt_etab
   use            :: mrkiss_utils,                    only: print_solution, analyze_solution
   use            :: mrkiss_eerk_dormand_prince_5_4,  only: a, b1, b2, c, p1, p2
 
@@ -56,10 +56,10 @@ program brusselator
   ! Call the solver, time how long it takes, report some stuff, and dump out the results.
   call system_clock(count_rate=c_rate)
   call system_clock(c_beg)
-  call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b1, c, t_end_o=t_end)
-  !call steps_condy_stab_nt(status, istats, solution, eq, y_iv, param, a, b1, c, 0.01_rk, 1e-1_rk, y_delta_len_tol_o=1e-15_rk, t_max_o=t_end)
-  !call steps_sloppy_condy_stab_nt(status, istats, solution, eq, y_iv, param, a, b1, c, 0.01_rk, 1e-2_rk, t_max_o=t_end)
-  !call steps_adapt_etab_nt(status, istats, solution, eq, y_iv, param, a, b1, b2, c, p1, p2, t_delta_max_o=0.1_rk, t_max_o=t_end)
+  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b1, c, t_end_o=t_end)
+  !call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b1, c, 0.01_rk, 1e-1_rk, y_delta_len_tol_o=1e-15_rk, t_max_o=t_end)
+  !call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b1, c, 0.01_rk, 1e-2_rk, t_max_o=t_end)
+  !call steps_adapt_etab(status, istats, solution, eq, y_iv, param, a, b1, b2, c, p1, p2, t_delta_max_o=0.1_rk, t_max_o=t_end)
   call system_clock(c_end)
 
   print '(a)',       ""

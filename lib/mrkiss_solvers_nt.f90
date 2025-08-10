@@ -68,14 +68,14 @@ module mrkiss_solvers_nt
   !! @endverbatim
   !!
   abstract interface
-     subroutine deq_iface_nt(status, dydt, y, param) 
+     subroutine deq_iface(status, dydt, y, param) 
        use mrkiss_config, only: rk
        implicit none
        integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: y(:)
        real(kind=rk),    intent(in)  :: param(:)
-     end subroutine deq_iface_nt
+     end subroutine deq_iface
   end interface
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ module mrkiss_solvers_nt
   !! @endverbatim
   !!
   abstract interface
-     subroutine stepp_iface_nt(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta) 
+     subroutine stepp_iface(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta) 
        use mrkiss_config, only: rk
        implicit none
        integer,          intent(out) :: status
@@ -101,7 +101,7 @@ module mrkiss_solvers_nt
        integer,          intent(out) :: sdf_flags     ! If >0, then use bisection to solve SDF and use the result to redo step...
        integer,          intent(in)  :: pnt_idx
        real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
-     end subroutine stepp_iface_nt
+     end subroutine stepp_iface
   end interface
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -113,27 +113,27 @@ module mrkiss_solvers_nt
   !!               - 512-767 ... Error in this routine
   !!               - others .... No other values allowed
   !! dist ....... The distance value of the SDF funciton
-  !! sdf_flags .. Flags passed from a stepp_iface_nt routine
+  !! sdf_flags .. Flags passed from a stepp_iface routine
   !! t .......... The t value.
   !! y(:) ....... The y value.
   !! param(:) ... Data payload usually used for constants.
   !! @endverbatim
   !!
   abstract interface
-     subroutine sdf_iface_nt(status, dist, sdf_flags, t, y) 
+     subroutine sdf_iface(status, dist, sdf_flags, t, y) 
        use mrkiss_config, only: rk
        implicit none
        integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dist
        integer,          intent(in)  :: sdf_flags
        real(kind=rk),    intent(in)  :: t, y(:)
-     end subroutine sdf_iface_nt
+     end subroutine sdf_iface
   end interface
 
-  public :: one_step_rk4_nt, one_step_rkf45_nt, one_step_dp54_nt                                         ! Test one step solvers
-  public :: one_step_etab_nt, one_step_stab_nt, one_richardson_step_stab_nt                              ! One step solvers
-  public :: steps_fixed_stab_nt, steps_condy_stab_nt, steps_sloppy_condy_stab_nt, steps_adapt_etab_nt    ! Many step solvers
-  public :: steps_points_stab_nt, interpolate_solution_nt                                                ! Meta-many step solvers
+  public :: one_step_rk4, one_step_rkf45, one_step_dp54                                         ! Test one step solvers
+  public :: one_step_etab, one_step_stab, one_richardson_step_stab                              ! One step solvers
+  public :: steps_fixed_stab, steps_condy_stab, steps_sloppy_condy_stab, steps_adapt_etab    ! Many step solvers
+  public :: steps_points_stab, interpolate_solution                                                ! Meta-many step solvers
 contains
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -158,13 +158,13 @@ contains
   !! t_delta ..................... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_etab_nt(status, y1_delta, y2_delta, dy, deq, y, param, a, b1, b2, c, t_delta) 
+  subroutine one_step_etab(status, y1_delta, y2_delta, dy, deq, y, param, a, b1, b2, c, t_delta) 
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
-    procedure(deq_iface_nt)       :: deq
+    procedure(deq_iface)       :: deq
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b1(:), c(:), t_delta, b2(:)
     ! Variables
     integer                       :: i, stage
@@ -193,7 +193,7 @@ contains
        y2_delta = y2_delta + k(:,i) * b2(i)
     end do
     status = 0
-  end subroutine one_step_etab_nt
+  end subroutine one_step_etab
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of a non-embedded RK method expressed as a Butcher Tableau.
@@ -217,14 +217,14 @@ contains
   !! t_delta ............. Delta t to use for the step.
   !! @endverbatim
   !! 
-  ! SHELLO: sed -n '/^  *subroutine one_step_etab_nt(/,/end subroutine one_step_etab_nt *$/p' mrkiss_solvers_nt.f90 | sed 's/, y2_delta[^,]*//; s/, b2[^,]*//; s/_etab/_stab/; s/b1/b/g; s/y1/y/g; /y2_delta/d;'
-  subroutine one_step_stab_nt(status, y_delta, dy, deq, y, param, a, b, c, t_delta) 
+  ! SHELLO: sed -n '/^  *subroutine one_step_etab(/,/end subroutine one_step_etab *$/p' mrkiss_solvers.f90 | sed 's/, y2_delta[^,]*//; s/, b2[^,]*//; s/_etab/_stab/; s/b1/b/g; s/y1/y/g; /y2_delta/d;'
+  subroutine one_step_stab(status, y_delta, dy, deq, y, param, a, b, c, t_delta) 
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
-    procedure(deq_iface_nt)       :: deq
+    procedure(deq_iface)       :: deq
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), t_delta
     ! Variables
     integer                       :: i, stage
@@ -251,7 +251,7 @@ contains
        y_delta = y_delta + k(:,i) * b(i)
     end do
     status = 0
-  end subroutine one_step_stab_nt
+  end subroutine one_step_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one Richardson Extrapolation Step.
@@ -263,7 +263,7 @@ contains
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
   !!                        - 1216-1231 .. Error in this routine
-  !!                        - 1248-1263 .. Error from one_step_stab_nt()
+  !!                        - 1248-1263 .. Error from one_step_stab()
   !!                        - others ..... No other values allowed
   !! y_delta(:) .......... Returned delta for the method
   !! dy(:) ............... Returned dy/dt value at t
@@ -274,15 +274,15 @@ contains
   !! p ................... The order for the RK method in the butcher tableau
   !! t_delta ............. Delta t to use for the step.
   !! @endverbatim
-  !! @see: mrkiss_solvers_nt::one_step_stab_nt(), 
+  !! @see: mrkiss_solvers::one_step_stab(), 
   !!
-  subroutine one_richardson_step_stab_nt(status, y_delta, dy, deq, y, param, a, b, c, p, t_delta) 
+  subroutine one_richardson_step_stab(status, y_delta, dy, deq, y, param, a, b, c, p, t_delta) 
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
-    procedure(deq_iface_nt)       :: deq
+    procedure(deq_iface)       :: deq
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer,          intent(in)  :: p
     real(kind=rk),    intent(in)  :: t_delta
@@ -293,19 +293,19 @@ contains
     t_delta_tmp = t_delta / 2.0_rk
     t_tmp       = 0.0_rk
     y_tmp       = y
-    call one_step_stab_nt(status, y_delta_small_1, dy, deq, y_tmp, param, a, b, c, t_delta_tmp)
+    call one_step_stab(status, y_delta_small_1, dy, deq, y_tmp, param, a, b, c, t_delta_tmp)
     if (status > 0) return
     t_tmp = t_tmp + t_delta_tmp
     y_tmp = y_tmp + y_delta_small_1
-    call one_step_stab_nt(status, y_delta_small_2, dy, deq, y_tmp, param, a, b, c, t_delta_tmp)
+    call one_step_stab(status, y_delta_small_2, dy, deq, y_tmp, param, a, b, c, t_delta_tmp)
     if (status > 0) return
     ! Compute y_delta_big
-    call one_step_stab_nt(status, y_delta_big, dy, deq, y, param, a, b, c, t_delta)
+    call one_step_stab(status, y_delta_big, dy, deq, y, param, a, b, c, t_delta)
     if (status > 0) return
     ! Compute y_delta
     y_delta = y_delta_small_1 + y_delta_small_2 + (y_delta_small_1 + y_delta_small_2 - y_delta_big) / (2**p - 1)
     status = 0
-  end subroutine one_richardson_step_stab_nt
+  end subroutine one_richardson_step_stab
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name One Step Test Solvers
@@ -327,13 +327,13 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_rk4_nt(status, y_delta, dy, deq, y, param, t_delta) 
+  subroutine one_step_rk4(status, y_delta, dy, deq, y, param, t_delta) 
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
-    procedure(deq_iface_nt)       :: deq
+    procedure(deq_iface)       :: deq
     real(kind=rk),    intent(in)  :: y(:), param(:), t_delta
     ! Variables
     real(kind=rk)                 :: k1(size(y, 1)), k2(size(y, 1)), k3(size(y, 1)), k4(size(y, 1))
@@ -348,7 +348,7 @@ contains
     call deq(status, k4, y + t_delta * k3, param)
     y_delta = t_delta * (k1 + 2.0_rk * k2 + 2.0_rk * k3 + k4) / 6.0_rk
     status = 0
-  end subroutine one_step_rk4_nt
+  end subroutine one_step_rk4
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of RKF45 (mrkiss_eerk_fehlberg_4_5)
@@ -367,13 +367,13 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_rkf45_nt(status, y1_delta, y2_delta, dy, deq, y, param, t_delta) 
+  subroutine one_step_rkf45(status, y1_delta, y2_delta, dy, deq, y, param, t_delta) 
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
-    procedure(deq_iface_nt)       :: deq
+    procedure(deq_iface)       :: deq
     real(kind=rk),    intent(in)  :: y(:), param(:), t_delta
     ! Variables
     real(kind=rk)                 :: k1(size(y, 1)), k2(size(y, 1)), k3(size(y, 1))
@@ -395,7 +395,7 @@ contains
     y1_delta = t_delta * (25.0_rk/216.0_rk * k1 + 1408.0_rk/2565.0_rk * k3 + 2197.0_rk/4104.0_rk * k4 - 1.0_rk/5.0_rk * k5)
     y2_delta = t_delta * (16.0_rk/135.0_rk * k1 + 6656.0_rk/12825.0_rk * k3 + 28561.0_rk/56430.0_rk * k4 - 9.0_rk/50.0_rk * k5 + 2.0_rk/55.0_rk * k6)
     status = 0
-  end subroutine one_step_rkf45_nt
+  end subroutine one_step_rkf45
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one step of DP45 (mrkiss_eerk_dormand_prince_5_4)
@@ -414,13 +414,13 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_dp54_nt(status, y1_delta, y2_delta, dy, deq, y, param, t_delta) 
+  subroutine one_step_dp54(status, y1_delta, y2_delta, dy, deq, y, param, t_delta) 
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
-    procedure(deq_iface_nt)       :: deq
+    procedure(deq_iface)       :: deq
     real(kind=rk),    intent(in)  :: y(:), param(:), t_delta
     ! Variables
     real(kind=rk)                 :: k1(size(y, 1)), k2(size(y, 1)), k3(size(y, 1)), k4(size(y, 1))
@@ -444,7 +444,7 @@ contains
     y1_delta = t_delta * (5179.0_rk/57600.0_rk*k1 + 7571.0_rk/16695.0_rk*k3 + 393.0_rk/640.0_rk*k4 - 92097.0_rk/339200.0_rk*k5 + 187.0_rk/2100.0_rk*k6 + 1.0_rk/40.0_rk*k7)
     y2_delta = t_delta * (35.0_rk/384.0_rk*k1 + 500.0_rk/1113.0_rk*k3 + 125.0_rk/192.0_rk*k4 - 2187.0_rk/6784.0_rk*k5 + 11.0_rk/84.0_rk*k6)
     status = 0
-  end subroutine one_step_dp54_nt
+  end subroutine one_step_dp54
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Multistep Solvers
@@ -457,8 +457,8 @@ contains
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1120-1151 .. Error in this routine
-  !!                                - 1216-1231 .. Error from one_richardson_step_stab_nt()
-  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - 1216-1231 .. Error from one_richardson_step_stab()
+  !!                                - 1248-1263 .. Error from one_step_stab()
   !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
   !!                                - See: mrkiss_utils::print_istats() for description of elements.
@@ -484,16 +484,16 @@ contains
   !! t_end_o ..................... End point for last step.  Silently ignored if t_delta_o is provided.
   !! t_max_o ..................... Maximum value for t
   !! @endverbatim
-  !! @see mrkiss_utils::print_istats(), mrkiss_solvers_nt::one_step_stab_nt(), mrkiss_solvers_nt::one_richardson_step_stab_nt()
+  !! @see mrkiss_utils::print_istats(), mrkiss_solvers::one_step_stab(), mrkiss_solvers::one_richardson_step_stab()
   !!
-  subroutine steps_fixed_stab_nt(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
+  subroutine steps_fixed_stab(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
                                  t_end_o, t_max_o) 
     use mrkiss_config, only: rk, t_delta_ai, istats_size, isi_num_pts, isi_step_norm
     implicit none
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface_nt)                 :: deq
+    procedure(deq_iface)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer,          optional, intent(in)  :: p_o, max_pts_o
     real(kind=rk),    optional, intent(in)  :: t_delta_o, t_end_o, t_max_o
@@ -536,10 +536,10 @@ contains
     do 
        cur_step = cur_step + 1
        if (p > 0) then
-          call one_richardson_step_stab_nt(status, y_delta, dy, deq, y_cv, param, a, b, c, p, t_delta)
+          call one_richardson_step_stab(status, y_delta, dy, deq, y_cv, param, a, b, c, p, t_delta)
           istats(isi_step_norm) = istats(isi_step_norm) + 3
        else
-          call one_step_stab_nt(status, y_delta, dy, deq, y_cv, param, a, b, c, t_delta)
+          call one_step_stab(status, y_delta, dy, deq, y_cv, param, a, b, c, t_delta)
           istats(isi_step_norm) = istats(isi_step_norm) + 1
        end if
        if (status > 0) return
@@ -563,7 +563,7 @@ contains
     if (status > 0) return
     solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(isi_num_pts) = istats(isi_num_pts) + 1
-  end subroutine steps_fixed_stab_nt
+  end subroutine steps_fixed_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple adaptive steps with constant length y_delta using a simple RK method storing the solutions in solution.  
@@ -587,7 +587,7 @@ contains
   !!                                - 1024-1055 .. Error in this routine (no_bisect_error_o==.true.)
   !!                                                - 1024 .. t_delta_min yielded a longer step than t_delta_max
   !!                                                - 1025 .. no_bisect_error_o==0 not present and max_bisect_o violated
-  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - 1248-1263 .. Error from one_step_stab()
   !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
   !!                                - See: mrkiss_utils::print_istats() for description of elements.
@@ -617,9 +617,9 @@ contains
   !! y_sol_len_max_o ............. Maximum length of the solution curve
   !! t_max_o ..................... Maximum value for t
   !! @endverbatim
-  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_stab_nt()
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers::one_step_stab()
   !!
-  subroutine steps_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ,          &
+  subroutine steps_condy_stab(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
                                  y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o) 
     use mrkiss_config, only: rk, t_delta_tiny, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
@@ -627,7 +627,7 @@ contains
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface_nt)                 :: deq
+    procedure(deq_iface)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_max
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o
     integer,          optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
@@ -668,7 +668,7 @@ contains
        cur_pnt_idx = cur_pnt_idx  + 1
        ! Compute t_delta 1
        bs_tmp1_t_delta = t_delta_min
-       call one_step_stab_nt(status, bs_tmp1_y_delta, bs_tmp1_dy, deq, y_cv, param, a, b, c, bs_tmp1_t_delta)
+       call one_step_stab(status, bs_tmp1_y_delta, bs_tmp1_dy, deq, y_cv, param, a, b, c, bs_tmp1_t_delta)
        istats(isi_step_norm) = istats(isi_step_norm) + 1
        if (status > 0) return
        if (present(y_delta_len_idxs_o)) then
@@ -678,7 +678,7 @@ contains
        end if
        ! Compute upper t_delta
        bs_tmp2_t_delta = t_delta_max
-       call one_step_stab_nt(status, bs_tmp2_y_delta, bs_tmp2_dy, deq, y_cv, param, a, b, c, bs_tmp2_t_delta)
+       call one_step_stab(status, bs_tmp2_y_delta, bs_tmp2_dy, deq, y_cv, param, a, b, c, bs_tmp2_t_delta)
        istats(isi_step_norm) = istats(isi_step_norm) + 1
        if (status > 0) return
        if (present(y_delta_len_idxs_o)) then
@@ -719,7 +719,7 @@ contains
                 end if
              end if
              bs_tmpc_t_delta = (bs_tmp1_t_delta + bs_tmp2_t_delta) / 2.0_rk
-             call one_step_stab_nt(status, bs_tmpc_y_delta, bs_tmpc_dy, deq, y_cv, param, a, b, c, bs_tmpc_t_delta)
+             call one_step_stab(status, bs_tmpc_y_delta, bs_tmpc_dy, deq, y_cv, param, a, b, c, bs_tmpc_t_delta)
              istats(isi_step_y_len) = istats(isi_step_y_len) + 1
              if (status > 0) return
              if (present(y_delta_len_idxs_o)) then
@@ -765,7 +765,7 @@ contains
     if (status > 0) return
     solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(isi_num_pts) = istats(isi_num_pts) + 1
-  end subroutine steps_condy_stab_nt
+  end subroutine steps_condy_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple adaptive steps adjusting for the length of y_delta using a simple RK method storing the solutions in solution.  
@@ -774,7 +774,7 @@ contains
   !! then takes another step with t_delta = t_delta_ini * y_delta_len_targ / y_delta_len.  If which will result in a y_delta
   !! approximately y_delta_len_targ when t_delta is proportional to y_delta.  By default this second step is only taken when the
   !! y_delta of the probe step is greater than y_delta_len_targ; however, it will be performed on shorter steps when adj_short_o
-  !! is present -- in this mode it approximates the behavior steps_condy_stab_nt() but is *much* faster.
+  !! is present -- in this mode it approximates the behavior steps_condy_stab() but is *much* faster.
   !!
   !! Note the assumption that t_delta is proportional to y_delta.  We have no mathematical guarantee for this assumption; however,
   !! it generally works in practice with well behaved functions when t_delta_ini is small and the.
@@ -786,7 +786,7 @@ contains
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1280-1296 .. Error in this routine
-  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - 1248-1263 .. Error from one_step_stab()
   !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
   !!                                - See: mrkiss_utils::print_istats() for description of elements.
@@ -813,9 +813,9 @@ contains
   !! y_sol_len_max_o ............. Maximum length of the solution curve
   !! t_max_o ..................... Maximum value for t
   !! @endverbatim
-  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_stab_nt()
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers::one_step_stab()
   !!
-  subroutine steps_sloppy_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
+  subroutine steps_sloppy_condy_stab(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
                                         y_sol_len_max_o, t_max_o) 
     use mrkiss_config, only: rk, t_delta_tiny, istats_size, isi_num_pts, isi_step_norm, isi_step_y_len
@@ -823,7 +823,7 @@ contains
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface_nt)                 :: deq
+    procedure(deq_iface)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_ini
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, t_delta_max_o
     integer,          optional, intent(in)  :: max_pts_o, y_delta_len_idxs_o(:), adj_short_o
@@ -850,7 +850,7 @@ contains
        cur_pnt_idx = cur_pnt_idx  + 1
        ! Compute Initial step
        t_delta = t_delta_ini
-       call one_step_stab_nt(status, y_delta, dy, deq, y_cv, param, a, b, c, t_delta)
+       call one_step_stab(status, y_delta, dy, deq, y_cv, param, a, b, c, t_delta)
        istats(isi_step_norm) = istats(isi_step_norm) + 1
        if (status > 0) return
        if (present(y_delta_len_idxs_o)) then
@@ -866,7 +866,7 @@ contains
              t_delta = min(t_delta_max_o, t_delta)
           end if
           ! Compute adjusted step
-          call one_step_stab_nt(status, y_delta, dy, deq, y_cv, param, a, b, c, t_delta)
+          call one_step_stab(status, y_delta, dy, deq, y_cv, param, a, b, c, t_delta)
           istats(isi_step_y_len) = istats(isi_step_y_len) + 1
           if (status > 0) return
        end if
@@ -899,7 +899,7 @@ contains
     if (status > 0) return
     solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(isi_num_pts) = istats(isi_num_pts) + 1
-  end subroutine steps_sloppy_condy_stab_nt
+  end subroutine steps_sloppy_condy_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple adaptive steps with an embedded RK method using relatively traditional step size controls.
@@ -914,8 +914,8 @@ contains
   !!                                - 512-767 .... Error in sdf_o
   !!                                - 1056-1119 .. Error in this routine
   !!                                                - 1056 .. no_bisect_error_o=.false. and max_bisect_o violated
-  !!                                - 1232-1247 .. Error from one_step_etab_nt()
-  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - 1232-1247 .. Error from one_step_etab()
+  !!                                - 1248-1263 .. Error from one_step_stab()
   !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
   !!                                - See: mrkiss_utils::print_istats() for description of elements.
@@ -960,9 +960,9 @@ contains
   !! sdf_tol_o ................... How close we have to get to accept an sdf solution. Default: sdf_tol_ai
   !! stepp_o ..................... Step processing subroutine.  Called after each step.
   !! @endverbatim
-  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_etab_nt(), mrkiss_solvers_nt::one_step_stab_nt()
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers::one_step_etab(), mrkiss_solvers::one_step_stab()
   !! 
-  subroutine steps_adapt_etab_nt(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
+  subroutine steps_adapt_etab(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
                                  t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,      &
                                  no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o) 
@@ -971,7 +971,7 @@ contains
     ! Arguments
     integer,                             intent(out) :: status, istats(istats_size)
     real(kind=rk),                       intent(out) :: solution(:,:)
-    procedure(deq_iface_nt)                          :: deq
+    procedure(deq_iface)                          :: deq
     real(kind=rk),                       intent(in)  :: y(:), param(:), a(:,:), b1(:), b2(:), c(:)
     integer,                             intent(in)  :: p1, p2
     real(kind=rk),             optional, intent(in)  :: t_max_o, t_end_o, t_delta_ini_o, t_delta_min_o, t_delta_max_o
@@ -979,9 +979,9 @@ contains
     real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
     integer,                   optional, intent(in)  :: max_pts_o, max_bisect_o
     logical,                   optional, intent(in)  :: no_bisect_error_o
-    procedure(sdf_iface_nt),   optional              :: sdf_o
+    procedure(sdf_iface),   optional              :: sdf_o
     real(kind=rk),             optional, intent(in)  :: sdf_tol_o
-    procedure(stepp_iface_nt), optional              :: stepp_o
+    procedure(stepp_iface), optional              :: stepp_o
     ! Variables
     integer                                          :: max_pts, cur_pnt_idx, adj_cnt, y_dim
     integer                                          :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
@@ -1054,7 +1054,7 @@ contains
        end if
        ! Do step and adaptive step
        do adj_cnt=1,2
-          call one_step_etab_nt(status, y1_delta, y2_delta, dy, deq, y_cv, param, a, b1, b2, c, t_delta)
+          call one_step_etab(status, y1_delta, y2_delta, dy, deq, y_cv, param, a, b1, b2, c, t_delta)
           if (adj_cnt > 1) then
              istats(isi_step_y_err) = istats(isi_step_y_err) + 1
           else
@@ -1064,7 +1064,7 @@ contains
           ! Compute new t_delta_nxt based on error estimate.
           y_delta_delta = abs(y1_delta-y2_delta)
           comb_err_tol  = (error_tol_rel + max(abs(solution(2:, cur_pnt_idx-1)), abs(y_cv + y1_delta)) * error_tol_rel)
-          ! MJR TODO NOTE steps_adapt_etab_nt: Fix this for when comb_err_tol has a zero entry!
+          ! MJR TODO NOTE steps_adapt_etab: Fix this for when comb_err_tol has a zero entry!
           t_delta_fac   = (1/sqrt(sum((y_delta_delta / comb_err_tol) ** 2) / size(y, 1))) ** (1 + 1/min(p1, p2))
           if (t_delta_fac < 1.0_rk)  t_delta_fac = t_delta_fac * t_delta_fac_fdg
           if (cur_pnt_idx /= 2)      t_delta_fac = max(t_delta_fac_min, t_delta_fac)
@@ -1098,18 +1098,18 @@ contains
                 sp_new_t_delta = min(t_delta_max_o, sp_new_t_delta)
              end if
              t_delta = sp_new_t_delta ! Leave t_delta_nxt unchanged...
-             call one_step_stab_nt(status, y1_delta, dy, deq, y_cv, param, a, b1, c, t_delta)
+             call one_step_stab(status, y1_delta, dy, deq, y_cv, param, a, b1, c, t_delta)
              istats(isi_step_spp_td) = istats(isi_step_spp_td) + 1
           end if
           if (sp_sdf_flags > 0) then
              bs_tmp1_t_delta = t_delta_min
-             call one_step_stab_nt(status, bs_tmp_y_delta, dy, deq, y_cv, param, a, b1, c, bs_tmp1_t_delta)
+             call one_step_stab(status, bs_tmp_y_delta, dy, deq, y_cv, param, a, b1, c, bs_tmp1_t_delta)
              istats(isi_step_sdf_bic) = istats(isi_step_sdf_bic) + 1
              if (status > 0) return
              call sdf_o(status, bs_tmp1_dist, sp_sdf_flags, t_cv+bs_tmp1_t_delta, y_cv+bs_tmp_y_delta)
              if (status > 0) return
              bs_tmp2_t_delta = t_delta
-             call one_step_stab_nt(status, bs_tmp_y_delta, dy, deq, y_cv, param, a, b1, c, bs_tmp2_t_delta)
+             call one_step_stab(status, bs_tmp_y_delta, dy, deq, y_cv, param, a, b1, c, bs_tmp2_t_delta)
              istats(isi_step_sdf_bic) = istats(isi_step_sdf_bic) + 1
              if (status > 0) return
              call sdf_o(status, bs_tmp2_dist, sp_sdf_flags, t_cv+bs_tmp2_t_delta, y_cv+bs_tmp_y_delta)
@@ -1126,7 +1126,7 @@ contains
                 bs_itr = 1
                 do 
                    bs_tmp_t_delta = (bs_tmp1_t_delta + bs_tmp2_t_delta) / 2.0_rk
-                   call one_step_stab_nt(status, bs_tmp_y_delta, dy, deq, y_cv, param, a, b1, c, bs_tmp_t_delta)
+                   call one_step_stab(status, bs_tmp_y_delta, dy, deq, y_cv, param, a, b1, c, bs_tmp_t_delta)
                    istats(isi_step_sdf_bic) = istats(isi_step_sdf_bic) + 1
                    if (status > 0) return
                    call sdf_o(status, bs_tmp_dist, sp_sdf_flags, t_cv+bs_tmp_t_delta, y_cv+bs_tmp_y_delta)
@@ -1178,7 +1178,7 @@ contains
     if (status > 0) return
     solution((2+y_dim):(2+2*y_dim-1), cur_pnt_idx) = dy
     istats(isi_num_pts) = istats(isi_num_pts) + 1
-  end subroutine steps_adapt_etab_nt
+  end subroutine steps_adapt_etab
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Multistep Meta Solvers
@@ -1191,10 +1191,10 @@ contains
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1348-1364 .. Error in this routine
-  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - 1248-1263 .. Error from one_step_stab()
   !! istats(:) ................... Integer statistics for run
   !!                                - See: mrkiss_utils::print_istats() for description of elements.
-  !!                                - Elements this routine updates (via steps_fixed_stab_nt() calls):
+  !!                                - Elements this routine updates (via steps_fixed_stab() calls):
   !!                                   - isi_num_pts
   !!                                   - isi_step_norm
   !! solution(:,:) ............... Array for solution.  
@@ -1210,15 +1210,15 @@ contains
   !! steps_per_pnt ............... Number of RK steps to reach each point
   !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
   !! @endverbatim
-  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_stab_nt()
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers::one_step_stab()
   !!
-  subroutine steps_points_stab_nt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o) 
+  subroutine steps_points_stab(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o) 
     use mrkiss_config, only: rk, istats_size
     implicit none
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface_nt)                 :: deq
+    procedure(deq_iface)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer,                    intent(in)  :: steps_per_pnt
     integer,          optional, intent(in)  :: p_o
@@ -1237,13 +1237,13 @@ contains
     if (status > 0) return
     solution((2+y_dim):(2+2*y_dim-1), 1) = dy
     do cur_pnt_idx=2,size(solution, 2)
-       call steps_fixed_stab_nt(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &   ! wt2nt:IGNORE
+       call steps_fixed_stab(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &   ! wt2nt:IGNORE
                                 solution(2:(2+y_dim-1), cur_pnt_idx-1), param, a, b, c, p, &
                                 t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1)
        istats = istats + jstats
        if (status > 0) return
     end do
-  end subroutine steps_points_stab_nt
+  end subroutine steps_points_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Create an interpolated solution from a source colution.
@@ -1270,7 +1270,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message() 
   !!
-  subroutine interpolate_solution_nt(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o) 
+  subroutine interpolate_solution(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o) 
     use :: mrkiss_config, only: rk, istats_size, isi_num_pts
     implicit none
     ! Arguments
@@ -1278,7 +1278,7 @@ contains
     real(kind=rk),              intent(inout) :: solution(:,:)
     real(kind=rk),              intent(in)    :: src_solution(:,:)
     integer,          optional, intent(in)    :: num_src_pts_o
-    procedure(deq_iface_nt)                   :: deq
+    procedure(deq_iface)                   :: deq
     real(kind=rk),              intent(in)    :: param(:)
     logical,          optional, intent(in)    :: linear_interp_o
     ! Variables
@@ -1326,7 +1326,7 @@ contains
        istats(isi_num_pts) = istats(isi_num_pts) + 1
     end do
     status = 0;
-  end subroutine interpolate_solution_nt
+  end subroutine interpolate_solution
   
 end module mrkiss_solvers_nt
 

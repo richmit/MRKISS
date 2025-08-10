@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program rk4
   use            :: mrkiss_config,      only: rk, istats_size
-  use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt, steps_points_stab_wt
+  use            :: mrkiss_solvers_wt,  only: one_step_rk4, one_step_stab, steps_fixed_stab, steps_points_stab
   use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -66,7 +66,7 @@ program rk4
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_pts
-     call one_step_rk4_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     call one_step_rk4(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -75,38 +75,38 @@ program rk4
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_pts
-     call one_step_stab_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     call one_step_stab(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
   call print_solution(status, sol, filename_o="rk4_stab.out", width_o=20)
 
   sol = 0
-  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
+  call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
   call print_solution(status, sol, filename_o="rk4_steps.out", width_o=20)
 
   sol = 0
-  call steps_fixed_stab_wt(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=max_pts)
+  call steps_fixed_stab(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=max_pts)
   call print_solution(status, sol, filename_o="rk4_frog.out", width_o=20, start_o=max_pts)
 
   sol = 0
-  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
+  call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   call print_solution(status, sol, filename_o="rk4_steps_end.out", width_o=20)
 
   sol = 0
-  call steps_fixed_stab_wt(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end, max_pts_o=max_pts)
+  call steps_fixed_stab(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end, max_pts_o=max_pts)
   call print_solution(status, sol, filename_o="rk4_frog_end.out", width_o=20, start_o=max_pts)
 
   sol = 0
-  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
+  call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   sol(2:, :) = 0
-  call steps_points_stab_wt(status, istats, sol, eq, y_iv, param, a, b, c, 1)
+  call steps_points_stab(status, istats, sol, eq, y_iv, param, a, b, c, 1)
   call print_solution(status, sol, filename_o="rk4_steps_end_points.out", width_o=20)
 
   sol = 0
-  call steps_fixed_stab_wt(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
+  call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   sol(2:, :) = 0
-  call steps_points_stab_wt(status, istats, sol, eq, y_iv, param, a, b, c, 10)
+  call steps_points_stab(status, istats, sol, eq, y_iv, param, a, b, c, 10)
   call print_solution(status, sol, filename_o="rk4_steps_end_points10.out", width_o=20)
 
 contains

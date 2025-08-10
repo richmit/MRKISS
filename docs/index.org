@@ -80,7 +80,7 @@ Here is a complete example in 23 lines that solves [[https://www.mitchr.me/SS/lo
 program minimal
 
   use :: mrkiss_config,      only: rk, istats_size
-  use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
+  use :: mrkiss_solvers_nt,  only: steps_fixed_stab
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -93,7 +93,7 @@ program minimal
   real(kind=rk)               :: solution(7, 10000)
   integer                     :: status, istats(istats_size)
 
-  call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   call print_solution(status, solution, filename_o="minimal.csv")
 
 contains
@@ -116,69 +116,10 @@ You can check out a couple larger examples:
 
 If you just want to jump in, then take a look at the [[#qs-min][Quick Start]] section.  
 
-* Features & Requirements
-:PROPERTIES:
-:CUSTOM_ID: features
-:END:
-
-The IVPs I work with are generally pretty well behavied:
-
- - Non-stiff
- - Time forward (\(\Delta{t} \ge 0\))
- - Defined by a small (<50) set of equations expressable in closed form.
-
-Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
-chemical reactions, and electronic circuits.
-
-My motivation for solving IVPs generally revolve around /generative art/ and /visualization/.  You will actually see this in the code and feature set of the
-library.
-
-Things I care about:
-
- - Simple to use for simple problems.
- - Easily create custom solvers for the, admittedly bizarre, demands of generative art.
- - Graceful response to evaluation failure in derivative functions
- - A good selection of predefined RK methods
- - Easy to use, hardwired methods for /fixed step size/ visualization use cases:
-   - Fixed \(t\) step size solvers
-   - Fixed \(\mathbf{y}\) space step size solvers
- - Solutions include derivative values so visualization tools can perform Hermite interpolation.
- - Interpolate entire solutions to new time points (Hermite & linear).
- - Programmable step processing.  Examples:
-   - Stop the routine if the solution curve is too long in y-space
-   - Stop the routine if the step delta, or some components of it, are too long in y-space
-   - Stop the routine if the solution has returned to the IV
-   - Stop the routine if the solution intersects itself
-   - Provide an alternate y-delta and redo the step based on some condition.
-   - Trigger a bisection search for a t_delta fitting some condition based on t-space and/or y-space.  Examples:
-     - Find t_delta so that y-delta, or some components of it, are the perfect length.
-     - Find where a step crosses over a boundary in space  (ex: root finding)
-     - Find where a step approaches closest to a point (ex: like the problem's IV)
- - Runge-Kutta Research
-   - Try out new RK methods by simply feeding the solvers a Butcher tableau.
-   - Directly accessible one step routines for assembling custom solvers.
-   - Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.
-   - Individual access to each method in an embedded tableau, and control over how each is used.
-   - Maple worksheets with rational values, variable floating point approximations, and stability graphs for every Tableau.
-   - A few of the RK methods included are of historical or research interest -- not necessarily very practical.
- - Easy deployment & sharing
-   - Easy to compile and tune for a new hardware architectures.
-   - Zero external dependencies[[#faq-deps][[*]]] except a Fortran compiler.
-   - 100% standard Fortran that works with various compilers.
-   - Simple text output that can be compressed and sent back home or shared with others.
-
-Things I don't care about:
-
- - Usage error checking.  
-   - I don't check for stuff like making sure the user has supplied consistent Butcher tableau arguments...
- - Avoiding derivative function evaluations.
-   - I can generally perform hundreds of thousands of RK steps in a few milliseconds for the problems I work with.
-   - This library diverges from common practice in a few significant ways:
-     - I don't use interpolating polynomials for intrastep approximations.  I even have a bisection routine that takes an RK step for every bisection!
-     - I use generic loops to compute RK steps over the Butcher tableau instead of optimized formulas.
-     - Butcher tableau arrays are not sparse.  In fact, I even include the top and final row full of zeros!
-
 * Vocabulary & Definitions
+
+Before discussing the software, it is best if we define the problem we are solving and fix some definitions and notation.  I use the notation from this
+section throughout this document.
 
 Within the confines of this software, we define a system of ODEs as:
 
@@ -239,6 +180,66 @@ and the \(\mathbf{k}_i\) defined as:
 
 \[ \mathbf{k}_i = \mathbf{f}\left(t + c_i \Delta{t},\, \mathbf{y} + \Delta{t} \sum_{j=1}^{i-1} a_{ij} \mathbf{k}_j\right) \]
 
+The \(\mathbf{\check{b}}\) methd is \(\mathcal{O}(\check{p})\) and the \(\mathbf{\hat{b}}\) method is \(\mathcal{O}(\hat{p})\).
+
+* Features & Requirements
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
+
+The IVPs I work with are generally pretty well behavied:
+
+ - Non-stiff
+ - Time forward (\(\Delta{t} \ge 0\))
+ - Defined by a small (<50) set of equations expressable in closed form.
+
+Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
+chemical reactions, and electronic circuits.
+
+My motivation for solving IVPs generally revolve around /generative art/ and /visualization/.  You will actually see this in the code and feature set of the
+library.
+
+Things I care about:
+
+ - Simple to use for simple problems.
+ - Easily create custom solvers for the, admittedly bizarre, demands of generative art.
+ - Graceful response to evaluation failure in derivative functions
+ - A good selection of predefined RK methods
+ - Easy to use, hardwired methods for /fixed step size/ visualization use cases:
+   - Fixed \(t\) step size solvers
+   - Fixed \(\mathbf{y}\)-space step size solvers
+ - Solutions include derivative values so visualization tools can perform Hermite interpolation.
+ - Interpolate entire solutions to new time points (Hermite & linear).
+ - Programmable step processing.  Examples:
+   - Stop the routine if the solution curve is too long in \(\mathbf{y}\)-space
+   - Stop the routine if the step delta, or some components of it, are too long in \(\mathbf{y}\)-space
+   - Stop the routine if the solution has returned to the IV
+   - Stop the routine if the solution intersects itself
+   - Provide an alternate \(\Delta{t}\) and redo the step based on some condition.
+   - Trigger a bisection search for a \(\Delta{t}\) fitting some condition based on t-space and/or \(\mathbf{y}\)-space.  Examples:
+     - Find \(\Delta{t}\) so that \(\Delta{\mathbf{y}}\), or some components of it, are the perfect length.
+     - Find where a step crosses over a boundary in space  (ex: root finding)
+     - Find where a step approaches closest to a point (ex: like the problem's IV)
+ - Runge-Kutta Research
+   - Try out new RK methods by simply feeding the solvers a Butcher tableau.
+   - Directly accessible one step routines for assembling custom solvers.
+   - Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.
+   - Individual access to each method in an embedded tableau, and control over how each is used.
+   - Maple worksheets with rational values, variable floating point approximations, and stability graphs for every Tableau.
+   - A few of the RK methods included are of historical or research interest -- not necessarily very practical.
+ - Easy deployment & sharing
+   - Easy to compile and tune for a new hardware architectures.
+   - Zero external dependencies[[#faq-deps][[*]]] except a Fortran compiler.
+   - 100% standard Fortran that works with various compilers.
+   - Simple text output that can be compressed and sent back home or shared with others.
+
+Things I don't care about:
+
+ - Usage error checking.  i.e. things like making sure the user has supplied consistent Butcher tableau arguments.
+ - Avoiding derivative function evaluations.
+ - \(\mathcal{O}(p)\) or \(\mathcal{O}(p-1)\) accuracy for intrastep interpolation.  Hermite is good enough for visulization.
+     
+
 * Defining Runge-Kutta Methods in [[https://github.com/richmit/MRKISS][~MRKISS~]]
 :PROPERTIES:
 :CUSTOM_ID: def-method
@@ -254,7 +255,7 @@ subroutines.
 
  - ~a~  -- The \(\mathbf{a}\) matrix.
  - ~c~  -- The \(\mathbf{c}\) vector.
- - ~p~  -- The order of the method
+ - ~p~  -- The order of the methd. i.e. \(\mathcal{O}(\check{p})\)
  - ~b~  -- The \(\mathbf{\check{b}}\) vector.
 
 Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes, and the value of ~p~ must be a positive integer.
@@ -268,9 +269,9 @@ Instead of a single ~b~ and ~p~ argument, we have ~b1~, ~p1~, ~b2~, and ~p2~.
 
  - ~a~  -- The \(\mathbf{a}\) matrix.
  - ~c~  -- The \(\mathbf{c}\) vector.
- - ~p1~ -- The order of the method associated with \(\mathbf{\check{b}}\) vector.
+ - ~p1~ -- \(\mathcal{O}(\check{p})\) -- i.e. the order of the ~b1~ method.
  - ~b1~ -- The \(\mathbf{\check{b}}\) vector.
- - ~p2~ -- The order of the method associated with the \(\mathbf{\hat{b}}\) vector (only for embedded methods).
+ - ~p2~ -- \(\mathcal{O}(\hat{p})\) -- i.e. the order of the ~b2~ method.
  - ~b2~ -- The \(\mathbf{\hat{b}}\) vector (only for embedded methods).
 
 Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes, and the values of ~p1~ and ~p2~ must be a positive integers.
@@ -393,17 +394,6 @@ method's stability region.
 | ~mrkiss_eerk_verner_8_7~             |   8   |   7   |   13   |        |
 | ~mrkiss_eerk_verner_9_8~             |   9   |   8   |   16   |  BOO   |
 
-* Homogeneous vs Non-Homogeneous IVPs Naming Conventions
-:PROPERTIES:
-:CUSTOM_ID: codecon-homo
-:END:
-
-Throughout the code you will see subroutines, functions, and types suffixed with "~_nt~" or "~_wt~":
-  - ~_nt~ stands for "No T" -- homogeneous problems.
-  - ~_wt~ stands for "With T" -- non-homogeneous problems.
-
-In the documentation below you will see "~_*t~" in subroutine names as shorthand to indicate both the "~_nt~" and "~_wt~" versions.
-
 * Providing ODE Equations For Solvers
 :PROPERTIES:
 :CUSTOM_ID: ode-func
@@ -411,14 +401,14 @@ In the documentation below you will see "~_*t~" in subroutine names as shorthand
 
 The equation to be solved is implimented in a user provided subroutine with one of the following two signatures:
 
-For Non-Homogeneous (with t) problems:
+For Non-Homogeneous (with t) problems (found in the module ~mrkiss_solvers_wt~):
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d' | sed 's/param) *$/param) ! Non-Homogeneous Case (with t)/;'
+sed -n '/^  *subroutine deq_iface/,/^  *end subroutine deq_iface *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d' | sed 's/param) *$/param) ! Non-Homogeneous Case (with t)/;'
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-     subroutine deq_iface_wt(status, dydt, t, y, param) ! Non-Homogeneous Case (with t)
+     subroutine deq_iface(status, dydt, t, y, param) ! Non-Homogeneous Case (with t)
        integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: t
@@ -426,14 +416,14 @@ sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../
        real(kind=rk),    intent(in)  :: param(:)
 #+end_src
 
-For Homogeneous (no t) problems:
+For Homogeneous (no t) problems (found in the module ~mrkiss_solvers_nt~)::
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d;' | sed 's/t, //; s/_wt/_nt/g; /t *$/d;' | sed 's/param) *$/param)    ! Homogeneous Case (no t)/;'
+sed -n '/^  *subroutine deq_iface/,/^  *end subroutine deq_iface *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d;' | sed 's/t, //; s/_wt/_nt/g; /t *$/d;' | sed 's/param) *$/param)    ! Homogeneous Case (no t)/;'
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-     subroutine deq_iface_nt(status, dydt, y, param)    ! Homogeneous Case (no t)
+     subroutine deq_iface(status, dydt, y, param)    ! Homogeneous Case (no t)
        integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: y(:)
@@ -459,36 +449,36 @@ of higher level routines to indicate an error condition.
 :CUSTOM_ID: hi-solvers
 :END:
 
-  - ~steps_adapt_etab_*t()~ uses traditional adaptive step size ::
+  - ~steps_adapt_etab()~ uses traditional adaptive step size ::
     - This solver is /very similar/ to solvers found in other ODE packages.
     - Programmable step processing
-    - A programmable bisection option to solve for interesting t_delta values
+    - A programmable bisection option to solve for interesting \(\Delta{t}\) values
     - Sophisticated curve length computations, and exit options when a maximum length is reached
     - It can end precisely on a time value, or it can simply quit when a step goes beyond a maximum time value.
     - These last two could be achieved with the programmable step processing and bisection features, but these requirements are so common that is convenient
       to have them directly available.
-  - ~steps_fixed_stab_*t()~ uses fixed \(\Delta{t}\) steps ::
+  - ~steps_fixed_stab()~ uses fixed \(\Delta{t}\) steps ::
     - This is a good place to start when writing a custom solver.
     - With most modern ODE packages, this would be done with interpolation.
     - This routine has the option to use Richardson extrapolation.
     - Most common use: curve evolution animations that naturally display velocity.
-  - ~steps_condy_stab_*t()~ uses fixed \(\Delta{\mathbf{y}}\)-space steps ::
+  - ~steps_condy_stab()~ uses fixed \(\Delta{\mathbf{y}}\)-space steps ::
     - Produce solution points separated by fixed deltas in \(\Delta{\mathbf{y}}\)-space, or some subset of \(\Delta{\mathbf{y}}\)-space.
     - This is a good place to start when writing a custom solver with a bisection step.
     - With most modern ODE packages, this would be done with interpolation.
     - Most common use: parametric plots, parametric tube plots, and sphere sweeps.
-  - ~steps_sloppy_condy_stab_*t()~ adjusts \(\Delta{t}\) to *approximate* \(\Delta{\mathbf{y}}\)-space steps ::
-    - Much like ~steps_condy_stab_*t()~ in practice but faster and less precise.
+  - ~steps_sloppy_condy_stab()~ adjusts \(\Delta{t}\) to *approximate* \(\Delta{\mathbf{y}}\)-space steps ::
+    - Much like ~steps_condy_stab()~ in practice but faster and less precise.
     - Computes a test step and then adjusts \(\Delta{t}\) in proportion to the ratio of the desired length vs test length.
     - This method has no guarantee for correctness, but generally works well in practice.
     - Can operate on every step or just steps that are too long.  
-    - Most common use: ~steps_fixed_stab_*t()~ results have a few steps that are "too long"
-  - ~steps_points_stab_*t()~ takes a set of \(t\) values at which to find solutions ::
+    - Most common use: ~steps_fixed_stab()~ results have a few steps that are "too long"
+  - ~steps_points_stab()~ takes a set of \(t\) values at which to find solutions ::
     - Used several fixed RK steps to go from each \(t\) value to the next.
     - Most common use: Produce a higher accuracy solution based on a previous solution.  
     - Most common use: Physical problems requiring solutions at specific time points.
   - ~interpolate_solution~ interpolates an existing solution to a new solution ::
-    - Not a RK method; however, it provides O(3) accuracy when using Hermite interpolation.
+    - Not a RK method; however, it provides \(\mathcal{O}(3)\) accuracy when using Hermite interpolation.
     - Derivative values are freshly computed for the interpolated points
 
 ** High Level Solver Common Arguments
@@ -512,9 +502,9 @@ The first several arguments are common across the higher level solvers.
   - ~istats~ :: Statistics regarding the solver run.                
     - ~istats(1)~: number of computed solution points
     - ~istats(2)~: number of one_step_* calls not triggerd by an event
-    - ~istats(3)~: number of one_step_* calls triggered by y_delta length constraint
-    - ~istats(4)~: number of one_step_* calls triggered by y_delta error constraint
-    - ~istats(5)~: number of one_step_* calls triggered by step processing with new t_delta
+    - ~istats(3)~: number of one_step_* calls triggered by \(\Delta{\mathbf{y}}\) length constraint
+    - ~istats(4)~: number of one_step_* calls triggered by \(\Delta{\mathbf{y}}\) error constraint
+    - ~istats(5)~: number of one_step_* calls triggered by step processing with new \(\Delta{t}\)
     - ~istats(6)~: number of one_step_* calls triggered by SDF bisection
     - ~istats(7)~: number of times bisection failed because of max_bisect_o
     - ~istats(8)~: number of times bisection failed because target was not contained
@@ -554,11 +544,11 @@ These arguments vary a bit, but mirror the names documented in the [[#def-method
 
 Behind all of the above high level solvers are single step routines to carry out the step calculations.  These are handy for creating DIY solvers.  
 
-  - ~one_step_stab_*t()~  non-embedded RK methods 
-  - ~one_richardson_step_stab_*t()~ uses Richardson extrapolation with non-embedded RK methods
-  - ~one_step_etab_*t()~ embedded RK methods
-  - ~one_step_rk4_*t()~ hardwired RK4 for unit tests
-  - ~one_step_rkf45_*t()~ hardwired RKF45 for unit tests
+  - ~one_step_stab()~  non-embedded RK methods 
+  - ~one_richardson_step_stab()~ uses Richardson extrapolation with non-embedded RK methods
+  - ~one_step_etab()~ embedded RK methods
+  - ~one_step_rk4()~ hardwired RK4 for unit tests
+  - ~one_step_rkf45()~ hardwired RKF45 for unit tests
 
 * Utilities
 :PROPERTIES:
@@ -571,7 +561,7 @@ Behind all of the above high level solvers are single step routines to carry out
     - ~print_solution()~ Print a solution to a file or STDOUT
   - Miscilanious
     - ~analyze_solution()~ Compute statstics related to the solution
-    - ~seq()~ Compute a fixed delta sequence of values in the same way steps are comptued in ~steps_fixed_stab_*t()~
+    - ~seq()~ Compute a fixed delta sequence of values in the same way steps are comptued in ~steps_fixed_stab()~
   - Status Codes
     - ~status_to_origin()~ Returns the subroutine or interface name assigned the given status code
     - ~status_to_message()~ Returns the error message for the given status code
@@ -628,6 +618,8 @@ cat ../examples/makefile | grep -B 20 '^###*#$' | grep -A 20 '^###*##$' | sed -E
 #+begin_src makefile :eval never :tangle no
 ###############################################################
 MRKISS_PATH = ..
+
+DO_OPENMP = NO
 
  include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
 # include $(MRKISS_PATH)/make_includes/tools_flang.mk

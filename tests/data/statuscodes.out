@@ -1,16 +1,16 @@
             status code: 0
-          status origin: NO ERROR                                                        
+          status origin: NO ERROR                        
          status message: NO ERROR                                                                                                                        
 
             status code: 1314
-          status origin: subroutine seq                                                  
-         status message: Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v                                                           
+          status origin: seq                             
+         status message: seq: Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v                                                      
 
             status code: 1248
-          status origin: subroutine one_step_stab_*t                                     
-         status message: subroutine one_step_stab_*t                                                                                                     
+          status origin: one_step_stab_*t                
+         status message: one_step_stab_*t: UNKNOWN ERROR                                                                                                 
 
             status code: 10000
-          status origin: ERROR                                                           
-         status message: ERROR                                                                                                                           
+          status origin: UNKNOWN SOURCE                  
+         status message: UNKNOWN SOURCE: UNKNOWN ERROR                                                                                                   
 

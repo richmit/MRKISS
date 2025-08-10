@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program tc1_TCASEN
   use :: mrkiss_config,                      only: rk
-  use :: mrkiss_solvers_wt,                  only: one_step_stab_wt
+  use :: mrkiss_solvers_wt,                  only: one_step_stab
 ! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b=>b1, c   ! TCASE_COM: bogacki_shampine_3_2_b1
 ! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b=>b2, c   ! TCASE_COM: bogacki_shampine_3_2_b2
 ! use :: mrkiss_eerk_bogacki_shampine_4_5,   only: a, b=>b1, c   ! TCASE_COM: bogacki_shampine_4_5_b1
@@ -98,7 +98,7 @@ program tc1_TCASEN
   do step=1,max_steps
      call ysol(status, y_tmp, t_cv, param)
      write (out_io_unit, fmt=fmt) "TCASEN", step, t_cv, y_cv, y_tmp, abs(y_tmp-y_cv)
-     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y_cv, param, a, b, c, t_delta=t_delta)
+     call one_step_stab(status, y_delta, dy, eq, t_cv, y_cv, param, a, b, c, t_delta=t_delta)
      t_cv = t_cv + t_delta
      y_cv = y_cv + y_delta
   end do

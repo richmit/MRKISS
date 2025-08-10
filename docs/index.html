@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-08 Fri 12:55 -->
+<!-- 2025-08-10 Sun 13:43 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-08 12:52:55</i></td>
+<td class="org-left"><i>2025-08-10 13:43:51</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-08 12:55:05</i></td>
+<td class="org-left"><i>2025-08-10 13:43:51</i></td>
 </tr>
 </tbody>
 </table>
@@ -285,8 +285,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
-<li><a href="#features">2. Features &amp; Requirements</a></li>
-<li><a href="#org0c771ce">3. Vocabulary &amp; Definitions</a></li>
+<li><a href="#org1fc63c4">2. Vocabulary &amp; Definitions</a></li>
+<li><a href="#features">3. Features &amp; Requirements</a></li>
 <li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
@@ -295,53 +295,52 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
-<li><a href="#orga2c4262">5.1. Predefined Non-embedded Methods</a></li>
-<li><a href="#org984bef9">5.2. Predefined Embedded Methods</a></li>
+<li><a href="#org9ebe9b7">5.1. Predefined Non-embedded Methods</a></li>
+<li><a href="#org6e9f882">5.2. Predefined Embedded Methods</a></li>
 </ul>
 </li>
-<li><a href="#codecon-homo">6. Homogeneous vs Non-Homogeneous IVPs Naming Conventions</a></li>
-<li><a href="#ode-func">7. Providing ODE Equations For Solvers</a></li>
-<li><a href="#hi-solvers">8. High Level Solvers</a>
+<li><a href="#ode-func">6. Providing ODE Equations For Solvers</a></li>
+<li><a href="#hi-solvers">7. High Level Solvers</a>
 <ul>
-<li><a href="#hi-solvers-args">8.1. High Level Solver Common Arguments</a></li>
+<li><a href="#hi-solvers-args">7.1. High Level Solver Common Arguments</a></li>
 </ul>
 </li>
-<li><a href="#lo-solvers">9. Low Level, One Step Solvers</a></li>
-<li><a href="#utils">10. Utilities</a></li>
-<li><a href="#qs-min">11. Quick Start &#x2013; The Absolute Minimum</a>
+<li><a href="#lo-solvers">8. Low Level, One Step Solvers</a></li>
+<li><a href="#utils">9. Utilities</a></li>
+<li><a href="#qs-min">10. Quick Start &#x2013; The Absolute Minimum</a>
 <ul>
-<li><a href="#qs-min-download">11.1. Getting <code>MRKISS</code></a></li>
-<li><a href="#qs-min-examples">11.2. Check Out The Examples</a></li>
+<li><a href="#qs-min-download">10.1. Getting <code>MRKISS</code></a></li>
+<li><a href="#qs-min-examples">10.2. Check Out The Examples</a></li>
 </ul>
 </li>
-<li><a href="#use-mrkiss">12. Using <code>MRKISS</code> In Your Projects</a>
+<li><a href="#use-mrkiss">11. Using <code>MRKISS</code> In Your Projects</a>
 <ul>
-<li><a href="#use-makeinc">12.1. Notes about <code>include.mk</code></a></li>
+<li><a href="#use-makeinc">11.1. Notes about <code>include.mk</code></a></li>
 </ul>
 </li>
-<li><a href="#test-mrkiss">13. <code>MRKISS</code> Testing</a>
+<li><a href="#test-mrkiss">12. <code>MRKISS</code> Testing</a>
 <ul>
-<li><a href="#test-mrkiss-ref-one-step">13.1. Refrence One Step Solvers</a></li>
-<li><a href="#test-mrkiss-tab-ok">13.2. Tableau Plausibility Tests</a></li>
-<li><a href="#test-mrkiss-homo-tab-ok">13.3. Homogeneous Solvers and More Tableau Plausibility Tests</a></li>
-<li><a href="#test-mrkiss-rich">13.4. Richardson Extrapolation</a></li>
-<li><a href="#test-mrkiss-short">13.5. Short Stages</a></li>
-<li><a href="#test-mrkiss-examples">13.6. Examples Are Tests Too</a></li>
+<li><a href="#test-mrkiss-ref-one-step">12.1. Refrence One Step Solvers</a></li>
+<li><a href="#test-mrkiss-tab-ok">12.2. Tableau Plausibility Tests</a></li>
+<li><a href="#test-mrkiss-homo-tab-ok">12.3. Homogeneous Solvers and More Tableau Plausibility Tests</a></li>
+<li><a href="#test-mrkiss-rich">12.4. Richardson Extrapolation</a></li>
+<li><a href="#test-mrkiss-short">12.5. Short Stages</a></li>
+<li><a href="#test-mrkiss-examples">12.6. Examples Are Tests Too</a></li>
 </ul>
 </li>
-<li><a href="#faq">14. FAQ</a>
+<li><a href="#faq">13. FAQ</a>
 <ul>
-<li><a href="#faq-name">14.1. What's with the name?</a></li>
-<li><a href="#faq-fortran">14.2. Why Fortran</a></li>
-<li><a href="#faq-why">14.3. Why did you write another ODE solver when so many good options exist?</a></li>
-<li><a href="#faq-others">14.4. Why don't you use package XYZ?</a></li>
-<li><a href="#faq-zotero">14.5. What are those zotero links in the references?</a></li>
-<li><a href="#faq-samethods">14.6. Are high order RK methods overkill for strange attractors?</a></li>
-<li><a href="#faq-need-more">14.7. I need a more comprehensive solution.  Do you have advice?</a></li>
-<li><a href="#faq-need-fast">14.8. I need something faster.  Do you have advice?</a></li>
-<li><a href="#faq-deps">14.9. It seems like things are used other than Fortran.  Are there really no external dependencies?</a></li>
-<li><a href="#faq-rel-head">14.10. What is a "Release"?  How is it different from what's on <code>HEAD</code>?</a></li>
-<li><a href="#faq-rel-platforms">14.11. What platforms are known to work?</a></li>
+<li><a href="#faq-name">13.1. What's with the name?</a></li>
+<li><a href="#faq-fortran">13.2. Why Fortran</a></li>
+<li><a href="#faq-why">13.3. Why did you write another ODE solver when so many good options exist?</a></li>
+<li><a href="#faq-others">13.4. Why don't you use package XYZ?</a></li>
+<li><a href="#faq-zotero">13.5. What are those zotero links in the references?</a></li>
+<li><a href="#faq-samethods">13.6. Are high order RK methods overkill for strange attractors?</a></li>
+<li><a href="#faq-need-more">13.7. I need a more comprehensive solution.  Do you have advice?</a></li>
+<li><a href="#faq-need-fast">13.8. I need something faster.  Do you have advice?</a></li>
+<li><a href="#faq-deps">13.9. It seems like things are used other than Fortran.  Are there really no external dependencies?</a></li>
+<li><a href="#faq-rel-head">13.10. What is a "Release"?  How is it different from what's on <code>HEAD</code>?</a></li>
+<li><a href="#faq-rel-platforms">13.11. What platforms are known to work?</a></li>
 </ul>
 </li>
 </ul>
@@ -372,8 +371,8 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
 <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
 <span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">minimal</span>
 
-  <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, ik, istats_size
-  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab_nt
+  <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, istats_size
+  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
 
@@ -384,15 +383,15 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end    = 50.0_rk</span>
 
   <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> solution(7, 10000)</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik)            ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
+  <span style="color: #63b8ff;">integer</span>                     ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
 
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab_nt</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"minimal.csv"</span>)
 
 <span style="color: #00ffff;">contains</span>
 
   <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, y, param)
-    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+    <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
@@ -417,102 +416,14 @@ If you just want to jump in, then take a look at the <a href="#qs-min">Quick Sta
 </p>
 </div>
 </div>
-<div id="outline-container-features" class="outline-2">
-<h2 id="features"><span class="section-number-2">2.</span> Features &amp; Requirements</h2>
-<div class="outline-text-2" id="text-features">
+<div id="outline-container-org1fc63c4" class="outline-2">
+<h2 id="org1fc63c4"><span class="section-number-2">2.</span> Vocabulary &amp; Definitions</h2>
+<div class="outline-text-2" id="text-2">
 <p>
-The IVPs I work with are generally pretty well behavied:
+Before discussing the software, it is best if we define the problem we are solving and fix some definitions and notation.  I use the notation from this
+section throughout this document.
 </p>
 
-<ul class="org-ul">
-<li>Non-stiff</li>
-<li>Time forward (\(\Delta{t} \ge 0\))</li>
-<li>Defined by a small (&lt;50) set of equations expressable in closed form.</li>
-</ul>
-
-<p>
-Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
-chemical reactions, and electronic circuits.
-</p>
-
-<p>
-My motivation for solving IVPs generally revolve around <i>generative art</i> and <i>visualization</i>.  You will actually see this in the code and feature set of the
-library.
-</p>
-
-<p>
-Things I care about:
-</p>
-
-<ul class="org-ul">
-<li>Simple to use for simple problems.</li>
-<li>Easily create custom solvers for the, admittedly bizarre, demands of generative art.</li>
-<li>Graceful response to evaluation failure in derivative functions</li>
-<li>A good selection of predefined RK methods</li>
-<li>Easy to use, hardwired methods for <i>fixed step size</i> visualization use cases:
-<ul class="org-ul">
-<li>Fixed \(t\) step size solvers</li>
-<li>Fixed \(\mathbf{y}\) space step size solvers</li>
-</ul></li>
-<li>Solutions include derivative values so visualization tools can perform Hermite interpolation.</li>
-<li>Interpolate entire solutions to new time points (Hermite &amp; linear).</li>
-<li>Programmable step processing.  Examples:
-<ul class="org-ul">
-<li>Stop the routine if the solution curve is too long in y-space</li>
-<li>Stop the routine if the step delta, or some components of it, are too long in y-space</li>
-<li>Stop the routine if the solution has returned to the IV</li>
-<li>Stop the routine if the solution intersects itself</li>
-<li>Provide an alternate y-delta and redo the step based on some condition.</li>
-<li>Trigger a bisection search for a t_delta fitting some condition based on t-space and/or y-space.  Examples:
-<ul class="org-ul">
-<li>Find t_delta so that y-delta, or some components of it, are the perfect length.</li>
-<li>Find where a step crosses over a boundary in space  (ex: root finding)</li>
-<li>Find where a step approaches closest to a point (ex: like the problem's IV)</li>
-</ul></li>
-</ul></li>
-<li>Runge-Kutta Research
-<ul class="org-ul">
-<li>Try out new RK methods by simply feeding the solvers a Butcher tableau.</li>
-<li>Directly accessible one step routines for assembling custom solvers.</li>
-<li>Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.</li>
-<li>Individual access to each method in an embedded tableau, and control over how each is used.</li>
-<li>Maple worksheets with rational values, variable floating point approximations, and stability graphs for every Tableau.</li>
-<li>A few of the RK methods included are of historical or research interest &#x2013; not necessarily very practical.</li>
-</ul></li>
-<li>Easy deployment &amp; sharing
-<ul class="org-ul">
-<li>Easy to compile and tune for a new hardware architectures.</li>
-<li>Zero external dependencies<a href="#faq-deps">[*</a>] except a Fortran compiler.</li>
-<li>100% standard Fortran that works with various compilers.</li>
-<li>Simple text output that can be compressed and sent back home or shared with others.</li>
-</ul></li>
-</ul>
-
-<p>
-Things I don't care about:
-</p>
-
-<ul class="org-ul">
-<li>Usage error checking.  
-<ul class="org-ul">
-<li>I don't check for stuff like making sure the user has supplied consistent Butcher tableau arguments&#x2026;</li>
-</ul></li>
-<li>Avoiding derivative function evaluations.
-<ul class="org-ul">
-<li>I can generally perform hundreds of thousands of RK steps in a few milliseconds for the problems I work with.</li>
-<li>This library diverges from common practice in a few significant ways:
-<ul class="org-ul">
-<li>I don't use interpolating polynomials for intrastep approximations.  I even have a bisection routine that takes an RK step for every bisection!</li>
-<li>I use generic loops to compute RK steps over the Butcher tableau instead of optimized formulas.</li>
-<li>Butcher tableau arrays are not sparse.  In fact, I even include the top and final row full of zeros!</li>
-</ul></li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div id="outline-container-org0c771ce" class="outline-2">
-<h2 id="org0c771ce"><span class="section-number-2">3.</span> Vocabulary &amp; Definitions</h2>
-<div class="outline-text-2" id="text-3">
 <p>
 Within the confines of this software, we define a system of ODEs as:
 </p>
@@ -601,6 +512,92 @@ and the \(\mathbf{k}_i\) defined as:
 <p>
 \[ \mathbf{k}_i = \mathbf{f}\left(t + c_i \Delta{t},\, \mathbf{y} + \Delta{t} \sum_{j=1}^{i-1} a_{ij} \mathbf{k}_j\right) \]
 </p>
+
+<p>
+The \(\mathbf{\check{b}}\) methd is \(\mathcal{O}(\check{p})\) and the \(\mathbf{\hat{b}}\) method is \(\mathcal{O}(\hat{p})\).
+</p>
+</div>
+</div>
+<div id="outline-container-features" class="outline-2">
+<h2 id="features"><span class="section-number-2">3.</span> Features &amp; Requirements</h2>
+<div class="outline-text-2" id="text-features">
+<p>
+The IVPs I work with are generally pretty well behavied:
+</p>
+
+<ul class="org-ul">
+<li>Non-stiff</li>
+<li>Time forward (\(\Delta{t} \ge 0\))</li>
+<li>Defined by a small (&lt;50) set of equations expressable in closed form.</li>
+</ul>
+
+<p>
+Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
+chemical reactions, and electronic circuits.
+</p>
+
+<p>
+My motivation for solving IVPs generally revolve around <i>generative art</i> and <i>visualization</i>.  You will actually see this in the code and feature set of the
+library.
+</p>
+
+<p>
+Things I care about:
+</p>
+
+<ul class="org-ul">
+<li>Simple to use for simple problems.</li>
+<li>Easily create custom solvers for the, admittedly bizarre, demands of generative art.</li>
+<li>Graceful response to evaluation failure in derivative functions</li>
+<li>A good selection of predefined RK methods</li>
+<li>Easy to use, hardwired methods for <i>fixed step size</i> visualization use cases:
+<ul class="org-ul">
+<li>Fixed \(t\) step size solvers</li>
+<li>Fixed \(\mathbf{y}\)-space step size solvers</li>
+</ul></li>
+<li>Solutions include derivative values so visualization tools can perform Hermite interpolation.</li>
+<li>Interpolate entire solutions to new time points (Hermite &amp; linear).</li>
+<li>Programmable step processing.  Examples:
+<ul class="org-ul">
+<li>Stop the routine if the solution curve is too long in \(\mathbf{y}\)-space</li>
+<li>Stop the routine if the step delta, or some components of it, are too long in \(\mathbf{y}\)-space</li>
+<li>Stop the routine if the solution has returned to the IV</li>
+<li>Stop the routine if the solution intersects itself</li>
+<li>Provide an alternate \(\Delta{t}\) and redo the step based on some condition.</li>
+<li>Trigger a bisection search for a \(\Delta{t}\) fitting some condition based on t-space and/or \(\mathbf{y}\)-space.  Examples:
+<ul class="org-ul">
+<li>Find \(\Delta{t}\) so that \(\Delta{\mathbf{y}}\), or some components of it, are the perfect length.</li>
+<li>Find where a step crosses over a boundary in space  (ex: root finding)</li>
+<li>Find where a step approaches closest to a point (ex: like the problem's IV)</li>
+</ul></li>
+</ul></li>
+<li>Runge-Kutta Research
+<ul class="org-ul">
+<li>Try out new RK methods by simply feeding the solvers a Butcher tableau.</li>
+<li>Directly accessible one step routines for assembling custom solvers.</li>
+<li>Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.</li>
+<li>Individual access to each method in an embedded tableau, and control over how each is used.</li>
+<li>Maple worksheets with rational values, variable floating point approximations, and stability graphs for every Tableau.</li>
+<li>A few of the RK methods included are of historical or research interest &#x2013; not necessarily very practical.</li>
+</ul></li>
+<li>Easy deployment &amp; sharing
+<ul class="org-ul">
+<li>Easy to compile and tune for a new hardware architectures.</li>
+<li>Zero external dependencies<a href="#faq-deps">[*</a>] except a Fortran compiler.</li>
+<li>100% standard Fortran that works with various compilers.</li>
+<li>Simple text output that can be compressed and sent back home or shared with others.</li>
+</ul></li>
+</ul>
+
+<p>
+Things I don't care about:
+</p>
+
+<ul class="org-ul">
+<li>Usage error checking.  i.e. things like making sure the user has supplied consistent Butcher tableau arguments.</li>
+<li>Avoiding derivative function evaluations.</li>
+<li>\(\mathcal{O}(p)\) or \(\mathcal{O}(p-1)\) accuracy for intrastep interpolation.  Hermite is good enough for visulization.</li>
+</ul>
 </div>
 </div>
 <div id="outline-container-def-method" class="outline-2">
@@ -617,7 +614,7 @@ subroutines.
 <ul class="org-ul">
 <li><code>a</code>  &#x2013; The \(\mathbf{a}\) matrix.</li>
 <li><code>c</code>  &#x2013; The \(\mathbf{c}\) vector.</li>
-<li><code>p</code>  &#x2013; The order of the method</li>
+<li><code>p</code>  &#x2013; The order of the methd. i.e. \(\mathcal{O}(\check{p})\)</li>
 <li><code>b</code>  &#x2013; The \(\mathbf{\check{b}}\) vector.</li>
 </ul>
 
@@ -636,9 +633,9 @@ Instead of a single <code>b</code> and <code>p</code> argument, we have <code>b1
 <ul class="org-ul">
 <li><code>a</code>  &#x2013; The \(\mathbf{a}\) matrix.</li>
 <li><code>c</code>  &#x2013; The \(\mathbf{c}\) vector.</li>
-<li><code>p1</code> &#x2013; The order of the method associated with \(\mathbf{\check{b}}\) vector.</li>
+<li><code>p1</code> &#x2013; \(\mathcal{O}(\check{p})\) &#x2013; i.e. the order of the <code>b1</code> method.</li>
 <li><code>b1</code> &#x2013; The \(\mathbf{\check{b}}\) vector.</li>
-<li><code>p2</code> &#x2013; The order of the method associated with the \(\mathbf{\hat{b}}\) vector (only for embedded methods).</li>
+<li><code>p2</code> &#x2013; \(\mathcal{O}(\hat{p})\) &#x2013; i.e. the order of the <code>b2</code> method.</li>
 <li><code>b2</code> &#x2013; The \(\mathbf{\hat{b}}\) vector (only for embedded methods).</li>
 </ul>
 
@@ -710,11 +707,11 @@ To make all this concrete, here is what one of these modules looks like (<code>m
 <span style="color: #ffa500;">!!  </span><span style="color: #ff7f24;">- Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102</span>
 <span style="color: #ffa500;">!!</span>
 <span style="color: #00ffff;">module</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_erk_kutta_4</span>
-  <span style="color: #00ffff;">use</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_config</span>, <span style="color: #00ffff;">only</span>: rk, ik
+  <span style="color: #00ffff;">use</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_config</span>, <span style="color: #00ffff;">only</span>: rk
   <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
   <span style="color: #00ffff;">public</span>
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The order of the overall method</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> s      = 4</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> s      = 4</span>
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The @f$\mathbf{a}@f$ matrix for the Butcher Tableau</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> a(s,s) = reshape([ 0.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
 <span style="color: #7fffd4;">                                                    1.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
@@ -723,7 +720,7 @@ To make all this concrete, here is what one of these modules looks like (<code>m
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The @f$\mathbf{c}@f$ matrix for the Butcher Tableau</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> c(s)   = [         0.0_rk, 1.0_rk, 1.0_rk, 2.0_rk]          / 2.0_rk</span>
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The order of the method</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> p      = 4</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> p      = 4</span>
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The @f$\mathbf{b}@f$ matrix for the Butcher Tableau</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> b(s)   = [         1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk]          / 6.0_rk</span>
 <span style="color: #00ffff;">end module</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_erk_kutta_4</span>
@@ -749,8 +746,8 @@ These worksheets contain the coefficients for the method's Butcher tableau, code
 method's stability region.
 </p>
 </div>
-<div id="outline-container-orga2c4262" class="outline-3">
-<h3 id="orga2c4262"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
+<div id="outline-container-org9ebe9b7" class="outline-3">
+<h3 id="org9ebe9b7"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -839,8 +836,8 @@ method's stability region.
 </table>
 </div>
 </div>
-<div id="outline-container-org984bef9" class="outline-3">
-<h3 id="org984bef9"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
+<div id="outline-container-org6e9f882" class="outline-3">
+<h3 id="org6e9f882"><span class="section-number-3">5.2.</span> Predefined Embedded Methods</h3>
 <div class="outline-text-3" id="text-5-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -966,35 +963,19 @@ method's stability region.
 </div>
 </div>
 </div>
-<div id="outline-container-codecon-homo" class="outline-2">
-<h2 id="codecon-homo"><span class="section-number-2">6.</span> Homogeneous vs Non-Homogeneous IVPs Naming Conventions</h2>
-<div class="outline-text-2" id="text-codecon-homo">
-<p>
-Throughout the code you will see subroutines, functions, and types suffixed with "<code>_nt</code>" or "<code>_wt</code>":
-</p>
-<ul class="org-ul">
-<li><code>_nt</code> stands for "No T" &#x2013; homogeneous problems.</li>
-<li><code>_wt</code> stands for "With T" &#x2013; non-homogeneous problems.</li>
-</ul>
-
-<p>
-In the documentation below you will see "<code>_*t</code>" in subroutine names as shorthand to indicate both the "<code>_nt</code>" and "<code>_wt</code>" versions.
-</p>
-</div>
-</div>
 <div id="outline-container-ode-func" class="outline-2">
-<h2 id="ode-func"><span class="section-number-2">7.</span> Providing ODE Equations For Solvers</h2>
+<h2 id="ode-func"><span class="section-number-2">6.</span> Providing ODE Equations For Solvers</h2>
 <div class="outline-text-2" id="text-ode-func">
 <p>
 The equation to be solved is implimented in a user provided subroutine with one of the following two signatures:
 </p>
 
 <p>
-For Non-Homogeneous (with t) problems:
+For Non-Homogeneous (with t) problems (found in the module <code>mrkiss_solvers_wt</code>):
 </p>
 <div class="org-src-container">
-<pre class="src src-f90"><span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">deq_iface_wt</span>(status, dydt, t, y, param) <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Non-Homogeneous Case (with t)</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+<pre class="src src-f90"><span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">deq_iface</span>(status, dydt, t, y, param) <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Non-Homogeneous Case (with t)</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
@@ -1003,11 +984,11 @@ For Non-Homogeneous (with t) problems:
 </div>
 
 <p>
-For Homogeneous (no t) problems:
+For Homogeneous (no t) problems (found in the module <code>mrkiss_solvers_nt</code>)::
 </p>
 <div class="org-src-container">
-<pre class="src src-f90"><span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">deq_iface_nt</span>(status, dydt, y, param)    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Homogeneous Case (no t)</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+<pre class="src src-f90"><span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">deq_iface</span>(status, dydt, y, param)    <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Homogeneous Case (no t)</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
@@ -1035,57 +1016,57 @@ of higher level routines to indicate an error condition.
 </div>
 </div>
 <div id="outline-container-hi-solvers" class="outline-2">
-<h2 id="hi-solvers"><span class="section-number-2">8.</span> High Level Solvers</h2>
+<h2 id="hi-solvers"><span class="section-number-2">7.</span> High Level Solvers</h2>
 <div class="outline-text-2" id="text-hi-solvers">
 <dl class="org-dl">
-<dt><code>steps_adapt_etab_*t()</code> uses traditional adaptive step size</dt><dd><ul class="org-ul">
+<dt><code>steps_adapt_etab()</code> uses traditional adaptive step size</dt><dd><ul class="org-ul">
 <li>This solver is <i>very similar</i> to solvers found in other ODE packages.</li>
 <li>Programmable step processing</li>
-<li>A programmable bisection option to solve for interesting t_delta values</li>
+<li>A programmable bisection option to solve for interesting \(\Delta{t}\) values</li>
 <li>Sophisticated curve length computations, and exit options when a maximum length is reached</li>
 <li>It can end precisely on a time value, or it can simply quit when a step goes beyond a maximum time value.</li>
 <li>These last two could be achieved with the programmable step processing and bisection features, but these requirements are so common that is convenient
 to have them directly available.</li>
 </ul></dd>
-<dt><code>steps_fixed_stab_*t()</code> uses fixed \(\Delta{t}\) steps</dt><dd><ul class="org-ul">
+<dt><code>steps_fixed_stab()</code> uses fixed \(\Delta{t}\) steps</dt><dd><ul class="org-ul">
 <li>This is a good place to start when writing a custom solver.</li>
 <li>With most modern ODE packages, this would be done with interpolation.</li>
 <li>This routine has the option to use Richardson extrapolation.</li>
 <li>Most common use: curve evolution animations that naturally display velocity.</li>
 </ul></dd>
-<dt><code>steps_condy_stab_*t()</code> uses fixed \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
+<dt><code>steps_condy_stab()</code> uses fixed \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
 <li>Produce solution points separated by fixed deltas in \(\Delta{\mathbf{y}}\)-space, or some subset of \(\Delta{\mathbf{y}}\)-space.</li>
 <li>This is a good place to start when writing a custom solver with a bisection step.</li>
 <li>With most modern ODE packages, this would be done with interpolation.</li>
 <li>Most common use: parametric plots, parametric tube plots, and sphere sweeps.</li>
 </ul></dd>
-<dt><code>steps_sloppy_condy_stab_*t()</code> adjusts \(\Delta{t}\) to <b>approximate</b> \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
-<li>Much like <code>steps_condy_stab_*t()</code> in practice but faster and less precise.</li>
+<dt><code>steps_sloppy_condy_stab()</code> adjusts \(\Delta{t}\) to <b>approximate</b> \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
+<li>Much like <code>steps_condy_stab()</code> in practice but faster and less precise.</li>
 <li>Computes a test step and then adjusts \(\Delta{t}\) in proportion to the ratio of the desired length vs test length.</li>
 <li>This method has no guarantee for correctness, but generally works well in practice.</li>
 <li>Can operate on every step or just steps that are too long.</li>
-<li>Most common use: <code>steps_fixed_stab_*t()</code> results have a few steps that are "too long"</li>
+<li>Most common use: <code>steps_fixed_stab()</code> results have a few steps that are "too long"</li>
 </ul></dd>
-<dt><code>steps_points_stab_*t()</code> takes a set of \(t\) values at which to find solutions</dt><dd><ul class="org-ul">
+<dt><code>steps_points_stab()</code> takes a set of \(t\) values at which to find solutions</dt><dd><ul class="org-ul">
 <li>Used several fixed RK steps to go from each \(t\) value to the next.</li>
 <li>Most common use: Produce a higher accuracy solution based on a previous solution.</li>
 <li>Most common use: Physical problems requiring solutions at specific time points.</li>
 </ul></dd>
 <dt><code>interpolate_solution</code> interpolates an existing solution to a new solution</dt><dd><ul class="org-ul">
-<li>Not a RK method; however, it provides O(3) accuracy when using Hermite interpolation.</li>
+<li>Not a RK method; however, it provides \(\mathcal{O}(3)\) accuracy when using Hermite interpolation.</li>
 <li>Derivative values are freshly computed for the interpolated points</li>
 </ul></dd>
 </dl>
 </div>
 <div id="outline-container-hi-solvers-args" class="outline-3">
-<h3 id="hi-solvers-args"><span class="section-number-3">8.1.</span> High Level Solver Common Arguments</h3>
+<h3 id="hi-solvers-args"><span class="section-number-3">7.1.</span> High Level Solver Common Arguments</h3>
 <div class="outline-text-3" id="text-hi-solvers-args">
 <p>
 The first several arguments are common across the higher level solvers.
 </p>
 </div>
 <div id="outline-container-hi-solvers-args-status" class="outline-4">
-<h4 id="hi-solvers-args-status"><span class="section-number-4">8.1.1.</span> Status: <code>status</code> &amp; <code>istats</code></h4>
+<h4 id="hi-solvers-args-status"><span class="section-number-4">7.1.1.</span> Status: <code>status</code> &amp; <code>istats</code></h4>
 <div class="outline-text-4" id="text-hi-solvers-args-status">
 <dl class="org-dl">
 <dt><code>status</code></dt><dd>This is an integer return code.  
@@ -1100,9 +1081,9 @@ The first several arguments are common across the higher level solvers.
 <ul class="org-ul">
 <li><code>istats(1)</code>: number of computed solution points</li>
 <li><code>istats(2)</code>: number of one_step_* calls not triggerd by an event</li>
-<li><code>istats(3)</code>: number of one_step_* calls triggered by y_delta length constraint</li>
-<li><code>istats(4)</code>: number of one_step_* calls triggered by y_delta error constraint</li>
-<li><code>istats(5)</code>: number of one_step_* calls triggered by step processing with new t_delta</li>
+<li><code>istats(3)</code>: number of one_step_* calls triggered by \(\Delta{\mathbf{y}}\) length constraint</li>
+<li><code>istats(4)</code>: number of one_step_* calls triggered by \(\Delta{\mathbf{y}}\) error constraint</li>
+<li><code>istats(5)</code>: number of one_step_* calls triggered by step processing with new \(\Delta{t}\)</li>
 <li><code>istats(6)</code>: number of one_step_* calls triggered by SDF bisection</li>
 <li><code>istats(7)</code>: number of times bisection failed because of max_bisect_o</li>
 <li><code>istats(8)</code>: number of times bisection failed because target was not contained</li>
@@ -1111,7 +1092,7 @@ The first several arguments are common across the higher level solvers.
 </div>
 </div>
 <div id="outline-container-hi-solvers-args-sol" class="outline-4">
-<h4 id="hi-solvers-args-sol"><span class="section-number-4">8.1.2.</span> The Solution: <code>solution</code></h4>
+<h4 id="hi-solvers-args-sol"><span class="section-number-4">7.1.2.</span> The Solution: <code>solution</code></h4>
 <div class="outline-text-4" id="text-hi-solvers-args-sol">
 <dl class="org-dl">
 <dt><code>solution</code></dt><dd>Array for solution.  <br />
@@ -1125,7 +1106,7 @@ The first several arguments are common across the higher level solvers.
 </div>
 </div>
 <div id="outline-container-hi-solvers-args-ivp" class="outline-4">
-<h4 id="hi-solvers-args-ivp"><span class="section-number-4">8.1.3.</span> The IVP: <code>deq</code>, <code>t</code>, <code>y</code>, <code>param</code></h4>
+<h4 id="hi-solvers-args-ivp"><span class="section-number-4">7.1.3.</span> The IVP: <code>deq</code>, <code>t</code>, <code>y</code>, <code>param</code></h4>
 <div class="outline-text-4" id="text-hi-solvers-args-ivp">
 <dl class="org-dl">
 <dt><code>deq</code>  </dt><dd>The subroutine used to evaluate the derivative function</dd>
@@ -1136,7 +1117,7 @@ The first several arguments are common across the higher level solvers.
 </div>
 </div>
 <div id="outline-container-hi-solvers-args-tab" class="outline-4">
-<h4 id="hi-solvers-args-tab"><span class="section-number-4">8.1.4.</span> The Butcher Tableau</h4>
+<h4 id="hi-solvers-args-tab"><span class="section-number-4">7.1.4.</span> The Butcher Tableau</h4>
 <div class="outline-text-4" id="text-hi-solvers-args-tab">
 <p>
 These arguments vary a bit, but mirror the names documented in the <a href="#def-method">section on predefined Runge-Kutta methods</a>.
@@ -1146,23 +1127,23 @@ These arguments vary a bit, but mirror the names documented in the <a href="#def
 </div>
 </div>
 <div id="outline-container-lo-solvers" class="outline-2">
-<h2 id="lo-solvers"><span class="section-number-2">9.</span> Low Level, One Step Solvers</h2>
+<h2 id="lo-solvers"><span class="section-number-2">8.</span> Low Level, One Step Solvers</h2>
 <div class="outline-text-2" id="text-lo-solvers">
 <p>
 Behind all of the above high level solvers are single step routines to carry out the step calculations.  These are handy for creating DIY solvers.  
 </p>
 
 <ul class="org-ul">
-<li><code>one_step_stab_*t()</code>  non-embedded RK methods</li>
-<li><code>one_richardson_step_stab_*t()</code> uses Richardson extrapolation with non-embedded RK methods</li>
-<li><code>one_step_etab_*t()</code> embedded RK methods</li>
-<li><code>one_step_rk4_*t()</code> hardwired RK4 for unit tests</li>
-<li><code>one_step_rkf45_*t()</code> hardwired RKF45 for unit tests</li>
+<li><code>one_step_stab()</code>  non-embedded RK methods</li>
+<li><code>one_richardson_step_stab()</code> uses Richardson extrapolation with non-embedded RK methods</li>
+<li><code>one_step_etab()</code> embedded RK methods</li>
+<li><code>one_step_rk4()</code> hardwired RK4 for unit tests</li>
+<li><code>one_step_rkf45()</code> hardwired RKF45 for unit tests</li>
 </ul>
 </div>
 </div>
 <div id="outline-container-utils" class="outline-2">
-<h2 id="utils"><span class="section-number-2">10.</span> Utilities</h2>
+<h2 id="utils"><span class="section-number-2">9.</span> Utilities</h2>
 <div class="outline-text-2" id="text-utils">
 <p>
 <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides a few utilities:
@@ -1176,7 +1157,7 @@ Behind all of the above high level solvers are single step routines to carry out
 <li>Miscilanious
 <ul class="org-ul">
 <li><code>analyze_solution()</code> Compute statstics related to the solution</li>
-<li><code>seq()</code> Compute a fixed delta sequence of values in the same way steps are comptued in <code>steps_fixed_stab_*t()</code></li>
+<li><code>seq()</code> Compute a fixed delta sequence of values in the same way steps are comptued in <code>steps_fixed_stab()</code></li>
 </ul></li>
 <li>Status Codes
 <ul class="org-ul">
@@ -1187,14 +1168,14 @@ Behind all of the above high level solvers are single step routines to carry out
 </div>
 </div>
 <div id="outline-container-qs-min" class="outline-2">
-<h2 id="qs-min"><span class="section-number-2">11.</span> Quick Start &#x2013; The Absolute Minimum</h2>
+<h2 id="qs-min"><span class="section-number-2">10.</span> Quick Start &#x2013; The Absolute Minimum</h2>
 <div class="outline-text-2" id="text-qs-min">
 <p>
 If you are interested playing around with <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> as quickly as possible, then this section is for you.
 </p>
 </div>
 <div id="outline-container-qs-min-download" class="outline-3">
-<h3 id="qs-min-download"><span class="section-number-3">11.1.</span> Getting <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></h3>
+<h3 id="qs-min-download"><span class="section-number-3">10.1.</span> Getting <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></h3>
 <div class="outline-text-3" id="text-qs-min-download">
 <p>
 The first step is to download <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  The easiest way is to clone them with git:
@@ -1211,7 +1192,7 @@ Alternatly, you could download the zip file: <a href="https://github.com/richmit
 </div>
 </div>
 <div id="outline-container-qs-min-examples" class="outline-3">
-<h3 id="qs-min-examples"><span class="section-number-3">11.2.</span> Check Out The Examples</h3>
+<h3 id="qs-min-examples"><span class="section-number-3">10.2.</span> Check Out The Examples</h3>
 <div class="outline-text-3" id="text-qs-min-examples">
 <p>
 The newly cloned repository will contain a directory called "<a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a>".  
@@ -1224,7 +1205,7 @@ Change into the <a href="https://github.com/richmit/MRKISS/blob/master/examples"
 </div>
 </div>
 <div id="outline-container-qs-min-makefile" class="outline-4">
-<h4 id="qs-min-makefile"><span class="section-number-4">11.2.1.</span> Using something other than <code>gfortran</code></h4>
+<h4 id="qs-min-makefile"><span class="section-number-4">10.2.1.</span> Using something other than <code>gfortran</code></h4>
 <div class="outline-text-4" id="text-qs-min-makefile">
 <p>
 This directory contains a <code>makefile</code> used to build all the examples.  This <code>makefile</code> may require modification if you are not using <code>gfortran</code>.  At the top of
@@ -1234,6 +1215,8 @@ each makefile you will find something like this:
 <div class="org-src-container">
 <pre class="src src-makefile"><span style="color: #ffa500;">###############################################################</span>
 <span style="color: #7fffd4;">MRKISS_PATH</span> = ..
+
+<span style="color: #7fffd4;">DO_OPENMP</span> = NO
 
  <span style="color: #00ffff;">include</span> $(<span style="color: #7fffd4;">MRKISS_PATH</span>)/make_includes/tools_gfortran.mk
 <span style="color: #ffa500;"># </span><span style="color: #ff7f24;">include $(</span><span style="color: #7fffd4;">MRKISS_PATH</span><span style="color: #ff7f24;">)/make_includes/tools_flang.mk</span>
@@ -1266,7 +1249,7 @@ completely unnecessary for making full use of the modules, so you you can safely
 </div>
 </div>
 <div id="outline-container-qs-min-examples-build" class="outline-4">
-<h4 id="qs-min-examples-build"><span class="section-number-4">11.2.2.</span> Build An Example</h4>
+<h4 id="qs-min-examples-build"><span class="section-number-4">10.2.2.</span> Build An Example</h4>
 <div class="outline-text-4" id="text-qs-min-examples-build">
 <p>
 Once you have the <code>makefile</code> worked out, pick an example to build.  For example, we might try this one:
@@ -1299,7 +1282,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="orgb9cc592" class="figure">
+<div id="org0be8b1b" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1308,7 +1291,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 </div>
 <div id="outline-container-use-mrkiss" class="outline-2">
-<h2 id="use-mrkiss"><span class="section-number-2">12.</span> Using <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> In Your Projects</h2>
+<h2 id="use-mrkiss"><span class="section-number-2">11.</span> Using <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> In Your Projects</h2>
 <div class="outline-text-2" id="text-use-mrkiss">
 <p>
 All of the code is in the module source files with no external dependencies at all.  So you just need to call the modules from your code, and then
@@ -1372,11 +1355,11 @@ seconds of extra compile time.  You can explicitly list out the modules in the m
 </div>
 </div>
 <div id="outline-container-use-makeinc" class="outline-3">
-<h3 id="use-makeinc"><span class="section-number-3">12.1.</span> Notes about <code>include.mk</code></h3>
+<h3 id="use-makeinc"><span class="section-number-3">11.1.</span> Notes about <code>include.mk</code></h3>
 <div class="outline-text-3" id="text-use-makeinc">
 </div>
 <div id="outline-container-makeinc-names" class="outline-4">
-<h4 id="makeinc-names"><span class="section-number-4">12.1.1.</span> Names of files</h4>
+<h4 id="makeinc-names"><span class="section-number-4">11.1.1.</span> Names of files</h4>
 <div class="outline-text-4" id="text-makeinc-names">
 <dl class="org-dl">
 <dt>File extensions on Windows (outside of WSL)</dt><dd><ul class="org-ul">
@@ -1393,7 +1376,7 @@ seconds of extra compile time.  You can explicitly list out the modules in the m
 </div>
 </div>
 <div id="outline-container-makeinc-vars" class="outline-4">
-<h4 id="makeinc-vars"><span class="section-number-4">12.1.2.</span> Useful Variables</h4>
+<h4 id="makeinc-vars"><span class="section-number-4">11.1.2.</span> Useful Variables</h4>
 <div class="outline-text-4" id="text-makeinc-vars">
 <dl class="org-dl">
 <dt><code>MRKISS_MOD_FILES</code>      </dt><dd>All the module (<code>.mod</code>) files.  These will appear in your build directory.</dd>
@@ -1404,7 +1387,7 @@ seconds of extra compile time.  You can explicitly list out the modules in the m
 </div>
 </div>
 <div id="outline-container-makeinc-target" class="outline-4">
-<h4 id="makeinc-target"><span class="section-number-4">12.1.3.</span> Useful Targets</h4>
+<h4 id="makeinc-target"><span class="section-number-4">11.1.3.</span> Useful Targets</h4>
 <div class="outline-text-4" id="text-makeinc-target">
 <dl class="org-dl">
 <dt><code>all_mrkiss_lib</code>    </dt><dd>Builds the library files.</dd>
@@ -1421,7 +1404,7 @@ build for all platforms, so I sometimes want to clean up the build products from
 </div>
 </div>
 <div id="outline-container-makeinc-stlib" class="outline-4">
-<h4 id="makeinc-stlib"><span class="section-number-4">12.1.4.</span> Static Library</h4>
+<h4 id="makeinc-stlib"><span class="section-number-4">11.1.4.</span> Static Library</h4>
 <div class="outline-text-4" id="text-makeinc-stlib">
 <p>
 A rule to make a static library is included in <code>include.mk</code>.  A build rule like the following should build that library and link it to your executable.  Note
@@ -1437,7 +1420,7 @@ the library on the command line is broadly supported across more compilers &#x20
 </div>
 </div>
 <div id="outline-container-makeinc-dylib" class="outline-4">
-<h4 id="makeinc-dylib"><span class="section-number-4">12.1.5.</span> Dynamic Library (<code>.so</code> and <code>.dll</code> files)</h4>
+<h4 id="makeinc-dylib"><span class="section-number-4">11.1.5.</span> Dynamic Library (<code>.so</code> and <code>.dll</code> files)</h4>
 <div class="outline-text-4" id="text-makeinc-dylib">
 <p>
 A rule to make a static library is included in <code>include.mk</code>.  You can build it with the target <code>clean_mrkiss_lib</code>, or by using <code>$(MRKISS_SHARED_LIB_FILE)</code> as a
@@ -1449,7 +1432,7 @@ how to do that.
 </div>
 </div>
 <div id="outline-container-test-mrkiss" class="outline-2">
-<h2 id="test-mrkiss"><span class="section-number-2">13.</span> <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> Testing</h2>
+<h2 id="test-mrkiss"><span class="section-number-2">12.</span> <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> Testing</h2>
 <div class="outline-text-2" id="text-test-mrkiss">
 <p>
 This section is about how I test <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a>.  
@@ -1486,7 +1469,7 @@ the test suite.  These targets are documented in the subsections below.
 </p>
 </div>
 <div id="outline-container-test-mrkiss-ref-one-step" class="outline-3">
-<h3 id="test-mrkiss-ref-one-step"><span class="section-number-3">13.1.</span> Refrence One Step Solvers</h3>
+<h3 id="test-mrkiss-ref-one-step"><span class="section-number-3">12.1.</span> Refrence One Step Solvers</h3>
 <div class="outline-text-3" id="text-test-mrkiss-ref-one-step">
 <p>
 The production solvers in <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> all consume Butcher tableaux in the <code>mrkiss_erk*</code> and <code>mrkiss_eerk*</code> modules.
@@ -1540,7 +1523,7 @@ working and produces correct results.
 </div>
 </div>
 <div id="outline-container-test-mrkiss-tab-ok" class="outline-3">
-<h3 id="test-mrkiss-tab-ok"><span class="section-number-3">13.2.</span> Tableau Plausibility Tests</h3>
+<h3 id="test-mrkiss-tab-ok"><span class="section-number-3">12.2.</span> Tableau Plausibility Tests</h3>
 <div class="outline-text-3" id="text-test-mrkiss-tab-ok">
 <p>
 In the <a href="#test-mrkiss-ref-one-step">previous section</a> we have some spot checks for three tableaux.  In this section we have tests that verify the <i>plausibility</i> of the
@@ -1579,14 +1562,14 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org32e9352" class="figure">
+<div id="orgd9bb362" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
 </div>
 </div>
 <div id="outline-container-test-mrkiss-homo-tab-ok" class="outline-3">
-<h3 id="test-mrkiss-homo-tab-ok"><span class="section-number-3">13.3.</span> Homogeneous Solvers and More Tableau Plausibility Tests</h3>
+<h3 id="test-mrkiss-homo-tab-ok"><span class="section-number-3">12.3.</span> Homogeneous Solvers and More Tableau Plausibility Tests</h3>
 <div class="outline-text-3" id="text-test-mrkiss-homo-tab-ok">
 <p>
 In the <a href="#test-mrkiss-tab-ok">previous section</a> we documented <i>plausibility</i> tests for the tableaux via the <code>mrkiss_solvers_wt</code> module.  This set of tests
@@ -1628,14 +1611,14 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org7e3b3a3" class="figure">
+<div id="org2dbe9fd" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
 </div>
 </div>
 <div id="outline-container-test-mrkiss-rich" class="outline-3">
-<h3 id="test-mrkiss-rich"><span class="section-number-3">13.4.</span> Richardson Extrapolation</h3>
+<h3 id="test-mrkiss-rich"><span class="section-number-3">12.4.</span> Richardson Extrapolation</h3>
 <div class="outline-text-3" id="text-test-mrkiss-rich">
 <p>
 This is another plausibility and change detection test.  This test compares <code>one_step_stab_wt()</code> and <code>one_richardson_step_stab_wt()</code> using <code>mrkiss_erk_euler_1</code>
@@ -1652,14 +1635,14 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orga861154" class="figure">
+<div id="orgec7c362" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>
 </div>
 </div>
 <div id="outline-container-test-mrkiss-short" class="outline-3">
-<h3 id="test-mrkiss-short"><span class="section-number-3">13.5.</span> Short Stages</h3>
+<h3 id="test-mrkiss-short"><span class="section-number-3">12.5.</span> Short Stages</h3>
 <div class="outline-text-3" id="text-test-mrkiss-short">
 <p>
 The <code>one_step_stab*()</code>, <code>steps_fixed*()</code>, <code>steps_condy*()</code>, and <code>steps_sloppy_condy*()</code> solvers all use the <code>b</code> vector to determine the number of stages &#x2013;
@@ -1676,7 +1659,7 @@ not the size of <code>a</code>.  This allows us to use a shorter <code>b</code> 
 </div>
 </div>
 <div id="outline-container-test-mrkiss-examples" class="outline-3">
-<h3 id="test-mrkiss-examples"><span class="section-number-3">13.6.</span> Examples Are Tests Too</h3>
+<h3 id="test-mrkiss-examples"><span class="section-number-3">12.6.</span> Examples Are Tests Too</h3>
 <div class="outline-text-3" id="text-test-mrkiss-examples">
 <p>
 The <a href="https://github.com/richmit/MRKISS/blob/master/examples/tdata"><code>MRKISS/examples/tdata/</code></a> directory in
@@ -1698,11 +1681,11 @@ archived.  These tests serve as "change detection" helping me to identify the in
 </div>
 </div>
 <div id="outline-container-faq" class="outline-2">
-<h2 id="faq"><span class="section-number-2">14.</span> FAQ</h2>
+<h2 id="faq"><span class="section-number-2">13.</span> FAQ</h2>
 <div class="outline-text-2" id="text-faq">
 </div>
 <div id="outline-container-faq-name" class="outline-3">
-<h3 id="faq-name"><span class="section-number-3">14.1.</span> What's with the name?</h3>
+<h3 id="faq-name"><span class="section-number-3">13.1.</span> What's with the name?</h3>
 <div class="outline-text-3" id="text-faq-name">
 <p>
 It's an overlapping acronym
@@ -1718,7 +1701,7 @@ It amuses me, perhaps more than it should, having such a complex name for a supe
 </div>
 </div>
 <div id="outline-container-faq-fortran" class="outline-3">
-<h3 id="faq-fortran"><span class="section-number-3">14.2.</span> Why Fortran</h3>
+<h3 id="faq-fortran"><span class="section-number-3">13.2.</span> Why Fortran</h3>
 <div class="outline-text-3" id="text-faq-fortran">
 <p>
 I do most of my programming in other languages, but I really like Fortran specifically for this kind of work.  It's just good at math.  Especially when
@@ -1727,7 +1710,7 @@ vectors and matrices are involved.
 </div>
 </div>
 <div id="outline-container-faq-why" class="outline-3">
-<h3 id="faq-why"><span class="section-number-3">14.3.</span> Why did you write another ODE solver when so many good options exist?</h3>
+<h3 id="faq-why"><span class="section-number-3">13.3.</span> Why did you write another ODE solver when so many good options exist?</h3>
 <div class="outline-text-3" id="text-faq-why">
 <p>
 For a long time I have had a few annoyances related available packages:
@@ -1754,7 +1737,7 @@ Oh.  And I enjoy writing this kind of code..
 </div>
 </div>
 <div id="outline-container-faq-others" class="outline-3">
-<h3 id="faq-others"><span class="section-number-3">14.4.</span> Why don't you use package XYZ?</h3>
+<h3 id="faq-others"><span class="section-number-3">13.4.</span> Why don't you use package XYZ?</h3>
 <div class="outline-text-3" id="text-faq-others">
 <p>
 Don't get me wrong, I <b>do</b> use other packages!
@@ -1769,7 +1752,7 @@ One of my favorites is <a href="https://www.mitchr.me/SS/tools/index.html#imath-
 </div>
 </div>
 <div id="outline-container-faq-zotero" class="outline-3">
-<h3 id="faq-zotero"><span class="section-number-3">14.5.</span> What are those zotero links in the references?</h3>
+<h3 id="faq-zotero"><span class="section-number-3">13.5.</span> What are those zotero links in the references?</h3>
 <div class="outline-text-3" id="text-faq-zotero">
 <p>
 Zotero is a bibliography tool.  On my computer, those links take me to the Zotero application with the reference in question highlighted.  This allows
@@ -1782,7 +1765,7 @@ Unfortunately they are not of much use to anyone but me.
 </div>
 </div>
 <div id="outline-container-faq-samethods" class="outline-3">
-<h3 id="faq-samethods"><span class="section-number-3">14.6.</span> Are high order RK methods overkill for strange attractors?</h3>
+<h3 id="faq-samethods"><span class="section-number-3">13.6.</span> Are high order RK methods overkill for strange attractors?</h3>
 <div class="outline-text-3" id="text-faq-samethods">
 <p>
 Yes.  In fact, Euler's method is normally good enough for strange attractors.
@@ -1790,7 +1773,7 @@ Yes.  In fact, Euler's method is normally good enough for strange attractors.
 </div>
 </div>
 <div id="outline-container-faq-need-more" class="outline-3">
-<h3 id="faq-need-more"><span class="section-number-3">14.7.</span> I need a more comprehensive solution.  Do you have advice?</h3>
+<h3 id="faq-need-more"><span class="section-number-3">13.7.</span> I need a more comprehensive solution.  Do you have advice?</h3>
 <div class="outline-text-3" id="text-faq-need-more">
 <p>
 My favorite is <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia</a>'s <code>DifferentialEquations.jl</code>.  It is comprehensive, well designed, fast, and
@@ -1817,7 +1800,7 @@ If you are doing statistics in combination with ODEs, then <a href="https://www.
 </div>
 </div>
 <div id="outline-container-faq-need-fast" class="outline-3">
-<h3 id="faq-need-fast"><span class="section-number-3">14.8.</span> I need something faster.  Do you have advice?</h3>
+<h3 id="faq-need-fast"><span class="section-number-3">13.8.</span> I need something faster.  Do you have advice?</h3>
 <div class="outline-text-3" id="text-faq-need-fast">
 <p>
 All of the options listed for the question "<a href="#faq-need-more">I need a more comprehensive solution.  Do you have
@@ -1832,7 +1815,7 @@ codes</a> &#x2013; they are faster than <b><a href="https://github.com/richmit/M
 </div>
 </div>
 <div id="outline-container-faq-deps" class="outline-3">
-<h3 id="faq-deps"><span class="section-number-3">14.9.</span> It seems like things are used other than Fortran.  Are there really no external dependencies?</h3>
+<h3 id="faq-deps"><span class="section-number-3">13.9.</span> It seems like things are used other than Fortran.  Are there really no external dependencies?</h3>
 <div class="outline-text-3" id="text-faq-deps">
 <p>
 I use several tools in the <b>development</b> of <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  In addition several of the examples use external tools to draw
@@ -1883,7 +1866,7 @@ graphs.  None of these tools are required to compile and use the package because
 </div>
 </div>
 <div id="outline-container-faq-rel-head" class="outline-3">
-<h3 id="faq-rel-head"><span class="section-number-3">14.10.</span> What is a "Release"?  How is it different from what's on <code>HEAD</code>?</h3>
+<h3 id="faq-rel-head"><span class="section-number-3">13.10.</span> What is a "Release"?  How is it different from what's on <code>HEAD</code>?</h3>
 <div class="outline-text-3" id="text-faq-rel-head">
 <p>
 Releases are contained in commits with a tag that looks like this: "vYYYY-MM-DD" &#x2013; i.e. an ISO 8601 format date prefixed with the letter "v".  These commits
@@ -1915,7 +1898,7 @@ by taking a look at the <a href="https://richmit.github.io/MRKISS/changelog.html
 </div>
 </div>
 <div id="outline-container-faq-rel-platforms" class="outline-3">
-<h3 id="faq-rel-platforms"><span class="section-number-3">14.11.</span> What platforms are known to work?</h3>
+<h3 id="faq-rel-platforms"><span class="section-number-3">13.11.</span> What platforms are known to work?</h3>
 <div class="outline-text-3" id="text-faq-rel-platforms">
 <p>
 I have used <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> on a variety of platforms including:

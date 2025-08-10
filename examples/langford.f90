@@ -46,7 +46,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program langford
   use :: mrkiss_config,      only: rk, istats_size
-  use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
+  use :: mrkiss_solvers_nt,  only: steps_fixed_stab
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
   use :: omp_lib
@@ -65,7 +65,7 @@ program langford
   character(len=512)        :: filename
 
   y_iv = [0.1_rk, 0.0_rk, 0.0_rk]
-  call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
+  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
   call print_solution(status, solution, filename_o="langford_fixed.csv", end_o=istats(1))
 
   !$OMP PARALLEL DO private(solution, status, istats, filename, i, y_iv)
@@ -73,7 +73,7 @@ program langford
      y_iv(1) = cos(i * 2 * pi / num_lines) * 0.15_rk + 0.2_rk
      y_iv(2) = sin(i * 2 * pi / num_lines) * 0.15_rk
      y_iv(3) = 0.05_rk
-     call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
+     call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
      write (filename, '("langford_",i2.2,".csv")') i
      call print_solution(status, solution, filename_o=trim(filename), end_o=istats(1), tag_o=i)
      print *, 'Line Complete: ', i

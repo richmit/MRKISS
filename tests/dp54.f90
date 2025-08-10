@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program dp54
   use :: mrkiss_config,            only: rk
-  use :: mrkiss_solvers_wt,        only: one_step_dp54_wt, one_step_etab_wt, one_step_stab_wt
+  use :: mrkiss_solvers_wt,        only: one_step_dp54, one_step_etab, one_step_stab
   use :: mrkiss_utils,             only: print_solution
   use :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, c
 
@@ -54,7 +54,7 @@ program dp54
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_dp54_wt(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     call one_step_dp54(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -63,7 +63,7 @@ program dp54
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_dp54_wt(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     call one_step_dp54(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -72,7 +72,7 @@ program dp54
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_etab_wt(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
+     call one_step_etab(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -81,7 +81,7 @@ program dp54
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_etab_wt(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
+     call one_step_etab(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -90,7 +90,7 @@ program dp54
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_stab_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, c, t_delta)
+     call one_step_stab(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -99,7 +99,7 @@ program dp54
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_stab_wt(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b2, c, t_delta)
+     call one_step_stab(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b2, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)

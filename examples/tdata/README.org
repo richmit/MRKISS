@@ -1,3 +1,0 @@
-
-Archived output files from the programs in the examples directory.  I
-use these to detect incompatible code changes that modify the results.

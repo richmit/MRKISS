@@ -36,7 +36,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program lorenz
   use :: mrkiss_config,      only: rk, t_delta_tiny, istats_size
-  use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt, steps_sloppy_condy_stab_nt, steps_condy_stab_nt
+  use :: mrkiss_solvers_nt,  only: steps_fixed_stab, steps_sloppy_condy_stab, steps_condy_stab
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -57,7 +57,7 @@ program lorenz
   ! This solution will have fixed t-delta, but no control over y-delta.
   call system_clock(count_rate=c_rate)
   call system_clock(c_beg)
-  call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   call system_clock(c_end)
   print '(a,f10.3)', "fixed                      "
   print '(a,i10)',   "                   Status: ", status
@@ -72,7 +72,7 @@ program lorenz
   ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
   call system_clock(count_rate=c_rate)
   call system_clock(c_beg)
-  call steps_sloppy_condy_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   call system_clock(c_end)
   print '(a,f10.3)', "sloppy_condy               "
   print '(a,i10)',   "                   Status: ", status
@@ -85,7 +85,7 @@ program lorenz
   ! This solution will have y-delta approximately equal to 1.0 for all steps.
   call system_clock(count_rate=c_rate)
   call system_clock(c_beg)
-  call steps_sloppy_condy_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
+  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
                                   adj_short_o=1)
   call system_clock(c_end)
   print '(a,f10.3)', "sloppy_condy short         "
@@ -101,7 +101,7 @@ program lorenz
   ! This solution will have y-delta equal to 1.0 for all steps.
   call system_clock(count_rate=c_rate)
   call system_clock(c_beg)
-  call steps_condy_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   call system_clock(c_end)
   print '(a,f10.3)', "condy                      "
   print '(a,i10)',   "                   Status: ", status

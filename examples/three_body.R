@@ -31,14 +31,14 @@
 #########################################################################################################################################################.H.E.##
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-adDat <- fread('three_body_steps_adapt_etab_wt-std.csv')
-ftDat <- fread('tree_body_steps_fixed_stab_wt.csv')
-fyDat <- fread('three_body_steps_condy_stab_wt.csv')
-loDat <- fread('steps_fixed_stab_wt-dp.csv')
-slDat <- fread('steps_sloppy_condy_stab_wt.csv')
-a2Dat <- fread('three_body_steps_adapt_etab_wt-fix-delta-steps.csv')
-a3Dat <- fread('three_body_steps_adapt_etab_wt-pho-t-max.csv')
-a4Dat <- fread('three_body_steps_adapt_etab_wt-isct.csv')
+adDat <- fread('three_body_steps_adapt_etab-std.csv')
+ftDat <- fread('tree_body_steps_fixed_stab.csv')
+fyDat <- fread('three_body_steps_condy_stab.csv')
+loDat <- fread('steps_fixed_stab-dp.csv')
+slDat <- fread('steps_sloppy_condy_stab.csv')
+a2Dat <- fread('three_body_steps_adapt_etab-fix-delta-steps.csv')
+a3Dat <- fread('three_body_steps_adapt_etab-pho-t-max.csv')
+a4Dat <- fread('three_body_steps_adapt_etab-isct.csv')
 aiDat <- fread('three_body_steps_adapt_std_interpolated.csv')
 alDat <- fread('three_body_steps_adapt_std_interpolated_lin.csv')
 erDat <- data.table(b=c('Earth'), x=c(0), y=c(0))
@@ -49,7 +49,8 @@ gp <- ggplot() +
   geom_path(data=aiDat, aes(x=y1, y=y2, col='Interpolated')) + 
   geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive')) +
   scale_colour_manual(values=c("Interpolated"="darkblue", "Adaptive"="red")) +
-  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Hermite)', x=expression(x[1]), y=expression(x[2]), col='') +
+  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Hermite)', 
+       x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body_interp_adapt_path.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
@@ -57,7 +58,8 @@ gp <- ggplot() +
   geom_path(data=alDat, aes(x=y1, y=y2, col='Interpolated')) + 
   geom_point(data=adDat, aes(x=y1, y=y2, col='Adaptive')) +
   scale_colour_manual(values=c("Interpolated"="darkblue", "Adaptive"="red")) +
-  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Linear)', x=expression(x[1]), y=expression(x[2]), col='') +
+  labs(title='Restricted Three Body Problem', subtitle='Interpolated Adaptive Solution (Linear)', 
+       x=expression(x[1]), y=expression(x[2]), col='') +
   coord_fixed()
 ggsave(filename='three_body_lin_interp_adapt_path.png', plot=gp, width=1024, height=800, units='px', dpi=150)
 
@@ -91,7 +93,9 @@ gp <- ggplot() +
   geom_path(data=ftDat, aes(x=y1, y=y2, col='High Order Fixed Steps'))  +
   geom_path(data=loDat, aes(x=y1, y=y2, col='Low Order Fixed Steps')) +
   geom_point(data=m0Dat, aes(x=x, y=y, col='Moon')) +
-  scale_colour_manual(values=c("Earth"="blue", "Moon"="grey", "High Order Fixed Steps"="pink", "Low Order Fixed Steps"="red")) +
+  scale_colour_manual(values=c("Earth"="blue", 
+                               "Moon"="grey", 
+                               "High Order Fixed Steps"="pink", "Low Order Fixed Steps"="red")) +
   labs(title='Restricted Three Body Problem', x=expression(x[1]), y=expression(x[2]), col='', 
        subtitle='High vs. Low Order Fixed Steps') +
   coord_fixed()

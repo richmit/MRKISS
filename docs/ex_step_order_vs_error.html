@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-07 Thu 14:47 -->
+<!-- 2025-08-10 Sun 13:43 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-07 14:47:50</i></td>
+<td class="org-left"><i>2025-08-10 13:43:16</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-07 14:47:52</i></td>
+<td class="org-left"><i>2025-08-10 13:43:17</i></td>
 </tr>
 </tbody>
 </table>
@@ -323,13 +323,13 @@ Here are a copule plots
 </p>
 
 
-<div id="org7aedd84" class="figure">
+<div id="org9934fa2" class="figure">
 <p><img src="pics/step_order_vs_error_soly.png" alt="step_order_vs_error_soly.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="org66bcbda" class="figure">
+<div id="org778a7b7" class="figure">
 <p><img src="pics/step_order_vs_error_sold.png" alt="step_order_vs_error_sold.png" width="90%" align="center" />
 </p>
 </div>
@@ -340,7 +340,7 @@ plot:
 </p>
 
 
-<div id="org6339a57" class="figure">
+<div id="orgeeaa4f4" class="figure">
 <p><img src="pics/step_order_vs_error_err.png" alt="step_order_vs_error_err.png" width="90%" align="center" />
 </p>
 </div>
@@ -358,8 +358,8 @@ plot:
 <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
 <span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">step_order_vs_error</span>
 
-  <span style="color: #00ffff;">use</span> :: mrkiss_config,          <span style="color: #00ffff;">only</span>: rk, ik, istats_size
-  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_wt,      <span style="color: #00ffff;">only</span>: steps_fixed_stab_wt, steps_points_stab_wt
+  <span style="color: #00ffff;">use</span> :: mrkiss_config,          <span style="color: #00ffff;">only</span>: rk, istats_size
+  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_wt,      <span style="color: #00ffff;">only</span>: steps_fixed_stab, steps_points_stab
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,           <span style="color: #00ffff;">only</span>: print_solution, seq
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4,     <span style="color: #00ffff;">only</span>: a4=&gt;a, b4=&gt;b, c4=&gt;c
   <span style="color: #00ffff;">use</span> :: mrkiss_eerk_verner_9_8, <span style="color: #00ffff;">only</span>: a9=&gt;a, b9=&gt;b1, c9=&gt;c
@@ -375,17 +375,17 @@ plot:
   <span style="color: #63b8ff;">real</span>(kind=rk),  <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end         = 2.0_rk * pi</span>
 
   <span style="color: #63b8ff;">real</span>(kind=rk)             ::<span style="color: #7fffd4;"> solution(1+2*deq_dim, num_points)</span>
-  <span style="color: #63b8ff;">integer</span>(kind=ik)          ::<span style="color: #7fffd4;"> status, istats(istats_size), spp</span>
+  <span style="color: #63b8ff;">integer</span>                   ::<span style="color: #7fffd4;"> status, istats(istats_size), spp</span>
   <span style="color: #63b8ff;">character</span>(len=512)        ::<span style="color: #7fffd4;"> filename</span>
 
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">seq</span>(status, solution(1,:), from_o=t_start, to_o=t_end)
 
   <span style="color: #00ffff;">do</span> spp = 1,10
-     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_points_stab_wt</span>(status, istats, solution, eq, y_iv, param, a4, b4, c4, spp)
+     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_points_stab</span>(status, istats, solution, eq, y_iv, param, a4, b4, c4, spp)
      <span style="color: #00ffff;">write</span> (filename, <span style="color: #fa8072;">'("step_order_vs_error_04_",i2.2,".csv")'</span>) spp
      <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #00ffff;">trim</span>(filename))
 
-     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_points_stab_wt</span>(status, istats, solution, eq, y_iv, param, a9, b9, c9, spp)
+     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_points_stab</span>(status, istats, solution, eq, y_iv, param, a9, b9, c9, spp)
      <span style="color: #00ffff;">write</span> (filename, <span style="color: #fa8072;">'("step_order_vs_error_09_",i2.2,".csv")'</span>) spp
      <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #00ffff;">trim</span>(filename))
   <span style="color: #00ffff;">end do</span>
@@ -393,7 +393,7 @@ plot:
 <span style="color: #00ffff;">contains</span>
 
   <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, t, y, param)
-    <span style="color: #63b8ff;">integer</span>(kind=ik), <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+    <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> t</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>

@@ -53,7 +53,7 @@ EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error langford
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) three_body.f90 $(MRKISS_OBJ_FILES) -o $@
 
-THREE_BODY_CSVS = steps_fixed_stab_wt-dp.csv three_body_steps_adapt_etab_wt-fix-delta-steps.csv three_body_steps_adapt_etab_wt-pho-t-max.csv three_body_steps_adapt_std_interpolated.csv three_body_steps_condy_stab_wt.csv steps_sloppy_condy_stab_wt.csv three_body_steps_adapt_etab_wt-isct.csv three_body_steps_adapt_etab_wt-std.csv three_body_steps_adapt_std_interpolated_lin.csv tree_body_steps_fixed_stab_wt.csv
+THREE_BODY_CSVS = steps_fixed_stab-dp.csv three_body_steps_adapt_etab-fix-delta-steps.csv three_body_steps_adapt_etab-pho-t-max.csv three_body_steps_adapt_std_interpolated.csv three_body_steps_condy_stab.csv steps_sloppy_condy_stab.csv three_body_steps_adapt_etab-isct.csv three_body_steps_adapt_etab-std.csv three_body_steps_adapt_std_interpolated_lin.csv tree_body_steps_fixed_stab.csv
 
 .PHONY: lorenz_csv
 three_body_csv : $(THREE_BODY_CSVS)

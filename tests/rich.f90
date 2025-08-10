@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program tc1_TCASEN
   use :: mrkiss_config,      only: rk
-  use :: mrkiss_solvers_wt,  only: one_step_stab_wt, one_richardson_step_stab_wt
+  use :: mrkiss_solvers_wt,  only: one_step_stab, one_richardson_step_stab
   use :: mrkiss_erk_euler_1, only: a, b, c, p
 
   implicit none
@@ -61,9 +61,9 @@ program tc1_TCASEN
   do step=1,max_steps
      call ysol(status, y_tru, t_cv, param)
      write (out_io_unit, fmt=fmt) step, t_cv, y1_cv, y2_cv, y_tru, abs(y_tru-y1_cv), abs(y_tru-y2_cv)
-     call one_step_stab_wt(status, y_delta, dy, eq, t_cv, y1_cv, param, a, b, c, t_delta)
+     call one_step_stab(status, y_delta, dy, eq, t_cv, y1_cv, param, a, b, c, t_delta)
      y1_cv = y1_cv + y_delta
-     call one_richardson_step_stab_wt(status, y_delta, dy, eq, t_cv, y2_cv, param, a, b, c, p, t_delta)
+     call one_richardson_step_stab(status, y_delta, dy, eq, t_cv, y2_cv, param, a, b, c, p, t_delta)
      y2_cv = y2_cv + y_delta
      t_cv  = t_cv + t_delta
   end do
