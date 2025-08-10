@@ -42,13 +42,23 @@ module mrkiss_config
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Real & integer types for externally viable interfaces and arguments
-  integer,          parameter, public :: ik                 = c_int32_t                       !< Integer kinds used in interfaces
-  integer,          parameter, public :: rk                 = c_double                        !< Real kind used in interfaces
-  integer,          parameter, public :: bk                 = c_bool                          !< Integer kind for boolean
+  integer,          parameter, public :: ik                 = c_int32_t  !< Integer kinds used in interfaces
+  integer,          parameter, public :: rk                 = c_double   !< Real kind used in interfaces
+  integer,          parameter, public :: bk                 = c_bool     !< Integer kind for boolean
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to the library
-  integer,          parameter, public :: istats_size        = 16                              !< Number of elements in istats(:)
+  integer,          parameter, public :: istats_size        = 16  !< Number of elements in istats(:)
+  integer,          parameter, public :: istats_max_idx     = 8   !< Number of used elements in istats(:)
+
+  integer,          parameter, public :: isi_num_pts        = 1   !< istats index num_pts                
+  integer,          parameter, public :: isi_step_norm      = 2   !< istats index one_step_norm          
+  integer,          parameter, public :: isi_step_y_len     = 3   !< istats index one_step_y_delta_len   
+  integer,          parameter, public :: isi_step_y_err     = 4   !< istats index one_step_y_delta_err   
+  integer,          parameter, public :: isi_step_spp_td    = 5   !< istats index one_step_stepp_t_delta 
+  integer,          parameter, public :: isi_step_sdf_bic   = 6   !< istats index one_step_sdf_bisection 
+  integer,          parameter, public :: isi_bic_fail_max   = 7   !< istats index bisect_fail_max        
+  integer,          parameter, public :: isi_bic_fail_bnd   = 8   !< istats index bisect_fail_containment
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Absolute constants
@@ -57,14 +67,14 @@ module mrkiss_config
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name ab initio parameters for defaults when we know nothing
-  real(kind=rk),    parameter, public :: t_delta_ai         = 1.0e-4_rk                       !< t_delta ai default
-  real(kind=rk),    parameter, public :: error_tol_abs_ai   = 1.0e-5_rk                       !< error_tol_abs ai default
-  real(kind=rk),    parameter, public :: error_tol_rel_ai   = 1.0e-3_rk                       !< error_tol_rel ai default
-  integer(kind=ik), parameter, public :: max_bisect_ai      = 1000                            !< max_bisect ai default
-  real(kind=rk),    parameter, public :: t_delta_fac_min_ai = 0.5_rk                          !< t_delta_fac_min ai default
-  real(kind=rk),    parameter, public :: t_delta_fac_max_ai = 2.0_rk                          !< t_delta_fac_max ai default
-  real(kind=rk),    parameter, public :: t_delta_fac_fdg_ai = 0.5_rk                          !< t_delta_fac_fdg ai default
-  real(kind=rk),    parameter, public :: sdf_tol_ai         = 1.0e-3                          !< sdf_tol ai default
+  real(kind=rk),    parameter, public :: t_delta_ai         = 1.0e-4_rk  !< t_delta ai default
+  real(kind=rk),    parameter, public :: error_tol_abs_ai   = 1.0e-5_rk  !< error_tol_abs ai default
+  real(kind=rk),    parameter, public :: error_tol_rel_ai   = 1.0e-3_rk  !< error_tol_rel ai default
+  integer(kind=ik), parameter, public :: max_bisect_ai      = 1000       !< max_bisect ai default
+  real(kind=rk),    parameter, public :: t_delta_fac_min_ai = 0.5_rk     !< t_delta_fac_min ai default
+  real(kind=rk),    parameter, public :: t_delta_fac_max_ai = 2.0_rk     !< t_delta_fac_max ai default
+  real(kind=rk),    parameter, public :: t_delta_fac_fdg_ai = 0.5_rk     !< t_delta_fac_fdg ai default
+  real(kind=rk),    parameter, public :: sdf_tol_ai         = 1.0e-3     !< sdf_tol ai default
 end module mrkiss_config
 
 

@@ -58,6 +58,17 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - N/A
   - New functionality
     - print_istats()
+    - istats constants:
+      - istats_max_idx    
+      - isi_num_pts       
+      - isi_step_norm     
+      - isi_step_y_len    
+      - isi_step_y_err    
+      - isi_step_spp_td   
+      - isi_step_sdf_bic  
+      - isi_bic_fail_max  
+      - isi_bic_fail_bnd
+    - All solvers now use isi_* constants to update istats
   - Documentation
     - Reworked istats() descriptions.
     - Added references to print_istats() & status_to_message().

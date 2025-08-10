@@ -66,7 +66,7 @@ program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
   use            :: mrkiss_config,                  only: rk, ik, bk, istats_size
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, &
-                                                          steps_sloppy_condy_stab_wt, interpolate_solution
+                                                          steps_sloppy_condy_stab_wt, interpolate_solution_wt
   use            :: mrkiss_utils,                   only: print_solution, seq, print_istats, status_to_message
   use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
   use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
@@ -139,9 +139,9 @@ program three_body
   print '(a)', "Adaptive hermite interpolation run"
   sol2 = 0
   ! BEGIN: steps_adapt_int_hermite
-  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                     ! Create new t values
+  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                        ! Create new t values
   print '(a)', status_to_message(status)
-  call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) ! Preform the interpolation
+  call interpolate_solution_wt(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) ! Preform the interpolation
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated.csv")
   ! END: steps_adapt_int_hermite
 
@@ -150,7 +150,7 @@ program three_body
   sol2 = 0
   ! BEGIN: steps_adapt_int_linear
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);
-  call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true._bk)
+  call interpolate_solution_wt(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true._bk)
   print '(a)', status_to_message(status)
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
   ! END: steps_adapt_int_linear

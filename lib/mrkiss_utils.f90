@@ -86,7 +86,7 @@ contains
   !! @see mrkiss_utils::status_to_message() 
   !! 
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, prt_titles_o, &
-                            t_min_o, t_max_o, tag_o, append_o) bind(C)
+                            t_min_o, t_max_o, tag_o, append_o) 
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik, bk
     implicit none
@@ -217,19 +217,22 @@ contains
   !> Output an istat array.
   !! 
   !! @verbatim
-  !! status ......... Exit status
-  !!                   - -inf-0 ..... Everything worked
-  !!                   - 1365-1381 .. Error in this routine
-  !!                                   - 1365 .. Could not open file for write
-  !!                                   - 1366 .. Could not close file         
-  !!                   - others ..... No other values allowed
-  !! istats(:) ...... Integer statistics from a solver run
+  !! status ............ Exit status
+  !!                     - -inf-0 ..... Everything worked
+  !!                     - 1365-1381 .. Error in this routine
+  !!                                     - 1365 .. Could not open file for write
+  !!                                     - 1366 .. Could not close file         
+  !!                     - others ..... No other values allowed
+  !! istats(:) ......... Integer statistics from a solver run
+  !! idxs_to_prt_o(:) .. Indexes of istats to print.  Indexes too large are silently ignored.
+  !! filename_o ..... Filename to which we print.  Default: NONE
+  !!                  If not present, then output will be to output_unit (STDOUT).  
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !! 
-  subroutine print_istats(status, istats, idxs_to_prt_o, filename_o) bind(C)
+  subroutine print_istats(status, istats, idxs_to_prt_o, filename_o) 
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: ik, istats_size
+    use            :: mrkiss_config,   only: ik, istats_size, istats_max_idx
     implicit none
     ! Arguments
     integer(kind=ik), intent(out)          :: status
@@ -274,8 +277,10 @@ contains
     ! Print 
     write(tmp_str1, '("(a",i0,",i10)")') ml + 7 + 2 + 3 + 2 + 1
     do i=1,size(idxs_to_prt)
-       write(tmp_str2, '(i2.2)') i
-       write (out_io_unit, fmt=tmp_str1) ("istats(" // trim(tmp_str2) // "): " // trim(desc(idxs_to_prt(i))) // ": "), istats(i)
+       if (i <= istats_max_idx) then
+          write(tmp_str2, '(i2.2)') i
+          write (out_io_unit, fmt=tmp_str1) ("istats(" // trim(tmp_str2) // "): " // trim(desc(idxs_to_prt(i))) // ": "), istats(idxs_to_prt(i))
+       end if
     end do
     ! Close file
     if (present(filename_o)) then
@@ -309,7 +314,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !! 
-  subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, y_delta_len_idxs_o) bind(C)
+  subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, y_delta_len_idxs_o) 
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik
     implicit none
@@ -433,7 +438,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !! 
-  subroutine seq(status, t, from_o, to_o, step_o) bind(C)
+  subroutine seq(status, t, from_o, to_o, step_o) 
     use :: mrkiss_config, only: rk, ik, zero_epsilon
     implicit none
     ! Arguments
