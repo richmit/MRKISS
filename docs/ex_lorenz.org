@@ -96,17 +96,9 @@ sed -n '/^  *! BEGIN: lorenz_fixed *$/,/^ *! END: lorenz_fixed *$/p' ../examples
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
   ! BEGIN: lorenz_fixed
-  ! This solution will have fixed t-delta, but no control over y-delta.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
-  call system_clock(c_end)
-  print '(a,f10.3)', "fixed                      "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2])
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_fixed
 #+end_src
@@ -151,31 +143,18 @@ sed -n '/^  *! BEGIN: lorenz_fixed-y *$/,/^ *! END: lorenz_fixed-y *$/p' ../exam
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
   ! BEGIN: lorenz_fixed-y
-  ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
-  call system_clock(c_end)
-  print '(a,f10.3)', "sloppy_condy               "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
 
   ! This solution will have y-delta approximately equal to 1.0 for all steps.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
+  print '(a)', repeat('*', 120)
+  print '(a)', "steps_sloppy_condy_stab short"
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
                                   adj_short_o=1)
-  call system_clock(c_end)
-  print '(a,f10.3)', "sloppy_condy short         "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_fixed-y
 #+end_src
@@ -209,17 +188,9 @@ sed -n '/^  *! BEGIN: lorenz_clip-y *$/,/^ *! END: lorenz_clip-y *$/p' ../exampl
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
   ! BEGIN: lorenz_clip-y
-  ! This solution will have y-delta equal to 1.0 for all steps.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
   call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
-  call system_clock(c_end)
-  print '(a,f10.3)', "condy                      "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_clip-y
 #+end_src
@@ -247,7 +218,7 @@ sed -n '/^  *! BEGIN: lorenz_clip-y *$/,/^ *! END: lorenz_clip-y *$/p' ../exampl
 program lorenz
   use :: mrkiss_config,      only: rk, t_delta_tiny, istats_size
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab, steps_sloppy_condy_stab, steps_condy_stab
-  use :: mrkiss_utils,       only: print_solution
+  use :: mrkiss_utils,       only: print_solution, print_istats, status_to_message
   use :: mrkiss_erk_kutta_4, only: a, b, c
 
   implicit none
@@ -261,64 +232,43 @@ program lorenz
 
   real(kind=rk)             :: solution(1+2*deq_dim, num_points)
   integer                   :: status, istats(istats_size)
-  integer                   :: c_beg, c_end, c_rate
 
-  ! BEGIN: lorenz_fixed
   ! This solution will have fixed t-delta, but no control over y-delta.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
+  print '(a)', repeat('*', 120)
+  print '(a)', "Fixed t_delta run"
+  ! BEGIN: lorenz_fixed
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
-  call system_clock(c_end)
-  print '(a,f10.3)', "fixed                      "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2])
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_fixed
 
-  ! BEGIN: lorenz_fixed-y
   ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
+  print '(a)', repeat('*', 120)
+  print '(a)', "steps_sloppy_condy_stab"
+  ! BEGIN: lorenz_fixed-y
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
-  call system_clock(c_end)
-  print '(a,f10.3)', "sloppy_condy               "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
 
   ! This solution will have y-delta approximately equal to 1.0 for all steps.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
+  print '(a)', repeat('*', 120)
+  print '(a)', "steps_sloppy_condy_stab short"
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
                                   adj_short_o=1)
-  call system_clock(c_end)
-  print '(a,f10.3)', "sloppy_condy short         "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_fixed-y
 
-  ! BEGIN: lorenz_clip-y
   ! This solution will have y-delta equal to 1.0 for all steps.
-  call system_clock(count_rate=c_rate)
-  call system_clock(c_beg)
+  print '(a)', repeat('*', 120)
+  print '(a)', "steps_condy_stab"
+  ! BEGIN: lorenz_clip-y
   call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
-  call system_clock(c_end)
-  print '(a,f10.3)', "condy                      "
-  print '(a,i10)',   "                   Status: ", status
-  print '(a,f10.3)', "             Milliseconds: ", 1000*(c_end-c_beg)/DBLE(c_rate)
-  print '(a,i10)',   "          Solution Points: ", istats(1)
-  print '(a,i10)',   "   Regular one_step calls: ", istats(2)
-  print '(a,i10)',   "Adjustment one_step calls: ", istats(3)
+  print '(a)', status_to_message(status)
+  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_clip-y
 

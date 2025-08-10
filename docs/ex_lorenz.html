@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-10 Sun 13:43 -->
+<!-- 2025-08-10 Sun 14:20 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-10 13:43:02</i></td>
+<td class="org-left"><i>2025-08-10 14:19:58</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-10 13:43:03</i></td>
+<td class="org-left"><i>2025-08-10 14:20:00</i></td>
 </tr>
 </tbody>
 </table>
@@ -322,7 +322,7 @@ example of such a curve:
 </p>
 
 
-<div id="org6ce9362" class="figure">
+<div id="orgf457003" class="figure">
 <p><img src="pics/lorenz_fixed.png" alt="lorenz_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -332,7 +332,7 @@ Notice the way some of the steps are much longer than others.  This is especiall
 </p>
 
 
-<div id="org10a61d7" class="figure">
+<div id="org071a26a" class="figure">
 <p><img src="pics/lorenz_fixed-c.png" alt="lorenz_fixed-c.png" width="90%" align="center" />
 </p>
 </div>
@@ -350,17 +350,9 @@ THe solutions used in the images above were created by this snippit of <a href="
 
 <div class="org-src-container">
 <pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed</span>
-<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have fixed t-delta, but no control over y-delta.</span>
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"fixed                      "</span>
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2])
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_fixed.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed</span>
 </pre>
@@ -399,13 +391,13 @@ Here are some representative samples:
 </p>
 
 
-<div id="org8a8a0bf" class="figure">
+<div id="orge431566" class="figure">
 <p><img src="pics/lorenz_condy.png" alt="lorenz_condy.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="org3098b2b" class="figure">
+<div id="org4cc0f99" class="figure">
 <p><img src="pics/lorenz_sloppy_condy_short.png" alt="lorenz_sloppy_condy_short.png" width="90%" align="center" />
 </p>
 </div>
@@ -416,31 +408,18 @@ These images were created by the following snippet of <a href="https://github.co
 
 <div class="org-src-container">
 <pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed-y</span>
-<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.</span>
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy               "</span>
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2, 3])
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately equal to 1.0 for all steps.</span>
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_sloppy_condy_stab short"</span>
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
                                 adj_short_o=1)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy short         "</span>
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2, 3])
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy_short.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed-y</span>
 </pre>
@@ -471,7 +450,7 @@ Here is the result:
 </p>
 
 
-<div id="orge1f6d57" class="figure">
+<div id="org3602a57" class="figure">
 <p><img src="pics/lorenz_sloppy_condy.png" alt="lorenz_sloppy_condy.png" width="90%" align="center" />
 </p>
 </div>
@@ -482,17 +461,9 @@ The solution used in the image above was created by this snippet of <a href="htt
 
 <div class="org-src-container">
 <pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_clip-y</span>
-<span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta equal to 1.0 for all steps.</span>
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"condy                      "</span>
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2, 3])
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_clip-y</span>
 </pre>
@@ -512,7 +483,7 @@ The solution used in the image above was created by this snippet of <a href="htt
 <span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">lorenz</span>
   <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, t_delta_tiny, istats_size
   <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab, steps_sloppy_condy_stab, steps_condy_stab
-  <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution
+  <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution, print_istats, status_to_message
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
 
   <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
@@ -526,64 +497,43 @@ The solution used in the image above was created by this snippet of <a href="htt
 
   <span style="color: #63b8ff;">real</span>(kind=rk)             ::<span style="color: #7fffd4;"> solution(1+2*deq_dim, num_points)</span>
   <span style="color: #63b8ff;">integer</span>                   ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
-  <span style="color: #63b8ff;">integer</span>                   ::<span style="color: #7fffd4;"> c_beg, c_end, c_rate</span>
 
-  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed</span>
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have fixed t-delta, but no control over y-delta.</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"Fixed t_delta run"</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed</span>
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"fixed                      "</span>
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2])
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_fixed.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed</span>
 
-  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed-y</span>
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_sloppy_condy_stab"</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_fixed-y</span>
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy               "</span>
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2, 3])
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately equal to 1.0 for all steps.</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_sloppy_condy_stab short"</span>
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
                                   adj_short_o=1)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"sloppy_condy short         "</span>
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2, 3])
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy_short.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_fixed-y</span>
 
-  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_clip-y</span>
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta equal to 1.0 for all steps.</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(count_rate=c_rate)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_beg)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_condy_stab"</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">BEGIN: lorenz_clip-y</span>
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">system_clock</span>(c_end)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"condy                      "</span>
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"                   Status: "</span>, status
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,f10.3)'</span>, <span style="color: #fa8072;">"             Milliseconds: "</span>, 1000*(c_end-c_beg)/<span style="color: #00ffff;">DBLE</span>(c_rate)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"          Solution Points: "</span>, istats(1)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"   Regular one_step calls: "</span>, istats(2)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a,i10)'</span>,   <span style="color: #fa8072;">"Adjustment one_step calls: "</span>, istats(3)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats, idxs_to_prt_o=[1, 2, 3])
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">END: lorenz_clip-y</span>
 
