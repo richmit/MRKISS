@@ -64,7 +64,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
-  use            :: mrkiss_config,                  only: rk, ik, bk, istats_size
+  use            :: mrkiss_config,                  only: rk, ik, istats_size
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, &
                                                           steps_sloppy_condy_stab_wt, interpolate_solution_wt
   use            :: mrkiss_utils,                   only: print_solution, seq, print_istats, status_to_message
@@ -150,7 +150,7 @@ program three_body
   sol2 = 0
   ! BEGIN: steps_adapt_int_linear
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);
-  call interpolate_solution_wt(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true._bk)
+  call interpolate_solution_wt(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true.)
   print '(a)', status_to_message(status)
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
   ! END: steps_adapt_int_linear

@@ -88,7 +88,7 @@ contains
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, prt_titles_o, &
                             t_min_o, t_max_o, tag_o, append_o) 
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: rk, ik, bk
+    use            :: mrkiss_config,   only: rk, ik
     implicit none
     ! Arguments
     integer(kind=ik), intent(out)          :: status
@@ -97,12 +97,12 @@ contains
     integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
     integer(kind=ik), intent(in), optional :: tag_o
-    logical(kind=bk), intent(in), optional :: prt_titles_o, append_o
+    logical,          intent(in), optional :: prt_titles_o, append_o
     ! Local variables
     integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx, tag
-    logical(kind=bk)                       :: prt_titles
+    logical                                :: prt_titles
     integer(kind=ik)                       :: i, num_int, num_real
-    integer                                :: out_io_stat, out_io_unit, 
+    integer                                :: out_io_stat, out_io_unit 
     character(len=:), allocatable          :: fmt, separator, access_mode
     character(len=512)                     :: digits_str, width_str, tmp_str
     ! Process arguments

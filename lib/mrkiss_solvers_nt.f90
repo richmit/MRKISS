@@ -622,7 +622,7 @@ contains
   subroutine steps_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
                                  y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o) 
-    use mrkiss_config, only: rk, ik, bk, t_delta_tiny, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
+    use mrkiss_config, only: rk, ik, t_delta_tiny, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out) :: status, istats(istats_size)
@@ -631,11 +631,11 @@ contains
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_max
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o
     integer(kind=ik), optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
-    logical(kind=bk), optional, intent(in)  :: no_bisect_error_o
+    logical,          optional, intent(in)  :: no_bisect_error_o
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
     integer(kind=ik)                        :: max_bisect, max_pts, cur_pnt_idx, biter, y_dim
-    logical(kind=bk)                        :: no_bisect_error
+    logical                                 :: no_bisect_error
     real(kind=rk)                           :: y_delta_len_tol, t_delta_min, y_sol_len, bs_tmp1_y_delta_len
     real(kind=rk)                           :: bs_tmp1_t_delta, bs_tmp2_t_delta, t_cv, dy(size(y, 1))
     real(kind=rk)                           :: bs_tmpc_dy(size(y, 1)), bs_tmp1_dy(size(y, 1)), bs_tmp2_dy(size(y, 1))
@@ -653,7 +653,7 @@ contains
     if (present(y_delta_len_tol_o)) y_delta_len_tol = y_delta_len_tol_o
     max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
-    no_bisect_error = .false._bk
+    no_bisect_error = .false.
     if (present(no_bisect_error_o)) no_bisect_error = no_bisect_error_o
     ! Compute Solution
     y_dim = size(y, 1)
@@ -978,14 +978,14 @@ contains
     real(kind=rk),             optional, intent(in)  :: t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o
     real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
     integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisect_o
-    logical(kind=bk),          optional, intent(in)  :: no_bisect_error_o
+    logical,                   optional, intent(in)  :: no_bisect_error_o
     procedure(sdf_iface_nt),   optional              :: sdf_o
     real(kind=rk),             optional, intent(in)  :: sdf_tol_o
     procedure(stepp_iface_nt), optional              :: stepp_o
     ! Variables
     integer(kind=ik)                                 :: max_pts, cur_pnt_idx, adj_cnt, y_dim
     integer(kind=ik)                                 :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
-    logical(kind=bk)                                 :: no_bisect_error
+    logical                                          :: no_bisect_error
     real(kind=rk)                                    :: t_delta_fac, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
     real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min
     real(kind=rk)                                    :: y_delta_delta(size(y, 1)), t_delta_fac_max, t_delta_fac_min
@@ -1031,7 +1031,7 @@ contains
     end if
     max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
-    no_bisect_error = .false._bk
+    no_bisect_error = .false.
     if (present(no_bisect_error_o)) no_bisect_error = no_bisect_error_o
     ! Compute solution
     y_dim = size(y, 1)
@@ -1271,7 +1271,7 @@ contains
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message() 
   !!
   subroutine interpolate_solution_nt(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o) 
-    use :: mrkiss_config, only: rk, ik, bk, istats_size, isi_num_pts
+    use :: mrkiss_config, only: rk, ik, istats_size, isi_num_pts
     implicit none
     ! Arguments
     integer(kind=ik),           intent(out)   :: status, istats(istats_size)
@@ -1280,10 +1280,10 @@ contains
     integer(kind=ik), optional, intent(in)    :: num_src_pts_o
     procedure(deq_iface_nt)                   :: deq
     real(kind=rk),              intent(in)    :: param(:)
-    logical(kind=bk), optional, intent(in)    :: linear_interp_o
+    logical,          optional, intent(in)    :: linear_interp_o
     ! Variables
     integer(kind=ik)                          :: new_sol_idx, old_sol_idx, max_idx, num_src_pts, y_dim
-    logical(kind=bk)                          :: linear_interp
+    logical                                   :: linear_interp
     real(kind=rk)                             :: t, t0, t1, tu, td
     real(kind=rk), allocatable                :: y0(:), y1(:), dy0(:), dy1(:), yat(:)
     ! Process Arguments

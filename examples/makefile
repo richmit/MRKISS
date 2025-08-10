@@ -242,4 +242,8 @@ tests : minimal_test brusselator_test lorenz_test three_body_test step_order_vs_
 clean : clean_multi_mrkiss
 	rm -f $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.svg *.obj *.o *.exe
 
+.PHONY: all
 all : brusselator.png lorenz_png three_body_png minimal.csv
+
+.PHONY: all_exe
+all_exe : $(EXE_TARGETS)

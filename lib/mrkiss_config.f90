@@ -44,7 +44,6 @@ module mrkiss_config
   !> @name Real & integer types for externally viable interfaces and arguments
   integer,          parameter, public :: ik                 = c_int32_t  !< Integer kinds used in interfaces
   integer,          parameter, public :: rk                 = c_double   !< Real kind used in interfaces
-  integer,          parameter, public :: bk                 = c_bool     !< Integer kind for boolean
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to the library
