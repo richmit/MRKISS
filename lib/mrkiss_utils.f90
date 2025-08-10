@@ -612,19 +612,19 @@ contains
     elseif (status == 1025) then
        status_to_message = "no_bisect_error_o not present and max_bisect_o violated"
     elseif (status == 1056) then
-       status_to_message = ". no_bisect_error_o not present and max_bisect_o violated"
+       status_to_message = "no_bisect_error_o not present and max_bisect_o violated"
     elseif (status == 1152) then
        status_to_message = "Could not open file for write"
     elseif (status == 1153) then
-       status_to_message = "Could not close file         "
+       status_to_message = "Could not close file"
     elseif (status == 1297) then
        status_to_message = "Could not open file for write"
     elseif (status == 1313) then
-       status_to_message = "Could not close file         "
+       status_to_message = "Could not close file"
     elseif (status == 1314) then
        status_to_message = "Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v"
     elseif (status == 1331) then
-       status_to_message = "... new_solution t value out of bounds"
+       status_to_message = "new_solution t value out of bounds"
     elseif (status == 1365) then
        status_to_message = "Could not open file for write"
     elseif (status == 1366) then
