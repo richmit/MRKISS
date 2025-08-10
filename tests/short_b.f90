@@ -34,22 +34,22 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program short_b
-  use :: mrkiss_config,                    only: rk, ik, istats_size
+  use :: mrkiss_config,                    only: rk, istats_size
   use :: mrkiss_solvers_wt,                only: steps_fixed_stab_wt
   use :: mrkiss_utils,                     only: print_solution
   use :: mrkiss_eerk_bogacki_shampine_3_2, only: a, b=>b1, c, s1
 
   implicit none
 
-  integer(kind=ik),  parameter :: num_points = 11
-  integer(kind=ik),  parameter :: deq_dim  = 1
+  integer         ,  parameter :: num_points = 11
+  integer         ,  parameter :: deq_dim  = 1
   real(kind=rk),     parameter :: param(1) = [1.0_rk]
   real(kind=rk),     parameter :: t_iv = 0.0_rk
   real(kind=rk),     parameter :: t_delta = 0.1_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
   real(kind=rk)                :: solution(1+2*deq_dim, num_points)
-  integer(kind=ik)             :: status, istats(istats_size)
+  integer                      :: status, istats(istats_size)
 
   call steps_fixed_stab_wt(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
   call print_solution(status, solution, filename_o="short_b_all.out", end_o=istats(1))
@@ -60,7 +60,7 @@ program short_b
 contains
 
   subroutine eq(status, dydt, t, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)

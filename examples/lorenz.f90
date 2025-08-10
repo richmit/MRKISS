@@ -35,7 +35,7 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program lorenz
-  use :: mrkiss_config,      only: rk, ik, t_delta_tiny, istats_size
+  use :: mrkiss_config,      only: rk, t_delta_tiny, istats_size
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt, steps_sloppy_condy_stab_nt, steps_condy_stab_nt
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
@@ -50,7 +50,7 @@ program lorenz
   real(kind=rk),  parameter :: t_max         = 100.0_rk
 
   real(kind=rk)             :: solution(1+2*deq_dim, num_points)
-  integer(kind=ik)          :: status, istats(istats_size)
+  integer                   :: status, istats(istats_size)
   integer                   :: c_beg, c_end, c_rate
 
   ! BEGIN: lorenz_fixed
@@ -115,7 +115,7 @@ program lorenz
 contains
   
   subroutine eq(status, dydt, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)

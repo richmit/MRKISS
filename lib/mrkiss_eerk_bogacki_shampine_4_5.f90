@@ -45,11 +45,11 @@
 !!  - Peter Stone (2012); Bogacki-Shampine Combined 7 Stage, Order 4 and 5 Runge-Kutta Scheme with an Additional 8 Stage, Order 4 FSAL Embedded Scheme; zotero://select/items/0_AS3ZHL53
 !!
 module mrkiss_eerk_bogacki_shampine_4_5
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 7
+  integer         , parameter :: s      = 7
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([                0.0_rk,                 0.0_rk,                0.0_rk,                0.0_rk,                 0.0_rk,                0.0_rk,         0.0_rk, &
                                                      624139091896320.0_rk,                 0.0_rk,                0.0_rk,                0.0_rk,                 0.0_rk,                0.0_rk,         0.0_rk, &
@@ -61,11 +61,11 @@ module mrkiss_eerk_bogacki_shampine_4_5
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [                        0.0_rk,                42.0_rk,               56.0_rk,              108.0_rk,               168.0_rk,              189.0_rk,       252.0_rk]          /               252.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
-  integer(kind=ik), parameter :: p1     = 4
+  integer         , parameter :: p1     = 4
   !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [                 50746150.0_rk,                 0.0_rk,        199815255.0_rk,        136035858.0_rk,           6022107.0_rk,        250664960.0_rk,  53848470.0_rk]          /         697132800.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
-  integer(kind=ik), parameter :: p2     = 5
+  integer         , parameter :: p2     = 5
   !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [                104760110.0_rk,                 0.0_rk,        385163505.0_rk,        295063692.0_rk,         -14425047.0_rk,        516006400.0_rk, 107696940.0_rk]          /        1394265600.0_rk
 end module mrkiss_eerk_bogacki_shampine_4_5

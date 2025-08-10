@@ -55,6 +55,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - API breaking Changes
     - interpolate_solution(): Add istats() argument.
     - Removed logical kind from library.
+    - Removed integer kind from library.
   - Deprecated functionality
     - N/A
   - New functionality

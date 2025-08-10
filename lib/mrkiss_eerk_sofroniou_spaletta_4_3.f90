@@ -45,11 +45,11 @@
 !!  - Sofroniou & Spaletta (2004); Construction of Explicit Runge-Kutta Pairs with Stiffness Detection; Math. and Comp. Modelling 40 (11); p1157-1169; zotero://select/items/0_52X4WPJK
 !!
 module mrkiss_eerk_sofroniou_spaletta_4_3
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 5
+  integer         , parameter :: s      = 5
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([     0.0_rk,        0.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
                                                      1584.0_rk,        0.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
@@ -59,13 +59,13 @@ module mrkiss_eerk_sofroniou_spaletta_4_3
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [             0.0_rk,        2.0_rk,       3.0_rk,    5.0_rk,        5.0_rk]          /       5.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
-  integer(kind=ik), parameter :: p1     = 4
+  integer         , parameter :: p1     = 4
   !> Number of stages for the @f$\mathbf{b_1}@f$ method
-  integer(kind=ik), parameter :: s1     = 4
+  integer         , parameter :: s1     = 4
   !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [            11.0_rk,       25.0_rk,      25.0_rk,   11.0_rk,        0.0_rk]          /      72.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
-  integer(kind=ik), parameter :: p2     = 3
+  integer         , parameter :: p2     = 3
   !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [        1251515.0_rk, 3710105.0_rk, 2519695.0_rk, 61105.0_rk, 1428492.0_rk]          / 8970912.0_rk
 end module mrkiss_eerk_sofroniou_spaletta_4_3

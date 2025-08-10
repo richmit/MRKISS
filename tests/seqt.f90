@@ -2,18 +2,18 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program seqt
-  use            :: mrkiss_config,      only: rk, ik
+  use            :: mrkiss_config,      only: rk
   use            :: mrkiss_utils,       only: seq
 
   implicit none
-  integer(kind=ik),  parameter :: num_num   = 11
+  integer         ,  parameter :: num_num   = 11
   real(kind=rk),     parameter :: in_from   = 0.0_rk
   real(kind=rk),     parameter :: in_to     = 1.0_rk
   real(kind=rk),     parameter :: in_step   = 0.1_rk
   real(kind=rk),     parameter :: out_step  = in_step + 1.0_rk
   real(kind=rk)                :: t(num_num)
   integer                      :: out_io_unit
-  integer(kind=ik)             :: status
+  integer                      :: status
 
   open(newunit=out_io_unit, file="seqt.out", form='formatted', action='write')
 

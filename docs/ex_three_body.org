@@ -267,17 +267,17 @@ sed -n '/^  *! BEGIN: steps_adapt_etab_wt-fix-delta-stepp *$/,/^ *! END: steps_a
   ! Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.
   ! It is sloppy because we assume t_delta is linearly proportional to y_delta_len
   subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
-    integer(kind=ik), intent(out) :: status, end_run
+    integer         , intent(out) :: status, end_run
     real(kind=rk),    intent(out) :: new_t_delta
-    integer(kind=ik), intent(out) :: sdf_flags
-    integer(kind=ik), intent(in)  :: pnt_idx
+    integer         , intent(out) :: sdf_flags
+    integer         , intent(in)  :: pnt_idx
     real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),      parameter :: y_delta_len_max = 0.1_rk
     integer,            parameter :: y_delta_len_idxs(2) = [1, 2]
     real(kind=rk)                 :: y_delta_len
-    status    = 0_ik
-    end_run   = 0_ik
-    sdf_flags = 0_ik
+    status    = 0
+    end_run   = 0
+    sdf_flags = 0
     y_delta_len = norm2(y_delta(y_delta_len_idxs))
     if ( y_delta_len > y_delta_len_max) then
        new_t_delta = t_delta * y_delta_len_max / y_delta_len
@@ -389,20 +389,20 @@ sed -n '/^  *! BEGIN: steps_adapt_etab_wt-pho-t-max-stepp *$/,/^ *! END: steps_a
   ! BEGIN: steps_adapt_etab_wt-pho-t-max-stepp
   ! Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab_wt().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
-    integer(kind=ik), intent(out) :: status
-    integer(kind=ik), intent(out) :: end_run
+    integer         , intent(out) :: status
+    integer         , intent(out) :: end_run
     real(kind=rk),    intent(out) :: new_t_delta
-    integer(kind=ik), intent(out) :: sdf_flags
-    integer(kind=ik), intent(in)  :: pnt_idx
+    integer         , intent(out) :: sdf_flags
+    integer         , intent(in)  :: pnt_idx
     real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),    parameter   :: t_max = 6.2_rk
-    status    = 0_ik
-    sdf_flags = 0_ik
+    status    = 0
+    sdf_flags = 0
     new_t_delta = -1.0_rk
     if ( solution(1, pnt_idx-1) + t_delta > t_max) then
-       end_run = 1_ik
+       end_run = 1
     else
-       end_run = 0_ik
+       end_run = 0
     end if
   end subroutine sp_max_t
   ! END: steps_adapt_etab_wt-pho-t-max-stepp
@@ -455,26 +455,26 @@ sed -n '/^  *! BEGIN: steps_adapt_etab_wt-isct-stepp *$/,/^ *! END: steps_adapt_
   ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works in conjunction with
   ! sdf_cross_moon().
   subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
-    integer(kind=ik), intent(out) :: status, end_run
+    integer         , intent(out) :: status, end_run
     real(kind=rk),    intent(out) :: new_t_delta
-    integer(kind=ik), intent(out) :: sdf_flags
-    integer(kind=ik), intent(in)  :: pnt_idx
+    integer         , intent(out) :: sdf_flags
+    integer         , intent(in)  :: pnt_idx
     real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),    parameter   :: eps = 0.0001_rk
     real(kind=rk)                 :: lp_d, cp_d    
-    status      = 0_ik
-    sdf_flags   = 0_ik
-    end_run     = 0_ik
+    status      = 0
+    sdf_flags   = 0
+    end_run     = 0
     new_t_delta = -1.0_rk
     if (solution(1, pnt_idx-1) > 0.2_rk) then
        cp_d = norm2(solution(2:3, pnt_idx-1)+y_delta(1:2))
        if ( abs(cp_d-1.0_rk)  < eps) then
-          end_run   = 1_ik
+          end_run   = 1
        else
           lp_d = norm2(solution(2:3, pnt_idx-1))
           if ((min(lp_d, cp_d) < 1.0_rk) .and. (max(lp_d, cp_d) > 1.0_rk)) then
-             sdf_flags = 1_ik
-             end_run   = 1_ik
+             sdf_flags = 1
+             end_run   = 1
           end if
        end if
     end if
@@ -494,13 +494,13 @@ sed -n '/^  *! BEGIN: steps_adapt_etab_wt-isct-sdf *$/,/^ *! END: steps_adapt_et
   ! BEGIN: steps_adapt_etab_wt-isct-sdf
   ! Example SDF subroutine to isolate a point on a solution segment that crosses the unit circle.
   subroutine sdf_cross_moon(status, dist, sdf_flags, t, y)
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dist
-    integer(kind=ik), intent(in)  :: sdf_flags
+    integer         , intent(in)  :: sdf_flags
     real(kind=rk),    intent(in)  :: t, y(:)
-    status = 0_ik
+    status = 0
     dist = 1.0_rk - norm2(y(1:2))
   end subroutine sdf_cross_moon
   ! END: steps_adapt_etab_wt-isct-sdf
@@ -546,7 +546,7 @@ sed -n '/^  *! BEGIN: steps_adapt_etab_wt-isct *$/,/^ *! END: steps_adapt_etab_w
 !-------------------------------------------------------------------------------------------------
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
-  use            :: mrkiss_config,                  only: rk, ik, istats_size
+  use            :: mrkiss_config,                  only: rk, istats_size
   use            :: mrkiss_solvers_wt,              only: steps_fixed_stab_wt, steps_condy_stab_wt, steps_adapt_etab_wt, &
                                                           steps_sloppy_condy_stab_wt, interpolate_solution
   use            :: mrkiss_utils,                   only: print_solution, seq, print_istats, status_to_message
@@ -565,7 +565,7 @@ program three_body
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
   real(kind=rk)               :: sol1(1+2*deq_dim, num_points), sol2(1+2*deq_dim, num_points)
-  integer(kind=ik)            :: status, istats1(istats_size)
+  integer                     :: status, istats1(istats_size)
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run V(9)"
@@ -676,7 +676,7 @@ program three_body
 contains
   
   subroutine eq(status, dydt, t, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)
@@ -714,20 +714,20 @@ contains
   ! BEGIN: steps_adapt_etab_wt-pho-t-max-stepp
   ! Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab_wt().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
-    integer(kind=ik), intent(out) :: status
-    integer(kind=ik), intent(out) :: end_run
+    integer         , intent(out) :: status
+    integer         , intent(out) :: end_run
     real(kind=rk),    intent(out) :: new_t_delta
-    integer(kind=ik), intent(out) :: sdf_flags
-    integer(kind=ik), intent(in)  :: pnt_idx
+    integer         , intent(out) :: sdf_flags
+    integer         , intent(in)  :: pnt_idx
     real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),    parameter   :: t_max = 6.2_rk
-    status    = 0_ik
-    sdf_flags = 0_ik
+    status    = 0
+    sdf_flags = 0
     new_t_delta = -1.0_rk
     if ( solution(1, pnt_idx-1) + t_delta > t_max) then
-       end_run = 1_ik
+       end_run = 1
     else
-       end_run = 0_ik
+       end_run = 0
     end if
   end subroutine sp_max_t
   ! END: steps_adapt_etab_wt-pho-t-max-stepp
@@ -736,17 +736,17 @@ contains
   ! Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.
   ! It is sloppy because we assume t_delta is linearly proportional to y_delta_len
   subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
-    integer(kind=ik), intent(out) :: status, end_run
+    integer         , intent(out) :: status, end_run
     real(kind=rk),    intent(out) :: new_t_delta
-    integer(kind=ik), intent(out) :: sdf_flags
-    integer(kind=ik), intent(in)  :: pnt_idx
+    integer         , intent(out) :: sdf_flags
+    integer         , intent(in)  :: pnt_idx
     real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),      parameter :: y_delta_len_max = 0.1_rk
     integer,            parameter :: y_delta_len_idxs(2) = [1, 2]
     real(kind=rk)                 :: y_delta_len
-    status    = 0_ik
-    end_run   = 0_ik
-    sdf_flags = 0_ik
+    status    = 0
+    end_run   = 0
+    sdf_flags = 0
     y_delta_len = norm2(y_delta(y_delta_len_idxs))
     if ( y_delta_len > y_delta_len_max) then
        new_t_delta = t_delta * y_delta_len_max / y_delta_len
@@ -760,26 +760,26 @@ contains
   ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works in conjunction with
   ! sdf_cross_moon().
   subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
-    integer(kind=ik), intent(out) :: status, end_run
+    integer         , intent(out) :: status, end_run
     real(kind=rk),    intent(out) :: new_t_delta
-    integer(kind=ik), intent(out) :: sdf_flags
-    integer(kind=ik), intent(in)  :: pnt_idx
+    integer         , intent(out) :: sdf_flags
+    integer         , intent(in)  :: pnt_idx
     real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
     real(kind=rk),    parameter   :: eps = 0.0001_rk
     real(kind=rk)                 :: lp_d, cp_d    
-    status      = 0_ik
-    sdf_flags   = 0_ik
-    end_run     = 0_ik
+    status      = 0
+    sdf_flags   = 0
+    end_run     = 0
     new_t_delta = -1.0_rk
     if (solution(1, pnt_idx-1) > 0.2_rk) then
        cp_d = norm2(solution(2:3, pnt_idx-1)+y_delta(1:2))
        if ( abs(cp_d-1.0_rk)  < eps) then
-          end_run   = 1_ik
+          end_run   = 1
        else
           lp_d = norm2(solution(2:3, pnt_idx-1))
           if ((min(lp_d, cp_d) < 1.0_rk) .and. (max(lp_d, cp_d) > 1.0_rk)) then
-             sdf_flags = 1_ik
-             end_run   = 1_ik
+             sdf_flags = 1
+             end_run   = 1
           end if
        end if
     end if
@@ -789,13 +789,13 @@ contains
   ! BEGIN: steps_adapt_etab_wt-isct-sdf
   ! Example SDF subroutine to isolate a point on a solution segment that crosses the unit circle.
   subroutine sdf_cross_moon(status, dist, sdf_flags, t, y)
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dist
-    integer(kind=ik), intent(in)  :: sdf_flags
+    integer         , intent(in)  :: sdf_flags
     real(kind=rk),    intent(in)  :: t, y(:)
-    status = 0_ik
+    status = 0
     dist = 1.0_rk - norm2(y(1:2))
   end subroutine sdf_cross_moon
   ! END: steps_adapt_etab_wt-isct-sdf

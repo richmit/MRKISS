@@ -35,11 +35,11 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program statuscodes
-  use :: mrkiss_config, only: rk, ik
+  use :: mrkiss_config, only: rk
   use :: mrkiss_utils,  only: seq, status_to_origin, status_to_message
 
   implicit none
-  integer(kind=ik) :: status
+  integer          :: status
   real(kind=rk)    :: t(10)
   integer          :: out_io_unit
 

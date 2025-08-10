@@ -36,7 +36,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program brusselator
   use, intrinsic :: iso_fortran_env,                 only: output_unit, error_unit
-  use            :: mrkiss_config,                   only: rk, ik, istats_size
+  use            :: mrkiss_config,                   only: rk, istats_size
   use            :: mrkiss_solvers_nt,               only: steps_fixed_stab_nt, steps_condy_stab_nt, steps_sloppy_condy_stab_nt, steps_adapt_etab_nt
   use            :: mrkiss_utils,                    only: print_solution, analyze_solution
   use            :: mrkiss_eerk_dormand_prince_5_4,  only: a, b1, b2, c, p1, p2
@@ -50,7 +50,7 @@ program brusselator
   real(kind=rk),  parameter :: t_end         = 20.0_rk
 
   real(kind=rk)             :: solution(1+2*deq_dim, num_points)
-  integer(kind=ik)          :: status, istats(istats_size)
+  integer                   :: status, istats(istats_size)
   integer                   :: c_beg, c_end, c_rate
 
   ! Call the solver, time how long it takes, report some stuff, and dump out the results.
@@ -88,7 +88,7 @@ program brusselator
 contains
   
   subroutine eq(status, dydt, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)

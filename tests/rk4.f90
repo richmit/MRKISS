@@ -34,14 +34,14 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program rk4
-  use            :: mrkiss_config,      only: rk, ik, istats_size
+  use            :: mrkiss_config,      only: rk, istats_size
   use            :: mrkiss_solvers_wt,  only: one_step_rk4_wt, one_step_stab_wt, steps_fixed_stab_wt, steps_points_stab_wt
   use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
   implicit none
-  integer(kind=ik), parameter :: max_pts                     = 11
-  integer(kind=ik), parameter :: deq_dim                     = 1
+  integer         , parameter :: max_pts                     = 11
+  integer         , parameter :: deq_dim                     = 1
   real(kind=rk),    parameter :: param(1)                    = [1.0_rk]
   real(kind=rk),    parameter :: t_iv                        = 0.0_rk
   real(kind=rk),    parameter :: t_delta                     = 0.1_rk
@@ -58,7 +58,7 @@ program rk4
                                                                          0.8000000000_rk, 0.9838057659_rk,  0.3723152399_rk, &
                                                                          0.9000000000_rk, 1.0246280460_rk,  0.4414926096_rk, &
                                                                          1.0000000000_rk, 1.0715783953_rk,  0.4949291477_rk], [1+2*deq_dim, max_pts])
-  integer(kind=ik)            :: step, status, istats(istats_size)
+  integer                     :: step, status, istats(istats_size)
   real(kind=rk)               :: y_delta(deq_dim), sol(1+2*deq_dim, max_pts)
 
   call print_solution(status, sol_h, filename_o="rk4_hnd.out", width_o=20)
@@ -112,7 +112,7 @@ program rk4
 contains
 
   subroutine eq(status, dydt, t, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)

@@ -88,20 +88,20 @@ contains
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, prt_titles_o, &
                             t_min_o, t_max_o, tag_o, append_o) 
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: rk, ik
+    use            :: mrkiss_config,   only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out)          :: status
+    integer         , intent(out)          :: status
     real(kind=rk),    intent(in)           :: solution(:,:)
     character(len=*), intent(in), optional :: filename_o, separator_o
-    integer(kind=ik), intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
+    integer         , intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
-    integer(kind=ik), intent(in), optional :: tag_o
+    integer         , intent(in), optional :: tag_o
     logical,          intent(in), optional :: prt_titles_o, append_o
     ! Local variables
-    integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx, tag
+    integer                                :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx, tag
     logical                                :: prt_titles
-    integer(kind=ik)                       :: i, num_int, num_real
+    integer                                :: i, num_int, num_real
     integer                                :: out_io_stat, out_io_unit 
     character(len=:), allocatable          :: fmt, separator, access_mode
     character(len=512)                     :: digits_str, width_str, tmp_str
@@ -233,12 +233,12 @@ contains
   !! 
   subroutine print_istats(status, istats, idxs_to_prt_o, filename_o) 
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: ik, istats_size, istats_max_idx
+    use            :: mrkiss_config,   only: istats_size, istats_max_idx
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out)          :: status
-    integer(kind=ik), intent(in)           :: istats(istats_size)
-    integer(kind=ik), intent(in), optional :: idxs_to_prt_o(:)
+    integer         , intent(out)          :: status
+    integer         , intent(in)           :: istats(istats_size)
+    integer         , intent(in), optional :: idxs_to_prt_o(:)
     character(len=*), intent(in), optional :: filename_o
     ! Local paramaters
     integer, parameter                     :: ml = 73
@@ -259,7 +259,7 @@ contains
                                                                     "                                                                         ", &
                                                                     "                                                                         "  ]
     ! Local variables
-    integer(kind=ik), allocatable          :: idxs_to_prt(:)
+    integer         , allocatable          :: idxs_to_prt(:)
     integer                                :: out_io_stat, out_io_unit, i
     character(len=32)                      :: tmp_str1, tmp_str2
     ! Process arguments
@@ -317,16 +317,16 @@ contains
   !! 
   subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, y_delta_len_idxs_o) 
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: rk, ik
+    use            :: mrkiss_config,   only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out)          :: status
+    integer         , intent(out)          :: status
     real(kind=rk),    intent(in)           :: solution(:,:)
     character(len=*), intent(in), optional :: filename_o
-    integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o, y_delta_len_idxs_o(:), start_o, end_o
+    integer         , intent(in), optional :: y_dim_o, sol_y_idx_o, y_delta_len_idxs_o(:), start_o, end_o
     ! Local variables
-    integer(kind=ik)                       :: y_dim, sol_y_idx, end_idx, start_idx
-    integer(kind=ik)                       :: i
+    integer                                :: y_dim, sol_y_idx, end_idx, start_idx
+    integer                                :: i
     integer                                :: out_io_stat, out_io_unit
     real(kind=rk)                          :: t_max, t_min, t_delta_max, t_delta_min, y_delta_len_max, y_delta_len_min
     real(kind=rk), allocatable             :: dy_max(:), dy_min(:), y_max(:), y_min(:)
@@ -441,14 +441,14 @@ contains
   !! @see mrkiss_utils::status_to_message() 
   !! 
   subroutine seq(status, t, from_o, to_o, step_o) 
-    use :: mrkiss_config, only: rk, ik, zero_epsilon
+    use :: mrkiss_config, only: rk, zero_epsilon
     implicit none
     ! Arguments
-    integer(kind=ik),        intent(out) :: status
+    integer         ,        intent(out) :: status
     real(kind=rk),           intent(out) :: t(:)
     real(kind=rk), optional, intent(in)  :: from_o, to_o, step_o
     ! Variables
-    integer(kind=ik)                     :: n_v, i
+    integer                              :: n_v, i
     real(kind=rk)                        :: from_v, to_v, step_v
     ! Compute paramaters
     if     (.not. (present(from_o))) then
@@ -537,10 +537,9 @@ contains
   !! @see mrkiss_utils::status_to_message() 
   !!
   character(len=64) function status_to_origin(status)
-    use :: mrkiss_config, only: ik
     implicit none
     ! Arguments
-    integer(kind=ik), intent(in) :: status
+    integer         , intent(in) :: status
     ! Process Input
     if     (status  <=    0) then
        status_to_origin = "NO ERROR"
@@ -600,10 +599,9 @@ contains
   !! @see mrkiss_utils::status_to_origin() 
   !!
   character(len=128) function status_to_message(status)
-    use :: mrkiss_config, only: ik
     implicit none
     ! Arguments
-    integer(kind=ik), intent(in) :: status
+    integer         , intent(in) :: status
     ! Process Input
     if (status == 1024) then
        status_to_message = "t_delta_min yielded a longer step than t_delta_max"

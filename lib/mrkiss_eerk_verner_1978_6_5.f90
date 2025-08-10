@@ -44,11 +44,11 @@
 !!  - Verner (1978); Explicit Runge-Kutta methods with estimates of the local truncation error; SIAM J. Numer. Anal 15 (4)l p772-790; zotero://select/items/0_9HLA6P9B
 !!
 module mrkiss_eerk_verner_1978_6_5
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 8
+  integer         , parameter :: s      = 8
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([           0.0_rk,             0.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
                                                      3026340000.0_rk,             0.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
@@ -61,13 +61,13 @@ module mrkiss_eerk_verner_1978_6_5
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [                   0.0_rk,             5.0_rk,             8.0_rk,          20.0_rk,         25.0_rk,   30.0_rk,          2.0_rk,     30.0_rk]          /          30.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
-  integer(kind=ik), parameter :: p1     = 6
+  integer         , parameter :: p1     = 6
   !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [              812889.0_rk,             0.0_rk,       4226250.0_rk,     3462305.0_rk,    1463616.0_rk,    0.0_rk,     116875.0_rk, 756585.0_rk]          /    10838520.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
-  integer(kind=ik), parameter :: p2     = 5
+  integer         , parameter :: p2     = 5
   !> Number of stages for the @f$\mathbf{b_2}@f$ method
-  integer(kind=ik), parameter :: s2     = 6
+  integer         , parameter :: s2     = 6
   !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [                2431.0_rk,             0.0_rk,         11875.0_rk,        9350.0_rk,       4224.0_rk, 2040.0_rk,          0.0_rk,      0.0_rk]          /       29920.0_rk
 end module mrkiss_eerk_verner_1978_6_5

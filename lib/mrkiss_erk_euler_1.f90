@@ -47,17 +47,17 @@
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p98
 !!
 module mrkiss_erk_euler_1
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 1
+  integer         , parameter :: s      = 1
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk], [s, s])
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk]
   !> The order of the method
-  integer(kind=ik), parameter :: p      = 1
+  integer         , parameter :: p      = 1
   !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b(s)   = [          1.0_rk]
 end module mrkiss_erk_euler_1

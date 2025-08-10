@@ -121,7 +121,7 @@ file:pics/langford_mov_050.gif
 
 !-------------------------------------------------------------------------------------------------
 program langford
-  use :: mrkiss_config,      only: rk, ik, istats_size
+  use :: mrkiss_config,      only: rk, istats_size
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
@@ -137,7 +137,7 @@ program langford
   real(kind=rk),  parameter :: t_delta    = 0.01_rk
 
   real(kind=rk)             :: solution(1+2*deq_dim, num_points), y_iv(deq_dim)
-  integer(kind=ik)          :: status, istats(istats_size), i
+  integer                   :: status, istats(istats_size), i
   character(len=512)        :: filename
 
   y_iv = [0.1_rk, 0.0_rk, 0.0_rk]
@@ -159,7 +159,7 @@ program langford
 contains
   
   subroutine eq(status, dydt, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)

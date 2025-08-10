@@ -55,9 +55,9 @@ module mrkiss_solvers_wt
   !!
   abstract interface
      subroutine deq_iface_wt(status, dydt, t, y, param) 
-       use mrkiss_config, only: rk, ik
+       use mrkiss_config, only: rk
        implicit none
-       integer(kind=ik), intent(out) :: status
+       integer         , intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: t
        real(kind=rk),    intent(in)  :: y(:)
@@ -80,13 +80,13 @@ module mrkiss_solvers_wt
   !!
   abstract interface
      subroutine stepp_iface_wt(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta) 
-       use mrkiss_config, only: rk, ik
+       use mrkiss_config, only: rk
        implicit none
-       integer(kind=ik), intent(out) :: status
-       integer(kind=ik), intent(out) :: end_run
+       integer         , intent(out) :: status
+       integer         , intent(out) :: end_run
        real(kind=rk),    intent(out) :: new_t_delta   ! If >0, then redo step with new t_delta
-       integer(kind=ik), intent(out) :: sdf_flags     ! If >0, then use bisection to solve SDF and use the result to redo step...
-       integer(kind=ik), intent(in)  :: pnt_idx
+       integer         , intent(out) :: sdf_flags     ! If >0, then use bisection to solve SDF and use the result to redo step...
+       integer         , intent(in)  :: pnt_idx
        real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
      end subroutine stepp_iface_wt
   end interface
@@ -108,11 +108,11 @@ module mrkiss_solvers_wt
   !!
   abstract interface
      subroutine sdf_iface_wt(status, dist, sdf_flags, t, y) 
-       use mrkiss_config, only: rk, ik
+       use mrkiss_config, only: rk
        implicit none
-       integer(kind=ik), intent(out) :: status
+       integer         , intent(out) :: status
        real(kind=rk),    intent(out) :: dist
-       integer(kind=ik), intent(in)  :: sdf_flags
+       integer         , intent(in)  :: sdf_flags
        real(kind=rk),    intent(in)  :: t, y(:)
      end subroutine sdf_iface_wt
   end interface
@@ -146,16 +146,16 @@ contains
   !! @endverbatim
   !!
   subroutine one_step_etab_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, a, b1, b2, c, t_delta) 
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b1(:), c(:), t_delta, b2(:)
     ! Variables
-    integer(kind=ik)              :: i, stage
+    integer                       :: i, stage
     real(kind=rk)                 :: k(size(y, 1),size(b1, 1)+1)
     real(kind=rk)                 :: stage_t_delta
     real(kind=rk)                 :: y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
@@ -207,16 +207,16 @@ contains
   !! 
   ! SHELLO: sed -n '/^  *subroutine one_step_etab_wt(/,/end subroutine one_step_etab_wt *$/p' mrkiss_solvers_wt.f90 | sed 's/, y2_delta[^,]*//; s/, b2[^,]*//; s/_etab/_stab/; s/b1/b/g; s/y1/y/g; /y2_delta/d;'
   subroutine one_step_stab_wt(status, y_delta, dy, deq, t, y, param, a, b, c, t_delta) 
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), t_delta
     ! Variables
-    integer(kind=ik)              :: i, stage
+    integer                       :: i, stage
     real(kind=rk)                 :: k(size(y, 1),size(b, 1)+1)
     real(kind=rk)                 :: stage_t_delta
     real(kind=rk)                 :: y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
@@ -266,15 +266,15 @@ contains
   !! @see: mrkiss_solvers_wt::one_step_stab_wt(), 
   !!
   subroutine one_richardson_step_stab_wt(status, y_delta, dy, deq, t, y, param, a, b, c, p, t_delta) 
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
-    integer(kind=ik), intent(in)  :: p
+    integer         , intent(in)  :: p
     real(kind=rk),    intent(in)  :: t_delta
     ! Variables
     real(kind=rk)                 :: t_delta_tmp, t_tmp, y_tmp(size(y, 1))
@@ -318,10 +318,10 @@ contains
   !! @endverbatim
   !!
   subroutine one_step_rk4_wt(status, y_delta, dy, deq, t, y, param, t_delta) 
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -359,10 +359,10 @@ contains
   !! @endverbatim
   !!
   subroutine one_step_rkf45_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta) 
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -407,10 +407,10 @@ contains
   !! @endverbatim
   !!
   subroutine one_step_dp54_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta) 
-    use mrkiss_config, only: rk, ik
+    use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -481,18 +481,18 @@ contains
   !!
   subroutine steps_fixed_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
                                  t_end_o, t_max_o) 
-    use mrkiss_config, only: rk, ik, t_delta_ai, istats_size, isi_num_pts, isi_step_norm
+    use mrkiss_config, only: rk, t_delta_ai, istats_size, isi_num_pts, isi_step_norm
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(istats_size)
+    integer         ,           intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
-    integer(kind=ik), optional, intent(in)  :: p_o, max_pts_o
+    integer         , optional, intent(in)  :: p_o, max_pts_o
     real(kind=rk),    optional, intent(in)  :: t_delta_o, t_end_o, t_max_o
     ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, y_dim, cur_step, max_steps, p
+    integer                                 :: cur_pnt_idx, y_dim, cur_step, max_steps, p
     real(kind=rk)                           :: t_cv, t_delta
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
     logical                                 :: lotsopnts 
@@ -516,7 +516,7 @@ contains
           t_delta = t_delta_ai
        end if
     end if
-    p = 0_ik
+    p = 0
     if (present(p_o)) p = p_o
     ! Compute Solution
     y_dim = size(y, 1)
@@ -616,20 +616,20 @@ contains
   subroutine steps_condy_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
                                  y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o) 
-    use mrkiss_config, only: rk, ik, t_delta_tiny, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
+    use mrkiss_config, only: rk, t_delta_tiny, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(istats_size)
+    integer         ,           intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_max
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o
-    integer(kind=ik), optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
+    integer         , optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
     logical,          optional, intent(in)  :: no_bisect_error_o
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
-    integer(kind=ik)                        :: max_bisect, max_pts, cur_pnt_idx, biter, y_dim
+    integer                                 :: max_bisect, max_pts, cur_pnt_idx, biter, y_dim
     logical                                 :: no_bisect_error
     real(kind=rk)                           :: y_delta_len_tol, t_delta_min, y_sol_len, bs_tmp1_y_delta_len
     real(kind=rk)                           :: bs_tmp1_t_delta, bs_tmp2_t_delta, t_cv, dy(size(y, 1))
@@ -813,19 +813,19 @@ contains
   subroutine steps_sloppy_condy_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
                                         y_sol_len_max_o, t_max_o) 
-    use mrkiss_config, only: rk, ik, t_delta_tiny, istats_size, isi_num_pts, isi_step_norm, isi_step_y_len
+    use mrkiss_config, only: rk, t_delta_tiny, istats_size, isi_num_pts, isi_step_norm, isi_step_y_len
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(istats_size)
+    integer         ,           intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_ini
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, t_delta_max_o
-    integer(kind=ik), optional, intent(in)  :: max_pts_o, y_delta_len_idxs_o(:), adj_short_o
+    integer         , optional, intent(in)  :: max_pts_o, y_delta_len_idxs_o(:), adj_short_o
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
-    integer(kind=ik)                        :: max_pts, cur_pnt_idx, y_dim
+    integer                                 :: max_pts, cur_pnt_idx, y_dim
     real(kind=rk)                           :: t_delta_min, y_sol_len, t_cv, t_delta, y_delta_len
     real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
     ! Process arguments
@@ -965,23 +965,23 @@ contains
     use mrkiss_config
     implicit none
     ! Arguments
-    integer(kind=ik),                    intent(out) :: status, istats(istats_size)
+    integer         ,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),                       intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                          :: deq
     real(kind=rk),                       intent(in)  :: t
     real(kind=rk),                       intent(in)  :: y(:), param(:), a(:,:), b1(:), b2(:), c(:)
-    integer(kind=ik),                    intent(in)  :: p1, p2
+    integer         ,                    intent(in)  :: p1, p2
     real(kind=rk),             optional, intent(in)  :: t_max_o, t_end_o, t_delta_ini_o, t_delta_min_o, t_delta_max_o
     real(kind=rk),             optional, intent(in)  :: t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o
     real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
-    integer(kind=ik),          optional, intent(in)  :: max_pts_o, max_bisect_o
+    integer         ,          optional, intent(in)  :: max_pts_o, max_bisect_o
     logical,                   optional, intent(in)  :: no_bisect_error_o
     procedure(sdf_iface_wt),   optional              :: sdf_o
     real(kind=rk),             optional, intent(in)  :: sdf_tol_o
     procedure(stepp_iface_wt), optional              :: stepp_o
     ! Variables
-    integer(kind=ik)                                 :: max_pts, cur_pnt_idx, adj_cnt, y_dim
-    integer(kind=ik)                                 :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
+    integer                                          :: max_pts, cur_pnt_idx, adj_cnt, y_dim
+    integer                                          :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
     logical                                          :: no_bisect_error
     real(kind=rk)                                    :: t_delta_fac, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
     real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min
@@ -1210,20 +1210,20 @@ contains
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_wt::one_step_stab_wt()
   !!
   subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o) 
-    use mrkiss_config, only: rk, ik, istats_size
+    use mrkiss_config, only: rk, istats_size
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out) :: status, istats(istats_size)
+    integer         ,           intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
-    integer(kind=ik),           intent(in)  :: steps_per_pnt
-    integer(kind=ik), optional, intent(in)  :: p_o
+    integer         ,           intent(in)  :: steps_per_pnt
+    integer         , optional, intent(in)  :: p_o
     ! Vars
-    integer(kind=ik)                        :: cur_pnt_idx, y_dim, jstats(istats_size), p
+    integer                                 :: cur_pnt_idx, y_dim, jstats(istats_size), p
     real(kind=rk)                           :: dy(size(y, 1))
     ! Process arguments
-    p = 0_ik
+    p = 0
     if (present(p_o)) p = p_o
     ! Compute Solution
     y_dim = size(y, 1)
@@ -1270,18 +1270,18 @@ contains
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message() 
   !!
   subroutine interpolate_solution_wt(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o) 
-    use :: mrkiss_config, only: rk, ik, istats_size, isi_num_pts
+    use :: mrkiss_config, only: rk, istats_size, isi_num_pts
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out)   :: status, istats(istats_size)
+    integer         ,           intent(out)   :: status, istats(istats_size)
     real(kind=rk),              intent(inout) :: solution(:,:)
     real(kind=rk),              intent(in)    :: src_solution(:,:)
-    integer(kind=ik), optional, intent(in)    :: num_src_pts_o
+    integer         , optional, intent(in)    :: num_src_pts_o
     procedure(deq_iface_wt)                   :: deq
     real(kind=rk),              intent(in)    :: param(:)
     logical,          optional, intent(in)    :: linear_interp_o
     ! Variables
-    integer(kind=ik)                          :: new_sol_idx, old_sol_idx, max_idx, num_src_pts, y_dim
+    integer                                   :: new_sol_idx, old_sol_idx, max_idx, num_src_pts, y_dim
     logical                                   :: linear_interp
     real(kind=rk)                             :: t, t0, t1, tu, td
     real(kind=rk), allocatable                :: y0(:), y1(:), dy0(:), dy1(:), yat(:)

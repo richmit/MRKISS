@@ -79,7 +79,7 @@ Here is a complete example in 23 lines that solves [[https://www.mitchr.me/SS/lo
 !-------------------------------------------------------------------------------------------------
 program minimal
 
-  use :: mrkiss_config,      only: rk, ik, istats_size
+  use :: mrkiss_config,      only: rk, istats_size
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
@@ -91,7 +91,7 @@ program minimal
   real(kind=rk),    parameter :: t_end    = 50.0_rk
 
   real(kind=rk)               :: solution(7, 10000)
-  integer(kind=ik)            :: status, istats(istats_size)
+  integer                     :: status, istats(istats_size)
 
   call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   call print_solution(status, solution, filename_o="minimal.csv")
@@ -99,7 +99,7 @@ program minimal
 contains
   
   subroutine eq(status, dydt, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)
@@ -326,11 +326,11 @@ To make all this concrete, here is what one of these modules looks like (~mrkiss
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
 !!
 module mrkiss_erk_kutta_4
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 4
+  integer         , parameter :: s      = 4
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  &
                                                     1.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  &
@@ -339,7 +339,7 @@ module mrkiss_erk_kutta_4
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [         0.0_rk, 1.0_rk, 1.0_rk, 2.0_rk]          / 2.0_rk
   !> The order of the method
-  integer(kind=ik), parameter :: p      = 4
+  integer         , parameter :: p      = 4
   !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b(s)   = [         1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk]          / 6.0_rk
 end module mrkiss_erk_kutta_4
@@ -419,7 +419,7 @@ sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
      subroutine deq_iface_wt(status, dydt, t, y, param) ! Non-Homogeneous Case (with t)
-       integer(kind=ik), intent(out) :: status
+       integer         , intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: t
        real(kind=rk),    intent(in)  :: y(:)
@@ -434,7 +434,7 @@ sed -n '/^  *subroutine deq_iface_wt/,/^  *end subroutine deq_iface_wt *$/p' ../
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
      subroutine deq_iface_nt(status, dydt, y, param)    ! Homogeneous Case (no t)
-       integer(kind=ik), intent(out) :: status
+       integer         , intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: y(:)
        real(kind=rk),    intent(in)  :: param(:)

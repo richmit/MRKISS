@@ -45,11 +45,11 @@
 !!  - Tsitouras (2011); Runge-Kutta Pairs of Order 5(4) Satisfying Only the First Column Simplifying Assumption; Comp. & Math. w/ Appl. 62 (2); p770-775; zotero://select/items/0_WHVVHHDH
 !!
 module mrkiss_eerk_tsitouras_arkode_5_4
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 7
+  integer         , parameter :: s      = 7
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.000000000000000000_rk,   0.000000000000000000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
                                                     0.161000000000000000_rk,   0.000000000000000000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
@@ -61,11 +61,11 @@ module mrkiss_eerk_tsitouras_arkode_5_4
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [         0.000000000000000000_rk,   0.161000000000000000_rk, 0.327000000000000000_rk,  0.900000000000000000_rk,  0.980025540904509700_rk, 1.000000000000000000_rk, 1.000000000000000000_rk]
   !> The order of the @f$\mathbf{b_1}@f$ method
-  integer(kind=ik), parameter :: p1     = 5
+  integer         , parameter :: p1     = 5
   !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [         0.096460766818065230_rk,   0.010000000000000000_rk, 0.479889650414499600_rk,  1.379008574103742000_rk, -3.290069515436081000_rk, 2.324710524099774000_rk, 0.000000000000000000_rk]
   !> The order of the @f$\mathbf{b_2}@f$ method
-  integer(kind=ik), parameter :: p2     = 4
+  integer         , parameter :: p2     = 4
   !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [         0.093523748581892710_rk,   0.008652883141566368_rk, 0.492893099131431900_rk,  1.140235412267858000_rk, -2.329180192439365000_rk, 1.568875049316616000_rk, 0.025000000000000000_rk]
 end module mrkiss_eerk_tsitouras_arkode_5_4

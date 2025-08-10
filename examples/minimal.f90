@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program minimal
 
-  use :: mrkiss_config,      only: rk, ik, istats_size
+  use :: mrkiss_config,      only: rk, istats_size
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab_nt
   use :: mrkiss_utils,       only: print_solution
   use :: mrkiss_erk_kutta_4, only: a, b, c
@@ -47,7 +47,7 @@ program minimal
   real(kind=rk),    parameter :: t_end    = 50.0_rk
 
   real(kind=rk)               :: solution(7, 10000)
-  integer(kind=ik)            :: status, istats(istats_size)
+  integer                     :: status, istats(istats_size)
 
   call steps_fixed_stab_nt(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   call print_solution(status, solution, filename_o="minimal.csv")
@@ -55,7 +55,7 @@ program minimal
 contains
   
   subroutine eq(status, dydt, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)

@@ -34,21 +34,21 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program rkf45
-  use :: mrkiss_config,            only: rk, ik
+  use :: mrkiss_config,            only: rk
   use :: mrkiss_solvers_wt,        only: one_step_rkf45_wt, one_step_etab_wt, one_step_stab_wt
   use :: mrkiss_utils,             only: print_solution
   use :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, c
 
   implicit none
 
-  integer(kind=ik),  parameter :: max_step      = 11
-  integer(kind=ik),  parameter :: deq_dim       = 1
+  integer         ,  parameter :: max_step      = 11
+  integer         ,  parameter :: deq_dim       = 1
   real(kind=rk),     parameter :: param(1)      = [1.0_rk]
   real(kind=rk),     parameter :: t_iv          = 0.0_rk
   real(kind=rk),     parameter :: t_delta       = 0.1_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
-  integer(kind=ik)             :: step, status
+  integer                      :: step, status
   real(kind=rk)                :: y_delta(deq_dim), y_tmp(deq_dim), sol(1+2*deq_dim, max_step)
 
   sol = 0
@@ -108,7 +108,7 @@ program rkf45
 contains
 
   subroutine eq(status, dydt, t, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)

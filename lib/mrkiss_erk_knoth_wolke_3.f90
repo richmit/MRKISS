@@ -44,11 +44,11 @@
 !!  - Knoth & Wolke (1988); Implicit-explicit runge-kutta methods for computiong atmospheric reactive flows; Appl. Num. Anal. 28(2-4); p327-341
 !!
 module mrkiss_erk_knoth_wolke_3
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 3
+  integer         , parameter :: s      = 3
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk,  0.0_rk, 0.0_rk, &
                                                     16.0_rk,  0.0_rk, 0.0_rk, &
@@ -56,7 +56,7 @@ module mrkiss_erk_knoth_wolke_3
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk, 4.0_rk, 9.0_rk]           / 12.0_rk
   !> The order of the method
-  integer(kind=ik), parameter :: p      = 3
+  integer         , parameter :: p      = 3
   !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b(s)   = [          5.0_rk, 9.0_rk, 16.0_rk]          / 30.0_rk
 end module mrkiss_erk_knoth_wolke_3

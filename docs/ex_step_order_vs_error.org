@@ -102,7 +102,7 @@ file:pics/step_order_vs_error_err.png
 !-------------------------------------------------------------------------------------------------
 program step_order_vs_error
 
-  use :: mrkiss_config,          only: rk, ik, istats_size
+  use :: mrkiss_config,          only: rk, istats_size
   use :: mrkiss_solvers_wt,      only: steps_fixed_stab_wt, steps_points_stab_wt
   use :: mrkiss_utils,           only: print_solution, seq
   use :: mrkiss_erk_kutta_4,     only: a4=>a, b4=>b, c4=>c
@@ -119,7 +119,7 @@ program step_order_vs_error
   real(kind=rk),  parameter :: t_end         = 2.0_rk * pi
 
   real(kind=rk)             :: solution(1+2*deq_dim, num_points)
-  integer(kind=ik)          :: status, istats(istats_size), spp
+  integer                   :: status, istats(istats_size), spp
   character(len=512)        :: filename
 
   call seq(status, solution(1,:), from_o=t_start, to_o=t_end)
@@ -137,7 +137,7 @@ program step_order_vs_error
 contains
   
   subroutine eq(status, dydt, t, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)

@@ -34,21 +34,21 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program tc1_TCASEN
-  use :: mrkiss_config,      only: rk, ik
+  use :: mrkiss_config,      only: rk
   use :: mrkiss_solvers_wt,  only: one_step_stab_wt, one_richardson_step_stab_wt
   use :: mrkiss_erk_euler_1, only: a, b, c, p
 
   implicit none
 
-  integer(kind=ik),  parameter :: deq_dim       = 1
-  integer(kind=ik),  parameter :: max_steps     = 30
+  integer         ,  parameter :: deq_dim       = 1
+  integer         ,  parameter :: max_steps     = 30
   real(kind=rk),     parameter :: t_end         = 3.0_rk
   real(kind=rk),     parameter :: t_delta       = t_end / (max_steps - 1)
   real(kind=rk),     parameter :: param(1)      = [0.0_rk]
   real(kind=rk),     parameter :: t_iv          = 0.0_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
-  integer(kind=ik)             :: step, status
+  integer                      :: step, status
   real(kind=rk)                :: y_delta(deq_dim), y1_cv(deq_dim), y2_cv(deq_dim), t_cv, y_tru(deq_dim), dy(deq_dim)
   integer                      :: out_io_unit
 
@@ -72,7 +72,7 @@ program tc1_TCASEN
 contains
 
   subroutine eq(status, dydt, t, y, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)
@@ -82,7 +82,7 @@ contains
   end subroutine eq
 
   subroutine ysol(status, y, t, param)
-    integer(kind=ik), intent(out) :: status
+    integer         , intent(out) :: status
     real(kind=rk),    intent(out) :: y(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: param(:)

@@ -43,11 +43,11 @@
 !!  - Ralston (1962); Runge-Kutta Methods with Minimum Error Bounds; Math. of Comp. 16 (80); p431-437; zotero://select/items/0_2FK7F4J3
 !!
 module mrkiss_erk_ralston_4
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 4
+  integer         , parameter :: s      = 4
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk, &
                                                     0.4000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk, &
@@ -56,7 +56,7 @@ module mrkiss_erk_ralston_4
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [         0.0000000000000000000000000000000000000_rk,  0.4000000000000000000000000000000000000_rk, 0.4557372542187894319232799371128857059_rk, 1.0000000000000000000000000000000000000_rk]                 
   !> The order of the method
-  integer(kind=ik), parameter :: p      = 4
+  integer         , parameter :: p      = 4
   !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b(s)   = [         0.1747602822626903712548676424114517824_rk, -0.5514806628787329405457611464815246174_rk, 1.2055355993965235350277772006141793793_rk, 0.1711847812195190342631163034558934558_rk]                 
 end module mrkiss_erk_ralston_4

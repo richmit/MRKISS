@@ -47,11 +47,11 @@
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p180; zotero://select/items/0_VLZWN2CT
 !!
 module mrkiss_eerk_fehlberg_4_5
-  use mrkiss_config, only: rk, ik
+  use mrkiss_config, only: rk
   implicit none
   public
   !> The order of the overall method
-  integer(kind=ik), parameter :: s      = 6
+  integer         , parameter :: s      = 6
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([         0.0_rk,           0.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
                                                      45082440.0_rk,           0.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
@@ -62,11 +62,11 @@ module mrkiss_eerk_fehlberg_4_5
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [                 0.0_rk,          26.0_rk,         39.0_rk,        96.0_rk,       104.0_rk,       52.0_rk ]          /       104.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
-  integer(kind=ik), parameter :: p1     = 4                                                                                                  
+  integer         , parameter :: p1     = 4                                                                                                  
   !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [              2375.0_rk,           0.0_rk,       11264.0_rk,    10985.0_rk,      -4104.0_rk,       0.0_rk ]          /     20520.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
-  integer(kind=ik), parameter :: p2     = 5                                                                                              
+  integer         , parameter :: p2     = 5                                                                                              
   !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [             33440.0_rk,           0.0_rk,      146432.0_rk,   142805.0_rk,     -50787.0_rk,   10260.0_rk ]          /    282150.0_rk
 end module mrkiss_eerk_fehlberg_4_5
