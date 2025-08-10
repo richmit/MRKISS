@@ -54,7 +54,7 @@ module mrkiss_solvers_wt
   !! @endverbatim
   !!
   abstract interface
-     subroutine deq_iface_wt(status, dydt, t, y, param)
+     subroutine deq_iface_wt(status, dydt, t, y, param) bind(C)
        use mrkiss_config, only: rk, ik
        implicit none
        integer(kind=ik), intent(out) :: status
@@ -79,7 +79,7 @@ module mrkiss_solvers_wt
   !! @endverbatim
   !!
   abstract interface
-     subroutine stepp_iface_wt(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
+     subroutine stepp_iface_wt(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta) bind(C)
        use mrkiss_config, only: rk, ik
        implicit none
        integer(kind=ik), intent(out) :: status
@@ -107,7 +107,7 @@ module mrkiss_solvers_wt
   !! @endverbatim
   !!
   abstract interface
-     subroutine sdf_iface_wt(status, dist, sdf_flags, t, y)
+     subroutine sdf_iface_wt(status, dist, sdf_flags, t, y) bind(C)
        use mrkiss_config, only: rk, ik
        implicit none
        integer(kind=ik), intent(out) :: status
@@ -120,8 +120,7 @@ module mrkiss_solvers_wt
   public :: one_step_rk4_wt, one_step_rkf45_wt, one_step_dp54_wt                                         ! Test one step solvers
   public :: one_step_etab_wt, one_step_stab_wt, one_richardson_step_stab_wt                              ! One step solvers
   public :: steps_fixed_stab_wt, steps_condy_stab_wt, steps_sloppy_condy_stab_wt, steps_adapt_etab_wt    ! Many step solvers
-  public :: steps_points_stab_wt                                                                         ! Meta-many step solvers
-  public :: interpolate_solution
+  public :: steps_points_stab_wt, interpolate_solution_wt                                                ! Meta-many step solvers
 contains
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -146,7 +145,7 @@ contains
   !! t_delta ..................... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_etab_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, a, b1, b2, c, t_delta)
+  subroutine one_step_etab_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, a, b1, b2, c, t_delta) bind(C)
     use mrkiss_config, only: rk, ik
     implicit none
     ! Arguments
@@ -207,7 +206,7 @@ contains
   !! @endverbatim
   !! 
   ! SHELLO: sed -n '/^  *subroutine one_step_etab_wt(/,/end subroutine one_step_etab_wt *$/p' mrkiss_solvers_wt.f90 | sed 's/, y2_delta[^,]*//; s/, b2[^,]*//; s/_etab/_stab/; s/b1/b/g; s/y1/y/g; /y2_delta/d;'
-  subroutine one_step_stab_wt(status, y_delta, dy, deq, t, y, param, a, b, c, t_delta)
+  subroutine one_step_stab_wt(status, y_delta, dy, deq, t, y, param, a, b, c, t_delta) bind(C)
     use mrkiss_config, only: rk, ik
     implicit none
     ! Arguments
@@ -266,7 +265,7 @@ contains
   !! @endverbatim
   !! @see: mrkiss_solvers_wt::one_step_stab_wt(), 
   !!
-  subroutine one_richardson_step_stab_wt(status, y_delta, dy, deq, t, y, param, a, b, c, p, t_delta)
+  subroutine one_richardson_step_stab_wt(status, y_delta, dy, deq, t, y, param, a, b, c, p, t_delta) bind(C)
     use mrkiss_config, only: rk, ik
     implicit none
     ! Arguments
@@ -318,7 +317,7 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_rk4_wt(status, y_delta, dy, deq, t, y, param, t_delta)
+  subroutine one_step_rk4_wt(status, y_delta, dy, deq, t, y, param, t_delta) bind(C)
     use mrkiss_config, only: rk, ik
     implicit none
     ! Arguments
@@ -359,7 +358,7 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_rkf45_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta)
+  subroutine one_step_rkf45_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta) bind(C)
     use mrkiss_config, only: rk, ik
     implicit none
     ! Arguments
@@ -407,7 +406,7 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_dp54_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta)
+  subroutine one_step_dp54_wt(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta) bind(C)
     use mrkiss_config, only: rk, ik
     implicit none
     ! Arguments
@@ -479,7 +478,7 @@ contains
   !! @see mrkiss_utils::print_istats(), mrkiss_solvers_wt::one_step_stab_wt(), mrkiss_solvers_wt::one_richardson_step_stab_wt()
   !!
   subroutine steps_fixed_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
-                                 t_end_o, t_max_o)
+                                 t_end_o, t_max_o) bind(C)
     use mrkiss_config, only: rk, ik, t_delta_ai, istats_size
     implicit none
     ! Arguments
@@ -609,7 +608,7 @@ contains
   !!
   subroutine steps_condy_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
-                                 y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
+                                 y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o) bind(C)
     use mrkiss_config, only: rk, ik, bk, t_delta_tiny, max_bisect_ai, istats_size
     implicit none
     ! Arguments
@@ -803,7 +802,7 @@ contains
   !!
   subroutine steps_sloppy_condy_stab_wt(status, istats, solution, deq, t, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
-                                        y_sol_len_max_o, t_max_o)
+                                        y_sol_len_max_o, t_max_o) bind(C)
     use mrkiss_config, only: rk, ik, t_delta_tiny, istats_size
     implicit none
     ! Arguments
@@ -945,7 +944,7 @@ contains
   subroutine steps_adapt_etab_wt(status, istats, solution, deq, t, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
                                  t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,      &
-                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
+                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o) bind(C)
     use mrkiss_config
     implicit none
     ! Arguments
@@ -1191,7 +1190,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_wt::one_step_stab_wt()
   !!
-  subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o)
+  subroutine steps_points_stab_wt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o) bind(C)
     use mrkiss_config, only: rk, ik, istats_size
     implicit none
     ! Arguments
@@ -1250,7 +1249,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message() 
   !!
-  subroutine interpolate_solution(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o)
+  subroutine interpolate_solution_wt(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o) bind(C)
     use :: mrkiss_config, only: rk, ik, bk, istats_size
     implicit none
     ! Arguments
@@ -1307,7 +1306,7 @@ contains
        istats(1) = istats(1) + 1
     end do
     status = 0;
-  end subroutine interpolate_solution
+  end subroutine interpolate_solution_wt
   
 end module mrkiss_solvers_wt
 

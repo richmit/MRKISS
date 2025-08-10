@@ -86,7 +86,7 @@ contains
   !! @see mrkiss_utils::status_to_message() 
   !! 
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, prt_titles_o, &
-                            t_min_o, t_max_o, tag_o, append_o)
+                            t_min_o, t_max_o, tag_o, append_o) bind(C)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik, bk
     implicit none
@@ -227,7 +227,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !! 
-  subroutine print_istats(status, istats, idxs_to_prt_o, filename_o)
+  subroutine print_istats(status, istats, idxs_to_prt_o, filename_o) bind(C)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: ik, istats_size
     implicit none
@@ -309,7 +309,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !! 
-  subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, y_delta_len_idxs_o)
+  subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, y_delta_len_idxs_o) bind(C)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, ik
     implicit none
@@ -433,7 +433,7 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !! 
-  subroutine seq(status, t, from_o, to_o, step_o)
+  subroutine seq(status, t, from_o, to_o, step_o) bind(C)
     use :: mrkiss_config, only: rk, ik, zero_epsilon
     implicit none
     ! Arguments
