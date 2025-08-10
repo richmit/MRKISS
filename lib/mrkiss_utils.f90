@@ -280,7 +280,7 @@ contains
     do i=1,size(idxs_to_prt)
        if (i <= istats_max_idx) then
           write(tmp_str2, '(i2.2)') i
-          write (out_io_unit, fmt=tmp_str1) ("istats(" // trim(tmp_str2) // "): " // trim(desc(idxs_to_prt(i))) // ": "), istats(idxs_to_prt(i))
+          write (out_io_unit, fmt=tmp_str1) (trim(desc(idxs_to_prt(i))) // ": istats(" // trim(tmp_str2) // "): "), istats(idxs_to_prt(i))
        end if
     end do
     ! Close file
