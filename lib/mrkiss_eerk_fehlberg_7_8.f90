@@ -51,7 +51,7 @@ module mrkiss_eerk_fehlberg_7_8
   implicit none
   public
   !> The order of the overall method
-  integer         , parameter :: s          = 13
+  integer,          parameter :: s          = 13
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([      0.0_rk,     0.0_rk,       0.0_rk,        0.0_rk,        0.0_rk,        0.0_rk,       0.0_rk,       0.0_rk,      0.0_rk,      0.0_rk,   0.0_rk,      0.0_rk,   0.0_rk, &
                                                      32800.0_rk,     0.0_rk,       0.0_rk,        0.0_rk,        0.0_rk,        0.0_rk,       0.0_rk,       0.0_rk,      0.0_rk,      0.0_rk,   0.0_rk,      0.0_rk,   0.0_rk, &
@@ -69,13 +69,13 @@ module mrkiss_eerk_fehlberg_7_8
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [              0.0_rk,     8.0_rk,      12.0_rk,       18.0_rk,       45.0_rk,       54.0_rk,      90.0_rk,      18.0_rk,     72.0_rk,     36.0_rk, 108.0_rk,      0.0_rk, 108.0_rk]          /    108.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
-  integer         , parameter :: p1     = 7
+  integer,          parameter :: p1     = 7
   !> Number of stages for the @f$\mathbf{b_1}@f$ method
-  integer         , parameter :: s1     = 11
+  integer,          parameter :: s1     = 11
   !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [              41.0_rk,    0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,  41.0_rk,      0.0_rk,   0.0_rk]          /    840.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
-  integer         , parameter :: p2     = 8
+  integer,          parameter :: p2     = 8
   !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [              0.0_rk,     0.0_rk,      0.0_rk,         0.0_rk,        0.0_rk,      272.0_rk,     216.0_rk,     216.0_rk,     27.0_rk,     27.0_rk,   0.0_rk,     41.0_rk,  41.0_rk]          /    840.0_rk
 end module mrkiss_eerk_fehlberg_7_8

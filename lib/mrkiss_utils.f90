@@ -91,12 +91,12 @@ contains
     use            :: mrkiss_config,   only: rk
     implicit none
     ! Arguments
-    integer         , intent(out)          :: status
+    integer,          intent(out)          :: status
     real(kind=rk),    intent(in)           :: solution(:,:)
     character(len=*), intent(in), optional :: filename_o, separator_o
-    integer         , intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
+    integer,          intent(in), optional :: digits_o, width_o, start_o, end_o, step_o
     real(kind=rk),    intent(in), optional :: t_min_o, t_max_o
-    integer         , intent(in), optional :: tag_o
+    integer,          intent(in), optional :: tag_o
     logical,          intent(in), optional :: prt_titles_o, append_o
     ! Local variables
     integer                                :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx, tag
@@ -236,9 +236,9 @@ contains
     use            :: mrkiss_config,   only: istats_size, istats_max_idx
     implicit none
     ! Arguments
-    integer         , intent(out)          :: status
-    integer         , intent(in)           :: istats(istats_size)
-    integer         , intent(in), optional :: idxs_to_prt_o(:)
+    integer,          intent(out)          :: status
+    integer,          intent(in)           :: istats(istats_size)
+    integer,          intent(in), optional :: idxs_to_prt_o(:)
     character(len=*), intent(in), optional :: filename_o
     ! Local paramaters
     integer, parameter                     :: ml = 73
@@ -259,7 +259,7 @@ contains
                                                                     "                                                                         ", &
                                                                     "                                                                         "  ]
     ! Local variables
-    integer         , allocatable          :: idxs_to_prt(:)
+    integer,          allocatable          :: idxs_to_prt(:)
     integer                                :: out_io_stat, out_io_unit, i
     character(len=32)                      :: tmp_str1, tmp_str2
     ! Process arguments
@@ -320,10 +320,10 @@ contains
     use            :: mrkiss_config,   only: rk
     implicit none
     ! Arguments
-    integer         , intent(out)          :: status
+    integer,          intent(out)          :: status
     real(kind=rk),    intent(in)           :: solution(:,:)
     character(len=*), intent(in), optional :: filename_o
-    integer         , intent(in), optional :: y_dim_o, sol_y_idx_o, y_delta_len_idxs_o(:), start_o, end_o
+    integer,          intent(in), optional :: y_dim_o, sol_y_idx_o, y_delta_len_idxs_o(:), start_o, end_o
     ! Local variables
     integer                                :: y_dim, sol_y_idx, end_idx, start_idx
     integer                                :: i
@@ -444,7 +444,7 @@ contains
     use :: mrkiss_config, only: rk, zero_epsilon
     implicit none
     ! Arguments
-    integer         ,        intent(out) :: status
+    integer,                 intent(out) :: status
     real(kind=rk),           intent(out) :: t(:)
     real(kind=rk), optional, intent(in)  :: from_o, to_o, step_o
     ! Variables
@@ -539,7 +539,7 @@ contains
   character(len=64) function status_to_origin(status)
     implicit none
     ! Arguments
-    integer         , intent(in) :: status
+    integer,          intent(in) :: status
     ! Process Input
     if     (status  <=    0) then
        status_to_origin = "NO ERROR"
@@ -601,7 +601,7 @@ contains
   character(len=128) function status_to_message(status)
     implicit none
     ! Arguments
-    integer         , intent(in) :: status
+    integer,          intent(in) :: status
     ! Process Input
     if (status == 1024) then
        status_to_message = "t_delta_min yielded a longer step than t_delta_max"

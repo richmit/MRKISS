@@ -137,7 +137,7 @@ program step_order_vs_error
 contains
   
   subroutine eq(status, dydt, t, y, param)
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)

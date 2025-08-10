@@ -51,7 +51,7 @@ module mrkiss_eerk_dormand_prince_5_4
   implicit none
   public
   !> The order of the overall method
-  integer         , parameter :: s      = 7
+  integer,          parameter :: s      = 7
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: a(s,s) = reshape([          0.0_rk,             0.0_rk,            0.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
                                                     3427256448.0_rk,             0.0_rk,            0.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
@@ -63,13 +63,13 @@ module mrkiss_eerk_dormand_prince_5_4
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: c(s)   = [                  0.0_rk,            18.0_rk,           27.0_rk,          72.0_rk,          80.0_rk,         90.0_rk,     90.0_rk]          /          90.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
-  integer         , parameter :: p1     = 5
+  integer,          parameter :: p1     = 5
   !> Number of stages for the @f$\mathbf{b_1}@f$ method
-  integer         , parameter :: s1     = 6
+  integer,          parameter :: s1     = 6
   !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b1(s)  = [              12985.0_rk,             0.0_rk,        64000.0_rk,       92750.0_rk,      -45927.0_rk,      18656.0_rk,      0.0_rk]          /      142464.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
-  integer         , parameter :: p2     = 4
+  integer,          parameter :: p2     = 4
   !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
   real(kind=rk),    parameter :: b2(s)  = [            1921409.0_rk,             0.0_rk,      9690880.0_rk,    13122270.0_rk,    -5802111.0_rk,    1902912.0_rk, 534240.0_rk]          /    21369600.0_rk
 end module mrkiss_eerk_dormand_prince_5_4

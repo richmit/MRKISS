@@ -40,8 +40,8 @@ program tc1_TCASEN
 
   implicit none
 
-  integer         ,  parameter :: deq_dim       = 1
-  integer         ,  parameter :: max_steps     = 30
+  integer,           parameter :: deq_dim       = 1
+  integer,           parameter :: max_steps     = 30
   real(kind=rk),     parameter :: t_end         = 3.0_rk
   real(kind=rk),     parameter :: t_delta       = t_end / (max_steps - 1)
   real(kind=rk),     parameter :: param(1)      = [0.0_rk]
@@ -72,7 +72,7 @@ program tc1_TCASEN
 contains
 
   subroutine eq(status, dydt, t, y, param)
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)
@@ -82,7 +82,7 @@ contains
   end subroutine eq
 
   subroutine ysol(status, y, t, param)
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: param(:)

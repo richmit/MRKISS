@@ -41,8 +41,8 @@ program short_b
 
   implicit none
 
-  integer         ,  parameter :: num_points = 11
-  integer         ,  parameter :: deq_dim  = 1
+  integer,           parameter :: num_points = 11
+  integer,           parameter :: deq_dim  = 1
   real(kind=rk),     parameter :: param(1) = [1.0_rk]
   real(kind=rk),     parameter :: t_iv = 0.0_rk
   real(kind=rk),     parameter :: t_delta = 0.1_rk
@@ -60,7 +60,7 @@ program short_b
 contains
 
   subroutine eq(status, dydt, t, y, param)
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)

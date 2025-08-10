@@ -55,7 +55,7 @@ program minimal
 contains
   
   subroutine eq(status, dydt, y, param)
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:)
     real(kind=rk),    intent(in)  :: param(:)

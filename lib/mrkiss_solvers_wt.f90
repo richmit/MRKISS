@@ -57,7 +57,7 @@ module mrkiss_solvers_wt
      subroutine deq_iface_wt(status, dydt, t, y, param) 
        use mrkiss_config, only: rk
        implicit none
-       integer         , intent(out) :: status
+       integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: t
        real(kind=rk),    intent(in)  :: y(:)
@@ -82,11 +82,11 @@ module mrkiss_solvers_wt
      subroutine stepp_iface_wt(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta) 
        use mrkiss_config, only: rk
        implicit none
-       integer         , intent(out) :: status
-       integer         , intent(out) :: end_run
+       integer,          intent(out) :: status
+       integer,          intent(out) :: end_run
        real(kind=rk),    intent(out) :: new_t_delta   ! If >0, then redo step with new t_delta
-       integer         , intent(out) :: sdf_flags     ! If >0, then use bisection to solve SDF and use the result to redo step...
-       integer         , intent(in)  :: pnt_idx
+       integer,          intent(out) :: sdf_flags     ! If >0, then use bisection to solve SDF and use the result to redo step...
+       integer,          intent(in)  :: pnt_idx
        real(kind=rk),    intent(in)  :: solution(:,:), t_delta, y_delta(:)
      end subroutine stepp_iface_wt
   end interface
@@ -110,9 +110,9 @@ module mrkiss_solvers_wt
      subroutine sdf_iface_wt(status, dist, sdf_flags, t, y) 
        use mrkiss_config, only: rk
        implicit none
-       integer         , intent(out) :: status
+       integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dist
-       integer         , intent(in)  :: sdf_flags
+       integer,          intent(in)  :: sdf_flags
        real(kind=rk),    intent(in)  :: t, y(:)
      end subroutine sdf_iface_wt
   end interface
@@ -149,7 +149,7 @@ contains
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -210,7 +210,7 @@ contains
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -269,12 +269,12 @@ contains
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
-    integer         , intent(in)  :: p
+    integer,          intent(in)  :: p
     real(kind=rk),    intent(in)  :: t_delta
     ! Variables
     real(kind=rk)                 :: t_delta_tmp, t_tmp, y_tmp(size(y, 1))
@@ -321,7 +321,7 @@ contains
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -362,7 +362,7 @@ contains
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -410,7 +410,7 @@ contains
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
     procedure(deq_iface_wt)       :: deq
     real(kind=rk),    intent(in)  :: t
@@ -484,12 +484,12 @@ contains
     use mrkiss_config, only: rk, t_delta_ai, istats_size, isi_num_pts, isi_step_norm
     implicit none
     ! Arguments
-    integer         ,           intent(out) :: status, istats(istats_size)
+    integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
-    integer         , optional, intent(in)  :: p_o, max_pts_o
+    integer,          optional, intent(in)  :: p_o, max_pts_o
     real(kind=rk),    optional, intent(in)  :: t_delta_o, t_end_o, t_max_o
     ! Vars
     integer                                 :: cur_pnt_idx, y_dim, cur_step, max_steps, p
@@ -619,13 +619,13 @@ contains
     use mrkiss_config, only: rk, t_delta_tiny, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
     implicit none
     ! Arguments
-    integer         ,           intent(out) :: status, istats(istats_size)
+    integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_max
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o
-    integer         , optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
+    integer,          optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
     logical,          optional, intent(in)  :: no_bisect_error_o
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
@@ -816,13 +816,13 @@ contains
     use mrkiss_config, only: rk, t_delta_tiny, istats_size, isi_num_pts, isi_step_norm, isi_step_y_len
     implicit none
     ! Arguments
-    integer         ,           intent(out) :: status, istats(istats_size)
+    integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_ini
     real(kind=rk),    optional, intent(in)  :: t_delta_min_o, t_delta_max_o
-    integer         , optional, intent(in)  :: max_pts_o, y_delta_len_idxs_o(:), adj_short_o
+    integer,          optional, intent(in)  :: max_pts_o, y_delta_len_idxs_o(:), adj_short_o
     real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
     integer                                 :: max_pts, cur_pnt_idx, y_dim
@@ -965,16 +965,16 @@ contains
     use mrkiss_config
     implicit none
     ! Arguments
-    integer         ,                    intent(out) :: status, istats(istats_size)
+    integer,                             intent(out) :: status, istats(istats_size)
     real(kind=rk),                       intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                          :: deq
     real(kind=rk),                       intent(in)  :: t
     real(kind=rk),                       intent(in)  :: y(:), param(:), a(:,:), b1(:), b2(:), c(:)
-    integer         ,                    intent(in)  :: p1, p2
+    integer,                             intent(in)  :: p1, p2
     real(kind=rk),             optional, intent(in)  :: t_max_o, t_end_o, t_delta_ini_o, t_delta_min_o, t_delta_max_o
     real(kind=rk),             optional, intent(in)  :: t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o
     real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
-    integer         ,          optional, intent(in)  :: max_pts_o, max_bisect_o
+    integer,                   optional, intent(in)  :: max_pts_o, max_bisect_o
     logical,                   optional, intent(in)  :: no_bisect_error_o
     procedure(sdf_iface_wt),   optional              :: sdf_o
     real(kind=rk),             optional, intent(in)  :: sdf_tol_o
@@ -1213,12 +1213,12 @@ contains
     use mrkiss_config, only: rk, istats_size
     implicit none
     ! Arguments
-    integer         ,           intent(out) :: status, istats(istats_size)
+    integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
     procedure(deq_iface_wt)                 :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
-    integer         ,           intent(in)  :: steps_per_pnt
-    integer         , optional, intent(in)  :: p_o
+    integer,                    intent(in)  :: steps_per_pnt
+    integer,          optional, intent(in)  :: p_o
     ! Vars
     integer                                 :: cur_pnt_idx, y_dim, jstats(istats_size), p
     real(kind=rk)                           :: dy(size(y, 1))
@@ -1273,10 +1273,10 @@ contains
     use :: mrkiss_config, only: rk, istats_size, isi_num_pts
     implicit none
     ! Arguments
-    integer         ,           intent(out)   :: status, istats(istats_size)
+    integer,                    intent(out)   :: status, istats(istats_size)
     real(kind=rk),              intent(inout) :: solution(:,:)
     real(kind=rk),              intent(in)    :: src_solution(:,:)
-    integer         , optional, intent(in)    :: num_src_pts_o
+    integer,          optional, intent(in)    :: num_src_pts_o
     procedure(deq_iface_wt)                   :: deq
     real(kind=rk),              intent(in)    :: param(:)
     logical,          optional, intent(in)    :: linear_interp_o

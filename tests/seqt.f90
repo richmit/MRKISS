@@ -6,7 +6,7 @@ program seqt
   use            :: mrkiss_utils,       only: seq
 
   implicit none
-  integer         ,  parameter :: num_num   = 11
+  integer,           parameter :: num_num   = 11
   real(kind=rk),     parameter :: in_from   = 0.0_rk
   real(kind=rk),     parameter :: in_to     = 1.0_rk
   real(kind=rk),     parameter :: in_step   = 0.1_rk

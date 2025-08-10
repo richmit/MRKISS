@@ -41,8 +41,8 @@ program rkf45
 
   implicit none
 
-  integer         ,  parameter :: max_step      = 11
-  integer         ,  parameter :: deq_dim       = 1
+  integer,           parameter :: max_step      = 11
+  integer,           parameter :: deq_dim       = 1
   real(kind=rk),     parameter :: param(1)      = [1.0_rk]
   real(kind=rk),     parameter :: t_iv          = 0.0_rk
   real(kind=rk),     parameter :: t_delta       = 0.1_rk
@@ -108,7 +108,7 @@ program rkf45
 contains
 
   subroutine eq(status, dydt, t, y, param)
-    integer         , intent(out) :: status
+    integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:)
