@@ -59,10 +59,9 @@ module mrkiss_solvers_nt
   !!
   !! @verbatim
   !! status .... Exit status
-  !! status .... Exit status
   !!              - -inf-0 .... Everything worked
   !!              - 1-255 ..... Error in this routine
-  !!              - others .... Other values are not allowed
+  !!              - others .... No other values allowed
   !! t ......... Value for t.
   !! y(:) ...... Value for y.
   !! param(:) .. Data payload usually used for constants.
@@ -86,7 +85,7 @@ module mrkiss_solvers_nt
   !! status .... Exit status
   !!              - -inf-0 .... Everything worked
   !!              - 256-511 ... Error in this routine
-  !!              - others .... Other values are not allowed
+  !!              - others .... No other values allowed
   !! t ......... Value for t.
   !! y(:) ...... Value for y.
   !! param(:) .. Data payload usually used for constants.
@@ -112,7 +111,7 @@ module mrkiss_solvers_nt
   !! status ..... Exit status
   !!               - -inf-0 .... Everything worked
   !!               - 512-767 ... Error in this routine
-  !!               - others .... Other values are not allowed
+  !!               - others .... No other values allowed
   !! dist ....... The distance value of the SDF funciton
   !! sdf_flags .. Flags passed from a stepp_iface_nt routine
   !! t .......... The t value.
@@ -149,7 +148,7 @@ contains
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1232-1247 .. Error in this routine
-  !!                                - others ..... Other values are not allowed
+  !!                                - others ..... No other values allowed
   !! y1_delta(:) ................. Returned delta for b1 method
   !! y2_delta(:) ................. Returned delta for b2 method
   !! dy(:) ....................... Returned dy/dt value at t
@@ -205,19 +204,19 @@ contains
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
   !!                        - 1248-1263 .. Error in this routine
-  !!                        - others ..... Other values are not allowed
+  !!                        - others ..... No other values allowed
   !! y_delta(:) .......... Returned delta for the method
   !! dy(:) ............... Returned dy/dt value at t
   !! deq ................. Equation subroutine
   !! t, y(:) ............. Initial conditions.  y is a column vector!
   !! param(:) ............ Data payload passed to deq
   !! a(:,:), b(:), c(:) .. The butcher tableau
+  !!                       The number of stages is determined based on the length of b.  All of the methods in an EERK need not
+  !!                       be the same number of stages.  When this occurs, the b1 or b2 pulled from the module can be shortened
+  !!                       when passing it to this function.  This will improve performance by not executing an unnecessary
+  !!                       stage.  See MRKISS/tests/short_b.f90 for an example.
   !! t_delta ............. Delta t to use for the step.
   !! @endverbatim
-  !!
-  !! The number of stages is determined based on the length of b.  All of the methods in an EERK need not be the same number of
-  !! stages.  When this occurs, the b1 or b2 pulled from the module can be shortened when passing it to this function.  This will
-  !! improve performance by not executing an unnecessary stage.  See $MRKISS/tests/short_b.f90 for an example.
   !! 
   ! SHELLO: sed -n '/^  *subroutine one_step_etab_nt(/,/end subroutine one_step_etab_nt *$/p' mrkiss_solvers_nt.f90 | sed 's/, y2_delta[^,]*//; s/, b2[^,]*//; s/_etab/_stab/; s/b1/b/g; s/y1/y/g; /y2_delta/d;'
   subroutine one_step_stab_nt(status, y_delta, dy, deq, y, param, a, b, c, t_delta)
@@ -265,7 +264,8 @@ contains
   !!                        - -inf-0 ..... Everything worked
   !!                        - 0-255 ...... Evaluation of deq failed
   !!                        - 1216-1231 .. Error in this routine
-  !!                        - others ..... Other values are not allowed
+  !!                        - 1248-1263 .. Error from one_step_stab_nt()
+  !!                        - others ..... No other values allowed
   !! y_delta(:) .......... Returned delta for the method
   !! dy(:) ............... Returned dy/dt value at t
   !! deq ................. Equation subroutine
@@ -275,6 +275,7 @@ contains
   !! p ................... The order for the RK method in the butcher tableau
   !! t_delta ............. Delta t to use for the step.
   !! @endverbatim
+  !! @see: mrkiss_solvers_nt::one_step_stab_nt(), 
   !!
   subroutine one_richardson_step_stab_nt(status, y_delta, dy, deq, y, param, a, b, c, p, t_delta)
     use mrkiss_config, only: rk, ik
@@ -318,7 +319,7 @@ contains
   !!                - -inf-0 ..... Everything worked
   !!                - 0-255 ...... Evaluation of deq failed
   !!                - 1200-1215 .. Error in this routine
-  !!                - others ..... Other values are not allowed
+  !!                - others ..... No other values allowed
   !! y_delta(:) .. Returned delta for the method
   !! dy(:) ....... Returned dy/dt value at t
   !! deq ......... Equation subroutine
@@ -358,7 +359,7 @@ contains
   !!                - -inf-0 ..... Everything worked
   !!                - 0-255 ...... Evaluation of deq failed
   !!                - 1184-1199 .. Error in this routine
-  !!                - others ..... Other values are not allowed
+  !!                - others ..... No other values allowed
   !! y_delta(:) .. Returned delta for the method
   !! dy(:) ....... Returned dy/dt value at t
   !! deq ......... Equation subroutine
@@ -405,7 +406,7 @@ contains
   !!                - -inf-0 ..... Everything worked
   !!                - 0-255 ...... Evaluation of deq failed
   !!                - 1263-1279 .. Error in this routine
-  !!                - others ..... Other values are not allowed
+  !!                - others ..... No other values allowed
   !! y_delta(:) .. Returned delta for the method
   !! dy(:) ....... Returned dy/dt value at t
   !! deq ......... Equation subroutine
@@ -457,10 +458,12 @@ contains
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1120-1151 .. Error in this routine
-  !!                                - others ..... Other values are not allowed
+  !!                                - 1216-1231 .. Error from one_richardson_step_stab_nt()
+  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
-  !!                                - istats(1): number of computed solution points stored in solution.
-  !!                                - istats(2): number of one_step_* calls not triggered by an event
+  !!                                - Elements this routine updates: 1, & 2
+  !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !! solution(:,:) ............... Array for solution.  
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
@@ -480,6 +483,7 @@ contains
   !! t_end_o ..................... End point for last step.  Silently ignored if t_delta_o is provided.
   !! t_max_o ..................... Maximum value for t
   !! @endverbatim
+  !! @see mrkiss_utils::print_istats(), mrkiss_solvers_nt::one_step_stab_nt(), mrkiss_solvers_nt::one_richardson_step_stab_nt()
   !!
   subroutine steps_fixed_stab_nt(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
                                  t_end_o, t_max_o)
@@ -582,13 +586,11 @@ contains
   !!                                - 1024-1055 .. Error in this routine (no_bisect_error_o==.true.)
   !!                                                - 1024 .. t_delta_min yielded a longer step than t_delta_max
   !!                                                - 1025 .. no_bisect_error_o==0 not present and max_bisect_o violated
-  !!                                - others ..... Other values are not allowed
+  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
-  !!                                - istats(1): number of computed solution points
-  !!                                - istats(2): number of one_step_* calls not triggered by an event
-  !!                                - istats(3): number of one_step_* calls triggered by y_delta length constraint
-  !!                                - istats(7): number of times bisection failed because of max_bisect_o
-  !!                                - istats(8): number of times bisection failed because target was not contained
+  !!                                - Elements this routine updates: 1, 2, 3, 7, & 8
+  !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !! solution .................... Array for solution.  
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
@@ -609,6 +611,7 @@ contains
   !! y_sol_len_max_o ............. Maximum length of the solution curve
   !! t_max_o ..................... Maximum value for t
   !! @endverbatim
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_stab_nt()
   !!
   subroutine steps_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
@@ -777,11 +780,11 @@ contains
   !!                                - -inf-0 ..... Everything worked
   !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1280-1296 .. Error in this routine
-  !!                                - others ..... Other values are not allowed
+  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
-  !!                                - istats(1): number of computed solution points
-  !!                                - istats(2): number of one_step_* calls not triggered by an event
-  !!                                - istats(3): number of one_step_* calls triggered by y_delta length constraint
+  !!                                - Elements this routine updates: 1, 2, 3
+  !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !! solution .................... Array for solution.  
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
@@ -801,6 +804,7 @@ contains
   !! y_sol_len_max_o ............. Maximum length of the solution curve
   !! t_max_o ..................... Maximum value for t
   !! @endverbatim
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_stab_nt()
   !!
   subroutine steps_sloppy_condy_stab_nt(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
@@ -900,16 +904,13 @@ contains
   !!                                - 256-511 .... Error in stepp_o
   !!                                - 512-767 .... Error in sdf_o
   !!                                - 1056-1119 .. Error in this routine
-  !!                                               - 1056 .... no_bisect_error_o=.false. and max_bisect_o violated
-  !!                                - others ..... Other values are not allowed
+  !!                                                - 1056 .. no_bisect_error_o=.false. and max_bisect_o violated
+  !!                                - 1232-1247 .. Error from one_step_etab_nt()
+  !!                                - 1248-1263 .. Error from one_step_stab_nt()
+  !!                                - others ..... No other values allowed
   !! istats(:) ................... Integer statistics for run
-  !!                                istats(1): number of computed solution points
-  !!                                istats(2): number of one_step_* calls not triggered by an event
-  !!                                istats(4): number of one_step_* calls triggered by y_delta error constraint
-  !!                                istats(5): number of one_step_* calls triggered by step processing with new t_delta
-  !!                                istats(6): number of one_step_* calls triggered by SDF bisection
-  !!                                istats(7): number of times bisection failed because of max_bisect_o
-  !!                                istats(8): number of times bisection failed because target was not contained
+  !!                                - Elements this routine updates: 1, 2, 4, 5, 6, 7, & 8
+  !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !! solution(:,:) ............... Array for solution.
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
@@ -943,6 +944,7 @@ contains
   !! sdf_tol_o ................... How close we have to get to accept an sdf solution. Default: sdf_tol_ai
   !! stepp_o ..................... Step processing subroutine.  Called after each step.
   !! @endverbatim
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_etab_nt(), mrkiss_solvers_nt::one_step_stab_nt()
   !! 
   subroutine steps_adapt_etab_nt(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
@@ -1171,10 +1173,12 @@ contains
   !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1348-1364 .. Error in this routine
+  !!                                - 1248-1263 .. Error from one_step_stab_nt()
   !! istats(:) ................... Integer statistics for run
-  !!                                - istats(1): number of computed solution points stored in solution.
-  !!                                - istats(2): number of one_step_* calls not triggered by an event
+  !!                                - Elements this routine updates: 1 & 2
+  !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !! solution(:,:) ............... Array for solution.  
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable if
@@ -1188,6 +1192,7 @@ contains
   !! steps_per_pnt ............... Number of RK steps to reach each point
   !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
   !! @endverbatim
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers_nt::one_step_stab_nt()
   !!
   subroutine steps_points_stab_nt(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o)
     use mrkiss_config, only: rk, ik, istats_size
@@ -1228,9 +1233,13 @@ contains
   !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
+  !!                                - 0-255 ...... Evaluation of deq failed
   !!                                - 1331:1347 .. Error in this routine
-  !!                                   - 1331 ...... solution t value out of bounds
-  !!                                - others ..... Other values are not allowed
+  !!                                                - 1331 ...... solution t value out of bounds
+  !!                                - others ..... No other values allowed
+  !! istats(:) ................... Integer statistics for run
+  !!                                - Elements this routine updates: 1
+  !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !! solution(:,:) ............... Array for new solution.  
   !!                                This array *must* have a populated t sequence in solution(1,:)
   !!                                It must also have room for a new y & dy coordinates.
@@ -1240,12 +1249,13 @@ contains
   !! num_src_pts_o ............... The number of solutions in src_solution.  Default infered from size of src_solution.
   !! linear_interp_o ............. If .true. do linear interpolation, and hermite otherwise.  Default: .false.
   !! @endverbatim
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message() 
   !!
-  subroutine interpolate_solution(status, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o)
-    use :: mrkiss_config, only: rk, ik, bk
+  subroutine interpolate_solution(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o)
+    use :: mrkiss_config, only: rk, ik, bk, istats_size
     implicit none
     ! Arguments
-    integer(kind=ik),           intent(out)   :: status
+    integer(kind=ik),           intent(out)   :: status, istats(istats_size)
     real(kind=rk),              intent(inout) :: solution(:,:)
     real(kind=rk),              intent(in)    :: src_solution(:,:)
     integer(kind=ik), optional, intent(in)    :: num_src_pts_o
@@ -1263,6 +1273,7 @@ contains
     num_src_pts = size(src_solution, 2)
     if (present(num_src_pts_o)) num_src_pts = min(num_src_pts_o, size(src_solution, 2))
     ! Compute value
+    istats(1) = 0
     y_dim = (size(src_solution, 1) - 1) /2
     max_idx = size(solution, 2)
     old_sol_idx = 2
@@ -1292,6 +1303,8 @@ contains
        solution(2:(2+y_dim-1),           new_sol_idx) = yat
        call deq(status, solution((2+y_dim):(2+2*y_dim-1), new_sol_idx), & ! wt2nt:IGNORE
                 yat, param)
+       if (status > 0) return
+       istats(1) = istats(1) + 1
     end do
     status = 0;
   end subroutine interpolate_solution

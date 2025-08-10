@@ -64,7 +64,7 @@ contains
   !!                   - 1152-1183 .. Error in this routine
   !!                                   - 1152 .. Could not open file for write
   !!                                   - 1153 .. Could not close file         
-  !!                   - others ..... Other values are not allowed
+  !!                   - others ..... No other values allowed
   !! solution ....... Matrix with solution values
   !!                   t ... row 1
   !!                   y ... rows 2:(2+y_dim)
@@ -83,6 +83,7 @@ contains
   !! tag_o .......... If non-negative, this integer that will become the first column of the output. Default: -1
   !! append_o ....... Append to file instead of overwriting.  Ignored if filename_o not present. Default: .false.
   !! @endverbatim
+  !! @see mrkiss_utils::status_to_message() 
   !! 
   subroutine print_solution(status, solution, filename_o, separator_o, digits_o, width_o, start_o, end_o, step_o, prt_titles_o, &
                             t_min_o, t_max_o, tag_o, append_o)
@@ -221,9 +222,10 @@ contains
   !!                   - 1365-1381 .. Error in this routine
   !!                                   - 1365 .. Could not open file for write
   !!                                   - 1366 .. Could not close file         
-  !!                   - others ..... Other values are not allowed
+  !!                   - others ..... No other values allowed
   !! istats(:) ...... Integer statistics from a solver run
   !! @endverbatim
+  !! @see mrkiss_utils::status_to_message() 
   !! 
   subroutine print_istats(status, istats, idxs_to_prt_o, filename_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
@@ -295,7 +297,7 @@ contains
   !!                        - 1297-1313 .. Error in this routine
   !!                                        - 1297 .. Could not open file for write
   !!                                        - 1313 .. Could not close file         
-  !!                        - others ..... Other values are not allowed
+  !!                        - others ..... No other values allowed
   !! solution ............ Matrix with solution values
   !! y_dim_o ............. Number of elements in y
   !! start_o ............. Starting index to print in solution. Default: 1
@@ -305,6 +307,7 @@ contains
   !! filename_o .......... Filename to which we print.  Default: NONE
   !!                       If not present, then output will be to output_unit (STDOUT).  
   !! @endverbatim
+  !! @see mrkiss_utils::status_to_message() 
   !! 
   subroutine analyze_solution(status, solution, filename_o, y_dim_o, start_o, end_o, sol_y_idx_o, y_delta_len_idxs_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
@@ -421,13 +424,14 @@ contains
   !! status .............. Exit status
   !!                        - -inf-0 ..... Everything worked
   !!                        - 1314:1330 .. Error in this routine
-  !!                          - 1314 .. Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v
+  !!                                        - 1314 .. Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v
   !! y_at_t .............. The value of the function at t
   !! t ................... Vector to fill
   !! from_o .............. Starting value
   !! to_o ................ Ending value
   !! step_o .............. Delta between valeus
   !! @endverbatim
+  !! @see mrkiss_utils::status_to_message() 
   !! 
   subroutine seq(status, t, from_o, to_o, step_o)
     use :: mrkiss_config, only: rk, ik, zero_epsilon
@@ -523,6 +527,7 @@ contains
   !!                                - ERROR ..... Error status of unknown origin
   !!                                - Every other return is a known interface or subroutine 
   !! @endverbatim
+  !! @see mrkiss_utils::status_to_message() 
   !!
   character(len=64) function status_to_origin(status)
     use :: mrkiss_config, only: ik
@@ -585,6 +590,7 @@ contains
   !!                                - ERROR ..... Error status of unknown message
   !!                                - Every other return is a known error message
   !! @endverbatim
+  !! @see mrkiss_utils::status_to_origin() 
   !!
   character(len=128) function status_to_message(status)
     use :: mrkiss_config, only: ik

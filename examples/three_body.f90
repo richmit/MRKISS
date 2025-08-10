@@ -83,7 +83,7 @@ program three_body
   real(kind=rk),    parameter :: t_delta       = 17.06521656015796d0 / (num_points - 1 )
 
   real(kind=rk)               :: sol1(1+2*deq_dim, num_points), sol2(1+2*deq_dim, num_points)
-  integer(kind=ik)            :: status, istats1(istats_size)
+  integer(kind=ik)            :: status, istats1(istats_size), istats2(istats_size)
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run V(9)"
@@ -139,9 +139,9 @@ program three_body
   print '(a)', "Adaptive hermite interpolation run"
   sol2 = 0
   ! BEGIN: steps_adapt_int_hermite
-  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                            ! Create new t values
+  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                     ! Create new t values
   print '(a)', status_to_message(status)
-  call interpolate_solution(status, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) ! Preform the interpolation
+  call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) ! Preform the interpolation
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated.csv")
   ! END: steps_adapt_int_hermite
 
@@ -150,7 +150,7 @@ program three_body
   sol2 = 0
   ! BEGIN: steps_adapt_int_linear
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);
-  call interpolate_solution(status, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true._bk)
+  call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true._bk)
   print '(a)', status_to_message(status)
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
   ! END: steps_adapt_int_linear

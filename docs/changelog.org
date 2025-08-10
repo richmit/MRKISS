@@ -53,13 +53,16 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Known Issues
     - N/A
   - API breaking Changes
-    - N/A
+    - interpolate_solution(): Add istats() argument.
   - Deprecated functionality
     - N/A
   - New functionality
     - print_istats()
   - Documentation
-    - N/A
+    - Reworked istats() descriptions.
+    - Added references to print_istats() & status_to_message().
+    - Added refs to all called routines from callers
+    - Added returns from all called routines
   - Examples
     - New
       - N/A
