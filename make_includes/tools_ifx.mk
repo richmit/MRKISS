@@ -43,11 +43,11 @@ ifeq ($(OS),Windows_NT)
 else
 	FC := ifx
 	ifeq ($(DO_OPENMP),YES)
-      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack -qopenmp
+      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack -qopenmp -fPIC
     else	
-      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack
+      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack -fPIC
     endif
-	FSHFLG = -shared  -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
+	FSHFLG = -fPIC -shared  -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 endif
 
 
