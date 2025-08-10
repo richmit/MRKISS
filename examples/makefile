@@ -124,7 +124,7 @@ lorenz_clean :
 	rm -f $(LORENZ_PNGS) $(LORENZ_CSVS) $(LORENZ_SVGS) lorenz.exe lorenz lorenz.o lorenz.obj
 
 .PHONY: lorenz_test
-lorenz_test: $(LORENZ_CSVS)
+lorenz_test: lorenz_fixed.csv lorenz_condy.csv
 	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
