@@ -49,7 +49,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :CUSTOM_ID: latest
 :END:
   - Fixed Bugs
-    - N/A
+    - Fixed integer type for out_io_stat & out_io_unit
   - Known Issues
     - N/A
   - API breaking Changes

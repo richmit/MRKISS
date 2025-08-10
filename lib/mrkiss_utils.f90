@@ -101,7 +101,8 @@ contains
     ! Local variables
     integer(kind=ik)                       :: digits, width, start_idx, end_idx, step, y_dim, sol_y_idx, tag
     logical(kind=bk)                       :: prt_titles
-    integer(kind=ik)                       :: i, out_io_stat, out_io_unit, num_int, num_real
+    integer(kind=ik)                       :: i, num_int, num_real
+    integer                                :: out_io_stat, out_io_unit, 
     character(len=:), allocatable          :: fmt, separator, access_mode
     character(len=512)                     :: digits_str, width_str, tmp_str
     ! Process arguments
@@ -325,7 +326,8 @@ contains
     integer(kind=ik), intent(in), optional :: y_dim_o, sol_y_idx_o, y_delta_len_idxs_o(:), start_o, end_o
     ! Local variables
     integer(kind=ik)                       :: y_dim, sol_y_idx, end_idx, start_idx
-    integer(kind=ik)                       :: i, out_io_stat, out_io_unit
+    integer(kind=ik)                       :: i
+    integer                                :: out_io_stat, out_io_unit
     real(kind=rk)                          :: t_max, t_min, t_delta_max, t_delta_min, y_delta_len_max, y_delta_len_min
     real(kind=rk), allocatable             :: dy_max(:), dy_min(:), y_max(:), y_min(:)
     real(kind=rk), allocatable             :: y_delta_max(:), y_delta_min(:)
@@ -442,12 +444,12 @@ contains
     use :: mrkiss_config, only: rk, ik, zero_epsilon
     implicit none
     ! Arguments
-    integer(kind=ik), intent(out) :: status
-    real(kind=rk),    intent(out) :: t(:)
+    integer(kind=ik),        intent(out) :: status
+    real(kind=rk),           intent(out) :: t(:)
     real(kind=rk), optional, intent(in)  :: from_o, to_o, step_o
     ! Variables
-    integer(kind=ik)              :: n_v, i
-    real(kind=rk)                 :: from_v, to_v, step_v
+    integer(kind=ik)                     :: n_v, i
+    real(kind=rk)                        :: from_v, to_v, step_v
     ! Compute paramaters
     if     (.not. (present(from_o))) then
        status = 0
