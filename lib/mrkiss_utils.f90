@@ -532,7 +532,7 @@ contains
   !! status_to_origin(len=32) .... A string identifying the origin of the status code.
   !!                                - A subroutine or interface name
   !!                                - "NO ERROR" for a non-error status of unknown origin
-  !!                                - "ERROR" for an error status of unknown origin
+  !!                                - "UNKNOWN SOURCE" for an error status of unknown origin
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !!
