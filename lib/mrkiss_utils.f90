@@ -529,14 +529,14 @@ contains
   !! 
   !! @verbatim
   !! status ...................... This is an intent(in) argument!!!!
-  !! status_to_origin(len=64) .... A string identifying the origin of the status code.
-  !!                                - NO ERROR .. Non-error status of unknown origin
-  !!                                - ERROR ..... Error status of unknown origin
-  !!                                - Every other return is a known interface or subroutine 
+  !! status_to_origin(len=32) .... A string identifying the origin of the status code.
+  !!                                - A subroutine or interface name
+  !!                                - "NO ERROR" for a non-error status of unknown origin
+  !!                                - "ERROR" for an error status of unknown origin
   !! @endverbatim
   !! @see mrkiss_utils::status_to_message() 
   !!
-  character(len=64) function status_to_origin(status)
+  character(len=32) function status_to_origin(status)
     implicit none
     ! Arguments
     integer,          intent(in) :: status
@@ -544,45 +544,45 @@ contains
     if     (status  <=    0) then
        status_to_origin = "NO ERROR"
     elseif ((status >=    1) .and. (status <=  255)) then
-       status_to_origin = "interface  deq_iface_*t"
+       status_to_origin = "deq_iface_*t"
     elseif ((status >=  256) .and. (status <=  511)) then
-       status_to_origin = "interface  stepp_iface_*t"
+       status_to_origin = "stepp_iface_*t"
     elseif ((status >=  512) .and. (status <=  767)) then
-       status_to_origin = "interface  sdf_iface_*t"
+       status_to_origin = "sdf_iface_*t"
     elseif ((status >= 1232) .and. (status <= 1247)) then
-       status_to_origin = "subroutine one_step_etab_*t"
+       status_to_origin = "one_step_etab_*t"
     elseif ((status >= 1248) .and. (status <= 1263)) then
-       status_to_origin = "subroutine one_step_stab_*t"
+       status_to_origin = "one_step_stab_*t"
     elseif ((status >= 1216) .and. (status <= 1231)) then
-       status_to_origin = "subroutine one_richardson_step_stab_*t"
+       status_to_origin = "one_richardson_step_stab_*t"
     elseif ((status >= 1200) .and. (status <= 1215)) then
-       status_to_origin = "subroutine one_step_rk4_*t"
+       status_to_origin = "one_step_rk4_*t"
     elseif ((status >= 1184) .and. (status <= 1199)) then
-       status_to_origin = "subroutine one_step_rkf45_*t"
+       status_to_origin = "one_step_rkf45_*t"
     elseif ((status >= 1263) .and. (status <= 1279)) then
-       status_to_origin = "subroutine one_step_dp54_*t"
+       status_to_origin = "one_step_dp54_*t"
     elseif ((status >= 1120) .and. (status <= 1151)) then
-       status_to_origin = "subroutine steps_fixed_stab_*t"
+       status_to_origin = "steps_fixed_stab_*t"
     elseif ((status >= 1024) .and. (status <= 1055)) then
-       status_to_origin = "subroutine steps_condy_stab_*t"
+       status_to_origin = "steps_condy_stab_*t"
     elseif ((status >= 1280) .and. (status <= 1296)) then
-       status_to_origin = "subroutine steps_sloppy_condy_stab_*t"
+       status_to_origin = "steps_sloppy_condy_stab_*t"
     elseif ((status >= 1056) .and. (status <= 1119)) then
-       status_to_origin = "subroutine steps_adapt_etab_*t"
+       status_to_origin = "steps_adapt_etab_*t"
     elseif ((status >= 1152) .and. (status <= 1183)) then
-       status_to_origin = "subroutine print_solution"
+       status_to_origin = "print_solution"
     elseif ((status >= 1297) .and. (status <= 1313)) then
-       status_to_origin = "subroutine analyze_solution"
+       status_to_origin = "analyze_solution"
     elseif ((status >= 1314) .and. (status <= 1330)) then
-       status_to_origin = "subroutine seq"
+       status_to_origin = "seq"
     elseif ((status >= 1331) .and. (status <= 1347)) then
-       status_to_origin = "subroutine interpolate_solution"
+       status_to_origin = "interpolate_solution"
     elseif ((status >= 1348) .and. (status <= 1364)) then
-       status_to_origin = "subroutine steps_points_stab_*t"
+       status_to_origin = "steps_points_stab_*t"
     elseif ((status >= 1365) .and. (status <= 1381)) then
-       status_to_origin = "subroutine print_istats"
+       status_to_origin = "print_istats"
     else
-       status_to_origin = "ERROR"
+       status_to_origin = "UNKNOWN SOURCE"
     end if
   end function status_to_origin
 
@@ -592,9 +592,10 @@ contains
   !! @verbatim
   !! status ...................... This is an intent(in) argument!!!!
   !! status_to_message(len=128) .. A string identifying the message of the status code.
-  !!                                - NO ERROR .. Non-error status of unknown message
-  !!                                - ERROR ..... Error status of unknown message
-  !!                                - Every other return is a known error message
+  !!                                - "SOURCE: MESSAGE"
+  !!                                  - SOURCE will be the subroutine or interface if known, and "UNKNOWN SOURCE" otherwise
+  !!                                  - MESSAGE will be the error message if known, and "UNKNOWN ERROR" otherwise
+  !!                                - "NO ERROR" for a non-error status of unknown message
   !! @endverbatim
   !! @see mrkiss_utils::status_to_origin() 
   !!
@@ -603,7 +604,10 @@ contains
     ! Arguments
     integer,          intent(in) :: status
     ! Process Input
-    if (status == 1024) then
+    if (status <= 0) then
+       status_to_message = "NO ERROR"
+       return
+    elseif (status == 1024) then
        status_to_message = "t_delta_min yielded a longer step than t_delta_max"
     elseif (status == 1025) then
        status_to_message = "no_bisect_error_o not present and max_bisect_o violated"
@@ -626,8 +630,9 @@ contains
     elseif (status == 1366) then
        status_to_message = "Could not close file"
     else
-       status_to_message = status_to_origin(status)
+       status_to_message = "UNKNOWN ERROR"
     end if
+    status_to_message = trim(status_to_origin(status)) // ": " // status_to_message 
   end function status_to_message
 
 end module mrkiss_utils

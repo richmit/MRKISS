@@ -53,9 +53,10 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Known Issues
     - N/A
   - API breaking Changes
-    - interpolate_solution(): Add istats() argument.
+    - interpolate_solution(): Add istats() argument and renamed to interpolate_solution_*t().
     - Removed logical kind from library.
     - Removed integer kind from library.
+    - status_to_origin() return changed from len=64 to len=32
   - Deprecated functionality
     - N/A
   - New functionality
@@ -71,6 +72,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
       - isi_bic_fail_max  
       - isi_bic_fail_bnd
     - All solvers now use isi_* constants to update istats
+    - status_to_origin() & status_to_message() have better messages now.
   - Documentation
     - Reworked istats() descriptions.
     - Added references to print_istats() & status_to_message().

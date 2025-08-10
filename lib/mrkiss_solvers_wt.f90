@@ -1318,7 +1318,7 @@ contains
           tu  = (t - t0) / td
           yat = tu * (tu * (tu * (2 * y0 + dy0 - 2 * y1 + dy1) - 2 * dy0 - 3 * y0 + 3 * y1 - dy1) + dy0) + y0
        end if
-       solution(2:(2+y_dim-1),           new_sol_idx) = yat
+       solution(2:(2+y_dim-1), new_sol_idx) = yat
        call deq(status, solution((2+y_dim):(2+2*y_dim-1), new_sol_idx), & ! wt2nt:IGNORE
                 t,                                                      & ! wt2nt:DELETE
                 yat, param)

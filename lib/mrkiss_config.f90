@@ -36,13 +36,13 @@
 !> Configuration for MRKISS == MR RK KISS == Mitch Richling's Runge-Kutta Keep It Simple Stupid
 !!
 module mrkiss_config
-  use, intrinsic:: iso_c_binding, only: c_int32_t, c_double, c_float, c_bool
+  use, intrinsic:: iso_c_binding, only: c_double, c_float
   implicit none
   private
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Real & integer types for externally viable interfaces and arguments
-  integer,          parameter, public :: rk                 = c_double   !< Real kind used in interfaces
+  integer,          parameter, public :: rk                 = c_double   !< Real kind used across the library
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to the library
