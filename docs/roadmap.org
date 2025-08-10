@@ -47,9 +47,9 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 Right now everything that is implemented seems to work.  Test coverage is poor for the high level solvers, but solid for the one step solvers and tableaux.  I
 have a few functionality improvements I want to implement, but I don't forsee any API changes.  I also have a few examples I would like to add.
 
- - Add dy to a solution without it already
  - Finalize step-size and error computation in ~steps_adapt_etab_*t()~
  - Add tests for high level solvers
+ - +Add dy to a solution without it already+ *CANCELED*
  - +Add status -> message function in mrkiss_utils+ *DONE*
  - +Solver that takes a t-vec, and computes solution using those points+ *DONE*
  - +step size & order vs accuracy+ *DONE*
