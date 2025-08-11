@@ -799,7 +799,7 @@ contains
   !! param(:) .................... Data payload passed to deq
   !! a(:,:), b(:), c(:) .......... The butcher tableau
   !! y_delta_len_targ ............ Attempt to make all steps this long
-  !! t_delta_ini ................. Maximum t_delta
+  !! t_delta_ini ................. Test step t_delta
   !! t_delta_max_o ............... Maximum t_delta
   !! t_delta_min_o ............... Minimum t_delta
   !! y_delta_len_idxs_o .......... Components of y_delta to use for y_delta length computation

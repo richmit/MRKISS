@@ -59,7 +59,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - New functionality
     - N/A
   - Documentation
-    - N/A
+    - Rewrote much of main index page.
   - Examples
     - New
       - N/A

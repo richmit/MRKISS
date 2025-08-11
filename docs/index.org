@@ -70,13 +70,12 @@ up and and running quickly when moving to a new supercomputer, cloud, or HPC clu
 Here is a complete example in 23 lines that solves [[https://www.mitchr.me/SS/lorenz/index.html][Lorenz's system]] and generates a CSV file of the results.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/src2noHeader ../examples/minimal.f90 | sed 's/; zotero.*$//; s/---------------------------------$//;'
+~/core/codeBits/bin/src2noHeader ../examples/minimal.f90 | sed 's/; zotero.*$//; /^!-*$/d;'
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
 
-!-------------------------------------------------------------------------------------------------
 program minimal
 
   use :: mrkiss_config,      only: rk, istats_size
@@ -117,11 +116,22 @@ You can check out a couple larger examples:
 If you just want to jump in, then take a look at the [[#qs-min][Quick Start]] section.  
 
 * Vocabulary & Definitions
+:PROPERTIES:
+:CUSTOM_ID: voc-def
+:END:
 
 Before discussing the software, it is best if we define the problem we are solving and fix some definitions and notation.  I use the notation from this
 section throughout this document.
 
-Within the confines of this software, we define a system of ODEs as:
+*Solving an ODE (Ordenary Differental Equation):*\\
+#+begin_quote
+  We wish to compute values for an unknown function \(\mathbf{y}:\mathbb{R}\rightarrow\mathbb{R}^n\) on some interval \([t_0, t_\mathrm{max}]\) given an
+  initial value \(\mathbf{y}(t_0)=\mathbf{y_0}\) and an implicit equation  involving \(t\), \(\mathbf{y}\), and it's derivatives:
+
+  \[ \mathbf{y}' =  \mathbf{f}(t, \mathbf{y}) \]
+#+end_quote
+
+The expression above may be written in component form as:
 
 \[ \frac{\mathrm{d}\mathbf{y}}{\mathrm{d}t} =  \mathbf{f}(t, \mathbf{y}) =
   \left[\begin{array}{c}
@@ -140,9 +150,9 @@ Within the confines of this software, we define a system of ODEs as:
    f_n(t, [y_1, \cdots, y_n]^\mathrm{T}) \\
   \end{array}\right] \]
 
-The goal is to find numerical values for the unknown function \(\mathbf{y}:\mathbb{R}\rightarrow\mathbb{R}^{n}\).
+If the function \(\mathbf{f}(t, \mathbf{y}) \) doesn't actually depend on \(t\), then the ODE is said to be Autonomous.
 
-We define an embedded explicit Runge-Kutta method via a set of coefficients organized into a /Butcher tableau/:
+We define an \(s\)-stage embedded explicit Runge-Kutta method via a set of coefficients organized into a /Butcher tableau/:
 
 \[ \begin{array}{l|llll}
      c_1              & a_{11}      & a_{12}      & \dots  & a_{1s}      \\
@@ -159,7 +169,9 @@ Explicit methods, which are the focus of *[[https://github.com/richmit/MRKISS][~
 
 The word /embedded/ indicates that we actually have two explicit Runge-Kutta methods using the same \(\mathbf{a}\) matrix and \(\mathbf{c}\) vector.  That is
 to say each \(\mathbf{b}\) vector defines a unique, explicit Runge-Kutta method.  *[[https://github.com/richmit/MRKISS][~MRKISS~]]* supports both embedded and
-non-embedded (no \(\mathbf{\hat{b}}\) vector defined) methods.
+non-embedded (no \(\mathbf{\hat{b}}\) vector defined) methods.  At least one of \(\check{b}_s\) and \(\hat{b}_s\) must be non-zero for the overall method to
+be considered \(s\)-stage; however, if one of them has \(k\) trailing zeros the Runge-Kutta method associated with that vector is said to be a \(s-k\)-stage
+method.  We use \(\check{s}\) for the stage count of the \(\check{b}\) method and \(\hat{s}\) for the \(\hat{b}\) method.
 
 Given \(\Delta{t}\) and initial conditions (\(t_0\) and \(\mathbf{y_0}\)), we may form an approximation of \(\mathbf{y}(t_0+\Delta{t})\) as:
 
@@ -180,7 +192,11 @@ and the \(\mathbf{k}_i\) defined as:
 
 \[ \mathbf{k}_i = \mathbf{f}\left(t + c_i \Delta{t},\, \mathbf{y} + \Delta{t} \sum_{j=1}^{i-1} a_{ij} \mathbf{k}_j\right) \]
 
-The \(\mathbf{\check{b}}\) methd is \(\mathcal{O}(\check{p})\) and the \(\mathbf{\hat{b}}\) method is \(\mathcal{O}(\hat{p})\).
+We say that a Runge-Kutta method is of order \(p\in\mathbb{Z_+}=\{i\in\mathbb{Z}\,\,\vert\,\,i>0\}\) if the error at each step is on the order of
+\(\mathcal{O}(\Delta{t}^{p+1})\) and the accumulated error of multiple steps is of order \(\mathcal{O}(\Delta{t}^{p})\).  This abuse of big-O terminology is
+traditionally also extended to an abuse of big-O notation by saying the Runge-Kutta method is \(\mathcal{O}(p)\).
+
+The \(\mathbf{\check{b}}\) method is \(\mathcal{O}(\check{p})\) and the \(\mathbf{\hat{b}}\) method is \(\mathcal{O}(\hat{p})\).
 
 * Features & Requirements
 :PROPERTIES:
@@ -255,7 +271,7 @@ subroutines.
 
  - ~a~  -- The \(\mathbf{a}\) matrix.
  - ~c~  -- The \(\mathbf{c}\) vector.
- - ~p~  -- The order of the methd. i.e. \(\mathcal{O}(\check{p})\)
+ - ~p~  -- The order of the methd, \(\check{p}\)
  - ~b~  -- The \(\mathbf{\check{b}}\) vector.
 
 Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes, and the value of ~p~ must be a positive integer.
@@ -269,10 +285,10 @@ Instead of a single ~b~ and ~p~ argument, we have ~b1~, ~p1~, ~b2~, and ~p2~.
 
  - ~a~  -- The \(\mathbf{a}\) matrix.
  - ~c~  -- The \(\mathbf{c}\) vector.
- - ~p1~ -- \(\mathcal{O}(\check{p})\) -- i.e. the order of the ~b1~ method.
  - ~b1~ -- The \(\mathbf{\check{b}}\) vector.
- - ~p2~ -- \(\mathcal{O}(\hat{p})\) -- i.e. the order of the ~b2~ method.
+ - ~p1~ -- The order of the ~b1~ method, \(\check{p}\).
  - ~b2~ -- The \(\mathbf{\hat{b}}\) vector (only for embedded methods).
+ - ~p2~ -- The order of the ~b2~ method, \(\hat{p}\).
 
 Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent sizes, and the values of ~p1~ and ~p2~ must be a positive integers.
 
@@ -286,19 +302,16 @@ Wherever arguments ~a~, ~c~, or ~b~ appear together, they must have consistent s
 the Butcher Tableau arguments documented in the [[#def-method][previous section]].  In addition, these modules also have a parameter containing the number of
 stages for the overall method and the number of stages for any embedded method that differs from the overall method.
 
- - ~s~   -- The number of stages for the entire method.
- - ~s1~  -- The number of stages for the ~b1~ method if it differs from ~s~.
- - ~s2~  -- The number of stages for the ~b2~ method if it differs from ~s~.
+ - ~s~   -- The number of stages for the entire method, \(s\) 
+ - ~s1~  -- The number of stages for the ~b1~ method, \(\check{s}\), is provided when \(s\neq\check{s}\).
+ - ~s2~  -- The number of stages for the ~b2~ method, \(\hat{s}\), is provided when \(s\neq\hat{s}\).
 
 In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same naming
 conventions.  See [[https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90][~mrkiss_eerk_cash_karp_5_4.f90~]] for an example.
 
 The modules follow a simple naming conventions:
-  - They have one of two prefixes:
-    - ~mrkiss_eerk_~ :: The module contains an /embedded explicit Runge Kutta method/.
-    - ~mrkiss_erk_~  :: The module contains an /explicit Runge Kutta method/  -- i.e. it is *not* embedded.
-  - The names end with numbers indicating the orders of the \(\mathbf{\check{b}}\) and \(\mathbf{\hat{b}}\)  methods.  
-    These numbers are separated from the rest of the name by an underscore.
+  - They have one of two prefixes.  *~mrkiss_eerk_~* for /embedded/ and *~mrkiss_erk_~* for non-embedded.
+  - The names end with underscore separated integers indicating the orders of the \(\mathbf{\check{b}}\) and \(\mathbf{\hat{b}}\) methods.  
 
 In addition to the parameters, the comments in these files normally include at least the following three sections:
  - ~IMO~ :: Personal commentary about the method in question.  Please note this material is simply my personal opinion.
@@ -360,6 +373,9 @@ These worksheets contain the coefficients for the method's Butcher tableau, code
 method's stability region.
 
 ** Predefined Non-embedded Methods
+:PROPERTIES:
+:CUSTOM_ID: def-premethod-stab
+:END:
 
 #+ATTR_HTML: :align center
 | Module Name                      | Order | Stages | Status |
@@ -376,6 +392,9 @@ method's stability region.
 | ~mrkiss_erk_feagin_10~           |  10   |   17   |  EXP   |
 
 ** Predefined Embedded Methods
+:PROPERTIES:
+:CUSTOM_ID: def-premethod-etab
+:END:
 
 #+ATTR_HTML: :align center
 | Module Name                          | Ord_1 | Ord_2 | Stages | Status |
@@ -401,14 +420,14 @@ method's stability region.
 
 The equation to be solved is implimented in a user provided subroutine with one of the following two signatures:
 
-For Non-Homogeneous (with t) problems (found in the module ~mrkiss_solvers_wt~):
+For Non-autonomous (with t) problems (found in the module ~mrkiss_solvers_wt~):
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-sed -n '/^  *subroutine deq_iface/,/^  *end subroutine deq_iface *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d' | sed 's/param) *$/param) ! Non-Homogeneous Case (with t)/;'
+sed -n '/^  *subroutine deq_iface/,/^  *end subroutine deq_iface *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d' | sed 's/param) *$/param) ! Non-Autonomous Case (with t)/;'
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-     subroutine deq_iface(status, dydt, t, y, param) ! Non-Homogeneous Case (with t)
+     subroutine deq_iface(status, dydt, t, y, param) ! Non-Autonomous Case (with t)
        integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: t
@@ -416,14 +435,14 @@ sed -n '/^  *subroutine deq_iface/,/^  *end subroutine deq_iface *$/p' ../lib/mr
        real(kind=rk),    intent(in)  :: param(:)
 #+end_src
 
-For Homogeneous (no t) problems (found in the module ~mrkiss_solvers_nt~)::
+For Autonomous (no t) problems (found in the module ~mrkiss_solvers_nt~)::
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-sed -n '/^  *subroutine deq_iface/,/^  *end subroutine deq_iface *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d;' | sed 's/t, //; s/_wt/_nt/g; /t *$/d;' | sed 's/param) *$/param)    ! Homogeneous Case (no t)/;'
+sed -n '/^  *subroutine deq_iface/,/^  *end subroutine deq_iface *$/p' ../lib/mrkiss_solvers_wt.f90 | sed '/use mrkiss/d; /implicit none/d; /end subroutine/d;' | sed 's/t, //; s/_wt/_nt/g; /t *$/d;' | sed 's/param) *$/param)    ! Autonomous Case (no t)/;'
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-     subroutine deq_iface(status, dydt, y, param)    ! Homogeneous Case (no t)
+     subroutine deq_iface(status, dydt, y, param)    ! Autonomous Case (no t)
        integer,          intent(out) :: status
        real(kind=rk),    intent(out) :: dydt(:)
        real(kind=rk),    intent(in)  :: y(:)
@@ -450,48 +469,62 @@ of higher level routines to indicate an error condition.
 :END:
 
   - ~steps_adapt_etab()~ uses traditional adaptive step size ::
-    - This solver is /very similar/ to solvers found in other ODE packages.
-    - Programmable step processing
-    - A programmable bisection option to solve for interesting \(\Delta{t}\) values
-    - Sophisticated curve length computations, and exit options when a maximum length is reached
-    - It can end precisely on a time value, or it can simply quit when a step goes beyond a maximum time value.
-    - These last two could be achieved with the programmable step processing and bisection features, but these requirements are so common that is convenient
-      to have them directly available.
+    - This solver is similar to solvers found in other ODE packages.
+    - It provides somewhat finer control over step size adjustment than is typical.
+    - Programmable step processing is used to steer the algorithm instead of directly providing solution points.
+    - A programmable bisection option to solve for interesting \(\Delta{t}\) values.
+    - End precisely on a \(t\) value or when a maximum \(t\) is exceeded.
   - ~steps_fixed_stab()~ uses fixed \(\Delta{t}\) steps ::
+    - With most modern ODE packages, this would be done with a "dense output" mode using embedded interpolation.
     - This is a good place to start when writing a custom solver.
-    - With most modern ODE packages, this would be done with interpolation.
     - This routine has the option to use Richardson extrapolation.
-    - Most common use: curve evolution animations that naturally display velocity.
+    - Common use cases: 
+      - Curve evolution animations that naturally display velocity.
   - ~steps_condy_stab()~ uses fixed \(\Delta{\mathbf{y}}\)-space steps ::
-    - Produce solution points separated by fixed deltas in \(\Delta{\mathbf{y}}\)-space, or some subset of \(\Delta{\mathbf{y}}\)-space.
+    - Produce solution points separated by fixed distance in \(\Delta{\mathbf{y}}\)-space.
+    - The components of \(\Delta{\mathbf{y}}\) used for length computations may be specified.
+    - Overall curve length is computed allowing exit options based on total solution length.
     - This is a good place to start when writing a custom solver with a bisection step.
-    - With most modern ODE packages, this would be done with interpolation.
-    - Most common use: parametric plots, parametric tube plots, and sphere sweeps.
+    - With most modern ODE packages, this would be done with interpolation.  Usually in combination with a step processing routine.
+    - This could be achieved in *[[https://github.com/richmit/MRKISS][~MRKISS~]]*  with the programmable step processing and bisection features of ~steps_adapt_etab()~.
+    - Common use cases: 
+      - Parametric line/dot plots
+      - Tube plots and sphere sweeps.
   - ~steps_sloppy_condy_stab()~ adjusts \(\Delta{t}\) to *approximate* \(\Delta{\mathbf{y}}\)-space steps ::
     - Much like ~steps_condy_stab()~ in practice but faster and less precise.
     - Computes a test step and then adjusts \(\Delta{t}\) in proportion to the ratio of the desired length vs test length.
     - This method has no guarantee for correctness, but generally works well in practice.
-    - Can operate on every step or just steps that are too long.  
-    - Most common use: ~steps_fixed_stab()~ results have a few steps that are "too long"
+    - Can operate on every step or just steps that are too long.  This allows for two handy behaviors:
+      - A cheap kind of steps size error control
+      - A way to bound the overall length of \(\Delta{\mathbf{y}}\)
+    - Common use cases: 
+      - ~steps_fixed_stab()~ results have a few steps that are "too long"
+      - Additional error control for systems with one or two "hot" coordinates.
   - ~steps_points_stab()~ takes a set of \(t\) values at which to find solutions ::
-    - Used several fixed RK steps to go from each \(t\) value to the next.
-    - Most common use: Produce a higher accuracy solution based on a previous solution.  
-    - Most common use: Physical problems requiring solutions at specific time points.
+    - Uses several fixed Runge-Kutta steps to go from each \(t\) value to the next.
+    - Common use cases: 
+      - Produce a higher accuracy solution based on a previous solution.  
+      - Physical problems requiring solutions at specific time points.
   - ~interpolate_solution~ interpolates an existing solution to a new solution ::
-    - Not a RK method; however, it provides \(\mathcal{O}(3)\) accuracy when using Hermite interpolation.
+    - Not a Runge-Kutta method; however, it provides \(\mathcal{O}(3)\) accuracy when using Hermite interpolation.
     - Derivative values are freshly computed for the interpolated points
+    - Common use cases: 
+      - Produce smooch plots from distant solution points.
+      - To "line up" two solutions to the same set of \(t\) values.
 
 ** High Level Solver Common Arguments
 :PROPERTIES:
 :CUSTOM_ID: hi-solvers-args
 :END:
 
-The first several arguments are common across the higher level solvers.
+The solvers share some common arguments.
 
 *** Status: ~status~ & ~istats~
 :PROPERTIES:
 :CUSTOM_ID: hi-solvers-args-status
 :END:
+
+The first two arguments of all high level solvers are:
 
   - ~status~ :: This is an integer return code.  
     - A positive value means failure.
@@ -514,6 +547,8 @@ The first several arguments are common across the higher level solvers.
 :CUSTOM_ID: hi-solvers-args-sol
 :END:
 
+The third argument of all high level solvers.
+
   - ~solution~ :: Array for solution.  \\
     - Each *column* is a solution containing \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).
     - The first column contains \(t\).  
@@ -525,8 +560,10 @@ The first several arguments are common across the higher level solvers.
 :CUSTOM_ID: hi-solvers-args-ivp
 :END:
 
+After the solution argument, the next arguments describe the IVP itself.
+
   - ~deq~   :: The subroutine used to evaluate the derivative function
-  - ~t~     :: The initial value for \(t\).
+  - ~t~     :: The initial value for \(t\) for non-autonomous problems (i.e. when using ~mrkiss_solvers_wt~)
   - ~y~     :: The initial value for \(\mathbf{y}\).
   - ~param~ :: A set of real values passed to ~deq()~.  These are usually constants in the defining equation.
 
@@ -536,6 +573,24 @@ The first several arguments are common across the higher level solvers.
 :END:
 
 These arguments vary a bit, but mirror the names documented in the [[#def-method][section on predefined Runge-Kutta methods]].
+
+*** Other Arguments
+:PROPERTIES:
+:CUSTOM_ID: hi-solvers-args-other
+:END:
+
+These arguments are used by multiple, but not all, high level solvers:
+
+  - ~max_bisect_o~                  :: Maximum number of bisection iterations per each step.  Default: ~max_bisect_ai~
+  - ~max_pts_o~                     :: Maximum number of solutions to store.  Default: Number of rows in solution
+  - ~no_bisect_error_o~             :: If ~.true.~, then not exit on bisection errors.  Default: ~.false.~
+  - ~t_delta_min_o~                 :: Minimum \(\Delta{t}\). Default: ~t_delta_ai~
+  - ~t_end_o~                       :: Try to stop integration precisely on this \(t\) value. Default: NONE
+  - ~t_max_o~                       :: Stop integration if \(t\) exceeds this value.  Default: NONE
+  - ~y_delta_len_idxs_o~            :: Components of \(\Delta{\mathbf{y}}\) to use for length.  Default: All components
+  - ~y_delta_len_targ~              :: Target length for \(\Delta{\mathbf{y}}\) 
+  - ~y_sol_len_max_o~               :: Stop integration if solution length exceeds this value
+  - ~t_delta_max~ & ~t_delta_max_o~ :: Maximum allowed \(\Delta{t}\). Default: NONE
 
 * Low Level, One Step Solvers
 :PROPERTIES:
@@ -904,7 +959,7 @@ The primary diagnostic plot is of global error:
 #+ATTR_HTML: :width 90% :align center
 [[file:pics/tc1_plot_error.png][file:pics/tc1_plot_error.png]]
 
-** Homogeneous Solvers and More Tableau Plausibility Tests
+** Autonomous Solvers and More Tableau Plausibility Tests
 :PROPERTIES:
 :CUSTOM_ID: test-mrkiss-homo-tab-ok
 :END:
@@ -914,7 +969,7 @@ continues that with a new test equation:
 
 \[ \frac{\mathrm{d}y}{\mathrm{d}t} = -2y \]
 
-For these tests we use the homogeneous solvers in the ~mrkiss_solvers_nt~ module.  This source code for this module is entirely generated from
+For these tests we use the autonomous solvers in the ~mrkiss_solvers_nt~ module.  This source code for this module is entirely generated from
 [[https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_solvers_wt.f90][~mrkiss_solvers_wt.f90~]] via
 [[https://github.com/richmit/MRKISS/blob/master/lib/wt2nt.sed][~wt2nt.sed~]].  So these tests also serve as a way to make sure this code gets generated and
 produces reasonable results.
