@@ -44,9 +44,38 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 
 #+TOC: headlines 5
 
-* Changes On HEAD Since Last Release
+* Changes On HEAD Since Last Release TEMPLATE                      
 :PROPERTIES:
 :CUSTOM_ID: latest
+:END:
+  - Fixed Bugs
+    - N/A
+  - Known Issues
+    - N/A
+  - API breaking Changes
+    - N/A
+  - Deprecated functionality
+    - N/A
+  - New functionality
+    - N/A
+  - Documentation
+    - N/A
+  - Examples
+    - New
+      - N/A
+    - Updated
+      - N/A
+  - Tests
+    - New
+      - N/A
+    - Updated
+      - N/A
+  - Miscellaneous
+    - N/A
+
+* v2025-08-12: Feature & Bugfix Release
+:PROPERTIES:
+:CUSTOM_ID: v2025-08-12
 :END:
   - Fixed Bugs
     - analyze_solution(): Fixed bug with output files going to STDOUT.

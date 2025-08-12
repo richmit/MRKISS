@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "MRKISS"
-PROJECT_NUMBER         = "2025-08-10+"
+PROJECT_NUMBER         = "2025-08-12"
 PROJECT_BRIEF          = "A tiny library with zero dependencies that aims to make it easy to use & experiment with explicit Runge-Kutta methods."
 PROJECT_LOGO           = ../docs/logo/MRKISS_logo_bg_120x60.png
 PROJECT_ICON           =

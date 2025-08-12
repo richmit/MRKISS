@@ -37,8 +37,6 @@ DO_OPENMP = NO
  include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
 # include $(MRKISS_PATH)/make_includes/tools_flang.mk
 # include $(MRKISS_PATH)/make_includes/tools_ifx.mk
-# include $(MRKISS_PATH)/make_includes/tools_lfortran.mk
-# include $(MRKISS_PATH)/make_includes/tools_nvfortran.mk
 
 include $(MRKISS_PATH)/make_includes/include.mk
 ################################################################################################################################################################

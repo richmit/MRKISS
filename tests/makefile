@@ -36,8 +36,6 @@ MRKISS_PATH = ..
  include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
 # include $(MRKISS_PATH)/make_includes/tools_flang.mk
 # include $(MRKISS_PATH)/make_includes/tools_ifx.mk
-# include $(MRKISS_PATH)/make_includes/tools_lfortran.mk
-# include $(MRKISS_PATH)/make_includes/tools_nvfortran.mk
 
 include $(MRKISS_PATH)/make_includes/include.mk
 ################################################################################################################################################################
@@ -49,7 +47,7 @@ TD = diff
 
 TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b test_statuscodes test_utils
 
-EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt statuscodes
+EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt statuscodes utils
 
 all : $(EXE_TARGETS)
 
@@ -262,7 +260,7 @@ tests : $(TESTS) test_tc1 test_tc2
 
 .PHONY: clean
 clean : clean_multi_mrkiss clean_tc1 clean_tc2
-	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.out *.tmp
+	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe *.out *.tmp *.obj *.o
 
 .PHONY: clean_gen_source
 clean_src : clean_src_tc1 clean_src_tc2

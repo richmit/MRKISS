@@ -32,17 +32,35 @@
 #########################################################################################################################################################.H.E.##
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-ifeq ($(DO_OPENMP),YES)
-  AR := ar	
-  FC := gfortran
-  FFLAGS := -fopenmp -O3 -Wsurprising -W -std=f2023
-  FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
+ifeq ($(OS),Windows_NT)
+  ifeq ($(DO_OPENMP),YES)
+    AR := ar	
+    FC := gfortran
+    FFLAGS := -fopenmp -O3 -Wsurprising -W -std=f2023
+    FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
+  else
+    AR := ar	
+    FC := gfortran
+    FFLAGS := -O3 -Wsurprising -W -std=f2023
+    FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
+  endif
 else
-  AR := ar	
-  FC := gfortran
-  FFLAGS := -O3 -Wsurprising -W -std=f2023
-  FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
+  ifeq ($(DO_OPENMP),YES)
+    AR := ar	
+    FC := gfortran
+    FFLAGS := -fopenmp -O3 -Wsurprising -W -std=f2023 -fPIC
+    FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES) -fPIC
+  else
+    AR := ar	
+    FC := gfortran
+    FFLAGS := -O3 -Wsurprising -W -std=f2023 -fPIC
+    FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES) -fPIC
+  endif
 endif
+
+
 
 # -Wall -- Removed for bug in gfortran 15
 # Should work with: -fdefault-integer-8
+
+
