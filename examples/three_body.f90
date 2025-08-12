@@ -90,7 +90,7 @@ program three_body
   ! BEGIN: steps_fixed_stab
   call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2])
+  call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="tree_body_steps_fixed_stab.csv", end_o=istats1(1))
   ! END: steps_fixed_stab
 
@@ -99,7 +99,7 @@ program three_body
   ! BEGIN: steps_fixed_stab-dp
   call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2])
+  call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="steps_fixed_stab-dp.csv", end_o=istats1(1))
   ! END: steps_fixed_stab-dp
 
@@ -109,7 +109,7 @@ program three_body
   call steps_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 3, 7, 8])
+  call print_istats(status, istats1)
 
   call print_solution(status, sol1, filename_o="three_body_steps_condy_stab.csv", end_o=istats1(1))
   ! END: steps_condy_stab
@@ -120,7 +120,7 @@ program three_body
   call steps_sloppy_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 3])
+  call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="steps_sloppy_condy_stab.csv", end_o=istats1(1))
   ! END: steps_sloppy_condy_stab
 
@@ -131,7 +131,7 @@ program three_body
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4])
+  call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-std.csv", end_o=istats1(1))
   ! END: steps_adapt_etab-std
 
@@ -163,7 +163,7 @@ program three_body
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_sloppy_y_delta_len_max);
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4, 5])
+  call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-fix-delta-steps.csv", end_o=istats1(1))
   ! END: steps_adapt_etab-fix-delta-steps
 
@@ -175,7 +175,7 @@ program three_body
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_max_t);
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4])
+  call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-pho-t-max.csv", end_o=istats1(1))
   ! END: steps_adapt_etab-pho-t-max
 
@@ -187,7 +187,7 @@ program three_body
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
   print '(a)', status_to_message(status)
-  call print_istats(status, istats1, idxs_to_prt_o=[1, 2, 4, 7, 8])
+  call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-isct.csv", end_o=istats1(1))
   ! END: steps_adapt_etab-isct
 

@@ -58,7 +58,7 @@ program lorenz
   ! BEGIN: lorenz_fixed
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats, idxs_to_prt_o=[1, 2])
+  call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_fixed
 
@@ -68,7 +68,7 @@ program lorenz
   ! BEGIN: lorenz_fixed-y
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
+  call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
 
   ! This solution will have y-delta approximately equal to 1.0 for all steps.
@@ -77,7 +77,7 @@ program lorenz
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
                                   adj_short_o=1)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
+  call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_fixed-y
 
@@ -87,7 +87,7 @@ program lorenz
   ! BEGIN: lorenz_clip-y
   call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   print '(a)', status_to_message(status)
-  call print_istats(status, istats, idxs_to_prt_o=[1, 2, 3])
+  call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
   ! END: lorenz_clip-y
 
