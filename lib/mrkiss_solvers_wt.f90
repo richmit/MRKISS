@@ -892,7 +892,33 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Take multiple adaptive steps with an embedded RK method using relatively traditional step size controls.
   !!
-  !! @warning I have not yet finalized the error estimate method.  /0 is possible when error_tol_abs_o = 0.
+  !! Method of controlling step size:
+  !!
+  !! First we compute a combined tolerance vector:
+  !!    @f[ \mathbf{E} = [ A_i + R_i \max(\vert y_i\vert, \vert y_i+\Delta t\vert) ] @f]
+  !! And a set containing the indexes of the non-zero elements of @f$\mathbf{E}@f$:
+  !!    @f[ \mathbf{E_+} = \{i\vert\,E_i\ne0\} @f]
+  !! When @f$\vert E_+\vert=0@f$, i.e. when @f$E_+=\emptyset@f$:
+  !!   - We accept the current step
+  !!   - Expand the next step by a factor of `t_delta_fac_max_o`
+  !!
+  !! Otherwise, we compute composite error:
+  !!    @f[ \epsilon = \sqrt{\frac{1}{\vert E_+\vert} \sum_{E_+}\left(\frac{\vert\Delta\check{y}_i-\Delta\hat{y}_i\vert}{E_i}\right)^2}  @f]
+  !! From this we compute the ideal step size adjustment ratio:  
+  !!    @f[ \left(\frac{1}{\epsilon}\right)^\frac{1}{1+\min(\hat{p}, \check{p})} @f]
+  !! When @f$ \vert\Delta\check{y}_i-\Delta\hat{y}_i\vert < E_i\,\,\,\,\forall i@f$, we:
+  !!   - We accept the current step
+  !!   - Expand the next step by a factor of @f$m@f$
+  !!
+  !! Otherwise
+  !!   - We recompute the current step with a @f$\Delta{t}@f$ reduced by @f$m@f$
+  !!   - Recompute the error conditions
+  !!   - Set the next step size based on the error conditions
+  !!
+  !! Notes: 
+  !!   - When @f$m<1@f$, the factor is adjusted by `t_delta_fac_fdg_o`
+  !!   - The final value for @f$m<1@f$ is constrained by `t_delta_fac_max_o` & `t_delta_fac_min_o`.
+  !!   - The final value for @f$\Delta{t}@f$ is always constrained by `t_delta_min_o` & `t_delta_max_o`.
   !!
   !! @verbatim
   !! status ...................... Exit status
@@ -971,9 +997,9 @@ contains
     procedure(sdf_iface),      optional              :: sdf_o
     procedure(stepp_iface),    optional              :: stepp_o
     ! Variables
-    integer                                          :: max_pts, cur_pnt_idx, adj_cnt, y_dim
+    integer                                          :: max_pts, cur_pnt_idx, adj_cnt, y_dim, comb_err_nzc
     integer                                          :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
-    logical                                          :: no_bisect_error, t_delta_end_p
+    logical                                          :: no_bisect_error, t_delta_end_p, comb_err_msk(size(y, 1))
     real(kind=rk)                                    :: t_delta_fac, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
     real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min
     real(kind=rk)                                    :: y_delta_delta(size(y, 1)), t_delta_fac_max, t_delta_fac_min
@@ -1051,11 +1077,16 @@ contains
           ! Compute new t_delta_nxt based on error estimate.
           y_delta_delta = abs(y1_delta-y2_delta)
           comb_err_tol  = (error_tol_abs + max(abs(solution(2:, cur_pnt_idx-1)), abs(y_cv + y1_delta)) * error_tol_rel)
-          ! MJR TODO NOTE steps_adapt_etab: Fix this for when comb_err_tol has a zero entry!
-          t_delta_fac   = (1/sqrt(sum((y_delta_delta / comb_err_tol) ** 2) / size(y, 1))) ** (1 + 1/min(p1, p2))
-          if (t_delta_fac < 1.0_rk)  t_delta_fac = t_delta_fac * t_delta_fac_fdg
-          if (cur_pnt_idx /= 2)      t_delta_fac = max(t_delta_fac_min, t_delta_fac)
-          t_delta_fac = min(t_delta_fac_max, t_delta_fac)
+          comb_err_msk  = abs(comb_err_tol) > zero_epsilon
+          comb_err_nzc  = count(comb_err_msk)
+          if (comb_err_nzc == 0) then
+             t_delta_fac = t_delta_fac_max
+          else
+             t_delta_fac   = (1/sqrt(sum((y_delta_delta / comb_err_tol) ** 2, comb_err_msk) / (comb_err_nzc))) ** (1 + 1/min(p1, p2))
+             if (t_delta_fac < 1.0_rk)  t_delta_fac = t_delta_fac * t_delta_fac_fdg
+             if (cur_pnt_idx /= 2)      t_delta_fac = max(t_delta_fac_min, t_delta_fac)
+             t_delta_fac = min(t_delta_fac_max, t_delta_fac)
+          end if
           t_delta_nxt = t_delta * t_delta_fac
           if (present(t_delta_min_o)) then
              t_delta_nxt = max(t_delta_min_o, t_delta_nxt)

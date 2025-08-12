@@ -63,6 +63,8 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Deprecated functionality
     - N/A
   - New functionality
+    - Reworked I/O significantly across mrkiss_utils functions.
+    - Finalized a stepsize control in steps_adapt_etab
     - New constant in config: t_delta_min_ai
       - Most solvers use this instead of t_delta_tiny for the default t_delta_min
     - analyze_solution() new argumetns:

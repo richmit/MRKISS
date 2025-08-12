@@ -47,7 +47,7 @@ IMG_VIEWER = nomacs
 FD = ../scripts/float_diff.rb
 TD = diff
 
-TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b test_statuscodes
+TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b test_statuscodes test_utils
 
 EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt statuscodes
 
@@ -67,7 +67,7 @@ test_statuscodes : statuscodes.out
 utils : utils.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) utils.f90 $(MRKISS_OBJ_FILES) -o $@
 
-UTILS_OUTS = utils_print_wstd.out utils_print_w30.out utils_print_e2.out utils_print_def.out utils_print_d5.out utils_istats_w8.out utils_istats_def.out utils_anal_w30.out utils_anal_e2.out utils_anal_def.out utils_anal_d5.out
+UTILS_OUTS = utils_anal_d5.out utils_anal_def.out utils_anal_e2.out utils_anal_w30.out utils_istats_def.out utils_istats_w8.out utils_print_d5.out utils_print_def.out utils_print_e2.out utils_print_std-e2.out utils_print_w30.out utils_print_wstd.out
 
 $(UTILS_OUTS) &: utils
 	utils$(EXE_SUFFIX)

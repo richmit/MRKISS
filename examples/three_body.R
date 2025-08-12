@@ -69,8 +69,8 @@ gp <- ggplot(rbind(data.table(t=ftDat$t, aerr=abs(aiDat$y1-ftDat$y1), bse=abs(ft
                    data.table(t=ftDat$t, aerr=abs(aiDat$y4-ftDat$y4), bse=abs(ftDat$y4) , var='v2')) %>%
              filter(aerr>0 & bse>0) %>%
              mutate(rerr=aerr/bse)) + 
-  geom_point(aes(x=t, y=rerr, col=var), shape=16, alpha=0.05, size=3.1) +
-  scale_colour_manual(values=c("x1"="darkgreen", "x2"="darkblue", "v1"="brown", "v2"="darkred"),
+  geom_line(aes(x=t, y=rerr, col=var), linewidth=2, alpha=0.5) +
+  scale_colour_manual(values=c("x1"="darkgreen", "x2"="darkblue", "v1"="darkgoldenrod", "v2"="darkred"),
                       labels=c(expression(x[1]), expression(x[2]), expression(v[1]), expression(v[2]))) +
   scale_y_log10() +
   labs(title='Interpolated Adaptive Solution', subtitle='Relative Error', x=expression(t), y='error', col='') 

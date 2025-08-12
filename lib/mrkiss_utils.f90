@@ -75,6 +75,7 @@ contains
   !! fmt_w_o ........ Width of print format for all entities. Default: 0
   !!                   If set to -1, then fmt_w_ai will be uesd.
   !! fmt_e_o ........ Number of digits in the exponent of floating point numbers.  Default: fmt_e_ai
+  !!                   Ignored if fmt_w_o==0
   !! start_o ........ Starting index to print in solution. Default: 1
   !! end_o .......... Ending index to print in solution.  Default: Number of columns in solution.
   !! step_o ......... Print only every step_o'th value in solution. Default: 1
@@ -103,8 +104,8 @@ contains
     integer                                :: fmt_e, fmt_d, fmt_w, start_idx, end_idx, step, y_dim, sol_y_idx, tag
     logical                                :: prt_titles
     integer                                :: i, num_int, num_real, out_io_stat, out_io_unit
-    character(len=:), allocatable          :: fmt, separator, access_mode
-    character(len=512)                     :: fmt_e_str, fmt_d_str, fmt_w_str, tmp_str
+    character(len=:), allocatable          :: fmt, separator, access_mode, fmt_r_str, fmt_i_str, fmt_a_str
+    character(len=512)                     :: tmp_str
     ! Process arguments
     access_mode = 'SEQUENTIAL'
     if (present(append_o)) then
@@ -141,10 +142,28 @@ contains
     ! Compute solution meta-data
     y_dim = (size(solution, 1) - 1) / 2
     sol_y_idx = 2
-    ! Create string from for format bits
-    write (fmt_e_str, '(i0)') fmt_e
-    write (fmt_d_str,  '(i0)') fmt_d
-    write (fmt_w_str,   '(i0)') fmt_w
+    ! Create format string components
+    if (fmt_w == 0) then
+       ! use f edit descriptor.  Ignore fmt_e.
+       write(tmp_str, '("f",i0,".",i0)') fmt_w, fmt_d
+       fmt_r_str = trim(tmp_str)
+    else
+       ! use e edit descriptor
+       write(tmp_str, '("e",i0,".",i0)') fmt_w, fmt_d
+       fmt_r_str = trim(tmp_str)
+       if (fmt_e > 0) then
+          write(tmp_str, '("e",i0)') fmt_e
+          fmt_r_str = fmt_r_str // trim(tmp_str)
+       end if
+    end if
+    write(tmp_str, '("i",i0)') fmt_w
+    fmt_i_str = trim(tmp_str)
+    if (fmt_w == 0) then
+       fmt_a_str = "a"
+    else
+       write(tmp_str, '("a",i0)') fmt_w
+       fmt_a_str = trim(tmp_str)
+    end if
     ! Figure out how many items per line
     num_real = size(solution, 1)
     num_int = 0
@@ -165,11 +184,7 @@ contains
     end if
     ! Print titles
     if (prt_titles) then
-       if (present(fmt_w_o)) then
-          fmt='(a' // trim(fmt_w_str) // ')'
-       else
-          fmt='(a)'
-       end if
+       fmt = "(" // fmt_a_str // ")"
        if (tag>=0)   then
           write(out_io_unit, fmt=fmt, advance="no") "tag"
           write(out_io_unit, fmt='(a)', advance="no") separator
@@ -190,9 +205,9 @@ contains
        write(out_io_unit, fmt='()')
     end if
     fmt = '('
-    if (tag>=0) fmt = fmt // 'i' // trim(fmt_w_str) // ',"' // separator // '",'
-    fmt = fmt // 'i' // trim(fmt_w_str)
-    fmt = fmt // repeat(',"' // separator // '",' // 'e' // trim(fmt_w_str) // '.' // trim(fmt_d_str) // 'e' // trim(fmt_e_str), num_real)
+    if (tag>=0) fmt = fmt // fmt_i_str // ',"' // separator // '",'
+    fmt = fmt // fmt_i_str
+    fmt = fmt // repeat(',"' // separator // '",' // fmt_r_str, num_real)
     fmt = fmt // ')'
     do i=start_idx,end_idx,step
        if (present(t_min_o)) then
@@ -326,7 +341,8 @@ contains
     integer                                :: y_dim, end_idx, start_idx, fmt_e, fmt_d, fmt_w, i, out_io_stat, out_io_unit
     real(kind=rk)                          :: t_max, t_min, t_delta_max, t_delta_min, y_delta_len_max, y_delta_len_min
     real(kind=rk), allocatable             :: dy_max(:), dy_min(:), y_max(:), y_min(:), y_delta_max(:), y_delta_min(:)
-    character(len=32)                      :: ofmti, ofmtr
+    character(len=32)                      :: tmp_str
+    character(len=:), allocatable          :: fmt, fmt_r_str, fmt_i_str
     ! Process arguments
     fmt_d = fmt_d_ai
     if (present(fmt_d_o)) fmt_d = fmt_d_o
@@ -338,6 +354,22 @@ contains
     if (present(start_o)) start_idx = start_o
     end_idx = size(solution, 2)
     if (present(end_o)) end_idx = min(end_o, size(solution, 2))
+    ! Create format string components
+    if (fmt_w == 0) then
+       ! use f edit descriptor.  Ignore fmt_e.
+       write(tmp_str, '("f",i0,".",i0)') fmt_w, fmt_d
+       fmt_r_str = trim(tmp_str)
+    else
+       ! use e edit descriptor
+       write(tmp_str, '("e",i0,".",i0)') fmt_w, fmt_d
+       fmt_r_str = trim(tmp_str)
+       if (fmt_e > 0) then
+          write(tmp_str, '("e",i0)') fmt_e
+          fmt_r_str = fmt_r_str // trim(tmp_str)
+       end if
+    end if
+    write(tmp_str, '("i",i0)') fmt_w
+    fmt_i_str = trim(tmp_str)
     ! Compute
     y_dim = (size(solution, 1) - 1) / 2
     if(end_idx - start_idx > 1) then
@@ -388,23 +420,23 @@ contains
        out_io_unit = output_unit
     end if
     ! Print report
-    write(ofmti, '("(a25,*(i",i0,"))")') fmt_w
-    write(ofmtr, '("(a25,*(e",i0,".",i0,"e",i0,"))")') fmt_w, fmt_d, fmt_e
     write(out_io_unit, fmt='(a25)') "Solution Analysis   "
-    write(out_io_unit, fmt=ofmti)   "            size 1: ", size(solution, 1)
-    write(out_io_unit, fmt=ofmti)   "            size 2: ", size(solution, 2)
-    write(out_io_unit, fmt=ofmtr)   "             Max y: ", y_max
-    write(out_io_unit, fmt=ofmtr)   "             Min y: ", y_min
-    write(out_io_unit, fmt=ofmtr)   "            Max dy: ", dy_max
-    write(out_io_unit, fmt=ofmtr)   "            Min dy: ", dy_min
-    write(out_io_unit, fmt=ofmtr)   "             Max t: ", t_max
-    write(out_io_unit, fmt=ofmtr)   "             Min t: ", t_min
-    write(out_io_unit, fmt=ofmtr)   "       Max delta t: ", t_delta_max
-    write(out_io_unit, fmt=ofmtr)   "       Min delta t: ", t_delta_min
-    write(out_io_unit, fmt=ofmtr)   "       Max delta y: ", y_delta_max
-    write(out_io_unit, fmt=ofmtr)   "       Min delta y: ", y_delta_min
-    write(out_io_unit, fmt=ofmtr)   "   Max delta y len: ", y_delta_len_max
-    write(out_io_unit, fmt=ofmtr)   "   Min delta y len: ", y_delta_len_min
+    fmt = '(a25,' // fmt_i_str // ')'
+    write(out_io_unit, fmt=fmt)   "            size 1: ", size(solution, 1)
+    write(out_io_unit, fmt=fmt)   "            size 2: ", size(solution, 2)
+    fmt = '(a25,*(' // fmt_r_str // '))'
+    write(out_io_unit, fmt=fmt)   "             Max y: ", y_max
+    write(out_io_unit, fmt=fmt)   "             Min y: ", y_min
+    write(out_io_unit, fmt=fmt)   "            Max dy: ", dy_max
+    write(out_io_unit, fmt=fmt)   "            Min dy: ", dy_min
+    write(out_io_unit, fmt=fmt)   "             Max t: ", t_max
+    write(out_io_unit, fmt=fmt)   "             Min t: ", t_min
+    write(out_io_unit, fmt=fmt)   "       Max delta t: ", t_delta_max
+    write(out_io_unit, fmt=fmt)   "       Min delta t: ", t_delta_min
+    write(out_io_unit, fmt=fmt)   "       Max delta y: ", y_delta_max
+    write(out_io_unit, fmt=fmt)   "       Min delta y: ", y_delta_min
+    write(out_io_unit, fmt=fmt)   "   Max delta y len: ", y_delta_len_max
+    write(out_io_unit, fmt=fmt)   "   Min delta y len: ", y_delta_len_min
     ! Close file
     if (present(filename_o)) then
        close(unit=out_io_unit, status='keep', iostat=out_io_stat)

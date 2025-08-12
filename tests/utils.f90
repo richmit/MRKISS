@@ -31,6 +31,7 @@ program langford
   call print_solution(status, solution,   fmt_w_o=30, filename_o="utils_print_w30.out")
   call print_solution(status, solution,   fmt_d_o=5,  filename_o="utils_print_d5.out")
   call print_solution(status, solution,   fmt_e_o=2,  filename_o="utils_print_e2.out")
+  call print_solution(status, solution,   fmt_w_o=-1, fmt_e_o=2,  filename_o="utils_print_std-e2.out")
 
 contains
   

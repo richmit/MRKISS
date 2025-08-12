@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-12 Tue 12:11 -->
+<!-- 2025-08-12 Tue 13:34 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-12 12:11:46</i></td>
+<td class="org-left"><i>2025-08-12 13:34:23</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-12 12:11:47</i></td>
+<td class="org-left"><i>2025-08-12 13:34:25</i></td>
 </tr>
 </tbody>
 </table>
@@ -536,6 +536,23 @@ traditionally also extended to an abuse of big-O notation by saying the Runge-Ku
 
 <p>
 The \(\mathbf{\check{b}}\) method is \(\mathcal{O}(\check{p})\) and the \(\mathbf{\hat{b}}\) method is \(\mathcal{O}(\hat{p})\).
+</p>
+
+
+<p>
+Combined Tollerance vector:
+</p>
+
+<p>
+\[ \mathbf{E} = [ A_i + R_i \max(\vert y_i\vert, \vert y_i+\Delta t\vert) ] \]
+</p>
+
+<p>
+\[ \mathbf{E_+} = \{i\vert\,E_i\ne0\} \]
+</p>
+
+<p>
+\[ \sqrt{\frac{1}{\vert E_+\vert} \sum_{E_+}\left(\frac{\vert\Delta\check{y}_i-\Delta\hat{y}_i\vert}{E_i}\right)^2} \]
 </p>
 </div>
 </div>
@@ -1360,7 +1377,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org5e9401f" class="figure">
+<div id="org195397e" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1640,7 +1657,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org1bc4299" class="figure">
+<div id="orgb09a9af" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1689,7 +1706,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org0bcd804" class="figure">
+<div id="org55a3782" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1713,7 +1730,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org05eac3b" class="figure">
+<div id="orga1e4a74" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>
