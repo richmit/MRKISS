@@ -47,7 +47,7 @@ IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
 
-EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error langford
+EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error langford benchmark
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -234,6 +234,14 @@ minimal_clean :
 .PHONY: minimal_test
 minimal_test: minimal.csv
 	$(FD) -Zdqn minimal.csv tdata/minimal.csv
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+benchmark : benchmark.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) benchmark.f90 $(MRKISS_OBJ_FILES) -o $@
+
+.PHONY: benchmark_clean
+benchmark_clean :
+	rm -f benchmark.exe benchmark benchmark.o benchmark.obj
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 tests : minimal_test brusselator_test lorenz_test three_body_test step_order_vs_error_test

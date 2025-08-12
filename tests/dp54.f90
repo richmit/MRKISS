@@ -58,7 +58,7 @@ program dp54
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="dp54_ref_5.out", width_o=20)
+  call print_solution(status, sol, filename_o="dp54_ref_5.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
@@ -67,7 +67,7 @@ program dp54
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="dp54_ref_4.out", width_o=20)
+  call print_solution(status, sol, filename_o="dp54_ref_4.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
@@ -76,7 +76,7 @@ program dp54
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="dp54_etab_5.out", width_o=20)
+  call print_solution(status, sol, filename_o="dp54_etab_5.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
@@ -85,7 +85,7 @@ program dp54
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="dp54_etab_4.out", width_o=20)
+  call print_solution(status, sol, filename_o="dp54_etab_4.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
@@ -94,7 +94,7 @@ program dp54
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="dp54_stab_5.out", width_o=20)
+  call print_solution(status, sol, filename_o="dp54_stab_5.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
@@ -103,7 +103,7 @@ program dp54
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="dp54_stab_4.out", width_o=20)
+  call print_solution(status, sol, filename_o="dp54_stab_4.out", fmt_w_o=-1)
 
 contains
 

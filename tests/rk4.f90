@@ -61,7 +61,7 @@ program rk4
   integer                     :: step, status, istats(istats_size)
   real(kind=rk)               :: y_delta(deq_dim), sol(1+2*deq_dim, max_pts)
 
-  call print_solution(status, sol_h, filename_o="rk4_hnd.out", width_o=20)
+  call print_solution(status, sol_h, filename_o="rk4_hnd.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
@@ -70,7 +70,7 @@ program rk4
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="rk4_ref.out", width_o=20)
+  call print_solution(status, sol, filename_o="rk4_ref.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
@@ -79,35 +79,35 @@ program rk4
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="rk4_stab.out", width_o=20)
+  call print_solution(status, sol, filename_o="rk4_stab.out", fmt_w_o=-1)
 
   sol = 0
   call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta)
-  call print_solution(status, sol, filename_o="rk4_steps.out", width_o=20)
+  call print_solution(status, sol, filename_o="rk4_steps.out", fmt_w_o=-1)
 
   sol = 0
   call steps_fixed_stab(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=max_pts)
-  call print_solution(status, sol, filename_o="rk4_frog.out", width_o=20, start_o=max_pts)
+  call print_solution(status, sol, filename_o="rk4_frog.out", fmt_w_o=-1, start_o=max_pts)
 
   sol = 0
   call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
-  call print_solution(status, sol, filename_o="rk4_steps_end.out", width_o=20)
+  call print_solution(status, sol, filename_o="rk4_steps_end.out", fmt_w_o=-1)
 
   sol = 0
   call steps_fixed_stab(status, istats, sol(:,max_pts:max_pts), eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end, max_pts_o=max_pts)
-  call print_solution(status, sol, filename_o="rk4_frog_end.out", width_o=20, start_o=max_pts)
+  call print_solution(status, sol, filename_o="rk4_frog_end.out", fmt_w_o=-1, start_o=max_pts)
 
   sol = 0
   call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   sol(2:, :) = 0
   call steps_points_stab(status, istats, sol, eq, y_iv, param, a, b, c, 1)
-  call print_solution(status, sol, filename_o="rk4_steps_end_points.out", width_o=20)
+  call print_solution(status, sol, filename_o="rk4_steps_end_points.out", fmt_w_o=-1)
 
   sol = 0
   call steps_fixed_stab(status, istats, sol, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   sol(2:, :) = 0
   call steps_points_stab(status, istats, sol, eq, y_iv, param, a, b, c, 10)
-  call print_solution(status, sol, filename_o="rk4_steps_end_points10.out", width_o=20)
+  call print_solution(status, sol, filename_o="rk4_steps_end_points10.out", fmt_w_o=-1)
 
 contains
 

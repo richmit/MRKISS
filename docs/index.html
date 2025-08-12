@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-11 Mon 14:00 -->
+<!-- 2025-08-12 Tue 12:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-11 14:00:23</i></td>
+<td class="org-left"><i>2025-08-12 12:11:46</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-11 14:00:25</i></td>
+<td class="org-left"><i>2025-08-12 12:11:47</i></td>
 </tr>
 </tbody>
 </table>
@@ -543,7 +543,7 @@ The \(\mathbf{\check{b}}\) method is \(\mathcal{O}(\check{p})\) and the \(\mathb
 <h2 id="features"><span class="section-number-2">3.</span> Features &amp; Requirements</h2>
 <div class="outline-text-2" id="text-features">
 <p>
-The IVPs I work with are generally pretty well behavied:
+<b>The IVPs I work with are generally pretty well behavied</b>
 </p>
 
 <ul class="org-ul">
@@ -554,16 +554,12 @@ The IVPs I work with are generally pretty well behavied:
 
 <p>
 Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
-chemical reactions, and electronic circuits.
+chemical reactions, and electronic circuits.  My motivation for solving IVPs generally revolve around <i>generative art</i> and <i>visualization</i>.  You will actually
+see this in the code and feature set of the library.
 </p>
 
 <p>
-My motivation for solving IVPs generally revolve around <i>generative art</i> and <i>visualization</i>.  You will actually see this in the code and feature set of the
-library.
-</p>
-
-<p>
-Things I care about:
+<b>Things I care about</b>
 </p>
 
 <ul class="org-ul">
@@ -576,7 +572,7 @@ Things I care about:
 <li>Fixed \(t\) step size solvers</li>
 <li>Fixed \(\mathbf{y}\)-space step size solvers</li>
 </ul></li>
-<li>Solutions include derivative values so visualization tools can perform Hermite interpolation.</li>
+<li>Solutions include derivative values for visualization tools.</li>
 <li>Interpolate entire solutions to new time points (Hermite &amp; linear).</li>
 <li>Programmable step processing.  Examples:
 <ul class="org-ul">
@@ -611,14 +607,23 @@ Things I care about:
 </ul>
 
 <p>
-Things I don't care about:
+<b>Things that may weird you out</b>
 </p>
 
-<ul class="org-ul">
-<li>Usage error checking.  i.e. things like making sure the user has supplied consistent Butcher tableau arguments.</li>
-<li>Avoiding derivative function evaluations.</li>
-<li>\(\mathcal{O}(p)\) or \(\mathcal{O}(p-1)\) accuracy for intrastep interpolation.  Hermite is good enough for visulization.</li>
-</ul>
+<p>
+Derivative function computation dominates the compute time for many applications.  This observation has had tremendous influence on the development of IVP
+numerical techniques and related software.  For the IVPs we are interested in the derivative functions are quite simple and the Runge-Kutta computations
+themselves generally dominate the computation time.  This changes things quite dramatically.  For example, techniques like embedded polynomial schemes for
+intrastep interpolation designed to minimize function evaluation may actually perform worse than simply making more Runge-Kutta steps for our problems!  As
+another example, performing iterative algorithms, like bisection, directly on the Runge-Kutta method itself is quite practical.  Keeping this in mind will
+reduce the number of "<i>WTH?!?!</i>" moments you have while reading the code, and will keep you from applying some features, like <code>steps_condy_stab()</code>, to
+problems that <b>do</b> have difficult derivatives to compute.
+</p>
+
+<p>
+While <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> provides comprehensive support for detecting and forwarding runtime errors, it doesn't do much
+<i>programmer</i> error checking.  For example, the code doesn't double check that the programmer has provided appropriate arguments for routines.
+</p>
 </div>
 </div>
 <div id="outline-container-def-method" class="outline-2">
@@ -1355,7 +1360,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org85dd9fd" class="figure">
+<div id="org5e9401f" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1635,7 +1640,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org3bc5ed8" class="figure">
+<div id="org1bc4299" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1684,7 +1689,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org76d47f6" class="figure">
+<div id="org0bcd804" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1708,7 +1713,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgf325aa1" class="figure">
+<div id="org05eac3b" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>

@@ -216,7 +216,7 @@ sed -n '/^  *! BEGIN: lorenz_clip-y *$/,/^ *! END: lorenz_clip-y *$/p' ../exampl
 
 !-------------------------------------------------------------------------------------------------
 program lorenz
-  use :: mrkiss_config,      only: rk, t_delta_tiny, istats_size
+  use :: mrkiss_config,      only: rk, istats_size
   use :: mrkiss_solvers_nt,  only: steps_fixed_stab, steps_sloppy_condy_stab, steps_condy_stab
   use :: mrkiss_utils,       only: print_solution, print_istats, status_to_message
   use :: mrkiss_erk_kutta_4, only: a, b, c

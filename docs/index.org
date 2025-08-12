@@ -203,19 +203,17 @@ The \(\mathbf{\check{b}}\) method is \(\mathcal{O}(\check{p})\) and the \(\mathb
 :CUSTOM_ID: features
 :END:
 
-The IVPs I work with are generally pretty well behavied:
+*The IVPs I work with are generally pretty well behavied*
 
  - Non-stiff
  - Time forward (\(\Delta{t} \ge 0\))
  - Defined by a small (<50) set of equations expressable in closed form.
 
 Typical examples are strange attractors and systems related to chaotic science models from celestial/classical mechanics, population dynamics, oscillating
-chemical reactions, and electronic circuits.
+chemical reactions, and electronic circuits.  My motivation for solving IVPs generally revolve around /generative art/ and /visualization/.  You will actually
+see this in the code and feature set of the library.
 
-My motivation for solving IVPs generally revolve around /generative art/ and /visualization/.  You will actually see this in the code and feature set of the
-library.
-
-Things I care about:
+*Things I care about*
 
  - Simple to use for simple problems.
  - Easily create custom solvers for the, admittedly bizarre, demands of generative art.
@@ -224,7 +222,7 @@ Things I care about:
  - Easy to use, hardwired methods for /fixed step size/ visualization use cases:
    - Fixed \(t\) step size solvers
    - Fixed \(\mathbf{y}\)-space step size solvers
- - Solutions include derivative values so visualization tools can perform Hermite interpolation.
+ - Solutions include derivative values for visualization tools.
  - Interpolate entire solutions to new time points (Hermite & linear).
  - Programmable step processing.  Examples:
    - Stop the routine if the solution curve is too long in \(\mathbf{y}\)-space
@@ -249,12 +247,18 @@ Things I care about:
    - 100% standard Fortran that works with various compilers.
    - Simple text output that can be compressed and sent back home or shared with others.
 
-Things I don't care about:
+*Things that may weird you out*
 
- - Usage error checking.  i.e. things like making sure the user has supplied consistent Butcher tableau arguments.
- - Avoiding derivative function evaluations.
- - \(\mathcal{O}(p)\) or \(\mathcal{O}(p-1)\) accuracy for intrastep interpolation.  Hermite is good enough for visulization.
-     
+Derivative function computation dominates the compute time for many applications.  This observation has had tremendous influence on the development of IVP
+numerical techniques and related software.  For the IVPs we are interested in the derivative functions are quite simple and the Runge-Kutta computations
+themselves generally dominate the computation time.  This changes things quite dramatically.  For example, techniques like embedded polynomial schemes for
+intrastep interpolation designed to minimize function evaluation may actually perform worse than simply making more Runge-Kutta steps for our problems!  As
+another example, performing iterative algorithms, like bisection, directly on the Runge-Kutta method itself is quite practical.  Keeping this in mind will
+reduce the number of "/WTH?!?!/" moments you have while reading the code, and will keep you from applying some features, like ~steps_condy_stab()~, to
+problems that *do* have difficult derivatives to compute.
+
+While [[https://github.com/richmit/MRKISS][~MRKISS~]] provides comprehensive support for detecting and forwarding runtime errors, it doesn't do much
+/programmer/ error checking.  For example, the code doesn't double check that the programmer has provided appropriate arguments for routines.
 
 * Defining Runge-Kutta Methods in [[https://github.com/richmit/MRKISS][~MRKISS~]]
 :PROPERTIES:

@@ -1,0 +1,15 @@
+     Solution Analysis   
+                 size 1:                         5
+                 size 2:                         4
+                  Max y:             0.10305E+0001            0.10000E+0001
+                  Min y:             0.10000E+0001            0.97045E+0000
+                 Max dy:             0.10305E+0001           -0.97045E+0000
+                 Min dy:             0.10000E+0001           -0.10000E+0001
+                  Max t:             0.30000E-0001
+                  Min t:             0.00000E+0000
+            Max delta t:             0.10000E-0001
+            Min delta t:             0.10000E-0001
+            Max delta y:             0.10253E-0001            0.99502E-0002
+            Min delta y:             0.10050E-0001            0.97531E-0002
+        Max delta y len:             0.14151E-0001
+        Min delta y len:             0.14143E-0001

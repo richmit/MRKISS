@@ -7,22 +7,22 @@
 !! @keywords  runge kutta embedded butcher tableau
 !! @std       F2023
 !! @see       https://github.com/richmit/MRKISS
-!! @copyright 
+!! @copyright
 !!  @parblock
 !!  Copyright (c) 2025, Mitchell Jay Richling <http://www.mitchr.me/> All rights reserved.
-!!  
+!!
 !!  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following
 !!  conditions are met:
-!!  
+!!
 !!  1. Redistributions of source code must retain the above copyright notice, this list of conditions, and the following
 !!     disclaimer.
-!!  
+!!
 !!  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following
 !!     disclaimer in the documentation and/or other materials provided with the distribution.
-!!  
+!!
 !!  3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
 !!     derived from this software without specific prior written permission.
-!!  
+!!
 !!  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 !!  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 !!  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
@@ -54,7 +54,7 @@ module mrkiss_solvers_wt
   !! @endverbatim
   !!
   abstract interface
-     subroutine deq_iface(status, dydt, t, y, param) 
+     subroutine deq_iface(status, dydt, t, y, param)
        use mrkiss_config, only: rk
        implicit none
        integer,          intent(out) :: status
@@ -79,7 +79,7 @@ module mrkiss_solvers_wt
   !! @endverbatim
   !!
   abstract interface
-     subroutine stepp_iface(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta) 
+     subroutine stepp_iface(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
        use mrkiss_config, only: rk
        implicit none
        integer,          intent(out) :: status
@@ -107,7 +107,7 @@ module mrkiss_solvers_wt
   !! @endverbatim
   !!
   abstract interface
-     subroutine sdf_iface(status, dist, sdf_flags, t, y) 
+     subroutine sdf_iface(status, dist, sdf_flags, t, y)
        use mrkiss_config, only: rk
        implicit none
        integer,          intent(out) :: status
@@ -145,20 +145,18 @@ contains
   !! t_delta ..................... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_etab(status, y1_delta, y2_delta, dy, deq, t, y, param, a, b1, b2, c, t_delta) 
+  subroutine one_step_etab(status, y1_delta, y2_delta, dy, deq, t, y, param, a, b1, b2, c, t_delta)
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
-    procedure(deq_iface)       :: deq
+    procedure(deq_iface)          :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b1(:), c(:), t_delta, b2(:)
     ! Variables
     integer                       :: i, stage
-    real(kind=rk)                 :: k(size(y, 1),size(b1, 1)+1)
-    real(kind=rk)                 :: stage_t_delta
-    real(kind=rk)                 :: y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
+    real(kind=rk)                 :: k(size(y, 1),size(b1, 1)+1), stage_t_delta, y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
     ! Compute k vectors
     do stage=1,size(b1, 1)
        stage_y_delta = 0.0_rk
@@ -204,22 +202,20 @@ contains
   !!                       stage.  See MRKISS/tests/short_b.f90 for an example.
   !! t_delta ............. Delta t to use for the step.
   !! @endverbatim
-  !! 
+  !!
   ! SHELLO: sed -n '/^  *subroutine one_step_etab(/,/end subroutine one_step_etab *$/p' mrkiss_solvers.f90 | sed 's/, y2_delta[^,]*//; s/, b2[^,]*//; s/_etab/_stab/; s/b1/b/g; s/y1/y/g; /y2_delta/d;'
-  subroutine one_step_stab(status, y_delta, dy, deq, t, y, param, a, b, c, t_delta) 
+  subroutine one_step_stab(status, y_delta, dy, deq, t, y, param, a, b, c, t_delta)
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
-    procedure(deq_iface)       :: deq
+    procedure(deq_iface)          :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), t_delta
     ! Variables
     integer                       :: i, stage
-    real(kind=rk)                 :: k(size(y, 1),size(b, 1)+1)
-    real(kind=rk)                 :: stage_t_delta
-    real(kind=rk)                 :: y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
+    real(kind=rk)                 :: k(size(y, 1),size(b, 1)+1), stage_t_delta, y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
     ! Compute k vectors
     do stage=1,size(b, 1)
        stage_y_delta = 0.0_rk
@@ -263,19 +259,18 @@ contains
   !! p ................... The order for the RK method in the butcher tableau
   !! t_delta ............. Delta t to use for the step.
   !! @endverbatim
-  !! @see: mrkiss_solvers::one_step_stab(), 
+  !! @see: mrkiss_solvers::one_step_stab(),
   !!
-  subroutine one_richardson_step_stab(status, y_delta, dy, deq, t, y, param, a, b, c, p, t_delta) 
+  subroutine one_richardson_step_stab(status, y_delta, dy, deq, t, y, param, a, b, c, p, t_delta)
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
-    procedure(deq_iface)       :: deq
+    procedure(deq_iface)          :: deq
     real(kind=rk),    intent(in)  :: t
-    real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
+    real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), t_delta
     integer,          intent(in)  :: p
-    real(kind=rk),    intent(in)  :: t_delta
     ! Variables
     real(kind=rk)                 :: t_delta_tmp, t_tmp, y_tmp(size(y, 1))
     real(kind=rk)                 :: y_delta_small_1(size(y, 1)), y_delta_small_2(size(y, 1)), y_delta_big(size(y, 1))
@@ -317,13 +312,13 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_rk4(status, y_delta, dy, deq, t, y, param, t_delta) 
+  subroutine one_step_rk4(status, y_delta, dy, deq, t, y, param, t_delta)
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y_delta(:), dy(:)
-    procedure(deq_iface)       :: deq
+    procedure(deq_iface)          :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), t_delta
     ! Variables
@@ -358,13 +353,13 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_rkf45(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta) 
+  subroutine one_step_rkf45(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta)
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
-    procedure(deq_iface)       :: deq
+    procedure(deq_iface)          :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), t_delta
     ! Variables
@@ -406,13 +401,13 @@ contains
   !! t_delta ..... Delta t to use for the step.
   !! @endverbatim
   !!
-  subroutine one_step_dp54(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta) 
+  subroutine one_step_dp54(status, y1_delta, y2_delta, dy, deq, t, y, param, t_delta)
     use mrkiss_config, only: rk
     implicit none
     ! Arguments
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: y1_delta(:), y2_delta(:), dy(:)
-    procedure(deq_iface)       :: deq
+    procedure(deq_iface)          :: deq
     real(kind=rk),    intent(in)  :: t
     real(kind=rk),    intent(in)  :: y(:), param(:), t_delta
     ! Variables
@@ -443,7 +438,7 @@ contains
   !> @name Multistep Solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple fixed time steps with a simple RK method and store solutions in solution.  
+  !> Take multiple fixed time steps with a simple RK method and store solutions in solution.
   !!
   !! @verbatim
   !! status ...................... Exit status
@@ -458,7 +453,7 @@ contains
   !!                                - Elements this routine updates
   !!                                   - isi_num_pts
   !!                                   - isi_step_norm
-  !! solution(:,:) ............... Array for solution.  
+  !! solution(:,:) ............... Array for solution.
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
   !!                                 - size(y, 1) elements starting with 2 have y values
@@ -469,9 +464,9 @@ contains
   !! a(:,:), b(:), c(:) .......... The butcher tableau
   !! p_o ......................... The order for the RK method in the butcher tableau to enable Richardson extrapolation
   !! max_pts_o ................... Maximum number of solutions to put in solution.
-  !!                               If max_pts_o>1 & size(solution, 2)==1, then max_pts_o-1 steps are taken and 
+  !!                               If max_pts_o>1 & size(solution, 2)==1, then max_pts_o-1 steps are taken and
   !!                               only the last solution is stored in solution.
-  !! t_delta_o ................... Step size to use.  
+  !! t_delta_o ................... Step size to use.
   !!                                If t_end_o is provided:  Default: (t_end - t) / (size(solution, 2) - 1)
   !!                                If t_end_o not provided: Default: mrkiss_config::t_delta_ai
   !! t_end_o ..................... End point for last step.  Silently ignored if t_delta_o is provided.
@@ -480,22 +475,21 @@ contains
   !! @see mrkiss_utils::print_istats(), mrkiss_solvers::one_step_stab(), mrkiss_solvers::one_richardson_step_stab()
   !!
   subroutine steps_fixed_stab(status, istats, solution, deq, t, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
-                                 t_end_o, t_max_o) 
+                                 t_end_o, t_max_o)
     use mrkiss_config, only: rk, t_delta_ai, istats_size, isi_num_pts, isi_step_norm
     implicit none
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface)                 :: deq
+    procedure(deq_iface)                    :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer,          optional, intent(in)  :: p_o, max_pts_o
     real(kind=rk),    optional, intent(in)  :: t_delta_o, t_end_o, t_max_o
     ! Vars
     integer                                 :: cur_pnt_idx, y_dim, cur_step, max_steps, p
-    real(kind=rk)                           :: t_cv, t_delta
-    real(kind=rk)                           :: y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
-    logical                                 :: lotsopnts 
+    real(kind=rk)                           :: t_cv, t_delta, y_cv(size(y, 1)), y_delta(size(y, 1)), dy(size(y, 1))
+    logical                                 :: lotsopnts
     ! Process arguments
     max_steps = size(solution, 2) - 1
     lotsopnts = .true.
@@ -509,7 +503,7 @@ contains
     end if
     if (present(t_delta_o)) then
        t_delta = t_delta_o
-    else 
+    else
        if (present(t_end_o)) then
           t_delta = (t_end_o - t) / max_steps
        else
@@ -527,7 +521,7 @@ contains
     cur_pnt_idx = 1
     solution(1,  cur_pnt_idx) = t_cv
     solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
-    do 
+    do
        cur_step = cur_step + 1
        if (p > 0) then
           call one_richardson_step_stab(status, y_delta, dy, deq, t_cv, y_cv, param, a, b, c, p, t_delta)
@@ -560,13 +554,13 @@ contains
   end subroutine steps_fixed_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps with constant length y_delta using a simple RK method storing the solutions in solution.  
+  !> Take multiple adaptive steps with constant length y_delta using a simple RK method storing the solutions in solution.
   !!
   !! The adaptive step size is controlled to result in steps that achieve a constant "length".  The "length" is defined to be the
   !! Euclidean norm of the subset of the solution vector specified by y_delta_len_idxs_o.  For each solution the routine will
   !! make two one_step_stab_* calls with t_delta_min_o and t_delta_max, and then use bisection (with additional calls to
   !! one_step_stab_*) to isolate a t_delta value that leads to a a length within y_delta_len_tol_o of y_delta_len_targ.
-  !!     
+  !!
   !! Note there is no mathematical guarantee that a RK step of size t_delta_min_o and t_delta_max will produce solutions that
   !! bracket y_delta_len_targ.  That said, for well behaved functions a t_delta_min_o and t_delta_max may always be found that
   !! work.  In practice finding good values are t_delta_min_o and t_delta_max isn't normally difficult.  One approach for harder
@@ -591,7 +585,7 @@ contains
   !!                                   - isi_step_y_len
   !!                                   - isi_bic_fail_max
   !!                                   - isi_bic_fail_bnd
-  !! solution .................... Array for solution.  
+  !! solution .................... Array for solution.
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
   !!                                 - size(y, 1) elements starting with 2 have y values
@@ -615,19 +609,18 @@ contains
   !!
   subroutine steps_condy_stab(status, istats, solution, deq, t, y, param, a, b, c, y_delta_len_targ,          &
                                  t_delta_max, t_delta_min_o, y_delta_len_tol_o, max_bisect_o, no_bisect_error_o, &
-                                 y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o) 
-    use mrkiss_config, only: rk, t_delta_tiny, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
+                                 y_delta_len_idxs_o, max_pts_o, y_sol_len_max_o, t_max_o)
+    use mrkiss_config, only: rk, t_delta_min_ai, max_bisect_ai, istats_size, isi_bic_fail_bnd, isi_bic_fail_max, isi_num_pts, isi_step_norm, isi_step_y_len
     implicit none
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface)                 :: deq
+    procedure(deq_iface)                    :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_max
-    real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o
+    real(kind=rk),    optional, intent(in)  :: t_delta_min_o, y_delta_len_tol_o, y_sol_len_max_o, t_max_o
     integer,          optional, intent(in)  :: max_pts_o, max_bisect_o, y_delta_len_idxs_o(:)
     logical,          optional, intent(in)  :: no_bisect_error_o
-    real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
     integer                                 :: max_bisect, max_pts, cur_pnt_idx, biter, y_dim
     logical                                 :: no_bisect_error
@@ -635,12 +628,12 @@ contains
     real(kind=rk)                           :: bs_tmp1_t_delta, bs_tmp2_t_delta, t_cv, dy(size(y, 1))
     real(kind=rk)                           :: bs_tmpc_dy(size(y, 1)), bs_tmp1_dy(size(y, 1)), bs_tmp2_dy(size(y, 1))
     real(kind=rk)                           :: bs_tmp2_y_delta_len, bs_tmpc_y_delta_len, bs_tmpc_t_delta
-    real(kind=rk)                           :: y_cv(size(y, 1)), bs_tmp1_y_delta(size(y, 1)) 
+    real(kind=rk)                           :: y_cv(size(y, 1)), bs_tmp1_y_delta(size(y, 1))
     real(kind=rk)                           :: bs_tmp2_y_delta(size(y, 1)), bs_tmpc_y_delta(size(y, 1))
     ! Process arguments
     max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
-    t_delta_min = t_delta_tiny
+    t_delta_min = t_delta_min_ai
     if (present(t_delta_min_o)) t_delta_min = t_delta_min_o
     max_bisect = max_bisect_ai
     if (present(max_bisect_o)) max_bisect = max_bisect_o
@@ -659,7 +652,7 @@ contains
     cur_pnt_idx = 1
     solution(1, cur_pnt_idx) = t_cv
     solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
-    do 
+    do
        cur_pnt_idx = cur_pnt_idx  + 1
        ! Compute t_delta 1
        bs_tmp1_t_delta = t_delta_min
@@ -763,7 +756,7 @@ contains
   end subroutine steps_condy_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps adjusting for the length of y_delta using a simple RK method storing the solutions in solution.  
+  !> Take multiple adaptive steps adjusting for the length of y_delta using a simple RK method storing the solutions in solution.
   !!
   !! This method attempts to control the length of y_delta.  At each solution step it takes a probing step at t_delta_ini and
   !! then takes another step with t_delta = t_delta_ini * y_delta_len_targ / y_delta_len.  If which will result in a y_delta
@@ -789,7 +782,7 @@ contains
   !!                                   - isi_num_pts
   !!                                   - isi_step_norm
   !!                                   - isi_step_y_len
-  !! solution .................... Array for solution.  
+  !! solution .................... Array for solution.
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
   !!                                 - size(y, 1) elements starting with 2 have y values
@@ -812,18 +805,17 @@ contains
   !!
   subroutine steps_sloppy_condy_stab(status, istats, solution, deq, t, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
                                         t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,           &
-                                        y_sol_len_max_o, t_max_o) 
-    use mrkiss_config, only: rk, t_delta_tiny, istats_size, isi_num_pts, isi_step_norm, isi_step_y_len
+                                        y_sol_len_max_o, t_max_o)
+    use mrkiss_config, only: rk, t_delta_min_ai, istats_size, isi_num_pts, isi_step_norm, isi_step_y_len
     implicit none
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface)                 :: deq
+    procedure(deq_iface)                    :: deq
     real(kind=rk),              intent(in)  :: t
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:), y_delta_len_targ, t_delta_ini
-    real(kind=rk),    optional, intent(in)  :: t_delta_min_o, t_delta_max_o
+    real(kind=rk),    optional, intent(in)  :: t_delta_min_o, t_delta_max_o, y_sol_len_max_o, t_max_o
     integer,          optional, intent(in)  :: max_pts_o, y_delta_len_idxs_o(:), adj_short_o
-    real(kind=rk),    optional, intent(in)  :: y_sol_len_max_o, t_max_o
     ! Variables
     integer                                 :: max_pts, cur_pnt_idx, y_dim
     real(kind=rk)                           :: t_delta_min, y_sol_len, t_cv, t_delta, y_delta_len
@@ -831,7 +823,7 @@ contains
     ! Process arguments
     max_pts = size(solution, 2)
     if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o);
-    t_delta_min = t_delta_tiny
+    t_delta_min = t_delta_min_ai
     if (present(t_delta_min_o)) t_delta_min = t_delta_min_o
     ! Compute Solution
     y_dim = size(y, 1)
@@ -842,7 +834,7 @@ contains
     cur_pnt_idx = 1
     solution(1, cur_pnt_idx) = t_cv
     solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
-    do 
+    do
        cur_pnt_idx = cur_pnt_idx  + 1
        ! Compute Initial step
        t_delta = t_delta_ini
@@ -916,13 +908,13 @@ contains
   !! istats(:) ................... Integer statistics for run
   !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !!                                - Elements this routine updates:
-  !!                                   - isi_num_pts        
-  !!                                   - isi_step_norm      
-  !!                                   - isi_step_y_err     
-  !!                                   - isi_step_spp_td    
-  !!                                   - isi_step_sdf_bic   
-  !!                                   - isi_bic_fail_max   
-  !!                                   - isi_bic_fail_bnd   
+  !!                                   - isi_num_pts
+  !!                                   - isi_step_norm
+  !!                                   - isi_step_y_err
+  !!                                   - isi_step_spp_td
+  !!                                   - isi_step_sdf_bic
+  !!                                   - isi_bic_fail_max
+  !!                                   - isi_bic_fail_bnd
   !! solution(:,:) ............... Array for solution.
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable
@@ -936,7 +928,7 @@ contains
   !! t_max_o ..................... Stop if t>t_max_o.  Different from t_end_o! Default: NONE
   !! t_end_o ..................... Try to stop integration at t_end. Default: NONE
   !! t_delta_ini_o ............... Initial t_delta. Default: (t_delta_max_o+t_delta_min_o)/2 or t_delta_ai otherwise
-  !! t_delta_min_o ............... Minimum allowed t_delta. Default: t_delta_tiny
+  !! t_delta_min_o ............... Minimum allowed t_delta. Default: t_delta_min_ai
   !! t_delta_max_o ............... Maximum allowed t_delta. Default: NONE
   !! t_delta_fac_min_o ........... Minimum t_delta adaption factor for all but the first step.  Default:  t_delta_fac_min_ai
   !! t_delta_fac_max_o ........... Maximum t_delta adaption factor.  Default:  2.0_rk
@@ -957,32 +949,31 @@ contains
   !! stepp_o ..................... Step processing subroutine.  Called after each step.
   !! @endverbatim
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers::one_step_etab(), mrkiss_solvers::one_step_stab()
-  !! 
+  !!
   subroutine steps_adapt_etab(status, istats, solution, deq, t, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
                                  t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
                                  t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,      &
-                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o) 
+                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
     use mrkiss_config
     implicit none
     ! Arguments
     integer,                             intent(out) :: status, istats(istats_size)
     real(kind=rk),                       intent(out) :: solution(:,:)
-    procedure(deq_iface)                          :: deq
+    procedure(deq_iface)                             :: deq
     real(kind=rk),                       intent(in)  :: t
     real(kind=rk),                       intent(in)  :: y(:), param(:), a(:,:), b1(:), b2(:), c(:)
     integer,                             intent(in)  :: p1, p2
     real(kind=rk),             optional, intent(in)  :: t_max_o, t_end_o, t_delta_ini_o, t_delta_min_o, t_delta_max_o
     real(kind=rk),             optional, intent(in)  :: t_delta_fac_min_o, t_delta_fac_max_o, t_delta_fac_fdg_o
-    real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:)
+    real(kind=rk),             optional, intent(in)  :: error_tol_abs_o(:), error_tol_rel_o(:), sdf_tol_o
     integer,                   optional, intent(in)  :: max_pts_o, max_bisect_o
     logical,                   optional, intent(in)  :: no_bisect_error_o
-    procedure(sdf_iface),   optional              :: sdf_o
-    real(kind=rk),             optional, intent(in)  :: sdf_tol_o
-    procedure(stepp_iface), optional              :: stepp_o
+    procedure(sdf_iface),      optional              :: sdf_o
+    procedure(stepp_iface),    optional              :: stepp_o
     ! Variables
     integer                                          :: max_pts, cur_pnt_idx, adj_cnt, y_dim
     integer                                          :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
-    logical                                          :: no_bisect_error
+    logical                                          :: no_bisect_error, t_delta_end_p
     real(kind=rk)                                    :: t_delta_fac, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
     real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min
     real(kind=rk)                                    :: y_delta_delta(size(y, 1)), t_delta_fac_max, t_delta_fac_min
@@ -990,7 +981,6 @@ contains
     real(kind=rk)                                    :: error_tol_rel(size(y, 1)), comb_err_tol(size(y, 1)), t_cv, t_delta
     real(kind=rk)                                    :: sp_new_t_delta, bs_tmp1_t_delta, bs_tmp2_t_delta, bs_tmp_t_delta
     real(kind=rk)                                    :: bs_tmp_y_delta(size(y, 1)), bs_tmp1_dist, bs_tmp2_dist, bs_tmp_dist
-    logical                                          :: t_delta_end_p
     ! Process arguments
     error_tol_abs = error_tol_abs_ai
     if (present(error_tol_abs_o)) then
@@ -1018,11 +1008,11 @@ contains
     if (present(t_delta_fac_max_o)) t_delta_fac_max = t_delta_fac_max_o
     t_delta_fac_min = t_delta_fac_min_ai
     if (present(t_delta_fac_min_o)) t_delta_fac_min = t_delta_fac_min_o
-    t_delta_min = t_delta_tiny
+    t_delta_min = t_delta_min_ai
     if (present(t_delta_min_o)) t_delta_min = t_delta_min_o
     if (present(t_delta_ini_o)) then
        t_delta_ini = t_delta_ini_o
-    else 
+    else
        t_delta_ini = t_delta_ai
        if (present(t_delta_max_o))  t_delta_ini = (t_delta_max_o - t_delta_min) / 2
     end if
@@ -1039,7 +1029,7 @@ contains
     cur_pnt_idx = 1
     solution(1, cur_pnt_idx) = t_cv
     solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
-    do 
+    do
        cur_pnt_idx = cur_pnt_idx  + 1
        ! If close to the end, adjust t_delta to hit t_end_o
        t_delta_end_p = .false.
@@ -1111,7 +1101,7 @@ contains
              if (status > 0) return
              call sdf_o(status, bs_tmp2_dist, sp_sdf_flags, t_cv+bs_tmp2_t_delta, y_cv+bs_tmp_y_delta)
              if (status > 0) return
-             if (bs_tmp2_dist < bs_tmp1_dist) then ! Swap if req. 
+             if (bs_tmp2_dist < bs_tmp1_dist) then ! Swap if req.
                 bs_tmp_t_delta  = bs_tmp1_t_delta
                 bs_tmp1_t_delta = bs_tmp2_t_delta
                 bs_tmp2_t_delta = bs_tmp_t_delta
@@ -1121,7 +1111,7 @@ contains
              end if
              if (bs_tmp2_dist >= 0) then ! We don't exit if we can't bisect, we just don't do it.
                 bs_itr = 1
-                do 
+                do
                    bs_tmp_t_delta = (bs_tmp1_t_delta + bs_tmp2_t_delta) / 2.0_rk
                    call one_step_stab(status, bs_tmp_y_delta, dy, deq, t_cv, y_cv, param, a, b1, c, bs_tmp_t_delta)
                    istats(isi_step_sdf_bic) = istats(isi_step_sdf_bic) + 1
@@ -1194,7 +1184,7 @@ contains
   !!                                - Elements this routine updates (via steps_fixed_stab() calls):
   !!                                   - isi_num_pts
   !!                                   - isi_step_norm
-  !! solution(:,:) ............... Array for solution.  
+  !! solution(:,:) ............... Array for solution.
   !!                                Each COLUMN is a solution:
   !!                                 - First element is the t variable if
   !!                                 - This array *must* have a populated t sequence in new_solution(1,:)
@@ -1209,13 +1199,13 @@ contains
   !! @endverbatim
   !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message(), mrkiss_solvers::one_step_stab()
   !!
-  subroutine steps_points_stab(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o) 
+  subroutine steps_points_stab(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o)
     use mrkiss_config, only: rk, istats_size
     implicit none
     ! Arguments
     integer,                    intent(out) :: status, istats(istats_size)
     real(kind=rk),              intent(out) :: solution(:,:)
-    procedure(deq_iface)                 :: deq
+    procedure(deq_iface)                    :: deq
     real(kind=rk),              intent(in)  :: y(:), param(:), a(:,:), b(:), c(:)
     integer,                    intent(in)  :: steps_per_pnt
     integer,          optional, intent(in)  :: p_o
@@ -1246,7 +1236,7 @@ contains
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Create an interpolated solution from a source colution.
-  !! 
+  !!
   !! @verbatim
   !! status ...................... Exit status
   !!                                - -inf-0 ..... Everything worked
@@ -1258,18 +1248,18 @@ contains
   !!                                - See: mrkiss_utils::print_istats() for description of elements.
   !!                                - Elements this routine updates:
   !!                                   - isi_num_pts
-  !! solution(:,:) ............... Array for new solution.  
+  !! solution(:,:) ............... Array for new solution.
   !!                                This array *must* have a populated t sequence in solution(1,:)
   !!                                It must also have room for a new y & dy coordinates.
   !!                                New y values are interpolated.  New dy values are coputed from deq.
-  !! src_solution(:,:) ........... Array for old solution.  
+  !! src_solution(:,:) ........... Array for old solution.
   !!                                This array *must* have t!  It must have at least two solution points.
   !! num_src_pts_o ............... The number of solutions in src_solution.  Default infered from size of src_solution.
   !! linear_interp_o ............. If .true. do linear interpolation, and hermite otherwise.  Default: .false.
   !! @endverbatim
-  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message() 
+  !! @see mrkiss_utils::print_istats(), mrkiss_utils::status_to_message()
   !!
-  subroutine interpolate_solution(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o) 
+  subroutine interpolate_solution(status, istats, solution, src_solution, deq, param, num_src_pts_o, linear_interp_o)
     use :: mrkiss_config, only: rk, istats_size, isi_num_pts
     implicit none
     ! Arguments
@@ -1277,7 +1267,7 @@ contains
     real(kind=rk),              intent(inout) :: solution(:,:)
     real(kind=rk),              intent(in)    :: src_solution(:,:)
     integer,          optional, intent(in)    :: num_src_pts_o
-    procedure(deq_iface)                   :: deq
+    procedure(deq_iface)                      :: deq
     real(kind=rk),              intent(in)    :: param(:)
     logical,          optional, intent(in)    :: linear_interp_o
     ! Variables
@@ -1327,8 +1317,5 @@ contains
     end do
     status = 0;
   end subroutine interpolate_solution
-  
+
 end module mrkiss_solvers_wt
-
-
-

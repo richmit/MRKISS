@@ -64,6 +64,19 @@ test_statuscodes : statuscodes.out
 	$(TD) -Z statuscodes.out data/statuscodes.out
 
 ####################################################################################################
+utils : utils.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) utils.f90 $(MRKISS_OBJ_FILES) -o $@
+
+UTILS_OUTS = utils_print_wstd.out utils_print_w30.out utils_print_e2.out utils_print_def.out utils_print_d5.out utils_istats_w8.out utils_istats_def.out utils_anal_w30.out utils_anal_e2.out utils_anal_def.out utils_anal_d5.out
+
+$(UTILS_OUTS) &: utils
+	utils$(EXE_SUFFIX)
+
+.PHONY: test_utils
+test_utils: $(UTILS_OUTS)
+	$(foreach fil,$^,$(FD) -Zdqn -g :[0-9]:X: $(fil) data/$(fil); )
+
+####################################################################################################
 short_b : short_b.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) short_b.f90 $(MRKISS_OBJ_FILES) -o $@
 

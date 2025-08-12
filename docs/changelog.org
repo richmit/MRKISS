@@ -49,17 +49,40 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :CUSTOM_ID: latest
 :END:
   - Fixed Bugs
-    - N/A
+    - analyze_solution(): Fixed bug with output files going to STDOUT.
   - Known Issues
     - N/A
   - API breaking Changes
-    - N/A
+    - analyze_solution(): removed arguments:
+      - y_dim_o
+      - sol_y_idx_o
+    - print_solution(): renamed arguments
+      - width_o => fmt_w_o
+      - digits_o => fmt_d_o
   - Deprecated functionality
     - N/A
   - New functionality
-    - N/A
+    - New constant in config: t_delta_min_ai
+      - Most solvers use this instead of t_delta_tiny for the default t_delta_min
+    - analyze_solution() new argumetns:
+      - fmt_w_o with default fmt_w_ai
+      - fmt_d_o with default fmt_d_ai
+      - fmt_e_o with default fmt_e_ai
+    - print_istats(): New arguments:
+      - fmt_w_o with default fmt_w_ai
+      - prt_zeros_o with default .false.  Zero elements are not printed by default now.
+    - print_solution
+      - New argument: fmt_e_o with default fmt_d_ai
+      - Renamed width_o to fmt_w_o
+      - If -1 is used for fmt_w_o, then it is set to fmt_w_ai
+      - Renamed digits_o to fmt_d_o and gave it a new default: fmt_d_ai
+    - Added new output format constants to mrkiss_config
+      - fmt_d_ai
+      - fmt_w_ai
+      - fmt_e_ai
   - Documentation
     - Rewrote much of main index page.
+    - Cleaned up whitespace in several comments.
   - Examples
     - New
       - N/A
@@ -67,11 +90,12 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
       - N/A
   - Tests
     - New
-      - N/A
+      - utils.f90: Test utilities print functions.
     - Updated
       - N/A
   - Miscellaneous
-    - N/A
+    - Collapsed declaration lines in all modules.
+    - Removed unnecessary imports of t_delta_tiny
 
 * v2025-08-10: Feature/Refactor
 :PROPERTIES:

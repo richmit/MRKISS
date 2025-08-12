@@ -6,22 +6,22 @@
 !! @brief     Configuration for MRKISS == MR RK KISS == Mitch Richling's Runge-Kutta Keep It Simple Stupid.@EOL
 !! @std       F2023
 !! @see       https://github.com/richmit/MRKISS/
-!! @copyright 
+!! @copyright
 !!  @parblock
 !!  Copyright (c) 2025, Mitchell Jay Richling <http://www.mitchr.me/> All rights reserved.
-!!  
+!!
 !!  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following
 !!  conditions are met:
-!!  
+!!
 !!  1. Redistributions of source code must retain the above copyright notice, this list of conditions, and the following
 !!     disclaimer.
-!!  
+!!
 !!  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following
 !!     disclaimer in the documentation and/or other materials provided with the distribution.
-!!  
+!!
 !!  3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
 !!     derived from this software without specific prior written permission.
-!!  
+!!
 !!  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 !!  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 !!  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
@@ -41,66 +41,74 @@ module mrkiss_config
   private
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> @name Real & integer types for externally viable interfaces and arguments
-  integer,          parameter, public :: rk                 = c_double   !< Real kind used across the library
+  !> @name Real type used for computations
+  integer,       parameter, public :: rk                 = c_double   !< Real kind used across the library
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> @name Constants related to the library
-  integer,          parameter, public :: istats_size        = 16  !< Number of elements in istats(:)
-  integer,          parameter, public :: istats_max_idx     = 8   !< Number of used elements in istats(:)
+  !> @name ab initio frmat specificaiton constants
+  integer,       parameter, public :: fmt_d_ai           = 15 !< Real print format: digits to the right of decimal
+  integer,       parameter, public :: fmt_w_ai           = 25 !< Numeric print format: total width
+  integer,       parameter, public :: fmt_e_ai           = 4  !< Real print format: digits in exponent
 
-  integer,          parameter, public :: isi_num_pts        = 1   !< istats index num_pts                
-  integer,          parameter, public :: isi_step_norm      = 2   !< istats index one_step_norm          
-  integer,          parameter, public :: isi_step_y_len     = 3   !< istats index one_step_y_delta_len   
-  integer,          parameter, public :: isi_step_y_err     = 4   !< istats index one_step_y_delta_err   
-  integer,          parameter, public :: isi_step_spp_td    = 5   !< istats index one_step_stepp_t_delta 
-  integer,          parameter, public :: isi_step_sdf_bic   = 6   !< istats index one_step_sdf_bisection 
-  integer,          parameter, public :: isi_bic_fail_max   = 7   !< istats index bisect_fail_max        
-  integer,          parameter, public :: isi_bic_fail_bnd   = 8   !< istats index bisect_fail_containment
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Constants related to istats
+  integer,       parameter, public :: istats_size        = 16  !< Number of elements in istats(:)
+  integer,       parameter, public :: istats_max_idx     = 8   !< Number of used elements in istats(:)
+
+  integer,       parameter, public :: isi_num_pts        = 1   !< istats index num_pts
+  integer,       parameter, public :: isi_step_norm      = 2   !< istats index one_step_norm
+  integer,       parameter, public :: isi_step_y_len     = 3   !< istats index one_step_y_delta_len
+  integer,       parameter, public :: isi_step_y_err     = 4   !< istats index one_step_y_delta_err
+  integer,       parameter, public :: isi_step_spp_td    = 5   !< istats index one_step_stepp_t_delta
+  integer,       parameter, public :: isi_step_sdf_bic   = 6   !< istats index one_step_sdf_bisection
+  integer,       parameter, public :: isi_bic_fail_max   = 7   !< istats index bisect_fail_max
+  integer,       parameter, public :: isi_bic_fail_bnd   = 8   !< istats index bisect_fail_containment
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Absolute constants
-  real(kind=rk),    parameter, public :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero
-  real(kind=rk),    parameter, public :: t_delta_tiny       = tiny(zero_epsilon) * 1.0e18_rk  !< Smallest value for t_delta
+  real(kind=rk), parameter, public :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero
+  real(kind=rk), parameter, public :: t_delta_tiny       = tiny(zero_epsilon) * 1.0e18_rk  !< Smallest value for t_delta
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name ab initio parameters for defaults when we know nothing
-  real(kind=rk),    parameter, public :: t_delta_ai         = 1.0e-4_rk  !< t_delta ai default
-  real(kind=rk),    parameter, public :: error_tol_abs_ai   = 1.0e-5_rk  !< error_tol_abs ai default
-  real(kind=rk),    parameter, public :: error_tol_rel_ai   = 1.0e-3_rk  !< error_tol_rel ai default
-  integer,          parameter, public :: max_bisect_ai      = 1000       !< max_bisect ai default
-  real(kind=rk),    parameter, public :: t_delta_fac_min_ai = 0.5_rk     !< t_delta_fac_min ai default
-  real(kind=rk),    parameter, public :: t_delta_fac_max_ai = 2.0_rk     !< t_delta_fac_max ai default
-  real(kind=rk),    parameter, public :: t_delta_fac_fdg_ai = 0.5_rk     !< t_delta_fac_fdg ai default
-  real(kind=rk),    parameter, public :: sdf_tol_ai         = 1.0e-3     !< sdf_tol ai default
+  real(kind=rk), parameter, public :: t_delta_ai         = 1.0e-4_rk    !< t_delta ai default
+  real(kind=rk), parameter, public :: error_tol_abs_ai   = 1.0e-5_rk    !< error_tol_abs ai default
+  real(kind=rk), parameter, public :: error_tol_rel_ai   = 1.0e-3_rk    !< error_tol_rel ai default
+  integer,       parameter, public :: max_bisect_ai      = 1000         !< max_bisect ai default
+  real(kind=rk), parameter, public :: t_delta_fac_min_ai = 0.5_rk       !< t_delta_fac_min ai default
+  real(kind=rk), parameter, public :: t_delta_fac_max_ai = 2.0_rk       !< t_delta_fac_max ai default
+  real(kind=rk), parameter, public :: t_delta_fac_fdg_ai = 0.5_rk       !< t_delta_fac_fdg ai default
+  real(kind=rk), parameter, public :: sdf_tol_ai         = 1.0e-3       !< sdf_tol ai default
+  real(kind=rk), parameter, public :: t_delta_min_ai     = t_delta_tiny !< t_delta_min ai default
+
 end module mrkiss_config
 
 
 !----------------------------------------------------------------------------------------------------------------------------------
-!> \mainpage 
-!! 
+!> \mainpage
+!!
 !! @image html MRKISS_logo_c_500x250.png
 !!
 !! MRKISS == MR RK KISS == Mitch Richling's Runge-Kutta Keep It Simple Stupid
 !!
 !! [MRKISS](https://github.com/richmit/MRKISS) is a *tiny* library with *zero dependencies* that aims to make it easy to *use*
 !! and *experiment with* explicit Runge-Kutta methods.
-!! 
+!!
 !! For an overview of MRKISS and some tutorial information, check out the [documentation](https://richmit.github.io/MRKISS/index.html).
-!! 
+!!
 !! A couple of the examples in the repository have longer explanatory documentation:
 !!    - [Three Body Problem](https://richmit.github.io/MRKISS/ex_three_body.html)
 !!    - [Lornez Attracter](https://richmit.github.io/MRKISS/ex_lorenz.html)
 !!    - [Step Size & Order Vs. Accuracy](https://richmit.github.io/MRKISS/ex_step_order_vs_error.html)
 !!    - [Langford Attracter](https://richmit.github.io/MRKISS/ex_langford.html)
-!! 
+!!
 !! Generated [API documentation](https://www.mitchr.me/SS/MRKISS/doc-lib/html/index.html) is viable as well.
-!! 
+!!
 !! Development News:
 !!   - [changelog](https://richmit.github.io/MRKISS/changelog.html)
 !!   - [roadmap](https://richmit.github.io/MRKISS/roadmap.html)
-!! 
+!!
 !! This library powers the [Strange Attractor Zoo](https://richmit.github.io/StrangeAttractorZoo/).
-!! 
+!!
 !! The canonical URL for this documentation: https://www.mitchr.me/SS/MRKISS/doc-lib/html/index.html
 !!

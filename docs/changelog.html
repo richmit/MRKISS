@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-11 Mon 14:03 -->
+<!-- 2025-08-12 Tue 10:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS changelog</title>
@@ -232,12 +232,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-11 14:03:01</i></td>
+<td class="org-left"><i>2025-08-12 10:07:00</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-11 14:03:03</i></td>
+<td class="org-left"><i>2025-08-12 10:07:06</i></td>
 </tr>
 </tbody>
 </table>
@@ -262,7 +262,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul class="org-ul">
 <li>Fixed Bugs
 <ul class="org-ul">
-<li>N/A</li>
+<li>analyze_solution(): Fixed bug with output files going to STDOUT.</li>
 </ul></li>
 <li>Known Issues
 <ul class="org-ul">
@@ -270,7 +270,16 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </ul></li>
 <li>API breaking Changes
 <ul class="org-ul">
-<li>N/A</li>
+<li>analyze_solution(): removed arguments:
+<ul class="org-ul">
+<li>y_dim_o</li>
+<li>sol_y_idx_o</li>
+</ul></li>
+<li>print_solution(): renamed arguments
+<ul class="org-ul">
+<li>width_o =&gt; fmt_w_o</li>
+<li>digits_o =&gt; fmt_d_o</li>
+</ul></li>
 </ul></li>
 <li>Deprecated functionality
 <ul class="org-ul">
@@ -278,11 +287,39 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </ul></li>
 <li>New functionality
 <ul class="org-ul">
-<li>N/A</li>
+<li>New constant in config: t_delta_min_ai
+<ul class="org-ul">
+<li>Most solvers use this instead of t_delta_tiny for the default t_delta_min</li>
+</ul></li>
+<li>analyze_solution() new argumetns:
+<ul class="org-ul">
+<li>fmt_w_o with default fmt_w_ai</li>
+<li>fmt_d_o with default fmt_d_ai</li>
+<li>fmt_e_o with default fmt_e_ai</li>
+</ul></li>
+<li>print_istats(): New arguments:
+<ul class="org-ul">
+<li>fmt_w_o with default fmt_w_ai</li>
+<li>prt_zeros_o with default .false.  Zero elements are not printed by default now.</li>
+</ul></li>
+<li>print_solution
+<ul class="org-ul">
+<li>New argument: fmt_e_o with default fmt_d_ai</li>
+<li>Renamed width_o to fmt_w_o</li>
+<li>If -1 is used for fmt_w_o, then it is set to fmt_w_ai</li>
+<li>Renamed digits_o to fmt_d_o and gave it a new default: fmt_d_ai</li>
+</ul></li>
+<li>Added new output format constants to mrkiss_config
+<ul class="org-ul">
+<li>fmt_d_ai</li>
+<li>fmt_w_ai</li>
+<li>fmt_e_ai</li>
+</ul></li>
 </ul></li>
 <li>Documentation
 <ul class="org-ul">
 <li>Rewrote much of main index page.</li>
+<li>Cleaned up whitespace in several comments.</li>
 </ul></li>
 <li>Examples
 <ul class="org-ul">
@@ -299,7 +336,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <ul class="org-ul">
 <li>New
 <ul class="org-ul">
-<li>N/A</li>
+<li>utils.f90: Test utilities print functions.</li>
 </ul></li>
 <li>Updated
 <ul class="org-ul">
@@ -308,7 +345,8 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </ul></li>
 <li>Miscellaneous
 <ul class="org-ul">
-<li>N/A</li>
+<li>Collapsed declaration lines in all modules.</li>
+<li>Removed unnecessary imports of t_delta_tiny</li>
 </ul></li>
 </ul>
 </div>

@@ -47,26 +47,32 @@ dump           = false
 ignore_non_num = false
 pnames         = false
 lines_re       = Regexp.new('.*')
+gsubs          = Array.new
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: float_diff.rb [options] file1 file2"
   opts.separator ""
   opts.separator "Options:"
   opts.separator "  Output Options:"
-  opts.on("-h",         "--help",                   "Show this message")                           { puts opts; exit 1;          }
-  opts.on("-D",         "--dump-diffs",             "Print string differences with .dump")         { |v| dump=true;              }
-  opts.on("-q",         "--brief",                  "Print just first difference")                 { |v| brief=true;             }
-  opts.on("-n",         "--names",                  "Include file names in output")                { |v| pnames=true;            }
-  opts.separator "  Content Options:"
-  opts.on("-e epsilon", "--epsilon epsilon",        "Set floating point epsilon")                  { |v| epsilon=v.to_f;         }
-  opts.on("-s",         "--report-identical-files", "Report identical files")                      { |v| identical=true;         }
-  opts.on("-Z",         "--ignore-trailing-space",  "ignore white space at line end")              { |v| ignore_ws_end=true;     }
-  opts.on("-b",         "--ignore-space-change",    "ignore changes in the amount of white space") { |v| ignore_ws_cnt=true;     }
-  opts.on("-w",         "--ignore-all-space",       "ignore all white space")                      { |v| ignore_ws_all=true;     }
-  opts.on("-a",         "--ignore-non-numeric",     "ignore non-numeric differences")              { |v| ignore_non_num=true;    }
+  opts.on("-h",           "--help",                   "Show this message")                           { puts opts; exit 1;              }
+  opts.on("-D",           "--dump-diffs",             "Print string differences with .dump")         { |v| dump=true;                  }
+  opts.on("-q",           "--brief",                  "Print just first difference")                 { |v| brief=true;                 }
+  opts.on("-n",           "--names",                  "Include file names in output")                { |v| pnames=true;                }
+  opts.separator "  Content Options:"                                                                                                  
+  opts.on("-e epsilon",   "--epsilon epsilon",        "Set floating point epsilon")                  { |v| epsilon=v.to_f;             }
+  opts.on("-s",           "--report-identical-files", "Report identical files")                      { |v| identical=true;             }
+  opts.on("-Z",           "--ignore-trailing-space",  "ignore white space at line end")              { |v| ignore_ws_end=true;         }
+  opts.on("-b",           "--ignore-space-change",    "ignore changes in the amount of white space") { |v| ignore_ws_cnt=true;         }
+  opts.on("-w",           "--ignore-all-space",       "ignore all white space")                      { |v| ignore_ws_all=true;         }
+  opts.on("-a",           "--ignore-non-numeric",     "ignore non-numeric differences")              { |v| ignore_non_num=true;        }
   opts.separator "  Filter Options:"
-  opts.separator "    Filtering occurs upon file read just as if the files had prepossessed."
+  opts.separator "    Filtering occurs upon file read just as if the files had been prepossessed."
   opts.separator "    Line numbers in output refer to the line numbers in the filtered result."
-  opts.on("-k regexp",  "--keep-lines regexp",      "Filter out non-matching lines")               { |v| lines_re=Regexp.new(v); }
+  opts.on("-k regexp",    "--keep-lines regexp",      "Filter out non-matching lines")               { |v| lines_re=Regexp.new(v);     }
+  opts.on("-g #/re/to/",  "--gsub #/re/to/",          "Replace re with 'to' in file #")              { |v| gsubs.push(v.split(v[-1])); }
+  opts.separator "                                     # must be 0 (both files), 1, or 2."
+  opts.separator "                                     Any character can be used for '/'."
+  opts.separator "                                     May be repeated with substitutions "
+  opts.separator "                                     occurring in the order given."
   opts.separator ""
   opts.separator "Super simple file diff that ignores small differences in floating"
   opts.separator "point values.  A non-zero exit code is returned if the files are"
@@ -85,12 +91,24 @@ if (pnames) then
   msgPfx = "#{ARGV[0]} & #{ARGV[1]}"
 end
 
+gsubs.map! do |num, from, to| 
+  [num.to_i, Regexp.new(from), to]
+end
 
-file_lines = ARGV.map { |fname|
+file_lines = ARGV.map.with_index do |fname, fnum|
   open(fname, "r") do |file|
-    file.readlines().select { |line| line.match(lines_re) }
+    tmp = file.readlines()
+    tmp.select! { |line| line.match(lines_re) };
+    tmp.each do |line| 
+      gsubs.each do |num, from, to| 
+        if ((num==0) || ((num-1)==fnum)) then
+          line.gsub!(from, to)
+        end
+      end
+    end
+    tmp
   end
-}
+end
 
 if (file_lines[0].length != file_lines[1].length) then
   puts("#{msgPfx} have different line counts");
