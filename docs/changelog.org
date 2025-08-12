@@ -59,6 +59,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - print_solution(): renamed arguments
       - width_o => fmt_w_o
       - digits_o => fmt_d_o
+    - Renumbered istats elements
   - Deprecated functionality
     - N/A
   - New functionality
@@ -71,6 +72,10 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - print_istats(): New arguments:
       - fmt_w_o with default fmt_w_ai
       - prt_zeros_o with default .false.  Zero elements are not printed by default now.
+    - Added istats message table to mrkiss_config.  print_istats now uses it.
+    - Added two elements to istats and renumbered items.
+      - isi_etab_norm
+      - isi_etab_y_err
     - print_solution
       - New argument: fmt_e_o with default fmt_d_ai
       - Renamed width_o to fmt_w_o

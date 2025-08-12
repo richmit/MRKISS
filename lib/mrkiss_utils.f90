@@ -228,18 +228,18 @@ contains
   !!                                     - 1365 .. Could not open file for write
   !!                                     - 1366 .. Could not close file
   !!                     - others ..... No other values allowed
-  !! istats(:) ......... Integer statistics from a solver run
+  !! istats(:) ......... Integer statistics from a solver run.  See isi_* constants.
   !! idxs_to_prt_o(:) .. Indexes of istats to print.  Indexes too large are silently ignored.
   !! filename_o ........ Filename to which we print.  Default: NONE
   !!                      If not present, then output will be to output_unit (STDOUT).
   !! fmt_w_o ........... Width of print format for all entities. Default: fmt_w_ai
   !! prt_zeros_o ....... If .true., then print zero values.  Default: .false.
   !! @endverbatim
-  !! @see mrkiss_utils::status_to_message()
+  !! @see mrkiss_utils::status_to_message(), mrkiss_config::isi_num_pts
   !!
   subroutine print_istats(status, istats, idxs_to_prt_o, filename_o, fmt_w_o, prt_zeros_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
-    use            :: mrkiss_config,   only: istats_size, istats_max_idx, fmt_w_ai
+    use            :: mrkiss_config,   only: istats_size, istats_max_idx, fmt_w_ai, istats_str_lng, istats_strs
     implicit none
     ! Arguments
     integer,          intent(out)          :: status
@@ -247,24 +247,6 @@ contains
     integer,          intent(in), optional :: idxs_to_prt_o(:), fmt_w_o
     logical,          intent(in), optional :: prt_zeros_o
     character(len=*), intent(in), optional :: filename_o
-    ! Local paramaters
-    integer, parameter                     :: ml = 73
-    character(len=ml), parameter           :: desc(istats_size) = [ "Computed solution points                                                 ", &
-                                                                    "Number of one_step_* calls not triggered by an event                     ", &
-                                                                    "Number of one_step_* calls triggered by y_delta length constraint        ", &
-                                                                    "Number of one_step_* calls triggered by y_delta error constraint         ", &
-                                                                    "Number of one_step_* calls triggered by step processing with new t_delta ", &
-                                                                    "Number of one_step_* calls triggered by SDF bisection                    ", &
-                                                                    "Bisection failures due to max_bisect_o                                   ", &
-                                                                    "Bisection failures due to target containment                             ", &
-                                                                    "                                                                         ", &
-                                                                    "                                                                         ", &
-                                                                    "                                                                         ", &
-                                                                    "                                                                         ", &
-                                                                    "                                                                         ", &
-                                                                    "                                                                         ", &
-                                                                    "                                                                         ", &
-                                                                    "                                                                         "  ]
     ! Local variables
     integer, allocatable                   :: idxs_to_prt(:)
     integer                                :: out_io_stat, out_io_unit, i, fmt_w
@@ -289,12 +271,12 @@ contains
     end if
     ! Print
     write(out_io_unit, fmt='(a25)') "ISTATS Contents"
-    write(tmp_str1, '("(a",i0,",i",i0,")")') ml + 7 + 2 + 3 + 2 + 1, fmt_w
+    write(tmp_str1, '("(a",i0,",i",i0,")")') istats_str_lng + 7 + 2 + 3 + 2 + 1, fmt_w
     do i=1,size(idxs_to_prt)
        if (i <= istats_max_idx) then
           if ((istats(idxs_to_prt(i)) > 0) .or. prt_zeros) then
              write(tmp_str2, '(i2.2)') i
-             write (out_io_unit, fmt=tmp_str1) (trim(desc(idxs_to_prt(i))) // ": istats(" // trim(tmp_str2) // "): "), istats(idxs_to_prt(i))
+             write (out_io_unit, fmt=tmp_str1) (trim(istats_strs(idxs_to_prt(i))) // ": istats(" // trim(tmp_str2) // "): "), istats(idxs_to_prt(i))
           end if
        end if
     end do

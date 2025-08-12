@@ -53,16 +53,39 @@ module mrkiss_config
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to istats
   integer,       parameter, public :: istats_size        = 16  !< Number of elements in istats(:)
-  integer,       parameter, public :: istats_max_idx     = 8   !< Number of used elements in istats(:)
+  integer,       parameter, public :: istats_max_idx     = 10  !< Number of used elements in istats(:)
 
   integer,       parameter, public :: isi_num_pts        = 1   !< istats index num_pts
-  integer,       parameter, public :: isi_step_norm      = 2   !< istats index one_step_norm
-  integer,       parameter, public :: isi_step_y_len     = 3   !< istats index one_step_y_delta_len
-  integer,       parameter, public :: isi_step_y_err     = 4   !< istats index one_step_y_delta_err
-  integer,       parameter, public :: isi_step_spp_td    = 5   !< istats index one_step_stepp_t_delta
-  integer,       parameter, public :: isi_step_sdf_bic   = 6   !< istats index one_step_sdf_bisection
-  integer,       parameter, public :: isi_bic_fail_max   = 7   !< istats index bisect_fail_max
-  integer,       parameter, public :: isi_bic_fail_bnd   = 8   !< istats index bisect_fail_containment
+  integer,       parameter, public :: isi_stab_norm      = 2   !< istats index one_step_norm
+  integer,       parameter, public :: isi_etab_norm      = 3   !< istats index one_etab_norm
+  integer,       parameter, public :: isi_stab_y_err     = 4   !< istats index one_step_y_delta_err
+  integer,       parameter, public :: isi_etab_y_err     = 5   !< istats index one_stab_y_delta_err
+  integer,       parameter, public :: isi_stab_y_len     = 6   !< istats index one_step_y_delta_len
+  integer,       parameter, public :: isi_stab_spp_td    = 7   !< istats index one_step_stepp_t_delta
+  integer,       parameter, public :: isi_stab_sdf_bic   = 8   !< istats index one_step_sdf_bisection
+  integer,       parameter, public :: isi_bic_fail_max   = 9   !< istats index bisect_fail_max
+  integer,       parameter, public :: isi_bic_fail_bnd   = 10  !< istats index bisect_fail_containment
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> @name Constants related to istats messages
+  integer,                       parameter, public :: istats_str_lng           = 78         !< Length of istats content message
+  character(len=istats_str_lng), parameter, public :: istats_strs(istats_size) = [       &  !< Array of istats content messages
+       "Computed solution points                                                      ", &
+       "Number of one_step_stab_* calls not triggered by an event                     ", &
+       "Number of one_step_etab_* calls not triggered by an event                     ", &
+       "Number of one_step_stab_* calls triggered by y_delta error constraint         ", &
+       "Number of one_step_etab_* calls triggered by y_delta error constraint         ", &
+       "Number of one_step_stab_* calls triggered by y_delta length constraint        ", &
+       "Number of one_step_stab_* calls triggered by step processing with new t_delta ", &
+       "Number of one_step_stab_* calls triggered by SDF bisection                    ", &
+       "Bisection failures due to max_bisect_o                                        ", &
+       "Bisection failures due to target containment                                  ", &
+       "                                                                              ", &
+       "                                                                              ", &
+       "                                                                              ", &
+       "                                                                              ", &
+       "                                                                              ", &
+       "                                                                              "  ]
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Absolute constants
