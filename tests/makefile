@@ -45,7 +45,7 @@ IMG_VIEWER = nomacs
 FD = ../scripts/float_diff.rb
 TD = diff
 
-TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b test_statuscodes test_utils
+TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b test_statuscodes test_utils test_seqt
 
 EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt statuscodes utils
 

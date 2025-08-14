@@ -452,51 +452,65 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Produce a sequence of values with fixed seporation.  Modeled after R's seq() function.
   !!
-  !! Three of the optional arguments should be provided.  The fourth argument will be computed from the others.
-  !! If all four optional arguments are provided, then they will be checked for consistency.
-  !! If fewer than three are provided, the routine will likely segfault.
+  !! Exactly two of @p from_o, @p to_o, and @p step_o should be provided.  The one not provided will be computed from the others.
+  !! If all three are are provided, then they will be checked for consistency.  Note that this consistency check is not
+  !! completely reliable due to round-off error.  This is why only two should be provided.
   !!
-  !! @param status  Exit status
-  !!                  | Value     | Description
-  !!                  |-----------|------------
-  !!                  | -inf-0    | Everything worked
-  !!                  | 1314      | Inconsistant sequence values: `step_v_o * (size(t)-1) /= to_v - from_v`
-  !!                  | 1315-1330 | Unknown error in this routine
-  !! @param t       Vector to fill with @f$t@f$ values
-  !! @param from_o  Starting value for @f$t@f$
-  !! @param to_o    Ending value for @f$t@f$
-  !! @param step_o  Delta between valeus
+  !! @param status     Exit status
+  !!                     | Value     | Description
+  !!                     |-----------|------------
+  !!                     | -inf-0    | Everything worked
+  !!                     | 1314      | Inconsistant sequence values: `step_v_o * (size(t)-1) /= to_v - from_v`
+  !!                     | 1315      | Not enough arguments
+  !!                     | 1316-1330 | Unknown error in this routine
+  !! @param t          Vector to fill with @f$t@f$ values
+  !! @param from_o     Starting value for @f$t@f$
+  !! @param to_o       Ending value for @f$t@f$
+  !! @param step_o     Delta between valeus
+  !! @param num_pts_o  Number of points to produce.
   !!
-  subroutine seq(status, t, from_o, to_o, step_o)
+  subroutine seq(status, t, from_o, to_o, step_o, num_pts_o)
     use :: mrkiss_config, only: rk, zero_epsilon
     implicit none
     ! Arguments
     integer,                 intent(out) :: status
     real(kind=rk),           intent(out) :: t(:)
     real(kind=rk), optional, intent(in)  :: from_o, to_o, step_o
+    integer,       optional, intent(in)  :: num_pts_o
     ! Variables
-    integer                              :: n_v, i
+    integer                              :: n_v, i, num_pts, num_args
     real(kind=rk)                        :: from_v, to_v, step_v
+    ! Process arguments
+    num_pts = size(t, 1)
+    if (present(num_pts_o)) num_pts = min(num_pts, num_pts_o)
+    num_args = 0
+    if (present(from_o)) num_args = num_args + 1
+    if (present(to_o))   num_args = num_args + 1
+    if (present(step_o)) num_args = num_args + 1
+    if (num_args < 2) then
+       status = 1315
+       return
+    end if
     ! Compute paramaters
     if     (.not. (present(from_o))) then
        status = 0
-       n_v    = size(t, 1) - 1
+       n_v    = num_pts - 1
        to_v   = to_o
        step_v = step_o
        from_v = -step_v * n_v + to_v
     elseif (.not. (present(to_o))) then
-       n_v    = size(t, 1) - 1
+       n_v    = num_pts - 1
        step_v = step_o
        from_v = from_o
        to_v   = step_v * n_v + from_v
     elseif (.not. (present(step_o))) then
        status = 0
-       n_v    = size(t, 1) - 1
+       n_v    = num_pts - 1
        to_v   = to_o
        from_v = from_o
        step_v = -(-to_v + from_v) / n_v
     else
-       n_v    = size(t, 1) - 1
+       n_v    = num_pts - 1
        to_v   = to_o
        from_v = from_o
        step_v = step_o
@@ -646,6 +660,8 @@ contains
        status_to_message = "Could not close file"
     elseif (status == 1314) then
        status_to_message = "Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v"
+    elseif (status == 1315) then
+       status_to_message = "Not enough arguments"
     elseif (status == 1331) then
        status_to_message = "new_solution t value out of bounds"
     elseif (status == 1365) then
