@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-13 Wed 15:44 -->
+<!-- 2025-08-13 Wed 23:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-13 15:44:14</i></td>
+<td class="org-left"><i>2025-08-13 23:55:36</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-13 15:44:15</i></td>
+<td class="org-left"><i>2025-08-13 23:55:38</i></td>
 </tr>
 </tbody>
 </table>
@@ -368,7 +368,7 @@ In this section we produce the classical image of the solution.
 </p>
 
 
-<div id="org9f164c4" class="figure">
+<div id="orgd2b8adf" class="figure">
 <p><img src="pics/three_body.png" alt="three_body.png" />
 </p>
 </div>
@@ -429,7 +429,7 @@ More common is the need to "line up" two solutions on the same \(t\) values for 
 </p>
 
 
-<div id="org55fa2da" class="figure">
+<div id="orge96cd46" class="figure">
 <p><a href="pics/three_body_interp_adapt_path.png"><img src="pics/three_body_interp_adapt_path.png" alt="three_body_interp_adapt_path.png" /></a>
 </p>
 </div>
@@ -451,7 +451,7 @@ Less common is linear interpolation:
 </p>
 
 
-<div id="orgd34750e" class="figure">
+<div id="org2353592" class="figure">
 <p><a href="pics/three_body_lin_interp_adapt_path.png"><img src="pics/three_body_lin_interp_adapt_path.png" alt="three_body_lin_interp_adapt_path.png" /></a>
 </p>
 </div>
@@ -474,21 +474,9 @@ errors:
 </p>
 
 
-<div id="org9622b52" class="figure">
+<div id="orgabcf086" class="figure">
 <p><a href="pics/three_body_interp_adapt_error.png"><img src="pics/three_body_interp_adapt_error.png" alt="three_body_interp_adapt_error.png" /></a>
 </p>
-</div>
-
-<p>
-The code for the above images:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-f90"><span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">seq</span>(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                        <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Create new t values</span>
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">interpolate_solution</span>(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Preform the interpolation</span>
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, sol2, filename_o=<span style="color: #fa8072;">"three_body_steps_adapt_std_interpolated.csv"</span>)
-</pre>
 </div>
 </div>
 </div>
@@ -512,7 +500,7 @@ In the following image we see the unsatisfactory result of using a 5th order sol
 </p>
 
 
-<div id="orge10e9be" class="figure">
+<div id="org572f91c" class="figure">
 <p><a href="pics/three_body-dp.png"><img src="pics/three_body-dp.png" alt="three_body-dp.png" /></a>
 </p>
 </div>
@@ -534,7 +522,7 @@ The code for the above solution is identical except for a change in Runge-Kutta 
 <h2 id="adaptiveylim"><span class="section-number-2">5.</span> Adaptive Solution With More Steps For A Nice Plot</h2>
 <div class="outline-text-2" id="text-adaptiveylim">
 
-<div id="org46c1d30" class="figure">
+<div id="org3e61598" class="figure">
 <p><img src="pics/three_body_ylen.png" alt="three_body_ylen.png" />
 </p>
 </div>
@@ -606,7 +594,7 @@ vector (the first two components) and not the velocity components (the last two 
 </p>
 
 
-<div id="org41c95a3" class="figure">
+<div id="orgc10b1c8" class="figure">
 <p><img src="pics/three_body_fixed_pos.png" alt="three_body_fixed_pos.png" />
 </p>
 </div>
@@ -616,7 +604,7 @@ Below are the velocity components plotted in the same manner as the position com
 </p>
 
 
-<div id="org7b8821b" class="figure">
+<div id="org1818475" class="figure">
 <p><img src="pics/three_body_fixed_vel.png" alt="three_body_fixed_vel.png" />
 </p>
 </div>
@@ -663,7 +651,7 @@ function.  In this example we keep it simple, and just use the
 </p>
 
 
-<div id="org37e9ba4" class="figure">
+<div id="org74f8cfd" class="figure">
 <p><img src="pics/three_body_maxt.png" alt="three_body_maxt.png" />
 </p>
 </div>
@@ -715,7 +703,7 @@ We wire up this subroutine to <code>steps_adapt_etab()</code> via the <code>step
 <h2 id="moonsatorb"><span class="section-number-2">8.</span> Satellite &amp; Moon Orbit Intersection</h2>
 <div class="outline-text-2" id="text-moonsatorb">
 
-<div id="orgf751ebe" class="figure">
+<div id="org48bc8d6" class="figure">
 <p><img src="pics/three_body_moon.png" alt="three_body_moon.png" />
 </p>
 </div>
