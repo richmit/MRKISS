@@ -90,17 +90,15 @@ for \(\Delta{t}\).
 THe solutions used in the images above were created by this snippit of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-sed -n '/^  *! BEGIN: lorenz_fixed *$/,/^ *! END: lorenz_fixed *$/p' ../examples/lorenz.f90
+~/core/codeBits/bin/getSnip.sh ../examples/lorenz.f90 lorenz_fixed
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  ! BEGIN: lorenz_fixed
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_fixed
 #+end_src
 
 * Sphere Sweeps
@@ -137,12 +135,11 @@ file:pics/lorenz_sloppy_condy_short.png
 These images were created by the following snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-sed -n '/^  *! BEGIN: lorenz_fixed-y *$/,/^ *! END: lorenz_fixed-y *$/p' ../examples/lorenz.f90
+~/core/codeBits/bin/getSnip.sh ../examples/lorenz.f90 lorenz_fixed-y
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  ! BEGIN: lorenz_fixed-y
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
@@ -156,7 +153,6 @@ sed -n '/^  *! BEGIN: lorenz_fixed-y *$/,/^ *! END: lorenz_fixed-y *$/p' ../exam
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_fixed-y
 #+end_src
 
 * Limiting Step Length
@@ -182,20 +178,16 @@ file:pics/lorenz_sloppy_condy.png
 The solution used in the image above was created by this snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-sed -n '/^  *! BEGIN: lorenz_clip-y *$/,/^ *! END: lorenz_clip-y *$/p' ../examples/lorenz.f90
+~/core/codeBits/bin/getSnip.sh ../examples/lorenz.f90 lorenz_clip-y
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  ! BEGIN: lorenz_clip-y
   call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_clip-y
 #+end_src
-
-
 
 * Full Code Listing
 :PROPERTIES:
@@ -236,17 +228,17 @@ program lorenz
   ! This solution will have fixed t-delta, but no control over y-delta.
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run"
-  ! BEGIN: lorenz_fixed
+  ! BEGIN:lorenz_fixed:
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_fixed
+  ! END:lorenz_fixed:
 
   ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
   print '(a)', repeat('*', 120)
   print '(a)', "steps_sloppy_condy_stab"
-  ! BEGIN: lorenz_fixed-y
+  ! BEGIN:lorenz_fixed-y:
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
@@ -260,17 +252,17 @@ program lorenz
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_fixed-y
+  ! END:lorenz_fixed-y:
 
   ! This solution will have y-delta equal to 1.0 for all steps.
   print '(a)', repeat('*', 120)
   print '(a)', "steps_condy_stab"
-  ! BEGIN: lorenz_clip-y
+  ! BEGIN:lorenz_clip-y:
   call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_clip-y
+  ! END:lorenz_clip-y:
 
 contains
   

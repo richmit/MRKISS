@@ -54,7 +54,7 @@ program langford
   implicit none
 
   integer,       parameter :: y_dim         = 3
-  integer,       parameter :: np            = 1000000
+  integer,       parameter :: np            = 10000000
   real(kind=rk), parameter :: param(6)      = [0.95_rk, 0.7_rk, 0.6_rk, 3.5_rk, 0.25_rk, 0.1_rk]
   real(kind=rk), parameter :: t_delta       = 0.01_rk
   real(kind=rk), parameter :: y_iv(y_dim)   = [0.1_rk, 0.0_rk, 0.0_rk]

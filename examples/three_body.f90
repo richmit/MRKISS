@@ -87,77 +87,77 @@ program three_body
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run V(9)"
-  ! BEGIN: steps_fixed_stab
+  ! BEGIN:steps_fixed_stab:
   call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="tree_body_steps_fixed_stab.csv", end_o=istats1(1))
-  ! END: steps_fixed_stab
+  ! END:steps_fixed_stab:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run DP(5)"
-  ! BEGIN: steps_fixed_stab-dp
+  ! BEGIN:steps_fixed_stab-dp:
   call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="steps_fixed_stab-dp.csv", end_o=istats1(1))
-  ! END: steps_fixed_stab-dp
+  ! END:steps_fixed_stab-dp:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed y_delta run"
-  ! BEGIN: steps_condy_stab
+  ! BEGIN:steps_condy_stab:
   call steps_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
 
   call print_solution(status, sol1, filename_o="three_body_steps_condy_stab.csv", end_o=istats1(1))
-  ! END: steps_condy_stab
+  ! END:steps_condy_stab:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Sloppy Fixed y_delta run"
-  ! BEGIN: steps_sloppy_condy_stab
+  ! BEGIN:steps_sloppy_condy_stab:
   call steps_sloppy_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="steps_sloppy_condy_stab.csv", end_o=istats1(1))
-  ! END: steps_sloppy_condy_stab
+  ! END:steps_sloppy_condy_stab:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run"
-  ! BEGIN: steps_adapt_etab-std
+  ! BEGIN:steps_adapt_etab-std:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-std.csv", end_o=istats1(1))
-  ! END: steps_adapt_etab-std
+  ! END:steps_adapt_etab-std:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive hermite interpolation run"
   sol2 = 0
-  ! BEGIN: steps_adapt_int_hermite
+  ! BEGIN:steps_adapt_int_hermite:
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                        ! Create new t values
   print '(a)', status_to_message(status)
   call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) ! Preform the interpolation
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated.csv")
-  ! END: steps_adapt_int_hermite
+  ! END:steps_adapt_int_hermite:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive linear interpolation run"
   sol2 = 0
-  ! BEGIN: steps_adapt_int_linear
+  ! BEGIN:steps_adapt_int_linear:
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);
   call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true.)
   print '(a)', status_to_message(status)
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
-  ! END: steps_adapt_int_linear
+  ! END:steps_adapt_int_linear:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max y_delta length"
-  ! BEGIN: steps_adapt_etab-fix-delta-steps
+  ! BEGIN:steps_adapt_etab-fix-delta-steps:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
@@ -165,11 +165,11 @@ program three_body
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-fix-delta-steps.csv", end_o=istats1(1))
-  ! END: steps_adapt_etab-fix-delta-steps
+  ! END:steps_adapt_etab-fix-delta-steps:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max t"
-  ! BEGIN: steps_adapt_etab-pho-t-max
+  ! BEGIN:steps_adapt_etab-pho-t-max:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
@@ -177,11 +177,11 @@ program three_body
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-pho-t-max.csv", end_o=istats1(1))
-  ! END: steps_adapt_etab-pho-t-max
+  ! END:steps_adapt_etab-pho-t-max:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w moon orbit hit"
-  ! BEGIN: steps_adapt_etab-isct
+  ! BEGIN:steps_adapt_etab-isct:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
@@ -189,7 +189,7 @@ program three_body
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-isct.csv", end_o=istats1(1))
-  ! END: steps_adapt_etab-isct
+  ! END:steps_adapt_etab-isct:
 
 contains
   
@@ -229,7 +229,7 @@ contains
     status = 0
   end subroutine eq
   
-  ! BEGIN: steps_adapt_etab-pho-t-max-stepp
+  ! BEGIN:steps_adapt_etab-pho-t-max-stepp:
   ! Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer,          intent(out) :: status
@@ -248,9 +248,9 @@ contains
        end_run = 0
     end if
   end subroutine sp_max_t
-  ! END: steps_adapt_etab-pho-t-max-stepp
+  ! END:steps_adapt_etab-pho-t-max-stepp:
 
-  ! BEGIN: steps_adapt_etab-fix-delta-stepp
+  ! BEGIN:steps_adapt_etab-fix-delta-stepp:
   ! Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.
   ! It is sloppy because we assume t_delta is linearly proportional to y_delta_len
   subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -272,9 +272,9 @@ contains
        new_t_delta = -1.0_rk
     end if
   end subroutine sp_sloppy_y_delta_len_max
-  ! END: steps_adapt_etab-fix-delta-stepp
+  ! END:steps_adapt_etab-fix-delta-stepp:
 
-  ! BEGIN: steps_adapt_etab-isct-stepp
+  ! BEGIN:steps_adapt_etab-isct-stepp:
   ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works 
   ! in conjunction with sdf_cross_moon().
   subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -302,9 +302,9 @@ contains
        end if
     end if
   end subroutine sp_cross_moon
-  ! END: steps_adapt_etab-isct-stepp
+  ! END:steps_adapt_etab-isct-stepp:
 
-  ! BEGIN: steps_adapt_etab-isct-sdf
+  ! BEGIN:steps_adapt_etab-isct-sdf:
   ! Example SDF subroutine to isolate a point on a solution segment that crosses the unit circle.
   subroutine sdf_cross_moon(status, dist, sdf_flags, t, y)
     use mrkiss_config, only: rk
@@ -316,6 +316,6 @@ contains
     status = 0
     dist = 1.0_rk - norm2(y(1:2))
   end subroutine sdf_cross_moon
-  ! END: steps_adapt_etab-isct-sdf
+  ! END:steps_adapt_etab-isct-sdf:
 
 end program three_body

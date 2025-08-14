@@ -84,6 +84,7 @@ s/\(steps_sloppy_condy_stab(\([^,]\+,\)\{4\}\)[^,]\+,/\1/;
 # Remove variable declarations with just a t -- I have left these on lines by themselves to make this easy. 
 
 /:: t$/d;
+/@param t /d
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Remove references to t in the bodies of some subroutines.

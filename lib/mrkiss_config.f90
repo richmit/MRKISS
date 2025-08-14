@@ -68,24 +68,24 @@ module mrkiss_config
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to istats messages
-  integer,                       parameter, public :: istats_str_lng           = 78         !< Length of istats content message
-  character(len=istats_str_lng), parameter, public :: istats_strs(istats_size) = [       &  !< Array of istats content messages
-       "Computed solution points                                                      ", &
-       "Number of one_step_stab_* calls not triggered by an event                     ", &
-       "Number of one_step_etab_* calls not triggered by an event                     ", &
-       "Number of one_step_stab_* calls triggered by y_delta error constraint         ", &
-       "Number of one_step_etab_* calls triggered by y_delta error constraint         ", &
-       "Number of one_step_stab_* calls triggered by y_delta length constraint        ", &
-       "Number of one_step_stab_* calls triggered by step processing with new t_delta ", &
-       "Number of one_step_stab_* calls triggered by SDF bisection                    ", &
-       "Bisection failures due to max_bisect_o                                        ", &
-       "Bisection failures due to target containment                                  ", &
-       "                                                                              ", &
-       "                                                                              ", &
-       "                                                                              ", &
-       "                                                                              ", &
-       "                                                                              ", &
-       "                                                                              "  ]
+  integer,                       parameter, public :: istats_str_lng           = 76       !< Length of istats content message
+  character(len=istats_str_lng), parameter, public :: istats_strs(istats_size) = [     &  !< Array of istats content messages
+       "Computed solution points                                                    ", &  ! istats( 1)
+       "Number of one_step_stab calls not triggered by an event                     ", &  ! istats( 2)
+       "Number of one_step_etab calls not triggered by an event                     ", &  ! istats( 3)
+       "Number of one_step_stab calls triggered by y_delta error constraint         ", &  ! istats( 4)
+       "Number of one_step_etab calls triggered by y_delta error constraint         ", &  ! istats( 5)
+       "Number of one_step_stab calls triggered by y_delta length constraint        ", &  ! istats( 6)
+       "Number of one_step_stab calls triggered by step processing with new t_delta ", &  ! istats( 7)
+       "Number of one_step_stab calls triggered by SDF bisection                    ", &  ! istats( 8)
+       "Bisection failures due to max_bisect_o                                      ", &  ! istats( 9)
+       "Bisection failures due to target containment                                ", &  ! istats(10)
+       "                                                                            ", &  ! istats(11)
+       "                                                                            ", &  ! istats(12)
+       "                                                                            ", &  ! istats(13)
+       "                                                                            ", &  ! istats(14)
+       "                                                                            ", &  ! istats(15)
+       "                                                                            "  ]
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Absolute constants

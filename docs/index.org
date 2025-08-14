@@ -85,12 +85,12 @@ program minimal
 
   implicit none
 
-  real(kind=rk),    parameter :: y_iv(3)  = [1.0_rk, 0.0_rk, 0.0_rk]
-  real(kind=rk),    parameter :: param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
-  real(kind=rk),    parameter :: t_end    = 50.0_rk
+  real(kind=rk), parameter :: y_iv(3)  = [1.0_rk, 0.0_rk, 0.0_rk]
+  real(kind=rk), parameter :: param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]
+  real(kind=rk), parameter :: t_end    = 50.0_rk
 
-  real(kind=rk)               :: solution(7, 10000)
-  integer                     :: status, istats(istats_size)
+  real(kind=rk)            :: solution(7, 10000)
+  integer                  :: status, istats(istats_size)
 
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   call print_solution(status, solution, filename_o="minimal.csv")
@@ -100,8 +100,7 @@ contains
   subroutine eq(status, dydt, y, param)
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
-    real(kind=rk),    intent(in)  :: y(:)
-    real(kind=rk),    intent(in)  :: param(:)
+    real(kind=rk),    intent(in)  :: y(:), param(:)
     dydt = [ param(1)*(y(2)-y(1)), y(1)*(param(2)-y(3))-y(2), y(1)*y(2)-param(3)*y(3) ]
     status = 0
   end subroutine eq
@@ -171,7 +170,7 @@ The word /embedded/ indicates that we actually have two explicit Runge-Kutta met
 to say each \(\mathbf{b}\) vector defines a unique, explicit Runge-Kutta method.  *[[https://github.com/richmit/MRKISS][~MRKISS~]]* supports both embedded and
 non-embedded (no \(\mathbf{\hat{b}}\) vector defined) methods.  At least one of \(\check{b}_s\) and \(\hat{b}_s\) must be non-zero for the overall method to
 be considered \(s\)-stage; however, if one of them has \(k\) trailing zeros the Runge-Kutta method associated with that vector is said to be a \(s-k\)-stage
-method.  We use \(\check{s}\) for the stage count of the \(\check{b}\) method and \(\hat{s}\) for the \(\hat{b}\) method.
+method.  We use \(\check{s}\) for the stage count of the \(\mathbf{\check{b}}\) method and \(\hat{s}\) for the \(\mathbf{\hat{b}}\) method.
 
 Given \(\Delta{t}\) and initial conditions (\(t_0\) and \(\mathbf{y_0}\)), we may form an approximation of \(\mathbf{y}(t_0+\Delta{t})\) as:
 

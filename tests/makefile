@@ -132,11 +132,11 @@ $(RKF45_OUTS) &: rkf45
 
 .PHONY: test_rkf45_ref_vs_stab_5
 test_rkf45_ref_vs_stab_5 : rkf45_ref_5.out rkf45_stab_5.out
-	$(FD) -Zdqn -e 1e-7 rkf45_ref_5.out rkf45_stab_5.out
+	$(FD) -Zdqn -e 1e-10 rkf45_ref_5.out rkf45_stab_5.out
 
 .PHONY: test_rkf45_ref_vs_stab_4
 test_rkf45_ref_vs_stab_4 : rkf45_ref_4.out rkf45_stab_4.out
-	$(FD) -Zdqn -e 1e-7 rkf45_ref_4.out rkf45_stab_4.out
+	$(FD) -Zdqn -e 1e-10 rkf45_ref_4.out rkf45_stab_4.out
 
 .PHONY: test_rkf45_stab_vs_etab_5
 test_rkf45_stab_vs_etab_5 : rkf45_stab_5.out rkf45_etab_5.out

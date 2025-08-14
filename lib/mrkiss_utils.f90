@@ -51,42 +51,40 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Output an RK solution matrix.
   !!
-  !! Inappropriate fmt_w_o, fmt_d_o, and separator_o values may cause a runtime error.
+  !! Examples
+  !!  - 1: The default values will produce CSV output @n
+  !!    `print_solution(solution)`
+  !!  - 2: For columnar output we just need to add a width @n
+  !!    `print_solution(solution, fmt_w_o=30)`
   !!
-  !! - Example 1: The default values will produce CSV output
-  !!   print_solution(solution)
-  !! - Example 2: For columnar output we just need to add a width
-  !!   print_solution(solution, fmt_w_o=30)
-  !!
-  !! @verbatim
-  !! status ......... Exit status
-  !!                   - -inf-0 ..... Everything worked
-  !!                   - 1152-1183 .. Error in this routine
-  !!                                   - 1152 .. Could not open file for write
-  !!                                   - 1153 .. Could not close file
-  !!                   - others ..... No other values allowed
-  !! solution ....... Matrix with solution values
-  !!                   t ... row 1
-  !!                   y ... rows 2:(2+y_dim)
-  !!                   dy .. rows (2+y_dim+1):(2+2*y_dim+1)
-  !! filename_o ..... Filename to which we print.  Default: NONE
-  !!                  If not present, then output will be to output_unit (STDOUT).
-  !! fmt_d_o ........ Number of digits for floating point numbers.  Default: fmt_d_ai
-  !! fmt_w_o ........ Width of print format for all entities. Default: 0
-  !!                   If set to -1, then fmt_w_ai will be uesd.
-  !! fmt_e_o ........ Number of digits in the exponent of floating point numbers.  Default: fmt_e_ai
-  !!                   Ignored if fmt_w_o==0
-  !! start_o ........ Starting index to print in solution. Default: 1
-  !! end_o .......... Ending index to print in solution.  Default: Number of columns in solution.
-  !! step_o ......... Print only every step_o'th value in solution. Default: 1
-  !! prt_titles_o ... Print titles if .true.  Default: .true.
-  !! separator_o .... String to place between fields.  Default: ',' if fmt_w_o missing, and ' ' otherwise.
-  !! t_min_o ........ Print only solutions with time values >= t_min_o
-  !! t_max_o ........ Print only solutions with time values <= t_min_o
-  !! tag_o .......... If non-negative, this integer that will become the first column of the output. Default: -1
-  !! append_o ....... Append to file instead of overwriting.  Ignored if filename_o not present. Default: .false.
-  !! @endverbatim
-  !! @see mrkiss_utils::status_to_message()
+  !! @param status        Exit status
+  !!                        | Value     | Description
+  !!                        |-----------|------------
+  !!                        | -inf-0    | Everything worked
+  !!                        | 1152      | Could not open file for write
+  !!                        | 1153      | Could not close file
+  !!                        | 1154-1183 | Unknown error in this routine
+  !! @param solution       Array containing the solution.
+  !!                       Each COLUMN is a solution:
+  !!                        - First element is the @f$t@f$ variable
+  !!                        - `size(y, 1)` elements starting with 2 have @f$\mathbf{y}@f$ values
+  !!                        - The next `size(y, 1)` elements have @f$\mathbf{y}'@f$ values
+  !! @param filename_o    Filename to which we print.  Default: NONE
+  !!                       - If not present, then output will be to output_unit (`STDOUT`).
+  !! @param fmt_d_o       Number of digits for floating point numbers.  Default: mrkiss_config::fmt_d_ai
+  !! @param fmt_w_o       Width of print format for all entities. Default: 0
+  !!                       - If set to -1, then mrkiss_config::fmt_w_ai will be uesd.
+  !! @param fmt_e_o       Number of digits in the exponent of floating point numbers.  Default: mrkiss_config::fmt_e_ai
+  !!                       - Ignored if `fmt_w_o==0`
+  !! @param start_o       Starting index to print in \p solution. Default: 1
+  !! @param end_o         Ending index to print in \p solution.  Default: Number of columns in \p solution.
+  !! @param step_o        Print only every \p step_o th value in solution. Default: 1
+  !! @param prt_titles_o  Print titles if `.TRUE.`  Default: `.TRUE.`
+  !! @param separator_o   String to place between fields.  Default: ',' if fmt_w_o missing, and ' ' otherwise.
+  !! @param t_min_o       Print only solutions with time values `>= t_min_o`
+  !! @param t_max_o       Print only solutions with time values `<= t_min_o`
+  !! @param tag_o         If non-negative, this integer that will become the first column of the output. Default: -1
+  !! @param append_o      Append to file instead of overwriting.  Ignored if \p filename_o not present. Default: `.FALSE.`
   !!
   subroutine print_solution(status, solution, filename_o, separator_o, fmt_w_o, fmt_d_o, fmt_e_o, start_o, end_o, step_o, prt_titles_o, &
                             t_min_o, t_max_o, tag_o, append_o)
@@ -236,21 +234,19 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Output an istat array.
   !!
-  !! @verbatim
-  !! status ............ Exit status
-  !!                     - -inf-0 ..... Everything worked
-  !!                     - 1365-1381 .. Error in this routine
-  !!                                     - 1365 .. Could not open file for write
-  !!                                     - 1366 .. Could not close file
-  !!                     - others ..... No other values allowed
-  !! istats(:) ......... Integer statistics from a solver run.  See isi_* constants.
-  !! idxs_to_prt_o(:) .. Indexes of istats to print.  Indexes too large are silently ignored.
-  !! filename_o ........ Filename to which we print.  Default: NONE
-  !!                      If not present, then output will be to output_unit (STDOUT).
-  !! fmt_w_o ........... Width of print format for all entities. Default: fmt_w_ai
-  !! prt_zeros_o ....... If .true., then print zero values.  Default: .false.
-  !! @endverbatim
-  !! @see mrkiss_utils::status_to_message(), mrkiss_config::isi_num_pts
+  !! @param status            Exit status
+  !!                            | Value     | Description
+  !!                            |-----------|------------
+  !!                            | -inf-0    | Everything worked
+  !!                            | 1365      | Could not open file for write
+  !!                            | 1366      | Could not close file
+  !!                            | 1367-1381 | Unknown error in this routine
+  !! @param istats(:)         Integer statistics from a solver run. See mrkiss_utils::print_istats() for description of elements.
+  !! @param idxs_to_prt_o(:)  Indexes of \p istats to print.  Indexes too large are silently ignored.
+  !! @param filename_o        Filename to which we print.  Default: NONE
+  !!                           - If not present, then output will be to output_unit (`STDOUT`).
+  !! @param fmt_w_o           Width of print format for all entities. Default: mrkiss_config::fmt_w_ai
+  !! @param prt_zeros_o       If `.TRUE.`, then print zero values.  Default: `.FALSE.`
   !!
   subroutine print_istats(status, istats, idxs_to_prt_o, filename_o, fmt_w_o, prt_zeros_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
@@ -309,24 +305,26 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Analyze an RK solution matrix.
   !!
-  !! @verbatim
-  !! status .............. Exit status
-  !!                        - -inf-0 ..... Everything worked
-  !!                        - 1297-1313 .. Error in this routine
-  !!                                        - 1297 .. Could not open file for write
-  !!                                        - 1313 .. Could not close file
-  !!                        - others ..... No other values allowed
-  !! solution ............ Matrix with solution values
-  !! start_o ............. Starting index to print in solution. Default: 1
-  !! end_o ............... Ending index to print in solution.  Default: Number of columns in solution.
-  !! y_delta_len_idxs_o .. Components of y_delta to use for y_delta length computation.  Default: All indexes
-  !! filename_o .......... Filename to which we print.  Default: NONE
-  !!                       If not present, then output will be to output_unit (STDOUT).
-  !! fmt_d_o ............. Number of digits for floating point numbers.  Default: fmt_d_ai
-  !! fmt_w_o.............. Width of print format for all entities. Default: fmt_w_ai
-  !! fmt_e_o ............. Number of digits in the exponent of floating point numbers.  Default: fmt_e_ai
-  !! @endverbatim
-  !! @see mrkiss_utils::status_to_message()
+  !! @param status              Exit status
+  !!                              | Value     | Description
+  !!                              |-----------|------------
+  !!                              | -inf-0    | Everything worked
+  !!                              | 1297      | Could not open file for write
+  !!                              | 1298      | Could not close file
+  !!                              | 1299-1313 | Unknown error in this routine
+  !! @param solution            Array containing the solution.
+  !!                            Each COLUMN is a solution:
+  !!                             - First element is the @f$t@f$ variable
+  !!                             - `size(y, 1)` elements starting with 2 have @f$\mathbf{y}@f$ values
+  !!                             - The next `size(y, 1)` elements have @f$\mathbf{y}'@f$ values
+  !! @param start_o             Starting index to use in \p solution. Default: 1
+  !! @param end_o               Ending index to use in \p solution.  Default: Number of columns in \p solution.
+  !! @param y_delta_len_idxs_o  Components of @f$\mathbf{\Delta{y}}@f$ to use for length computation
+  !! @param filename_o          Filename to which we print.  Default: NONE
+  !!                             - If not present, then output will be to output_unit (`STDOUT`).
+  !! @param fmt_d_o             Number of digits for floating point numbers.  Default: mrkiss_config::fmt_d_ai
+  !! @param fmt_w_o             Width of print format for all entities. Default: mrkiss_config::fmt_w_ai
+  !! @param fmt_e_o             Number of digits in the exponent of floating point numbers.  Default: mrkiss_config::fmt_e_ai
   !!
   subroutine analyze_solution(status, solution, filename_o, start_o, end_o, y_delta_len_idxs_o, fmt_w_o, fmt_d_o, fmt_e_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
@@ -441,7 +439,7 @@ contains
     if (present(filename_o)) then
        close(unit=out_io_unit, status='keep', iostat=out_io_stat)
        if (out_io_stat /= 0) then
-          status = 1313
+          status = 1298
           return
        end if
     end if
@@ -454,18 +452,20 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Produce a sequence of values with fixed seporation.  Modeled after R's seq() function.
   !!
-  !! @verbatim
-  !! status .............. Exit status
-  !!                        - -inf-0 ..... Everything worked
-  !!                        - 1314:1330 .. Error in this routine
-  !!                                        - 1314 .. Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v
-  !! y_at_t .............. The value of the function at t
-  !! t ................... Vector to fill
-  !! from_o .............. Starting value
-  !! to_o ................ Ending value
-  !! step_o .............. Delta between valeus
-  !! @endverbatim
-  !! @see mrkiss_utils::status_to_message()
+  !! Three of the optional arguments should be provided.  The fourth argument will be computed from the others.
+  !! If all four optional arguments are provided, then they will be checked for consistency.
+  !! If fewer than three are provided, the routine will likely segfault.
+  !!
+  !! @param status  Exit status
+  !!                  | Value     | Description
+  !!                  |-----------|------------
+  !!                  | -inf-0    | Everything worked
+  !!                  | 1314      | Inconsistant sequence values: `step_v_o * (size(t)-1) /= to_v - from_v`
+  !!                  | 1315-1330 | Unknown error in this routine
+  !! @param t       Vector to fill with @f$t@f$ values
+  !! @param from_o  Starting value for @f$t@f$
+  !! @param to_o    Ending value for @f$t@f$
+  !! @param step_o  Delta between valeus
   !!
   subroutine seq(status, t, from_o, to_o, step_o)
     use :: mrkiss_config, only: rk, zero_epsilon
@@ -519,33 +519,35 @@ contains
   !> Return, as a string, the source of a status code.
   !!
   !! Status codes are assigned in blocks to subroutines and interfaces.  Status codes are frequently "passed up" the call chain.
-  !! i.e. a routine may return a status code that was returned to it by another routine.  Assigning the codes in blocks allows
-  !! the user to know from which subroutine a status originated.
+  !! i.e. a routine may return a status code that was returned to it by another routine it called.  Assigning the codes in blocks
+  !! allows the user to know from which subroutine a status code originated.
   !!
   !! Assigned Status Ranges
-  !! - 0001-0255 ... interface  deq_iface_*t
-  !! - 0256-0511 ... interface  stepp_iface_*t
-  !! - 0512-0767 ... interface  sdf_iface_*t
-  !! - 1232-1247 ... subroutine one_step_etab_*t
-  !! - 1248-1263 ... subroutine one_step_stab_*t
-  !! - 1216-1231 ... subroutine one_richardson_step_stab_*t
-  !! - 1200-1215 ... subroutine one_step_rk4_*t
-  !! - 1184-1199 ... subroutine one_step_rkf45_*t
-  !! - 1263-1279 ... subroutine one_step_dp54_*t
-  !! - 1120-1151 ... subroutine steps_fixed_stab_*t
-  !! - 1024-1055 ... subroutine steps_condy_stab_*t
-  !! - 1280-1296 ... subroutine steps_sloppy_condy_stab_*t
-  !! - 1056-1119 ... subroutine steps_adapt_etab_*t
-  !! - 1152-1183 ... subroutine print_solution
-  !! - 1297-1313 ... subroutine analyze_solution
-  !! - 1314:1330 ... subroutine seq
-  !! - 1331:1347 ... subroutine interpolate_solution
-  !! - 1348-1364 ... subroutine steps_points_stab_*t
-  !! - 1365-1381 ... subroutine print_istats
-  !! - 1382-1398 ... Unallocated
-  !! - 1399-1415 ... Unallocated
+  !!   | Range     | Assignment
+  !!   |-----------|-----------
+  !!   | 0001-0255 | mrkiss_solvers_wt::deq_iface & mrkiss_solvers_nt::deq_iface
+  !!   | 0256-0511 | mrkiss_solvers_wt::stepp_iface & mrkiss_solvers_nt::stepp_iface
+  !!   | 0512-0767 | mrkiss_solvers_wt::sdf_iface & mrkiss_solvers_nt::sdf_iface
+  !!   | 1232-1247 | mrkiss_solvers_wt::one_step_etab & mrkiss_solvers_nt::one_step_etab
+  !!   | 1248-1263 | mrkiss_solvers_wt::one_step_stab & mrkiss_solvers_nt::one_step_stab
+  !!   | 1216-1231 | mrkiss_solvers_wt::one_richardson_step_stab & mrkiss_solvers_nt::one_richardson_step_stab
+  !!   | 1200-1215 | mrkiss_solvers_wt::one_step_rk4 & mrkiss_solvers_nt::one_step_rk4
+  !!   | 1184-1199 | mrkiss_solvers_wt::one_step_rkf45 & mrkiss_solvers_nt::one_step_rkf45
+  !!   | 1263-1279 | mrkiss_solvers_wt::one_step_dp54 & mrkiss_solvers_nt::one_step_dp54
+  !!   | 1120-1151 | mrkiss_solvers_wt::steps_fixed_stab & mrkiss_solvers_nt::steps_fixed_stab
+  !!   | 1024-1055 | mrkiss_solvers_wt::steps_condy_stab & mrkiss_solvers_nt::steps_condy_stab
+  !!   | 1280-1296 | mrkiss_solvers_wt::steps_sloppy_condy_stab & mrkiss_solvers_nt::steps_sloppy_condy_stab
+  !!   | 1056-1119 | mrkiss_solvers_wt::steps_adapt_etab & mrkiss_solvers_nt::steps_adapt_etab
+  !!   | 1152-1183 | mrkiss_utils::print_solution
+  !!   | 1297-1313 | mrkiss_utils::analyze_solution
+  !!   | 1314:1330 | mrkiss_utils::seq
+  !!   | 1331:1347 | mrkiss_solvers_wt::interpolate_solution & mrkiss_solvers_nt::interpolate_solution
+  !!   | 1348-1364 | mrkiss_solvers_wt::steps_points_stab & mrkiss_solvers_nt::steps_points_stab
+  !!   | 1365-1381 | mrkiss_utils::print_istats
+  !!   | 1382-1398 | Unallocated
+  !!   | 1399-1415 | Unallocated
   !!
-  !! I use the following bit of code to generate new blocks:
+  !! I use the following bit of Emacs lisp code to generate new blocks:
   !! @verbatim
   !! (let ((s "\n"))
   !!   (cl-loop for f from 1348 to 2000 by 17
@@ -554,14 +556,11 @@ contains
   !!   s)
   !! @endverbatim
   !!
-  !! @verbatim
-  !! status ...................... This is an intent(in) argument!!!!
-  !! status_to_origin(len=32) .... A string identifying the origin of the status code.
-  !!                                - A subroutine or interface name
-  !!                                - "NO ERROR" for a non-error status of unknown origin
-  !!                                - "UNKNOWN SOURCE" for an error status of unknown origin
-  !! @endverbatim
-  !! @see mrkiss_utils::status_to_message()
+  !! @param status            This is an `intent(in)` argument!!!!
+  !! @param status_to_origin  A string `(len=32)` identifying the origin of the status code.
+  !!                           - A subroutine or interface name
+  !!                           - "NO ERROR" for a non-error status of unknown origin
+  !!                           - "UNKNOWN SOURCE" for an error status of unknown origin
   !!
   character(len=32) function status_to_origin(status)
     implicit none
@@ -616,15 +615,12 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Return, as a string, the source of a status code.
   !!
-  !! @verbatim
-  !! status ...................... This is an intent(in) argument!!!!
-  !! status_to_message(len=128) .. A string identifying the message of the status code.
-  !!                                - "SOURCE: MESSAGE"
-  !!                                  - SOURCE will be the subroutine or interface if known, and "UNKNOWN SOURCE" otherwise
-  !!                                  - MESSAGE will be the error message if known, and "UNKNOWN ERROR" otherwise
-  !!                                - "NO ERROR" for a non-error status of unknown message
-  !! @endverbatim
-  !! @see mrkiss_utils::status_to_origin()
+  !! @param status             This is an intent(in) argument!!!!
+  !! @param status_to_message  A string `(len=128)` identifying the message of the status code.
+  !!                            - Format: "SOURCE: MESSAGE"
+  !!                              - SOURCE will be the subroutine or interface if known, and "UNKNOWN SOURCE" otherwise
+  !!                              - MESSAGE will be the error message if known, and "UNKNOWN ERROR" otherwise
+  !!                             - "NO ERROR" for a non-error status of unknown message
   !!
   character(len=128) function status_to_message(status)
     implicit none
@@ -646,7 +642,7 @@ contains
        status_to_message = "Could not close file"
     elseif (status == 1297) then
        status_to_message = "Could not open file for write"
-    elseif (status == 1313) then
+    elseif (status == 1298) then
        status_to_message = "Could not close file"
     elseif (status == 1314) then
        status_to_message = "Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v"

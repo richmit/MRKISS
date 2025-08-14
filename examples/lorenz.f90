@@ -55,17 +55,17 @@ program lorenz
   ! This solution will have fixed t-delta, but no control over y-delta.
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run"
-  ! BEGIN: lorenz_fixed
+  ! BEGIN:lorenz_fixed:
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_fixed
+  ! END:lorenz_fixed:
 
   ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
   print '(a)', repeat('*', 120)
   print '(a)', "steps_sloppy_condy_stab"
-  ! BEGIN: lorenz_fixed-y
+  ! BEGIN:lorenz_fixed-y:
   call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
@@ -79,17 +79,17 @@ program lorenz
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy_short.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_fixed-y
+  ! END:lorenz_fixed-y:
 
   ! This solution will have y-delta equal to 1.0 for all steps.
   print '(a)', repeat('*', 120)
   print '(a)', "steps_condy_stab"
-  ! BEGIN: lorenz_clip-y
+  ! BEGIN:lorenz_clip-y:
   call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
-  ! END: lorenz_clip-y
+  ! END:lorenz_clip-y:
 
 contains
   

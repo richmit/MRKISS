@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-12 Tue 17:43 -->
+<!-- 2025-08-13 Wed 18:34 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-12 17:43:40</i></td>
+<td class="org-left"><i>2025-08-13 16:26:00</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-12 17:43:45</i></td>
+<td class="org-left"><i>2025-08-13 18:34:22</i></td>
 </tr>
 </tbody>
 </table>
@@ -377,12 +377,12 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
 
   <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
 
-  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_iv(3)  = [1.0_rk, 0.0_rk, 0.0_rk]</span>
-  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]</span>
-  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end    = 50.0_rk</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk), <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> y_iv(3)  = [1.0_rk, 0.0_rk, 0.0_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk), <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> param(3) = [10.0_rk, 28.0_rk, 8.0_rk/3.0_rk]</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk), <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> t_end    = 50.0_rk</span>
 
-  <span style="color: #63b8ff;">real</span>(kind=rk)               ::<span style="color: #7fffd4;"> solution(7, 10000)</span>
-  <span style="color: #63b8ff;">integer</span>                     ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk)            ::<span style="color: #7fffd4;"> solution(7, 10000)</span>
+  <span style="color: #63b8ff;">integer</span>                  ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
 
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"minimal.csv"</span>)
@@ -392,8 +392,7 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
   <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, y, param)
     <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
-    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
-    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:), param(:)</span>
     dydt = [ param(1)*(y(2)-y(1)), y(1)*(param(2)-y(3))-y(2), y(1)*y(2)-param(3)*y(3) ]
     status = 0
   <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
@@ -490,7 +489,7 @@ The word <i>embedded</i> indicates that we actually have two explicit Runge-Kutt
 to say each \(\mathbf{b}\) vector defines a unique, explicit Runge-Kutta method.  <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> supports both embedded and
 non-embedded (no \(\mathbf{\hat{b}}\) vector defined) methods.  At least one of \(\check{b}_s\) and \(\hat{b}_s\) must be non-zero for the overall method to
 be considered \(s\)-stage; however, if one of them has \(k\) trailing zeros the Runge-Kutta method associated with that vector is said to be a \(s-k\)-stage
-method.  We use \(\check{s}\) for the stage count of the \(\check{b}\) method and \(\hat{s}\) for the \(\hat{b}\) method.
+method.  We use \(\check{s}\) for the stage count of the \(\mathbf{\check{b}}\) method and \(\hat{s}\) for the \(\mathbf{\hat{b}}\) method.
 </p>
 
 <p>
@@ -1360,7 +1359,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org1ecfb57" class="figure">
+<div id="orgab49c6d" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1640,7 +1639,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orgf635687" class="figure">
+<div id="org21b3197" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1689,7 +1688,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org756d817" class="figure">
+<div id="orgd329a0e" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1713,7 +1712,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org9c1dd03" class="figure">
+<div id="org588058e" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>
