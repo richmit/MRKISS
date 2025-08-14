@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_eerk_sofroniou_spaletta_4_3.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -31,7 +31,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Sofroniou Spaletta's 5 step, order (4,3) Runge-Kutta method
@@ -50,22 +50,22 @@ module mrkiss_eerk_sofroniou_spaletta_4_3
   public
   !> The order of the overall method
   integer,          parameter :: s      = 5
-  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([     0.0_rk,        0.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
                                                      1584.0_rk,        0.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
                                                      -594.0_rk,     2970.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
                                                      1710.0_rk,    -1350.0_rk,    3600.0_rk,    0.0_rk,        0.0_rk, &
                                                       605.0_rk,     1375.0_rk,    1375.0_rk,  605.0_rk,        0.0_rk], [s, s]) /    3960.0_rk
-  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [             0.0_rk,        2.0_rk,       3.0_rk,    5.0_rk,        5.0_rk]          /       5.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
   integer,          parameter :: p1     = 4
   !> Number of stages for the @f$\mathbf{b_1}@f$ method
   integer,          parameter :: s1     = 4
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: b1(s)  = [            11.0_rk,       25.0_rk,      25.0_rk,   11.0_rk,        0.0_rk]          /      72.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
   integer,          parameter :: p2     = 3
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: b2(s)  = [        1251515.0_rk, 3710105.0_rk, 2519695.0_rk, 61105.0_rk, 1428492.0_rk]          / 8970912.0_rk
 end module mrkiss_eerk_sofroniou_spaletta_4_3

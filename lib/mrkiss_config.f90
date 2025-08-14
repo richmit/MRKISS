@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_config.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -30,7 +30,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Configuration for MRKISS == MR RK KISS == Mitch Richling's Runge-Kutta Keep It Simple Stupid
@@ -42,16 +42,19 @@ module mrkiss_config
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Real type used for computations
+
   integer,       parameter, public :: rk                 = c_double   !< Real kind used across the library
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name ab initio frmat specificaiton constants
+
   integer,       parameter, public :: fmt_d_ai           = 15 !< Real print format: digits to the right of decimal
   integer,       parameter, public :: fmt_w_ai           = 25 !< Numeric print format: total width
   integer,       parameter, public :: fmt_e_ai           = 4  !< Real print format: digits in exponent
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to istats
+
   integer,       parameter, public :: istats_size        = 16  !< Number of elements in istats(:)
   integer,       parameter, public :: istats_max_idx     = 10  !< Number of used elements in istats(:)
 
@@ -68,8 +71,11 @@ module mrkiss_config
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to istats messages
+
   integer,                       parameter, public :: istats_str_lng           = 76       !< Length of istats content message
-  character(len=istats_str_lng), parameter, public :: istats_strs(istats_size) = [     &  !< Array of istats content messages
+  !> Array of istats descriptions
+  !! @showinlinesource
+  character(len=istats_str_lng), parameter, public :: istats_strs(istats_size) = [     &
        "Computed solution points                                                    ", &  ! istats( 1)
        "Number of one_step_stab calls not triggered by an event                     ", &  ! istats( 2)
        "Number of one_step_etab calls not triggered by an event                     ", &  ! istats( 3)
@@ -89,11 +95,13 @@ module mrkiss_config
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Absolute constants
+
   real(kind=rk), parameter, public :: zero_epsilon       = 1.0e-12_rk                      !< Used to test for zero
   real(kind=rk), parameter, public :: t_delta_tiny       = tiny(zero_epsilon) * 1.0e18_rk  !< Smallest value for t_delta
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name ab initio parameters for defaults when we know nothing
+
   real(kind=rk), parameter, public :: t_delta_ai         = 1.0e-4_rk    !< t_delta ai default
   real(kind=rk), parameter, public :: error_tol_abs_ai   = 1.0e-5_rk    !< error_tol_abs ai default
   real(kind=rk), parameter, public :: error_tol_rel_ai   = 1.0e-3_rk    !< error_tol_rel ai default
@@ -116,6 +124,8 @@ end module mrkiss_config
 !!
 !! [MRKISS](https://github.com/richmit/MRKISS) is a *tiny* library with *zero dependencies* that aims to make it easy to *use*
 !! and *experiment with* explicit Runge-Kutta methods.
+!!
+!! Everything is on github: https://github.com/richmit/MRKISS
 !!
 !! For an overview of MRKISS and some tutorial information, check out the [documentation](https://richmit.github.io/MRKISS/index.html).
 !!

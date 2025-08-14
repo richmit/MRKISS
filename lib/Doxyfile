@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "MRKISS"
-PROJECT_NUMBER         = "2025-08-12"
+PROJECT_NUMBER         = "2025-08-12+"
 PROJECT_BRIEF          = "A tiny library with zero dependencies that aims to make it easy to use & experiment with explicit Runge-Kutta methods."
 PROJECT_LOGO           = ../docs/logo/MRKISS_logo_bg_120x60.png
 PROJECT_ICON           =
@@ -96,7 +96,7 @@ SHOW_INCLUDE_FILES     = YES
 SHOW_GROUPED_MEMB_INC  = NO
 FORCE_LOCAL_INCLUDES   = NO
 INLINE_INFO            = YES
-SORT_MEMBER_DOCS       = YES
+SORT_MEMBER_DOCS       = NO
 SORT_BRIEF_DOCS        = NO
 SORT_MEMBERS_CTORS_1ST = NO
 SORT_GROUP_NAMES       = NO
@@ -327,9 +327,9 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 # Configuration options related to external references
 #---------------------------------------------------------------------------
-TAGFILES               =
-GENERATE_TAGFILE       =
-ALLEXTERNALS           = NO
+TAGFILES               = 
+GENERATE_TAGFILE       = ../docs/dox/DTAGS
+ALLEXTERNALS           = YES
 EXTERNAL_GROUPS        = YES
 EXTERNAL_PAGES         = YES
 #---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_eerk_heun_euler_2_1.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -31,7 +31,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Heun & Euler 2 step, order (2,1) Runge-Kutta method
@@ -51,19 +51,19 @@ module mrkiss_eerk_heun_euler_2_1
   public
   !> The order of the overall method
   integer,          parameter :: s      = 2
-  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk,  0.0_rk, &
                                                      1.0_rk,  0.0_rk], [s, s]) / 1.0_rk
-  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  1.0_rk]          / 1.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
   integer,          parameter :: p1     = 2
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: b1(s)  = [          1.0_rk,  1.0_rk]          / 2.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
   integer,          parameter :: p2     = 1
   !> Number of stages for the @f$\mathbf{b_2}@f$ method
   integer,          parameter :: s2     = 1
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: b2(s)  = [          1.0_rk,  0.0_rk]          / 1.0_rk
 end module mrkiss_eerk_heun_euler_2_1

@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_utils.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -30,7 +30,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Utilities.
@@ -556,11 +556,11 @@ contains
   !!   s)
   !! @endverbatim
   !!
-  !! @param status            This is an `intent(in)` argument!!!!
-  !! @param status_to_origin  A string `(len=32)` identifying the origin of the status code.
-  !!                           - A subroutine or interface name
-  !!                           - "NO ERROR" for a non-error status of unknown origin
-  !!                           - "UNKNOWN SOURCE" for an error status of unknown origin
+  !! @param status This is an `intent(in)` argument!!!!
+  !! @return  A string `(len=32)` identifying the origin of the status code.
+  !!            - A subroutine or interface name
+  !!            - "NO ERROR" for a non-error status of unknown origin
+  !!            - "UNKNOWN SOURCE" for an error status of unknown origin
   !!
   character(len=32) function status_to_origin(status)
     implicit none
@@ -615,12 +615,12 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Return, as a string, the source of a status code.
   !!
-  !! @param status             This is an intent(in) argument!!!!
-  !! @param status_to_message  A string `(len=128)` identifying the message of the status code.
-  !!                            - Format: "SOURCE: MESSAGE"
-  !!                              - SOURCE will be the subroutine or interface if known, and "UNKNOWN SOURCE" otherwise
-  !!                              - MESSAGE will be the error message if known, and "UNKNOWN ERROR" otherwise
-  !!                             - "NO ERROR" for a non-error status of unknown message
+  !! @param status This is an intent(in) argument!!!!
+  !! @return  A string `(len=128)` identifying the message of the status code.
+  !!           - Format: "SOURCE: MESSAGE"
+  !!             - SOURCE will be the subroutine or interface if known, and "UNKNOWN SOURCE" otherwise
+  !!             - MESSAGE will be the error message if known, and "UNKNOWN ERROR" otherwise
+  !!           - "NO ERROR" for a non-error status of unknown message
   !!
   character(len=128) function status_to_message(status)
     implicit none

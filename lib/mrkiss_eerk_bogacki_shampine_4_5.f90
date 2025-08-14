@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_eerk_bogacki_shampine_4_5.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -31,7 +31,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Bogacki Shampine's 7 step, order (4,5) Runge-Kutta method
@@ -50,7 +50,7 @@ module mrkiss_eerk_bogacki_shampine_4_5
   public
   !> The order of the overall method
   integer,          parameter :: s      = 7
-  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([                0.0_rk,                 0.0_rk,                0.0_rk,                0.0_rk,                 0.0_rk,                0.0_rk,         0.0_rk, &
                                                      624139091896320.0_rk,                 0.0_rk,                0.0_rk,                0.0_rk,                 0.0_rk,                0.0_rk,         0.0_rk, &
                                                      277395151953920.0_rk,   554790303907840.0_rk,                0.0_rk,                0.0_rk,                 0.0_rk,                0.0_rk,         0.0_rk, &
@@ -58,14 +58,14 @@ module mrkiss_eerk_bogacki_shampine_4_5
                                                      857403196948480.0_rk, -1361758018682880.0_rk, 1099881476628480.0_rk, 1901029712691200.0_rk,                 0.0_rk,                0.0_rk,         0.0_rk, &
                                                       99239445453330.0_rk,   861737496197760.0_rk,  403421580251235.0_rk,  599993938324872.0_rk,   844233453306243.0_rk,                0.0_rk,         0.0_rk, &
                                                      680055277224960.0_rk, -1449549904158720.0_rk, 1546177346703360.0_rk, 2400406438993920.0_rk, -3790311591306240.0_rk, 4358056983920640.0_rk,        0.0_rk], [s, s]) / 3744834551377920.0_rk
-  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: c(s)   = [                        0.0_rk,                42.0_rk,               56.0_rk,              108.0_rk,               168.0_rk,              189.0_rk,       252.0_rk]          /               252.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
   integer,          parameter :: p1     = 4
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: b1(s)  = [                 50746150.0_rk,                 0.0_rk,        199815255.0_rk,        136035858.0_rk,           6022107.0_rk,        250664960.0_rk,  53848470.0_rk]          /         697132800.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
   integer,          parameter :: p2     = 5
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: b2(s)  = [                104760110.0_rk,                 0.0_rk,        385163505.0_rk,        295063692.0_rk,         -14425047.0_rk,        516006400.0_rk, 107696940.0_rk]          /        1394265600.0_rk
 end module mrkiss_eerk_bogacki_shampine_4_5

@@ -59,7 +59,8 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - New functionality
     - N/A
   - Documentation
-    - N/A
+    - All routines have full Doxygen documentation
+    - Added inline source to small Butcher Tableaux
   - Examples
     - New
       - N/A
@@ -71,7 +72,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - Updated
       - N/A
   - Miscellaneous
-    - N/A
+    - one_step_stab() & one_step_etab() are slightly faster.
 
 * v2025-08-12: Feature & Bugfix Release
 :PROPERTIES:

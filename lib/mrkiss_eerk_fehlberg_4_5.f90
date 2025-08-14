@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_eerk_fehlberg_4_5.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -31,7 +31,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Fehlberg's 6 stage, Order (4,5) Runge-Kutta method
@@ -52,22 +52,22 @@ module mrkiss_eerk_fehlberg_4_5
   public
   !> The order of the overall method
   integer,          parameter :: s      = 6
-  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([         0.0_rk,           0.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
                                                      45082440.0_rk,           0.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
                                                      16905915.0_rk,    50717745.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
                                                     158578560.0_rk,  -590976000.0_rk,  598855680.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
                                                     366503540.0_rk, -1442638080.0_rk, 1293593600.0_rk, -37129300.0_rk,         0.0_rk,         0.0_rk, &
                                                     -53431040.0_rk,   360659520.0_rk, -249157376.0_rk,  81684460.0_rk, -49590684.0_rk,         0.0_rk], [s, s]) / 180329760.0_rk
-  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: c(s)   = [                 0.0_rk,          26.0_rk,         39.0_rk,        96.0_rk,       104.0_rk,       52.0_rk ]          /       104.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
   integer,          parameter :: p1     = 4                                                                                                  
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: b1(s)  = [              2375.0_rk,           0.0_rk,       11264.0_rk,    10985.0_rk,      -4104.0_rk,       0.0_rk ]          /     20520.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
   integer,          parameter :: p2     = 5                                                                                              
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: b2(s)  = [             33440.0_rk,           0.0_rk,      146432.0_rk,   142805.0_rk,     -50787.0_rk,   10260.0_rk ]          /    282150.0_rk
 end module mrkiss_eerk_fehlberg_4_5
 

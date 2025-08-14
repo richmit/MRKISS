@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_eerk_bogacki_shampine_3_2.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -31,7 +31,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Bogacki Shampine's 4 step, order (3,2) Runge-Kutta method
@@ -47,21 +47,21 @@ module mrkiss_eerk_bogacki_shampine_3_2
   public
   !> The order of the overall method
   integer,          parameter :: s      = 4
-  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk,  0.0_rk,  0.0_rk, 0.0_rk, &
                                                     18.0_rk,  0.0_rk,  0.0_rk, 0.0_rk, &
                                                      0.0_rk, 27.0_rk,  0.0_rk, 0.0_rk, &
                                                      8.0_rk, 12.0_rk, 16.0_rk, 0.0_rk], [s, s]) / 36.0_rk
-  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  2.0_rk,  3.0_rk, 4.0_rk]          /  4.0_rk
   !> The order of the @f$\mathbf{b_1}@f$ method
   integer,          parameter :: p1     = 3
   !> Number of stages for the @f$\mathbf{b_1}@f$ method
   integer,          parameter :: s1     = 3
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: b1(s)  = [          2.0_rk,  3.0_rk,  4.0_rk, 0.0_rk]          /  9.0_rk
   !> The order of the @f$\mathbf{b_2}@f$ method
   integer,          parameter :: p2     = 2
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau
+  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: b2(s)  = [          7.0_rk,  6.0_rk,  8.0_rk, 3.0_rk]          / 24.0_rk
 end module mrkiss_eerk_bogacki_shampine_3_2

@@ -1,5 +1,5 @@
 ! -*- Mode:F90; Coding:us-ascii-unix; fill-column:129 -*-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.S.!!
 !>
 !! @file      mrkiss_solvers_wt.f90
 !! @author    Mitch Richling http://www.mitchr.me/
@@ -31,7 +31,7 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
+!.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 
 !----------------------------------------------------------------------------------------------------------------------------------
@@ -40,6 +40,11 @@
 module mrkiss_solvers_wt
   implicit none
   private
+
+  public :: one_step_rk4, one_step_rkf45, one_step_dp54                                         ! Test one step solvers
+  public :: one_step_etab, one_step_stab, one_richardson_step_stab                              ! One step solvers
+  public :: steps_fixed_stab, steps_condy_stab, steps_sloppy_condy_stab, steps_adapt_etab    ! Many step solvers
+  public :: steps_points_stab, interpolate_solution                                                ! Meta-many step solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type for ODE dydt functions.
@@ -119,10 +124,6 @@ module mrkiss_solvers_wt
      end subroutine sdf_iface
   end interface
 
-  public :: one_step_rk4, one_step_rkf45, one_step_dp54                                         ! Test one step solvers
-  public :: one_step_etab, one_step_stab, one_richardson_step_stab                              ! One step solvers
-  public :: steps_fixed_stab, steps_condy_stab, steps_sloppy_condy_stab, steps_adapt_etab    ! Many step solvers
-  public :: steps_points_stab, interpolate_solution                                                ! Meta-many step solvers
 contains
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -136,7 +137,7 @@ contains
   !!                    |-----------|------------
   !!                    | -inf-0    | Everything worked
   !!                    | 0-255     | Evaluation of @p deq failed
-  !!                    | 1232-1247 | Error in this routine
+  !!                    | 1232-1247 | Unknown error in this routine
   !! @param y1_delta  Returned @f$\mathbf{\Delta\check{y}}@f$ for the @f$\mathbf{\check{b}}@f$ (@p b1) method
   !! @param y2_delta  Returned @f$\mathbf{\Delta\hat{y}}@f$ for the @f$\mathbf{\hat{b}}@f$ (@p b2) method
   !! @param dy        Returned @f$\mathbf{y}'@f$ value at @f$t@f$
@@ -188,14 +189,14 @@ contains
   end subroutine one_step_etab
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Compute one step of a non-embedded RK method expressed as a Butcher Tableau.
+  !> Compute one step of a non-embedded RK method expressed as a Butcher Tableau. @anchor one_step_stab_wt
   !!
   !! @param status   Exit status
   !!                   | Value     | Description
   !!                   |-----------|------------
   !!                   | -inf-0    | Everything worked
   !!                   | 0-255     | Evaluation of @p deq failed
-  !!                   | 1248-1263 | Error in this routine
+  !!                   | 1248-1263 | Unknown error in this routine
   !! @param y_delta  Returned @f$\mathbf{\Delta{y}}@f$ for the method
   !! @param dy       Returned @f$\mathbf{y}'@f$ value at @f$t@f$
   !! @param deq      The equation subroutine returning values for @f$\mathbf{y}'@f$ -- i.e. @f$\mathbf{f}(t, \mathbf{y})@f$
@@ -204,10 +205,9 @@ contains
   !! @param param    Data payload passed to @p deq
   !! @param a        The butcher tableau
   !! @param b        The butcher tableau @f$\mathbf{\check{b}}@f$ vector
-  !!                 The number of stages is determined based on the length of b.  All of the methods in an EERK need not
-  !!                 be the same number of stages.  When this occurs, the b1 or b2 pulled from the module can be shortened
-  !!                 when passing it to this function.  This will improve performance by not executing an unnecessary
-  !!                 stage.
+  !!                 The number of stages is determined based on the length of @p b.  All of the methods in an EERK need not be
+  !!                 the same number of stages.  When this occurs, the @p b1 or @p b2 pulled from the module can be shortened
+  !!                 when passing it to this function.  This will improve performance by not executing an unnecessary stage.
   !! @param c        The butcher tableau @f$\mathbf{c}@f$ vector
   !! @param t_delta  The @f$\Delta{t}@f$ value for this step.
   !!
@@ -250,15 +250,23 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one Richardson Extrapolation Step.
   !!
-  !! Uses Richardson extrapolation to produce an estimate of order one greater than the provided Runge-Kutta method.
+  !! This routine produces an improved value for @f$\mathbf{\Delta{y}}@f$, whch we denote by @f$\mathbf{\Delta{\tilde{y}}}@f$, by
+  !! combining two approximations of @f$\mathbf{\Delta{y}}@f$.  If the original Runge-Kutta method was @f$\mathcal{O}(p)@f$, then
+  !! this new approximation is @f$\mathcal{O}(p+1)@f$.  The first approximation of @f$\mathbf{\Delta{y}}@f$, which we denote by
+  !! @f$\mathbf{\Delta{y_B}}@f$, is computed in the standard way with a single Runge-Kutta step of size @f$\Delta{t}@f$.  The
+  !! second approximation of @f$\mathbf{\Delta{y}}@f$, which we denote by @f$\mathbf{\Delta{y_S}}@f$, is computed by taking two
+  !! Runge-Kutta steps of size @f$\frac{\Delta{t}}{2}@f$.  We combine these approximations to compute our improved
+  !! @f$\mathbf{\Delta{y}}@f$ as follows:
+  !!
+  !! @f[ \mathbf{\Delta{\tilde{y}}} = \mathbf{\Delta{y_S}} + \frac{\mathbf{\Delta{y_S}} - \mathbf{\Delta{y_B}}}{2^p - 1} @f]
   !!
   !! @param status   Exit status
   !!                   | Value     | Description
   !!                   |-----------|------------
   !!                   | -inf-0    | Everything worked
   !!                   | 0-255     | Evaluation of @p deq failed
-  !!                   | 1216-1231 | Error in this routine
-  !!                   | 1248-1263 | Error from one_step_stab()
+  !!                   | 1216-1231 | Unknown error in this routine
+  !!                   | 1248-1263 | Error from mrkiss_solvers_wt::one_step_stab()
   !! @param y_delta  Returned @f$\mathbf{\Delta{y}}@f$ for the method
   !! @param dy       Returned @f$\mathbf{y}'@f$ value at @f$t@f$
   !! @param deq      The equation subroutine returning values for @f$\mathbf{y}'@f$ -- i.e. @f$\mathbf{f}(t, \mathbf{y})@f$
@@ -313,7 +321,7 @@ contains
   !!                   |-----------|------------
   !!                   | -inf-0    | Everything worked
   !!                   | 0-255     | Evaluation of @p deq failed
-  !!                   | 1200-1215 | Error in this routine
+  !!                   | 1200-1215 | Unknown error in this routine
   !! @param y_delta  Returned @f$\mathbf{\Delta{y}}@f$ for the method
   !! @param dy       Returned @f$\mathbf{y}'@f$ value at @f$t@f$
   !! @param deq      The equation subroutine returning values for @f$\mathbf{y}'@f$ -- i.e. @f$\mathbf{f}(t, \mathbf{y})@f$
@@ -429,7 +437,7 @@ contains
     call deq(status, k1, t,                        y, param)
     if (status > 0) return
     dy = k1;
-    call deq(status, k2, t+t_delta/5.0_rk,         y + t_delta * (k1/5.0_rk), param)
+    call deq(status, k2, t+t_delta*1.0_rk/5.0_rk,  y + t_delta * (k1*1.0_rk/5.0_rk), param)
     if (status > 0) return
     call deq(status, k3, t+t_delta*3.0_rk/10.0_rk, y + t_delta * (k1*3.0_rk/40.0_rk       + k2*9.0_rk/40.0_rk), param)
     if (status > 0) return                                                                
@@ -450,7 +458,7 @@ contains
   !> @name Multistep Solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple fixed time steps with a simple RK method and store solutions in solution.
+  !> Take multiple fixed time steps with a simple Runge-Kutta method.
   !!
   !! @param status     Exit status
   !!                   | Value     | Description
@@ -458,10 +466,10 @@ contains
   !!                   | -inf-0    | Everything worked
   !!                   | 0-255     |  Evaluation of @p deq failed
   !!                   | 1120-1151 | Unnecessary error in this routine
-  !!                   | 1216-1231 | Error from one_richardson_step_stab()
-  !!                   | 1248-1263 | Error from one_step_stab()
+  !!                   | 1216-1231 | Error from mrkiss_solvers_wt::one_richardson_step_stab()
+  !!                   | 1248-1263 | Error from mrkiss_solvers_wt::one_step_stab()
   !! @param istats     Integer statistics for run
-  !!                    - See: mrkiss_utils::print_istats() for description of elements.
+  !!                    - See: mrkiss_config::istats_strs for a description of elements.
   !!                    - Elements this routine updates
   !!                       - mrkiss_config::isi_num_pts
   !!                       - mrkiss_config::isi_stab_norm
@@ -477,7 +485,7 @@ contains
   !! @param a          The butcher tableau @f$\mathbf{a}@f$ matrix
   !! @param b          The butcher tableau @f$\mathbf{\check{b}}@f$ vector
   !! @param c          The butcher tableau @f$\mathbf{c}@f$ vector
-  !! @param p_o        The order for the RK method in the butcher tableau to enable Richardson extrapolation
+  !! @param p_o        The order for the Runge-Kutta method in the butcher tableau to enable Richardson extrapolation
   !! @param max_pts_o  Maximum number of points to put in @p solution.
   !!                   If `max_pts_o>1` & `size(solution, 2)==1`, then `max_pts_o-1` steps are taken and
   !!                   only the last solution is stored in solution.
@@ -567,13 +575,13 @@ contains
   end subroutine steps_fixed_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps with constant length y_delta using a simple RK method storing the solutions in solution.
+  !> Take multiple adaptive steps with constant @f$\mathbf{\Delta{y}}@f$ length using a simple Runge-Kutta method.
   !!
   !! This method attempts to precisely control the length of @f$\mathbf{\Delta{y}}@f$ which we denote by
   !! @f$\vert\vert\mathbf{\Delta{y}}\vert\vert_L@f$.  This is done by finding a value for @f$\Delta{t}@f$ for which
   !! @f$\vert\vert\mathbf{\Delta{y}}\vert\vert_L@f$ is equal to @p y_delta_len_targ with an accuracy of @p y_delta_len_tol_o.
   !!
-  !! This value for @f$\Delta{t}@f$ is found via bisection.  For each solution point we first compute two RK steps with
+  !! This value for @f$\Delta{t}@f$ is found via bisection.  For each solution point we first compute two Runge-Kutta steps with
   !! @f$\Delta{t}@f$ set to @p t_delta_min_o and @p t_delta_max.  We hope that the lengths of the two @f$\mathbf{\Delta{y}}@f$
   !! values thus obtained will bracket @p y_delta_len_targ.  If they don't then we can't isolate an appropriate value for
   !! @f$\Delta{t}@f$.  In this case we ignore the issue and continue to the next step if @p no_bisect_error_o is .TRUE.,
@@ -583,11 +591,11 @@ contains
   !! The length, which we have denoted by @f$\vert\vert\mathbf{\Delta{y}}\vert\vert_L@f$, is defined to be the Euclidean
   !! distance of the vector defined by the elements of @f$\mathbf{\Delta{y}}@f$ that are indexed by @p y_delta_len_idxs_o.
   !!
-  !! Note there is no mathematical guarantee that a RK step of size @p t_delta_min_o and @p t_delta_max will produce solutions that
-  !! bracket @p y_delta_len_targ.  That said, for well behaved functions a @p t_delta_min_o and @p t_delta_max may always be found
-  !! that work.  Usually finding good values are @p t_delta_min_o and @p t_delta_max isn't difficult.  For challenging cases, a
-  !! good approach is to use steps_fixed_stab() over the interval in question, and then examine the values of
-  !! @f$\vert\vert\mathbf{\Delta{y}}\vert\vert_L@f$ in the solution via analyze_solution().
+  !! Note there is no mathematical guarantee that a Runge-Kutta step of size @p t_delta_min_o and @p t_delta_max will produce
+  !! solutions that bracket @p y_delta_len_targ.  That said, for well behaved functions a @p t_delta_min_o and @p t_delta_max may
+  !! always be found that work.  Usually finding good values are @p t_delta_min_o and @p t_delta_max isn't difficult.  For
+  !! challenging cases, a good approach is to use steps_fixed_stab() over the interval in question, and then examine the values
+  !! of @f$\vert\vert\mathbf{\Delta{y}}\vert\vert_L@f$ in the solution via analyze_solution().
   !!
   !! My primary use case for this function is to create uniform sphere sweeps for constructive solid geometry applications.
   !!
@@ -598,10 +606,10 @@ contains
   !!                              | 0-255     | Evaluation of @p deq failed (see: deq_iface)
   !!                              | 1024      | bisection containment anomaly
   !!                              | 1025      | `no_bisect_error_o==0` not present and `max_bisect_o` violated
-  !!                              | 1026-1055 | Unknown Error in this routine
-  !!                              | 1248-1263 | Error from one_step_stab()
+  !!                              | 1026-1055 | Unknown error in this routine
+  !!                              | 1248-1263 | Error from mrkiss_solvers_wt::one_step_stab()
   !! @param istats              Integer statistics for run
-  !!                             - See: mrkiss_config::istats_strs for description of elements.
+  !!                             - See: mrkiss_config::istats_strs for a description of elements.
   !!                             - Elements this routine updates
   !!                                - mrkiss_config::isi_num_pts
   !!                                - mrkiss_config::isi_stab_norm
@@ -780,7 +788,7 @@ contains
   end subroutine steps_condy_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps adjusting for the length of y_delta using a simple RK method storing the solutions in solution.
+  !> Take multiple adaptive steps adjusting for the length of @f$\mathbf{\Delta{y}}@f$ using a simple Runge-Kutta method.
   !!
   !! This method attempts to control the length of @f$\mathbf{\Delta{y}}@f$ which we denote by
   !! @f$\vert\vert\mathbf{\Delta{y}}\vert\vert_L@f$.  At each solution step it takes a probing step with @f$\Delta{t}@f$ equal to
@@ -807,9 +815,9 @@ contains
   !!                              | -inf-0    | Everything worked
   !!                              | 0-255     |  Evaluation of @p deq failed
   !!                              | 1280-1296 | Unknown error in this routine
-  !!                              | 1248-1263 | Error from one_step_stab()
+  !!                              | 1248-1263 | Error from mrkiss_solvers_wt::one_step_stab()
   !! @param istats              Integer statistics for run
-  !!                             - See: mrkiss_utils::print_istats() for description of elements.
+  !!                             - See: mrkiss_config::istats_strs for a description of elements.
   !!                             - Elements this routine updates:
   !!                                - mrkiss_config::isi_num_pts
   !!                                - mrkiss_config::isi_stab_norm
@@ -923,22 +931,22 @@ contains
   end subroutine steps_sloppy_condy_stab
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take multiple adaptive steps with an embedded RK method using relatively traditional step size controls.
+  !> Take multiple adaptive steps with an embedded Runge-Kutta method using relatively traditional step size controls.
   !!
   !! Method of controlling step size:
   !!
   !! First we compute a combined tolerance vector:
   !!    @f[ \mathbf{E} = [ A_i + R_i \max(\vert y_i\vert, \vert y_i+\Delta t\vert) ] @f]
-  !! And a set containing the indexes of the non-zero elements of @f$\mathbf{E}@f$:
+  !! Now define a set containing the indexes of the non-zero elements of @f$\mathbf{E}@f$:
   !!    @f[ \mathbf{E_+} = \{i\vert\,E_i\ne0\} @f]
   !! When @f$\vert E_+\vert=0@f$, i.e. when @f$E_+=\emptyset@f$:
   !!   - We accept the current step
   !!   - Expand the next step by a factor of @p t_delta_fac_max_o
   !!
-  !! Otherwise, we compute composite error:
+  !! Otherwise, we compute a composite error estimate:
   !!    @f[ \epsilon = \sqrt{\frac{1}{\vert E_+\vert} \sum_{E_+}\left(\frac{\vert\Delta\check{y}_i-\Delta\hat{y}_i\vert}{E_i}\right)^2}  @f]
   !! From this we compute the ideal step size adjustment ratio:
-  !!    @f[ \left(\frac{1}{\epsilon}\right)^\frac{1}{1+\min(\hat{p}, \check{p})} @f]
+  !!    @f[ m = \left(\frac{1}{\epsilon}\right)^\frac{1}{1+\min(\hat{p}, \check{p})} @f]
   !! When @f$ \vert\Delta\check{y}_i-\Delta\hat{y}_i\vert < E_i\,\,\,\,\forall i@f$, we:
   !!   - We accept the current step
   !!   - Expand the next step by a factor of @f$m@f$
@@ -950,7 +958,7 @@ contains
   !!
   !! Notes:
   !!   - When @f$m<1@f$, the factor is adjusted by @p t_delta_fac_fdg_o
-  !!   - The final value for @f$m<1@f$ is constrained by @p t_delta_fac_max_o & @p t_delta_fac_min_o.
+  !!   - The final value for @f$m@f$ is constrained by @p t_delta_fac_max_o & @p t_delta_fac_min_o.
   !!   - The final value for @f$\Delta{t}@f$ is always constrained by @p t_delta_min_o & @p t_delta_max_o.
   !!
   !! @param status             Exit status
@@ -962,10 +970,10 @@ contains
   !!                             | 512-767   | Error in @p sdf_o
   !!                             | 1056      | @p no_bisect_error_o is `.FALSE`. and @p max_bisect_o violated.
   !!                             | 1057-1119 | Unknown error in this routine
-  !!                             | 1232-1247 | Error from one_step_etab()
-  !!                             | 1248-1263 | Error from one_step_stab()
+  !!                             | 1232-1247 | Error from mrkiss_solvers_wt::one_step_etab()
+  !!                             | 1248-1263 | Error from mrkiss_solvers_wt::one_step_stab()
   !! @param istats             Integer statistics for run
-  !!                            - See: mrkiss_utils::print_istats() for description of elements.
+  !!                            - See: mrkiss_config::istats_strs for a description of elements.
   !!                            - Elements this routine updates:
   !!                               - mrkiss_config::isi_num_pts
   !!                               - mrkiss_config::isi_etab_norm
@@ -987,8 +995,8 @@ contains
   !! @param b1                 The butcher tableau @f$\mathbf{\check{b}}@f$ vector
   !! @param b2                 The butcher tableau @f$\mathbf{\hat{b}}@f$ vector
   !! @param c                  The butcher tableau @f$\mathbf{c}@f$ vector
-  !! @param p1                 Order for the @f$\mathbf{\check{b}}@f$ (@p b1) RK method
-  !! @param p2                 Order for the @f$\mathbf{\hat{b}}@f$ (@p b2) RK method
+  !! @param p1                 Order for the @f$\mathbf{\check{b}}@f$ (@p b1) Runge-Kutta method
+  !! @param p2                 Order for the @f$\mathbf{\hat{b}}@f$ (@p b2) Runge-Kutta method
   !! @param t_max_o            Stop if @f$t@f$ becomes greater than @p t_max_o.  Different from @p t_end_o! Default: NONE
   !! @param t_end_o            Try to stop integration with @f$t@f$ equal to @p t_end. Default: NONE
   !! @param t_delta_ini_o      Initial @f$\Delta{t}@f$.
@@ -1241,17 +1249,17 @@ contains
   !> @name Multistep Meta Solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Take a solution with t values pre-populated, and take steps_per_pnt RK steps between each t value.
+  !> Take a solution with @f$t@f$ values pre-populated, and take @p steps_per_pnt Runge-Kutta steps between each @f$t@f$ value.
   !!
   !! @param status         Exit status
   !!                         | Value     | Description
   !!                         |-----------|------------
   !!                         | -inf-0    | Everything worked
   !!                         | 0-255     | Evaluation of @p deq failed
-  !!                         | 1348-1364 | Error in this routine
-  !!                         | 1248-1263 | Error from one_step_stab()
+  !!                         | 1348-1364 | Unknown error in this routine
+  !!                         | 1248-1263 | Error from mrkiss_solvers_wt::one_step_stab()
   !! @param istats         Integer statistics for run
-  !!                        - See: mrkiss_utils::print_istats() for description of elements.
+  !!                        - See: mrkiss_config::istats_strs for a description of elements.
   !!                        - Elements this routine updates (via steps_fixed_stab() calls):
   !!                           - mrkiss_config::isi_num_pts
   !!                           - mrkiss_config::isi_stab_norm
@@ -1267,8 +1275,8 @@ contains
   !! @param a              The butcher tableau @f$\mathbf{a}@f$ matrix
   !! @param b              The butcher tableau @f$\mathbf{\check{b}}@f$ vector
   !! @param c              The butcher tableau @f$\mathbf{c}@f$ vector
-  !! @param steps_per_pnt  Number of RK steps to reach each solution point
-  !! @param p_o            The order for the RK method in the butcher tableau to enable Richardson extrapolation
+  !! @param steps_per_pnt  Number of Runge-Kutta steps to reach each solution point
+  !! @param p_o            The order for the Runge-Kutta method in the butcher tableau to enable Richardson extrapolation
   !!
   subroutine steps_points_stab(status, istats, solution, deq, y, param, a, b, c, steps_per_pnt, p_o)
     use mrkiss_config, only: rk, istats_size
@@ -1308,6 +1316,45 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Create an interpolated solution from a source solution.
   !!
+  !! Take a series of @f$t@f$ values and a source solution, and produces a new solution with points at the given @f$t@f$ values.
+  !!
+  !! In order to produce a new solution point at a given @f$t@f$ value, we first find two solution points in the source solution
+  !! that bracket @f$t@f$.  That is to say, we find two source solutions with times @f$t_0@f$ and @f$t_1@f$ such that
+  !!    @f[ t_0 \le t \le t_1 @f]
+  !!
+  !! If Hermite interpolation is being used (`linear_interp_o==.FALSE.`), we then compute the new @f$\mathbf{\tilde{y}}@f$ value like so:
+  !!    @f[ \mathbf{\tilde{y}}(t) = \sum_{i=0}^3 \mathbf{c_i} \left(\frac{t - t_0}{\Delta{t}}\right)^i  @f]
+  !! Where @f$\Delta{t}=t_1-t_0@f$ and the @f$\mathbf{c_i}@f$ defined as:
+  !!    @f[ \begin{array}{lcl}
+  !!      \mathbf{c_3} & = & 2\cdot\mathbf{y}(t_0) + \Delta{t}\cdot\mathbf{y}'(t_0) - 2\cdot\mathbf{y}(t_1) + \Delta{t}\cdot\mathbf{y}'(t_1) \\
+  !!      \mathbf{c_2} & = & -2\cdot\Delta{t}\mathbf{y}'(t_0) - 3\cdot\mathbf{y}(t_0) + 3\cdot\mathbf{y}(t_1) - \Delta{t}\cdot\mathbf{y}'(t_1) \\
+  !!      \mathbf{c_1} & = & \Delta{t}\cdot\mathbf{y}'(t_0) \\
+  !!      \mathbf{c_0} & = & \mathbf{y}(t_0)
+  !!    \end{array} @f]
+  !! Note that 
+  !!    @f[ \begin{array}{lcl}
+  !!     \mathbf{\tilde{y}}(t_0) & = & \mathbf{y}(t_0)   \\
+  !!     \mathbf{\tilde{y}}(t_1) & = & \mathbf{y}(t_1)   \\
+  !!     \mathbf{\tilde{y}}'(t_0) & = & \mathbf{y}'(t_0) \\
+  !!     \mathbf{\tilde{y}}'(t_1) & = & \mathbf{y}'(t_1) 
+  !!    \end{array} @f]
+  !! And thus the collection of Hermite approximation polynomials produce a is @f$ \mathcal{C}^\infty@f$ approximation over the
+  !! entire solution interval.  Also note that the Hermite solution provides a solution of @f$\mathcal{O}(3)@f$.
+  !!
+  !! If linear interpolation is being used (`linear_interp_o==.TRUE.`), we then we compute the new @f$\mathbf{\tilde{y}}@f$ value
+  !! like so:
+  !!    @f[ \mathbf{\tilde{y}}(t) = \frac{\mathbf{y}(t_0) (t_1 - t) + \mathbf{y}(t_1) (t - t_0)}{\Delta{t}} @f]
+  !! Where @f$\Delta{t}=t_1-t_0@f$.
+  !!
+  !! While the collection of linear approximation functions provide the same equality at source solution @f$t@f$ values that we
+  !! had with Hermite interpolation, that equality doesn't extend to the values of the derivatives.  So while this collection of
+  !! linear interpolation functions provide a continuous approximation over the integration interval, this approximation is not
+  !! generally smooth.
+  !!
+  !! Regardless of the interpolation method, the new values for @f$\mathbf{\tilde{y}}'(t)@f$ are directly computed as
+  !!    @f[ \mathbf{f}(t, \mathbf{\tilde{y}}) @f]
+  !! using the @p deq and @p param arguments.
+  !!
   !! @param status           Exit status
   !!                           | Value     | Description
   !!                           |-----------|------------
@@ -1316,9 +1363,9 @@ contains
   !!                           | 1331      | Solution @f$t@f$ value out of bounds
   !!                           | 1332:1347 | Unknown error in this routine
   !! @param istats           Integer statistics for run
-  !!                          - See: mrkiss_utils::print_istats() for description of elements.
+  !!                          - See: mrkiss_config::istats_strs for a description of elements.
   !!                          - Elements this routine updates:
-  !!                          - mrkiss_config::isi_num_pts
+  !!                            - mrkiss_config::isi_num_pts
   !! @param solution         Array for new solution.
   !!                          - This array *must* have a populated @f$t@f$ sequence in solution(1,:)
   !!                          - New @f$\mathbf{y}@f$ values are interpolated.  New @f$\mathbf{y}'@f$ values are computed from @p deq.
