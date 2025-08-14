@@ -55,10 +55,10 @@ module mrkiss_solvers_nt
   implicit none
   private
 
-  public :: one_step_rk4, one_step_rkf45, one_step_dp54                                         ! Test one step solvers
-  public :: one_step_etab, one_step_stab, one_richardson_step_stab                              ! One step solvers
-  public :: steps_fixed_stab, steps_condy_stab, steps_sloppy_condy_stab, steps_adapt_etab    ! Many step solvers
-  public :: steps_points_stab, interpolate_solution                                                ! Meta-many step solvers
+  public :: one_step_rk4, one_step_rkf45, one_step_dp54                                   ! Test one step solvers
+  public :: one_step_etab, one_step_stab, one_richardson_step_stab                        ! One step solvers
+  public :: steps_fixed_stab, steps_condy_stab, steps_sloppy_condy_stab, steps_adapt_etab ! Many step solvers
+  public :: steps_points_stab, interpolate_solution                                       ! Meta-many step solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type for ODE dydt functions.
@@ -85,18 +85,18 @@ module mrkiss_solvers_nt
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Type step processing subroutine.
   !!
-  !! @param status      Exit status
-  !!                      | Value     | Description
-  !!                      |-----------|------------
-  !!                      | -inf-0    | Everything worked
-  !!                      | 256-511   | Error in this routine
-  !! @param end_run     Return used to trigger the calling solver to stop the run when `end_run` is positive.
-  !! @param sdf_flags   Return used to trigger SDF run in the calling solver, and pass information to `sdf_iface` function
-  !! @param new_t_delta Returns a new value for @f$\Delta{t}@f$.  Used by calling solver if positive.
-  !! @param pnt_idx     Index of current point in `solution`
-  !! @param solution    Solution
-  !! @param t_delta     Value from this step's @f$\Delta{t}@f$
-  !! @param y_delta     Value from for this step's @f$\mathbf{\Delta{y}}@f$
+  !! @param status       Exit status
+  !!                       | Value     | Description
+  !!                       |-----------|------------
+  !!                       | -inf-0    | Everything worked
+  !!                       | 256-511   | Error in this routine
+  !! @param end_run      Return used to trigger the calling solver to stop the run when `end_run` is positive.
+  !! @param sdf_flags    Return used to trigger SDF run in the calling solver, and pass information to `sdf_iface` function
+  !! @param new_t_delta  Returns a new value for @f$\Delta{t}@f$.  Used by calling solver if positive.
+  !! @param pnt_idx      Index of current point in `solution`
+  !! @param solution     Solution
+  !! @param t_delta      Value from this step's @f$\Delta{t}@f$
+  !! @param y_delta      Value from for this step's @f$\mathbf{\Delta{y}}@f$
   !!
   abstract interface
      subroutine stepp_iface(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -141,7 +141,7 @@ contains
   !> @name One Step Solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Compute one step of a embedded RK method expressed as a Butcher Tableau.
+  !> Compute one step of a embedded Runge-Kutta method expressed as a Butcher Tableau.
   !!
   !! @param status    Exit status
   !!                    | Value     | Description
@@ -198,7 +198,7 @@ contains
   end subroutine one_step_etab
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Compute one step of a non-embedded RK method expressed as a Butcher Tableau. @anchor one_step_stab_nt
+  !> Compute one step of a non-embedded Runge-Kutta method expressed as a Butcher Tableau. @anchor one_step_stab_nt
   !!
   !! @param status   Exit status
   !!                   | Value     | Description
@@ -282,7 +282,7 @@ contains
   !! @param a        The butcher tableau @f$\mathbf{a}@f$ matrix
   !! @param b        The butcher tableau @f$\mathbf{\check{b}}@f$ vector
   !! @param c        The butcher tableau @f$\mathbf{c}@f$ vector
-  !! @param p        The order for the RK method in the butcher tableau
+  !! @param p        The order for the Runge-Kutta method in the butcher tableau
   !! @param t_delta  The @f$\Delta{t}@f$ value for this step.
   !!
   subroutine one_richardson_step_stab(status, y_delta, dy, deq, y, param, a, b, c, p, t_delta)
@@ -319,7 +319,7 @@ contains
   !> @name One Step Test Solvers
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Compute one step of RK (mrkiss_erk_kutta_4)
+  !> Compute one step of RK4 -- the classical 4th order Runge-Kutta method (mrkiss_erk_kutta_4).
   !!
   !! @param status   Exit status
   !!                   | Value     | Description
@@ -358,7 +358,7 @@ contains
   end subroutine one_step_rk4
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !> Compute one step of RKF45 (mrkiss_eerk_fehlberg_4_5)
+  !> Compute one step of RKF45 (mrkiss_eerk_fehlberg_4_5).
   !!
   !! @param status    Exit status
   !!                    | Value     | Description
@@ -390,7 +390,7 @@ contains
     if (status > 0) return
     dy = k1
     call deq(status, k2,   y + t_delta * ( k1*1.0_rk/4.0_rk), param)
-    if (status > 0) return                            
+    if (status > 0) return
     call deq(status, k3,   y + t_delta * ( k1*3.0_rk/32.0_rk      + k2*9.0_rk/32.0_rk), param)
     if (status > 0) return
     call deq(status, k4, y + t_delta * ( k1*1932.0_rk/2197.0_rk - k2*7200.0_rk/2197.0_rk + k3*7296.0_rk/2197.0_rk), param)
@@ -439,7 +439,7 @@ contains
     call deq(status, k2,  y + t_delta * (k1*1.0_rk/5.0_rk), param)
     if (status > 0) return
     call deq(status, k3, y + t_delta * (k1*3.0_rk/40.0_rk       + k2*9.0_rk/40.0_rk), param)
-    if (status > 0) return                                                                
+    if (status > 0) return
     call deq(status, k4,  y + t_delta * (k1*44.0_rk/45.0_rk      - k2*56.0_rk/15.0_rk      + k3*32.0_rk/9.0_rk), param)
     if (status > 0) return
     call deq(status, k5,  y + t_delta * (k1*19372.0_rk/6561.0_rk - k2*25360.0_rk/2187.0_rk + k3*64448.0_rk/6561.0_rk - k4*212.0_rk/729.0_rk), param)
@@ -1320,12 +1320,12 @@ contains
   !!      \mathbf{c_1} & = & \Delta{t}\cdot\mathbf{y}'(t_0) \\
   !!      \mathbf{c_0} & = & \mathbf{y}(t_0)
   !!    \end{array} @f]
-  !! Note that 
+  !! Note that
   !!    @f[ \begin{array}{lcl}
   !!     \mathbf{\tilde{y}}(t_0) & = & \mathbf{y}(t_0)   \\
   !!     \mathbf{\tilde{y}}(t_1) & = & \mathbf{y}(t_1)   \\
   !!     \mathbf{\tilde{y}}'(t_0) & = & \mathbf{y}'(t_0) \\
-  !!     \mathbf{\tilde{y}}'(t_1) & = & \mathbf{y}'(t_1) 
+  !!     \mathbf{\tilde{y}}'(t_1) & = & \mathbf{y}'(t_1)
   !!    \end{array} @f]
   !! And thus the collection of Hermite approximation polynomials produce a is @f$ \mathcal{C}^\infty@f$ approximation over the
   !! entire solution interval.  Also note that the Hermite solution provides a solution of @f$\mathcal{O}(3)@f$.
