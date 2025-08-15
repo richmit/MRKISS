@@ -467,7 +467,7 @@ contains
   !! @param from_o     Starting value for @f$t@f$
   !! @param to_o       Ending value for @f$t@f$
   !! @param step_o     Delta between valeus
-  !! @param max_pts_o  Number of points to produce.
+  !! @param max_pts_o  Maximum number of points to produce.  Default: `size(t, 1)`
   !!
   subroutine seq(status, t, from_o, to_o, step_o, max_pts_o)
     use :: mrkiss_config, only: rk, zero_epsilon
