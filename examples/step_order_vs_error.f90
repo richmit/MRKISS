@@ -30,6 +30,17 @@
 !!  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 !!  OF THE POSSIBILITY OF SUCH DAMAGE.
 !!  @endparblock
+!! @filedetails   
+!!
+!!  In this example we solve the same equation with two different Runge-Kutta methods -- the classical @f$\mathcal{O}(4)@f$
+!!  method and a newer @f$\mathcal{O}(0)@f$ method.  For each method we use 10 different step sizes.
+!!  
+!!  The system we solve:
+!!     @f[ y'=t\cos(t^2) \,\,\,\mathrm{with}\,\,\, y(0)=0 @f]  
+!!  
+!!  We can solve this equation symbolically:
+!!     @f[ y'\frac{\sin(t^2)}{2} @f]  
+!!  
 !.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------

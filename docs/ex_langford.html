@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-10 Sun 13:42 -->
+<!-- 2025-08-15 Fri 14:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-10 13:42:51</i></td>
+<td class="org-left"><i>2025-08-15 14:06:11</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-10 13:42:52</i></td>
+<td class="org-left"><i>2025-08-15 14:07:59</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,16 +302,17 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
+<div class="org" id="org6eb0554">
 <p>
 The Langford attractor is governed by the following equations:
 </p>
 
 <p>
 \[ \begin{align*}
-      \frac{\mathrm{d}x}{\mathrm{d}t} & = (z - \beta) x - \omega y \\                                                  
-      \frac{\mathrm{d}y}{\mathrm{d}t} & = \omega x + (z - \beta) y \\                                                  
-      \frac{\mathrm{d}z}{\mathrm{d}t} & = \lambda + \alpha z - \frac{z^3}{3} - (x^2 + y^2) (1 + \rho z) + \epsilon z x^3
- \end{align*} \]
+        \frac{\mathrm{d}x}{\mathrm{d}t} & = (z - \beta) x - \omega y \\                                                  
+        \frac{\mathrm{d}y}{\mathrm{d}t} & = \omega x + (z - \beta) y \\                                                  
+        \frac{\mathrm{d}z}{\mathrm{d}t} & = \lambda + \alpha z - \frac{z^3}{3} - (x^2 + y^2) (1 + \rho z) + \epsilon z x^3
+   \end{align*} \]
 </p>
 
 <p>
@@ -320,13 +321,13 @@ With the following parameter values:
 
 <p>
 \[ \begin{align*}
-      \alpha   & = 0.95 \\
-      \beta    & = 0.70 \\
-      \lambda  & = 0.60 \\
-      \omega   & = 3.50 \\
-      \rho     & = 0.25 \\
-      \epsilon & = 0.10
- \end{align*} \]
+        \alpha   & = 0.95 \\
+        \beta    & = 0.70 \\
+        \lambda  & = 0.60 \\
+        \omega   & = 3.50 \\
+        \rho     & = 0.25 \\
+        \epsilon & = 0.10
+   \end{align*} \]
 </p>
 
 <p>
@@ -335,38 +336,88 @@ And with the following initial conditions:
 
 <p>
 \[ \begin{align*}
-      x(0) & = 0.1 \\                                                  
-      y(0) & = 0.0 \\                                                  
-      z(0) & = 0.0
- \end{align*} \]
+        x(0) & = 0.1 \\                                                  
+        y(0) & = 0.0 \\                                                  
+        z(0) & = 0.0
+   \end{align*} \]
 </p>
+
+</div>
 
 <p>
-Here is an image created with Paraview:
+We can translate that equation to code like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, y, param)
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:), param(:)</span>
+  dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), 
+          param(4)*y(1) + (y(3) - param(2))*y(2), 
+          param(3) + param(1)*y(3) - (y(3)**3/3) - (y(1)**2+y(2)**2)*(1 + param(5)*y(3)) + param(6)*y(3)*y(1)**3]
+  status = 0
+<span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
+</pre>
+</div>
+
+<p>
+We can solve and output the solution to a CSV file like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90">y_iv = [0.1_rk, 0.0_rk, 0.0_rk]
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"langford_fixed.csv"</span>, end_o=istats(1))
+</pre>
+</div>
+
+<p>
+If we then load the data into Paraview, we get something like this:
 </p>
 
 
-<div id="org39d56ea" class="figure">
+<div id="org13dacdf" class="figure">
 <p><img src="pics/langford_pv_fixed.png" alt="langford_pv_fixed.png" width="90%" align="center" />
 </p>
 </div>
 
 <p>
-And another created with GNUplot:
+We could also graph it with GNUplot:
 </p>
 
 
-<div id="org80f177a" class="figure">
+<div id="org4c730a6" class="figure">
 <p><img src="pics/langford_fixed.png" alt="langford_fixed.png" width="90%" align="center" />
 </p>
 </div>
 
 <p>
-In this program we seed the IVP with 20 IVs on a circle, and trace all the solutions.  The result looks like this:
+Just for fun, let's solve the IVP 20 times with diffrent initial values on a little circle on the central "stalk"
+structure.  We can do that, in parallel, with this little bit of code:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-f90"><span style="color: #ffa500;">!</span><span style="color: #ff7f24;">$OMP PARALLEL DO private(solution, status, istats, filename, i, y_iv)</span>
+<span style="color: #00ffff;">do</span> i=0, num_lines-1
+   y_iv(1) = <span style="color: #00ffff;">cos</span>(i * 2 * pi / num_lines) * 0.15_rk + 0.2_rk
+   y_iv(2) = <span style="color: #00ffff;">sin</span>(i * 2 * pi / num_lines) * 0.15_rk
+   y_iv(3) = 0.05_rk
+   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
+   <span style="color: #00ffff;">write</span> (filename, <span style="color: #fa8072;">'("langford_",i2.2,".csv")'</span>) i
+   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #00ffff;">trim</span>(filename), end_o=istats(1), tag_o=i)
+   <span style="color: #00ffff;">print</span> *, <span style="color: #fa8072;">'Line Complete: '</span>, i
+<span style="color: #00ffff;">end do</span>
+<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">$OMP END PARALLEL DO</span>
+</pre>
+</div>
+
+<p>
+We can take the resulting 20 CSV files, load them up into Paraview, and animate the results:
 </p>
 
 
-<div id="orgf3b2c47" class="figure">
+<div id="org80a764b" class="figure">
 <p><img src="pics/langford_mov_050.gif" alt="langford_mov_050.gif" align="center" />
 </p>
 </div>
@@ -380,9 +431,7 @@ In this program we seed the IVP with 20 IVs on a circle, and trace all the solut
 <h3 id="fortrancode"><span class="section-number-3">2.1.</span> Fortran Code</h3>
 <div class="outline-text-3" id="text-fortrancode">
 <div class="org-src-container">
-<pre class="src src-f90">
-<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
-<span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">langford</span>
+<pre class="src src-f90"><span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">langford</span>
   <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, istats_size
   <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution
@@ -423,9 +472,10 @@ In this program we seed the IVP with 20 IVs on a circle, and trace all the solut
   <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>(status, dydt, y, param)
     <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
-    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:)</span>
-    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> param(:)</span>
-    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), param(4) * y(1) + (y(3) - param(2)) * y(2), param(3) + param(1) * y(3) - (y(3)**3 / 3) - (y(1)**2 + y(2)**2) * (1 + param(5) * y(3)) + param(6) * y(3) * y(1)**3]
+    <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:), param(:)</span>
+    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), 
+            param(4)*y(1) + (y(3) - param(2))*y(2), 
+            param(3) + param(1)*y(3) - (y(3)**3/3) - (y(1)**2+y(2)**2)*(1 + param(5)*y(3)) + param(6)*y(3)*y(1)**3]
     status = 0
   <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
 
@@ -442,9 +492,7 @@ The images were produced with GNUplot.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R">
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
-set encoding utf8
+<pre class="src src-R">set encoding utf8
 set termoption noenhanced
 set datafile separator <span style="color: #fa8072;">','</span>
 set margins 0, 0, 0, 0
@@ -472,9 +520,7 @@ The multiple curve graph may be explored interactively with the following code.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R">
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
-set encoding utf8
+<pre class="src src-R">set encoding utf8
 set termoption noenhanced
 set datafile separator <span style="color: #fa8072;">','</span>
 unset xlabel

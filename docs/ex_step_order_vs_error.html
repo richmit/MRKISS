@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-10 Sun 13:43 -->
+<!-- 2025-08-15 Fri 14:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library Example</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-10 13:43:16</i></td>
+<td class="org-left"><i>2025-08-15 14:06:40</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-10 13:43:17</i></td>
+<td class="org-left"><i>2025-08-15 14:08:11</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,34 +302,37 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
+<div class="org" id="org2a2c596">
 <p>
-This example solves a test system:
+In this example we solve the same equation with two different Runge-Kutta methods &#x2013; the classical \(\mathcal{O}(4)\)
+method and a newer \(\mathcal{O}(0)\) method.  For each method we use 10 different step sizes.
 </p>
 
 <p>
-\[ y'=t\cos(t^2) \,\,\,\mathrm{with}\,\,\, y(0)=0 \]  
+The system we solve:
+   \[ y'=t\cos(t^2) \,\,\,\mathrm{with}\,\,\, y(0)=0 \]  
 </p>
 
 <p>
 We can solve this equation symbolically:
+   \[ y'\frac{\sin(t^2)}{2} \]  
 </p>
 
-<p>
-\[ y'\frac{\sin(t^2)}{2} \]  
-</p>
+</div>
+
 
 <p>
 Here are a copule plots
 </p>
 
 
-<div id="org9934fa2" class="figure">
+<div id="org8e41956" class="figure">
 <p><img src="pics/step_order_vs_error_soly.png" alt="step_order_vs_error_soly.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="org778a7b7" class="figure">
+<div id="org0b81583" class="figure">
 <p><img src="pics/step_order_vs_error_sold.png" alt="step_order_vs_error_sold.png" width="90%" align="center" />
 </p>
 </div>
@@ -340,7 +343,7 @@ plot:
 </p>
 
 
-<div id="orgeeaa4f4" class="figure">
+<div id="org2e11488" class="figure">
 <p><img src="pics/step_order_vs_error_err.png" alt="step_order_vs_error_err.png" width="90%" align="center" />
 </p>
 </div>
@@ -354,9 +357,7 @@ plot:
 <h3 id="fortrancode"><span class="section-number-3">2.1.</span> Fortran Code</h3>
 <div class="outline-text-3" id="text-fortrancode">
 <div class="org-src-container">
-<pre class="src src-f90">
-<span style="color: #ffa500;">!</span><span style="color: #ff7f24;">-------------------------------------------------------------------------------------------------</span>
-<span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">step_order_vs_error</span>
+<pre class="src src-f90"><span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">step_order_vs_error</span>
 
   <span style="color: #00ffff;">use</span> :: mrkiss_config,          <span style="color: #00ffff;">only</span>: rk, istats_size
   <span style="color: #00ffff;">use</span> :: mrkiss_solvers_wt,      <span style="color: #00ffff;">only</span>: steps_fixed_stab, steps_points_stab
@@ -415,15 +416,11 @@ The images were produced with R.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-R">
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
-crvDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(t=seq(0,2*pi, length.out=500)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(truy1=sin(t*t)/2)
+<pre class="src src-R">crvDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(t=seq(0,2*pi, length.out=500)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(truy1=sin(t*t)/2)
 drvDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(t=seq(0,2*pi, length.out=500)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(trudy1=t*cos(t*t))
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 truDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> data.table(t=seq(0,2*pi, length.out=10)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> transmute(truy1=sin(t*t)/2)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 solDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> do.call(rbind, lapply(list.files(pattern = <span style="color: #fa8072;">"^step_order_vs_error_[0-9][0-9]_[0-9][0-9]\\.csv$"</span>), 
                                 <span style="color: #00ffff;">function</span>(f) { 
                                   rko=first(strsplit(f, <span style="color: #fa8072;">"[_.]"</span>))[5];
@@ -432,19 +429,16 @@ solDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> do.call(rbi
                                     mutate(err=abs(y1-truy1), order=rko, steps_per_point=spp); })) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
   filter(i&gt;1 &amp; steps_per_point!=<span style="color: #fa8072;">'01'</span>)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(crvDat) +
   geom_line(aes(x=t, y=truy1)) +
   labs(title=<span style="color: #fa8072;">'Solution'</span>, x=<span style="color: #fa8072;">'t'</span>, y=<span style="color: #fa8072;">'y'</span>) 
 ggsave(filename=<span style="color: #fa8072;">'step_order_vs_error_soly.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(drvDat) +
   geom_line(aes(x=t, y=trudy1)) +
   labs(title=<span style="color: #fa8072;">'Solution Derivative'</span>, x=<span style="color: #fa8072;">'t'</span>, y=<span style="color: #fa8072;">'y'</span>) 
 ggsave(filename=<span style="color: #fa8072;">'step_order_vs_error_sold.png'</span>, plot=gp, width=1024, height=800, units=<span style="color: #fa8072;">'px'</span>, dpi=150)
 
-<span style="color: #ffa500;">#</span><span style="color: #ff7f24;">---------------------------------------------------------------------------------------------------------------------------</span>
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(solDat) +
   geom_line( aes(x=t, y=err, shape=order, col=steps_per_point)) +
   geom_point(aes(x=t, y=err, shape=order, col=steps_per_point)) +

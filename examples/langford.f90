@@ -33,13 +33,32 @@
 !!  @endparblock
 !! @filedetails   
 !!
-!!  Run with various thread counts on linux (eshell):
-!!    bash -c 'export OMP_NUM_THREADS=16; time ./langford'
-!!  Run with various thread counts on windows (eshell):
-!!    bash -c 'export OMP_NUM_THREADS=16; time ./langford.exe '
-!!  Convert CSVs to VTUs (eshell):
-!!    for f in langford_??.csv {~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb $f points:4:5:6 time:3 tag:1 step:2 derivative:7:8:9 > $(file-name-sans-extension f).vtu}
-!!    ~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb langford_fixed.csv points:3:4:5 time:2 step:1 derivative:6:7:8 > langford_fixed.vtu
+!!  The Langford attractor is governed by the following equations:
+!!  
+!!   @f[ \begin{align*}
+!!        \frac{\mathrm{d}x}{\mathrm{d}t} & = (z - \beta) x - \omega y \\                                                  
+!!        \frac{\mathrm{d}y}{\mathrm{d}t} & = \omega x + (z - \beta) y \\                                                  
+!!        \frac{\mathrm{d}z}{\mathrm{d}t} & = \lambda + \alpha z - \frac{z^3}{3} - (x^2 + y^2) (1 + \rho z) + \epsilon z x^3
+!!   \end{align*} @f]
+!!  
+!!  With the following parameter values:
+!!  
+!!   @f[ \begin{align*}
+!!        \alpha   & = 0.95 \\
+!!        \beta    & = 0.70 \\
+!!        \lambda  & = 0.60 \\
+!!        \omega   & = 3.50 \\
+!!        \rho     & = 0.25 \\
+!!        \epsilon & = 0.10
+!!   \end{align*} @f]
+!!  
+!!  And with the following initial conditions:
+!!  
+!!   @f[ \begin{align*}
+!!        x(0) & = 0.1 \\                                                  
+!!        y(0) & = 0.0 \\                                                  
+!!        z(0) & = 0.0
+!!   \end{align*} @f]
 !!
 !.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
@@ -64,10 +83,13 @@ program langford
   integer                   :: status, istats(istats_size), i
   character(len=512)        :: filename
 
+  ! SS-BEGIN:solver-call:
   y_iv = [0.1_rk, 0.0_rk, 0.0_rk]
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
   call print_solution(status, solution, filename_o="langford_fixed.csv", end_o=istats(1))
+  ! SS-END:solver-call:
 
+  ! SS-BEGIN:par-solver:
   !$OMP PARALLEL DO private(solution, status, istats, filename, i, y_iv)
   do i=0, num_lines-1
      y_iv(1) = cos(i * 2 * pi / num_lines) * 0.15_rk + 0.2_rk
@@ -79,16 +101,20 @@ program langford
      print *, 'Line Complete: ', i
   end do
   !$OMP END PARALLEL DO
+  ! SS-END:par-solver:
 
 contains
   
+  ! SS-BEGIN:eq:
   subroutine eq(status, dydt, y, param)
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
-    real(kind=rk),    intent(in)  :: y(:)
-    real(kind=rk),    intent(in)  :: param(:)
-    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), param(4) * y(1) + (y(3) - param(2)) * y(2), param(3) + param(1) * y(3) - (y(3)**3 / 3) - (y(1)**2 + y(2)**2) * (1 + param(5) * y(3)) + param(6) * y(3) * y(1)**3]
+    real(kind=rk),    intent(in)  :: y(:), param(:)
+    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), 
+            param(4)*y(1) + (y(3) - param(2))*y(2), 
+            param(3) + param(1)*y(3) - (y(3)**3/3) - (y(1)**2+y(2)**2)*(1 + param(5)*y(3)) + param(6)*y(3)*y(1)**3]
     status = 0
   end subroutine eq
+  ! SS-END:eq:
 
 end program langford

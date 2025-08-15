@@ -33,31 +33,49 @@
 !! @filedetails   
 !!
 !!  This is one of my favorite IVP example problems.
+!!  
+!!  This is a dimensionless, restricted three gravitational body problem.  The Earth is stationary at the origin.  The Moon
+!!  orbits the Earth at a radius of $1$ and is at @f$(1,0)@f$ at @f$t=0@f$.  The mass ratio is @f$\frac{100}{8145}@f$.  The
+!!  position, @f$(x_1,x_2)@f$, and velocity, @f$(v_1,v_2)@f$, are governed by the following differential equation:
+!!  
+!!   @f[\begin{align*}
+!!       \frac{\mathrm{d}v_1}{\mathrm{d}t} & = v_1 \\
+!!       \frac{\mathrm{d}v_2}{\mathrm{d}t} & = v_2 \\
+!!       \frac{\mathrm{d}x_1}{\mathrm{d}t} & =   2  v_2 + x_1 - \frac{\mu (x_1 + \mu -1)}{D_1} - \frac{(1 - \mu)  (x_1 + \mu)}{D_2} \\
+!!       \frac{\mathrm{d}x_2}{\mathrm{d}t} & =  -2  v_1 + x_2 - \frac{\mu  x_2}{D_1} - \frac{(1 - \mu) x_2}{D_2} 
+!!   \end{align*}@f]
+!!  
+!!  Where @f$D_1@f$ and @f$D_2@f$ are defined as:
+!!  
+!!   @f[\begin{align*}
+!!       D_1 & = \sqrt{\left(x_2^2 + (x_1 + \mu - 1)^2\right)^3} \\
+!!       D_2 & = \sqrt{\left(x_2^2 + (x_1 + \mu)\right)^3}         
+!!   \end{align*}@f]
+!!  
+!!  We solve the equations with the following initial values:
+!!  
+!!   @f[\begin{align*}
+!!      (x_1,x_2) &=  \left(\frac{497}{500}, 0\right) \\
+!!      (v_1,v_2) & = (0, -2.0015851063790825224)  
+!!   \end{align*}@f]
+!!  
+!!  Under these conditions the satellite will return to it's initial position after completing a three lobed orbit at
+!!  @f$t=17.06521656015796@f$.
 !!
-!!  The earth is at \((0, 0)\).  The moon is in a circular orbit of the earth at a distance of \(1\).  At the start of the
-!!  simulation, the moon is located at \((1,0)\).  We have a small satellite starting out at \((0.99400, 0.0)\) with an initial
-!!  velocity of \((0.0, -2.0015851063790825224)\).  With these initial conditions, the satellite will return to it's initial
-!!  position after completing a three lobed orbit at \(t=17.06521656015796\).
+!! Another interesting set of initial conditions leads to a five lobe orbit at @f$t=19.14045706162071@f$:
 !!
-!!  This example demonstrates:
-!!    - Fixed step size in t space using steps_fixed_stab() 
-!!    - Fixed step size in y space using steps_condy_stab() 
-!!    - Typical adaptive step use case via steps_adapt_etab()
-!!    - Exit after a maximum t value is reached via stepp_o = sp_max_t()
-!!    - Rough scaling of t_delta in order to limit length of a sub-vector of y_delta via stepp_o = sp_sloppy_y_delta_len_max()
-!!    - Find intersection with moon orbit via stepp_o = sp_cross_moon() & sdf_o = sdf_cross_moon() 
-!!
-!!  Interesting cases:
-!!    - fiveLobe   y_iv: [0.87978_rk, 0.0_rk, 0.0_rk, -0.3797000000000000000_rk] t_iv: 0.0_rk t_end: 19.14045706162071_rk
-!!    - threeLobe  y_iv: [0.99400_rk, 0.0_rk, 0.0_rk, -2.0015851063790825224_rk] t_iv: 0.0_rk t_end: 17.06521656015796_rk
+!!   @f[\begin{align*}
+!!      (x_1,x_2) &=  \left(0.87978, 0\right) \\
+!!      (v_1,v_2) & = (0, -0.3797)  
+!!   \end{align*}@f]
 !!
 !!  References:
-!!    Arenstorf (1963); Periodic Solutions of the Restricted Three Body Problem Representing Analytic Continuations 
-!!        of Keplerian Elliptic Motions; American J. of Math. 85 (1); p27-35; zotero://select/items/0_JPDZ7KNL
-!!    Butcher (2008); Numerical Methods for Ordinary Differential Equations; p29-30; zotero://select/items/0_8V2GY73E
-!!    Butcher (2016); Numerical Methods for Ordinary Differential Equations; p28-31; zotero://select/items/0_V7UTIRPT
-!!    Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p129-130; 
-!!        zotero://select/items/0_VLZWN2CT
+!!   - Arenstorf (1963); Periodic Solutions of the Restricted Three Body Problem Representing Analytic Continuations 
+!!       of Keplerian Elliptic Motions; American J. of Math. 85 (1); p27-35; zotero://select/items/0_JPDZ7KNL
+!!   - Butcher (2008); Numerical Methods for Ordinary Differential Equations; p29-30; zotero://select/items/0_8V2GY73E
+!!   - Butcher (2016); Numerical Methods for Ordinary Differential Equations; p28-31; zotero://select/items/0_V7UTIRPT
+!!   - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p129-130; 
+!!       zotero://select/items/0_VLZWN2CT
 !!
 !.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
@@ -87,77 +105,77 @@ program three_body
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run V(9)"
-  ! BEGIN:steps_fixed_stab:
+  ! SS-BEGIN:steps_fixed_stab:
   call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="tree_body_steps_fixed_stab.csv", end_o=istats1(1))
-  ! END:steps_fixed_stab:
+  ! SS-END:steps_fixed_stab:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run DP(5)"
-  ! BEGIN:steps_fixed_stab-dp:
+  ! SS-BEGIN:steps_fixed_stab-dp:
   call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="steps_fixed_stab-dp.csv", end_o=istats1(1))
-  ! END:steps_fixed_stab-dp:
+  ! SS-END:steps_fixed_stab-dp:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed y_delta run"
-  ! BEGIN:steps_condy_stab:
+  ! SS-BEGIN:steps_condy_stab:
   call steps_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
 
   call print_solution(status, sol1, filename_o="three_body_steps_condy_stab.csv", end_o=istats1(1))
-  ! END:steps_condy_stab:
+  ! SS-END:steps_condy_stab:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Sloppy Fixed y_delta run"
-  ! BEGIN:steps_sloppy_condy_stab:
+  ! SS-BEGIN:steps_sloppy_condy_stab:
   call steps_sloppy_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="steps_sloppy_condy_stab.csv", end_o=istats1(1))
-  ! END:steps_sloppy_condy_stab:
+  ! SS-END:steps_sloppy_condy_stab:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run"
-  ! BEGIN:steps_adapt_etab-std:
+  ! SS-BEGIN:steps_adapt_etab-std:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-std.csv", end_o=istats1(1))
-  ! END:steps_adapt_etab-std:
+  ! SS-END:steps_adapt_etab-std:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive hermite interpolation run"
   sol2 = 0
-  ! BEGIN:steps_adapt_int_hermite:
-  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                        ! Create new t values
+  ! SS-BEGIN:steps_adapt_int_hermite:
+  call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                     ! Create new t values
   print '(a)', status_to_message(status)
   call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1)) ! Preform the interpolation
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated.csv")
-  ! END:steps_adapt_int_hermite:
+  ! SS-END:steps_adapt_int_hermite:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive linear interpolation run"
   sol2 = 0
-  ! BEGIN:steps_adapt_int_linear:
+  ! SS-BEGIN:steps_adapt_int_linear:
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);
   call interpolate_solution(status, istats2, sol2, sol1, eq, param, num_src_pts_o=istats1(1), linear_interp_o=.true.)
   print '(a)', status_to_message(status)
   call print_solution(status, sol2, filename_o="three_body_steps_adapt_std_interpolated_lin.csv")
-  ! END:steps_adapt_int_linear:
+  ! SS-END:steps_adapt_int_linear:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max y_delta length"
-  ! BEGIN:steps_adapt_etab-fix-delta-steps:
+  ! SS-BEGIN:steps_adapt_etab-fix-delta-steps:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
@@ -165,11 +183,11 @@ program three_body
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-fix-delta-steps.csv", end_o=istats1(1))
-  ! END:steps_adapt_etab-fix-delta-steps:
+  ! SS-END:steps_adapt_etab-fix-delta-steps:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max t"
-  ! BEGIN:steps_adapt_etab-pho-t-max:
+  ! SS-BEGIN:steps_adapt_etab-pho-t-max:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
@@ -177,11 +195,11 @@ program three_body
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-pho-t-max.csv", end_o=istats1(1))
-  ! END:steps_adapt_etab-pho-t-max:
+  ! SS-END:steps_adapt_etab-pho-t-max:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w moon orbit hit"
-  ! BEGIN:steps_adapt_etab-isct:
+  ! SS-BEGIN:steps_adapt_etab-isct:
   call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
@@ -189,7 +207,7 @@ program three_body
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-isct.csv", end_o=istats1(1))
-  ! END:steps_adapt_etab-isct:
+  ! SS-END:steps_adapt_etab-isct:
 
 contains
   
@@ -229,7 +247,7 @@ contains
     status = 0
   end subroutine eq
   
-  ! BEGIN:steps_adapt_etab-pho-t-max-stepp:
+  ! SS-BEGIN:steps_adapt_etab-pho-t-max-stepp:
   ! Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer,          intent(out) :: status
@@ -248,9 +266,9 @@ contains
        end_run = 0
     end if
   end subroutine sp_max_t
-  ! END:steps_adapt_etab-pho-t-max-stepp:
+  ! SS-END:steps_adapt_etab-pho-t-max-stepp:
 
-  ! BEGIN:steps_adapt_etab-fix-delta-stepp:
+  ! SS-BEGIN:steps_adapt_etab-fix-delta-stepp:
   ! Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.
   ! It is sloppy because we assume t_delta is linearly proportional to y_delta_len
   subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -272,9 +290,9 @@ contains
        new_t_delta = -1.0_rk
     end if
   end subroutine sp_sloppy_y_delta_len_max
-  ! END:steps_adapt_etab-fix-delta-stepp:
+  ! SS-END:steps_adapt_etab-fix-delta-stepp:
 
-  ! BEGIN:steps_adapt_etab-isct-stepp:
+  ! SS-BEGIN:steps_adapt_etab-isct-stepp:
   ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works 
   ! in conjunction with sdf_cross_moon().
   subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -302,9 +320,9 @@ contains
        end if
     end if
   end subroutine sp_cross_moon
-  ! END:steps_adapt_etab-isct-stepp:
+  ! SS-END:steps_adapt_etab-isct-stepp:
 
-  ! BEGIN:steps_adapt_etab-isct-sdf:
+  ! SS-BEGIN:steps_adapt_etab-isct-sdf:
   ! Example SDF subroutine to isolate a point on a solution segment that crosses the unit circle.
   subroutine sdf_cross_moon(status, dist, sdf_flags, t, y)
     use mrkiss_config, only: rk
@@ -316,6 +334,6 @@ contains
     status = 0
     dist = 1.0_rk - norm2(y(1:2))
   end subroutine sdf_cross_moon
-  ! END:steps_adapt_etab-isct-sdf:
+  ! SS-END:steps_adapt_etab-isct-sdf:
 
 end program three_body
