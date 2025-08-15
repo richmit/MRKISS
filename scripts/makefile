@@ -1,4 +1,4 @@
 
 
-float_diff.rb : ../../utils/float_diff.rb
-	cp ../../utils/float_diff.rb float_diff.rb
+float_diff.rb : ~/MJR/core/codeBits/bin/float_diff.rb
+	cp ~/MJR/core/codeBits/bin/float_diff.rb float_diff.rb

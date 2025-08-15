@@ -4,10 +4,9 @@
 ##
 # @file      float_diff.rb
 # @author    Mitch Richling http://www.mitchr.me/
-# @date      2024-08-13
 # @brief     File diff comprehending floating point numbers.@EOL
 # @std       Ruby 3
-# @see       
+# @see       https://github.com/richmit/codeBits/
 # @copyright 
 #  @parblock
 #  Copyright (c) 2024, Mitchell Jay Richling <http://www.mitchr.me/> All rights reserved.
@@ -99,10 +98,12 @@ file_lines = ARGV.map.with_index do |fname, fnum|
   open(fname, "r") do |file|
     tmp = file.readlines()
     tmp.select! { |line| line.match(lines_re) };
-    tmp.each do |line| 
-      gsubs.each do |num, from, to| 
-        if ((num==0) || ((num-1)==fnum)) then
-          line.gsub!(from, to)
+    if ( !(gsubs.empty?)) then
+      tmp.each do |line| 
+        gsubs.each do |num, from, to| 
+          if ((num==0) || ((num-1)==fnum)) then
+            line.gsub!(from, to)
+          end
         end
       end
     end
