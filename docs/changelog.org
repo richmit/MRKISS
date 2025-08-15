@@ -57,7 +57,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Deprecated functionality
     - N/A
   - New functionality
-    - seq has new argument: num_pts_o
+    - seq has new argument: max_pts_o
   - Documentation
     - All routines have full Doxygen documentation
     - Added inline source to small Butcher Tableaux

@@ -467,22 +467,22 @@ contains
   !! @param from_o     Starting value for @f$t@f$
   !! @param to_o       Ending value for @f$t@f$
   !! @param step_o     Delta between valeus
-  !! @param num_pts_o  Number of points to produce.
+  !! @param max_pts_o  Number of points to produce.
   !!
-  subroutine seq(status, t, from_o, to_o, step_o, num_pts_o)
+  subroutine seq(status, t, from_o, to_o, step_o, max_pts_o)
     use :: mrkiss_config, only: rk, zero_epsilon
     implicit none
     ! Arguments
     integer,                 intent(out) :: status
     real(kind=rk),           intent(out) :: t(:)
     real(kind=rk), optional, intent(in)  :: from_o, to_o, step_o
-    integer,       optional, intent(in)  :: num_pts_o
+    integer,       optional, intent(in)  :: max_pts_o
     ! Variables
-    integer                              :: n_v, i, num_pts, num_args
+    integer                              :: n_v, i, max_pts, num_args
     real(kind=rk)                        :: from_v, to_v, step_v
     ! Process arguments
-    num_pts = size(t, 1)
-    if (present(num_pts_o)) num_pts = min(num_pts, num_pts_o)
+    max_pts = size(t, 1)
+    if (present(max_pts_o)) max_pts = min(max_pts, max_pts_o)
     num_args = 0
     if (present(from_o)) num_args = num_args + 1
     if (present(to_o))   num_args = num_args + 1
@@ -494,23 +494,23 @@ contains
     ! Compute paramaters
     if     (.not. (present(from_o))) then
        status = 0
-       n_v    = num_pts - 1
+       n_v    = max_pts - 1
        to_v   = to_o
        step_v = step_o
        from_v = -step_v * n_v + to_v
     elseif (.not. (present(to_o))) then
-       n_v    = num_pts - 1
+       n_v    = max_pts - 1
        step_v = step_o
        from_v = from_o
        to_v   = step_v * n_v + from_v
     elseif (.not. (present(step_o))) then
        status = 0
-       n_v    = num_pts - 1
+       n_v    = max_pts - 1
        to_v   = to_o
        from_v = from_o
        step_v = -(-to_v + from_v) / n_v
     else
-       n_v    = num_pts - 1
+       n_v    = max_pts - 1
        to_v   = to_o
        from_v = from_o
        step_v = step_o

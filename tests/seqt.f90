@@ -40,51 +40,51 @@ program seqt
   write (out_io_unit, fmt='(a)') repeat('*', 100)
 
   t = -1
-  call seq(status, t, from_o=in_from, to_o=in_to, num_pts_o=16)
+  call seq(status, t, from_o=in_from, to_o=in_to, max_pts_o=16)
   write (out_io_unit, fmt='(i5)') status
   write (out_io_unit, fmt='(*(f8.3))') t
 
   t = -1
-  call seq(status, t, from_o=in_from, step_o=in_step, num_pts_o=16)
+  call seq(status, t, from_o=in_from, step_o=in_step, max_pts_o=16)
   write (out_io_unit, fmt='(i5)') status
   write (out_io_unit, fmt='(*(f8.3))') t
 
   t = -1
-  call seq(status, t, to_o=in_to, step_o=in_step, num_pts_o=16)
+  call seq(status, t, to_o=in_to, step_o=in_step, max_pts_o=16)
   write (out_io_unit, fmt='(i5)') status
   write (out_io_unit, fmt='(*(f8.3))') t
 
   t = -1
-  call seq(status, t, to_o=in_to, step_o=in_step, from_o=in_from, num_pts_o=16)
-  write (out_io_unit, fmt='(i5)') status
-  write (out_io_unit, fmt='(*(f8.3))') t
-
-  write (out_io_unit, fmt='(a)') repeat('*', 100)
-
-  t = -1
-  call seq(status, t, from_o=in_from, to_o=in_to, num_pts_o=6)
-  write (out_io_unit, fmt='(i5)') status
-  write (out_io_unit, fmt='(*(f8.3))') t
-
-  t = -1
-  call seq(status, t, from_o=in_from, step_o=in_step, num_pts_o=6)
-  write (out_io_unit, fmt='(i5)') status
-  write (out_io_unit, fmt='(*(f8.3))') t
-
-  t = -1
-  call seq(status, t, to_o=in_to, step_o=in_step, num_pts_o=6)
-  write (out_io_unit, fmt='(i5)') status
-  write (out_io_unit, fmt='(*(f8.3))') t
-
-  t = -1
-  call seq(status, t, to_o=in_to, step_o=in_step*2, from_o=in_from, num_pts_o=6)
+  call seq(status, t, to_o=in_to, step_o=in_step, from_o=in_from, max_pts_o=16)
   write (out_io_unit, fmt='(i5)') status
   write (out_io_unit, fmt='(*(f8.3))') t
 
   write (out_io_unit, fmt='(a)') repeat('*', 100)
 
   t = -1
-  call seq(status, t, to_o=in_to, step_o=in_step, from_o=in_from, num_pts_o=6)
+  call seq(status, t, from_o=in_from, to_o=in_to, max_pts_o=6)
+  write (out_io_unit, fmt='(i5)') status
+  write (out_io_unit, fmt='(*(f8.3))') t
+
+  t = -1
+  call seq(status, t, from_o=in_from, step_o=in_step, max_pts_o=6)
+  write (out_io_unit, fmt='(i5)') status
+  write (out_io_unit, fmt='(*(f8.3))') t
+
+  t = -1
+  call seq(status, t, to_o=in_to, step_o=in_step, max_pts_o=6)
+  write (out_io_unit, fmt='(i5)') status
+  write (out_io_unit, fmt='(*(f8.3))') t
+
+  t = -1
+  call seq(status, t, to_o=in_to, step_o=in_step*2, from_o=in_from, max_pts_o=6)
+  write (out_io_unit, fmt='(i5)') status
+  write (out_io_unit, fmt='(*(f8.3))') t
+
+  write (out_io_unit, fmt='(a)') repeat('*', 100)
+
+  t = -1
+  call seq(status, t, to_o=in_to, step_o=in_step, from_o=in_from, max_pts_o=6)
   write (out_io_unit, fmt='(i5)') status
   write (out_io_unit, fmt='(*(f8.3))') t
 
