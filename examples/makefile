@@ -45,7 +45,7 @@ IMG_VIEWER = nomacs
 
 FD = ../scripts/float_diff.rb
 
-EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error langford benchmark
+EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error langford benchmark step_too_far
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -194,6 +194,30 @@ step_order_vs_error_clean :
 .PHONY: step_order_vs_error_test
 step_order_vs_error_test: $(STEP_ORDER_VS_ERROR_CSVS)
 	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+step_too_far : step_too_far.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) step_too_far.f90 $(MRKISS_OBJ_FILES) -o $@
+
+.PHONY: step_too_far_csv
+step_too_far_csv : step_too_far_1000.csv
+		ls -l step_too_far_????.csv | head
+		ls -l step_too_far_????.csv | tail
+
+step_too_far_1000.csv &: step_too_far
+	./step_too_far$(EXE_SUFFIX)
+	head -n 15 step_too_far_1000.csv
+
+step_too_far.png &: step_too_far_1000.csv step_too_far.R
+	R --no-save --no-echo -q -f step_too_far.R
+
+.PHONY: step_too_far_png
+step_too_far_png : step_too_far.png
+	$(IMG_VIEWER) step_too_far.png &
+
+.PHONY: step_too_far_clean
+step_too_far_clean :
+	rm -f step_too_far_????.csv step_too_far_err.png step_too_far.exe step_too_far step_too_far.o step_too_far.obj
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)

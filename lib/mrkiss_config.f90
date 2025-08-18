@@ -134,6 +134,7 @@ end module mrkiss_config
 !!    - [Lornez Attracter](https://richmit.github.io/MRKISS/ex_lorenz.html)
 !!    - [Step Size & Order Vs. Accuracy](https://richmit.github.io/MRKISS/ex_step_order_vs_error.html)
 !!    - [Langford Attracter](https://richmit.github.io/MRKISS/ex_langford.html)
+!!    - [Step Size Vs. Accuracy](https://richmit.github.io/MRKISS/ex_step_too_far.html)
 !!
 !! Generated [API documentation](https://www.mitchr.me/SS/MRKISS/doc-lib/html/index.html) is viable as well.
 !!

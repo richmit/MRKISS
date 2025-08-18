@@ -1,0 +1,233 @@
+# -*- Mode:Org; Coding:utf-8; fill-column:158 -*-
+# ######################################################################################################################################################.H.S.##
+# FILE:        ex_step_too_far.org
+#+TITLE:       Runge-Kutta Step Size and Accuracy
+#+SUBTITLE:    A MRKISS Library Example Program
+#+AUTHOR:      Mitch Richling
+#+EMAIL:       http://www.mitchr.me/
+#+DESCRIPTION: MRKISS Documentation Examples
+#+KEYWORDS:    RK runge kutta ode ivp
+#+LANGUAGE:    en
+#+OPTIONS:     num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t skip:nil d:nil todo:t pri:nil H:5 p:t author:t html-scripts:nil 
+# FIXME: When uncommented the following line will render latex equations as images embedded into exported HTML, when commented MathJax will be used
+# #+OPTIONS:     tex:dvipng
+# FIXME: Select ONE of the three TODO lines below
+# #+SEQ_TODO:    ACTION:NEW(t!) ACTION:ASSIGNED(a!@) ACTION:WORK(w!) ACTION:HOLD(h@) | ACTION:FUTURE(f) ACTION:DONE(d!) ACTION:CANCELED(c!)
+# #+SEQ_TODO:    TODO:NEW(T!)                        TODO:WORK(W!)   TODO:HOLD(H@)   |                  TODO:DONE(D!)   TODO:CANCELED(C!)
+#+SEQ_TODO:    TODO:NEW(t)                         TODO:WORK(w)    TODO:HOLD(h)    | TODO:FUTURE(f)   TODO:DONE(d)    TODO:CANCELED(c)
+#+PROPERTY: header-args :eval never-export
+#+HTML_HEAD: <style>body { width: 95%; margin: 2% auto; font-size: 18px; line-height: 1.4em; font-family: Georgia, serif; color: black; background-color: white; }</style>
+# Change max-width to get wider output -- also note #content style below
+#+HTML_HEAD: <style>body { min-width: 500px; max-width: 1024px; }</style>
+#+HTML_HEAD: <style>h1,h2,h3,h4,h5,h6 { color: #A5573E; line-height: 1em; font-family: Helvetica, sans-serif; }</style>
+#+HTML_HEAD: <style>h1,h2,h3 { line-height: 1.4em; }</style>
+#+HTML_HEAD: <style>h1.title { font-size: 3em; }</style>
+#+HTML_HEAD: <style>.subtitle { font-size: 0.6em; }</style>
+#+HTML_HEAD: <style>h4,h5,h6 { font-size: 1em; }</style>
+#+HTML_HEAD: <style>.org-src-container { border: 1px solid #ccc; box-shadow: 3px 3px 3px #eee; font-family: Lucida Console, monospace; font-size: 80%; margin: 0px; padding: 0px 0px; position: relative; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre { line-height: 1.2em; padding-top: 1.5em; margin: 0.5em; background-color: #404040; color: white; overflow: auto; }</style>
+#+HTML_HEAD: <style>.org-src-container>pre:before { display: block; position: absolute; background-color: #b3b3b3; top: 0; right: 0; padding: 0 0.2em 0 0.4em; border-bottom-left-radius: 8px; border: 0; color: white; font-size: 100%; font-family: Helvetica, sans-serif;}</style>
+#+HTML_HEAD: <style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
+#+HTML_HEAD: <style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
+# Change the following to get wider output -- also note body style above
+#+HTML_HEAD: <style>#content { max-width: 60em; }</style>
+#+HTML_LINK_HOME: https://www.mitchr.me/
+#+HTML_LINK_UP: https://github.com/richmit/MRKISS/
+# ######################################################################################################################################################.H.E.##
+
+#+ATTR_HTML: :border 2 solid #ccc :frame hsides :align center
+|          <r> | <l>                                          |
+|    *Author:* | /{{{author}}}/                               |
+|   *Updated:* | /{{{modification-time(%Y-%m-%d %H:%M:%S)}}}/ |
+| *Generated:* | /{{{time(%Y-%m-%d %H:%M:%S)}}}/              |
+#+ATTR_HTML: :align center
+Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
+
+#+TOC: headlines 2
+
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#   010  #    020  #    030  #    040  #    050  #    060  #    070  #    080  #    090  #    100  #    110  #    120  #    130  #    140  #    150  #    160  #    170  #    180  #    190  #    200  #    210  #    220  #    230  #    240  #    250  #    260  #    270  #    280  #    290  #
+# 345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+#        #         #         #         #         #         #         #         #         #         #         #         #         #         #         #       | #         #         #         #         #         #         #         #         #         #         #         #         #         #
+
+* Results
+:PROPERTIES:
+:CUSTOM_ID: Results
+:END:
+
+The code for this example is found in [[https://github.com/richmit/MRKISS/blob/master/examples/step_too_far.f90][~examples/step_too_far.f90~]].
+Additionally the code may be found at the end of this document in the section [[#full-code][Full Code Listing]].
+
+#+begin_src sh :results output verbatum :exports results :wrap "org"
+~/core/codeBits/bin/srcHdrInfo ../examples/step_too_far.f90
+#+end_src
+
+#+RESULTS:
+#+begin_org
+  In this example we solve a simple equation with various step sizes in order to observe the relationship between step size and
+  accuracy.
+
+  The system we solve:
+     \[ y'(t)=e^t + y(t) \,\,\,\mathrm{with}\,\,\, y(0)=0 \]
+
+  We can solve this equation symbolically:
+     \[ y(t) = te^t  \]
+
+  By construction, the error for an RK method should decrease as the step size decreases, and we see this behavior in our
+  numerical results for moderate step sizes.  As the step size gets smaller, we see the accuracy continue to improve as
+  expected; however, the nice smooth response curve begins to roughen up a bit with what looks like random noise.  Eventually
+  we reach small enough step sizes that round-off error begins to dominate the results, and accuracy degrades as step size
+  decreases.  The point at which this happens is very much dependent upon the RK method, the problem, and how the method is
+  implemented.  This last point is important.  Simply rearranging the order of operations, while mathematical identical, can
+  have dramatic impact on final error.
+#+end_org
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/step_too_far.png
+
+* Full Code Listing
+:PROPERTIES:
+:CUSTOM_ID: full-code
+:END:
+
+** Fortran Code
+:PROPERTIES:
+:CUSTOM_ID: fortrancode
+:END:
+
+#+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
+~/core/codeBits/bin/src2orgListing ../examples/step_too_far.f90
+#+end_src
+
+#+RESULTS:
+#+begin_src f90 :eval never :tangle no
+program step_too_far
+
+  use :: mrkiss_config,          only: rk, istats_size
+  use :: mrkiss_solvers_wt,      only: steps_fixed_stab
+  use :: mrkiss_utils,           only: print_solution, print_istats
+  use :: mrkiss_erk_kutta_4,     only: a=>a, b=>b, c=>c
+
+  implicit none
+
+  integer,        parameter :: deq_dim       = 1
+  real(kind=rk),  parameter :: y_iv(deq_dim) = [0.0_rk]
+  real(kind=rk),  parameter :: t_iv          = 0.0_rk
+  real(kind=rk),  parameter :: param(1)      = [0.0_rk]
+  real(kind=rk),  parameter :: t_end         = 1.0_rk
+
+  real(kind=rk)             :: solution(1+2*deq_dim, 1)
+  integer                   :: status, istats(istats_size), sso, num_pts
+  character(len=512)        :: filename
+
+  do sso = 1000,2100
+     num_pts = 1.005_rk ** sso
+     print '("sso=",i4," num_pts=",i0)', sso, num_pts
+     call steps_fixed_stab(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
+     write (filename, '("step_too_far_",i4.4,".csv")') sso
+     call print_solution(status, solution, filename_o=trim(filename))
+  end do
+
+contains
+
+  subroutine eq(status, dydt, t, y, param)
+    integer,          intent(out) :: status
+    real(kind=rk),    intent(out) :: dydt(:)
+    real(kind=rk),    intent(in)  :: t
+    real(kind=rk),    intent(in)  :: y(:)
+    real(kind=rk),    intent(in)  :: param(:)
+    dydt = [ exp(t) + y(1) ]
+    status = 0
+  end subroutine eq
+
+end program step_too_far
+#+end_src
+
+** GNUplot Code
+:PROPERTIES:
+:CUSTOM_ID: gnuplotcode
+:END:
+
+The images were produced with GNUplot.
+
+#+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
+~/core/codeBits/bin/src2orgListing ../examples/langford.gplt
+#+end_src
+
+#+RESULTS:
+#+begin_src R :eval never :tangle no
+set encoding utf8
+set termoption noenhanced
+set datafile separator ','
+set margins 0, 0, 0, 0
+set view 50, 40, 1.3, 1.4
+set xyplane at 0
+unset border
+unset ytics
+unset ztics
+unset xtics
+set terminal svg
+set pointsize 0.2
+
+set title "Langford (fixed)"
+set output "langford_fixed.svg"
+splot 'langford_fixed.csv' using 3:4:5 with lines title ""
+
+set title "Langford (fixed)"
+set output "langford_multi.svg"
+splot for [i=1:20] sprintf("langford_%02d.csv", i) using 4:5:6 with lines title ""
+#+end_src
+
+The multiple curve graph may be explored interactively with the following code.
+
+#+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
+~/core/codeBits/bin/src2orgListing ../examples/langford_interactive.gplt
+#+end_src
+
+#+RESULTS:
+#+begin_src R :eval never :tangle no
+set encoding utf8
+set termoption noenhanced
+set datafile separator ','
+unset xlabel
+unset ylabel
+unset zlabel
+unset grid
+unset border
+unset ytics
+unset ztics
+unset xtics
+set view equal xyz
+set view 160, 90
+
+set title "Langford"
+splot for [i=1:20] sprintf("langford_%02d.csv", i) using 4:5:6 with lines title ""
+
+pause -1
+#+end_src
+
+* Notes :noexport:
+
+Run with various thread counts on linux (eshell):
+#+begin_src sh :eval never :tangle no :results none :exports code
+bash -c 'export OMP_NUM_THREADS=16; time ./langford'
+#+end_src
+
+Run with various thread counts on windows (eshell)
+
+#+begin_src sh :eval never :tangle no :results none :exports code
+bash -c 'export OMP_NUM_THREADS=16; time ./langford.exe '
+#+end_src
+
+Convert CSVs to VTUs (eshell):
+
+#+begin_src sh :eval never :tangle no :results none :exports code
+for f in langford_??.csv {~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb $f points:4:5:6 time:3 tag:1 step:2 derivative:7:8:9 > $(file-name-sans-extension f).vtu}
+#+end_src
+
+#+begin_src sh :eval never :tangle no :results none :exports code
+~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb langford_fixed.csv points:3:4:5 time:2 step:1 derivative:6:7:8 > langford_fixed.vtu
+#+end_src
+
