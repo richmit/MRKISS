@@ -1,8 +1,8 @@
 # -*- Mode:Org; Coding:utf-8; fill-column:158 -*-
 # ######################################################################################################################################################.H.S.##
 # FILE:        ex_three_body.f90
-#+TITLE:       MRKISS Library Example
-#+SUBTITLE:    The Three Body Problem
+#+TITLE:       A Three Body Problem
+#+SUBTITLE:    A MRKISS Library Example Program
 #+AUTHOR:      Mitch Richling
 #+EMAIL:       http://www.mitchr.me/
 #+DESCRIPTION: MRKISS Documentation Examples

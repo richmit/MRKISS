@@ -62,7 +62,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - N/A
   - Examples
     - New
-      - N/A
+      - step_too_small.f90
     - Updated
       - N/A
   - Tests

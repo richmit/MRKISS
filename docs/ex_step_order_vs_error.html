@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-15 Fri 14:08 -->
+<!-- 2025-08-18 Mon 15:22 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
-<title>MRKISS Library Example</title>
+<title>Step Size &amp; Order Vs Accuracy</title>
 <meta name="author" content="Mitch Richling" />
 <meta name="description" content="MRKISS Documentation Examples" />
 <meta name="keywords" content="RK runge kutta ode ivp" />
@@ -247,9 +247,9 @@
  |
  <a accesskey="H" href="https://www.mitchr.me/"> HOME </a>
 </div><div id="content" class="content">
-<h1 class="title">MRKISS Library Example
+<h1 class="title">Step Size &amp; Order Vs Accuracy
 <br />
-<span class="subtitle">Step Size &amp; Order Vs Accuracy</span>
+<span class="subtitle">A MRKISS Library Example Program</span>
 </h1>
 <table border="2 solid #ccc" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-15 14:06:40</i></td>
+<td class="org-left"><i>2025-08-18 15:22:34</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-15 14:08:11</i></td>
+<td class="org-left"><i>2025-08-18 15:22:39</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="org2a2c596">
+<div class="org" id="org9bc9d5b">
 <p>
 In this example we solve the same equation with two different Runge-Kutta methods &#x2013; the classical \(\mathcal{O}(4)\)
 method and a newer \(\mathcal{O}(0)\) method.  For each method we use 10 different step sizes.
@@ -326,13 +326,13 @@ Here are a copule plots
 </p>
 
 
-<div id="org8e41956" class="figure">
+<div id="org7f2be10" class="figure">
 <p><img src="pics/step_order_vs_error_soly.png" alt="step_order_vs_error_soly.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="org0b81583" class="figure">
+<div id="org956d826" class="figure">
 <p><img src="pics/step_order_vs_error_sold.png" alt="step_order_vs_error_sold.png" width="90%" align="center" />
 </p>
 </div>
@@ -343,7 +343,7 @@ plot:
 </p>
 
 
-<div id="org2e11488" class="figure">
+<div id="org698dde5" class="figure">
 <p><img src="pics/step_order_vs_error_err.png" alt="step_order_vs_error_err.png" width="90%" align="center" />
 </p>
 </div>

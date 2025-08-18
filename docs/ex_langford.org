@@ -1,8 +1,8 @@
 # -*- Mode:Org; Coding:utf-8; fill-column:158 -*-
 # ######################################################################################################################################################.H.S.##
 # FILE:        ex_langford.org
-#+TITLE:       MRKISS Library Example
-#+SUBTITLE:    Langford Attractor
+#+TITLE:       The Langford Attractor
+#+SUBTITLE:    A MRKISS Library Example Program
 #+AUTHOR:      Mitch Richling
 #+EMAIL:       http://www.mitchr.me/
 #+DESCRIPTION: MRKISS Documentation Examples
