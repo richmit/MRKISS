@@ -42,13 +42,13 @@
 !!     @f[ y(t) = te^t  @f]
 !!
 !!  By construction, the truncation error for an RK method decreases as the step size decreases.  Round-off error on the other
-!!  hand increases as the step size decreases.  Total error is the sum of truncation and round-off error.  In this experiment
+!!  hand increases as the step size decreases.  Total error is the sum of truncation and round-off error.  In this experiment we
 !!  directly measure total error.  For moderate step sizes we observe truncation error dominating the total error.  As the step
 !!  size gets smaller, we see the total error continue to improve as expected; however, the nice smooth response curve begins to
 !!  roughen up a bit with what looks like random noise.  Eventually we reach small enough step sizes that round-off error begins
 !!  to dominate the results, and accuracy degrades as step size continues to decrease. The point at which this happens is very
 !!  much dependent upon the RK method, the problem, and how the method is implemented.  This last point is important.  Simply
-!!  rearranging the order of operations, while mathematical identical, can have dramatic impact on final error.
+!!  rearranging the order of operations can have dramatic impact on final error.
 !!
 !.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 

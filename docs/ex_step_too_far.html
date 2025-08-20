@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-20 Wed 14:33 -->
+<!-- 2025-08-20 Wed 14:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>Runge-Kutta Step Size and Accuracy</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-20 14:33:24</i></td>
+<td class="org-left"><i>2025-08-20 14:39:01</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-20 14:33:24</i></td>
+<td class="org-left"><i>2025-08-20 14:39:01</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="orgae27061">
+<div class="org" id="orga889745">
 <p>
 In this example we solve a simple equation with various step sizes in order to observe the relationship between step size and
 accuracy.
@@ -320,13 +320,13 @@ We can solve this equation symbolically:
 
 <p>
 By construction, the truncation error for an RK method decreases as the step size decreases.  Round-off error on the other
-hand increases as the step size decreases.  Total error is the sum of truncation and round-off error.  In this experiment
+hand increases as the step size decreases.  Total error is the sum of truncation and round-off error.  In this experiment we
 directly measure total error.  For moderate step sizes we observe truncation error dominating the total error.  As the step
 size gets smaller, we see the total error continue to improve as expected; however, the nice smooth response curve begins to
 roughen up a bit with what looks like random noise.  Eventually we reach small enough step sizes that round-off error begins
 to dominate the results, and accuracy degrades as step size continues to decrease. The point at which this happens is very
 much dependent upon the RK method, the problem, and how the method is implemented.  This last point is important.  Simply
-rearranging the order of operations, while mathematical identical, can have dramatic impact on final error.
+rearranging the order of operations can have dramatic impact on final error.
 </p>
 
 </div>
@@ -336,7 +336,7 @@ Here is a log-log plot of our measured results:
 </p>
 
 
-<div id="orgbc9ff38" class="figure">
+<div id="org470ae44" class="figure">
 <p><img src="pics/step_too_far.png" alt="step_too_far.png" width="90%" align="center" />
 </p>
 </div>
@@ -347,7 +347,7 @@ something like this:
 </p>
 
 
-<div id="org0e0d4d6" class="figure">
+<div id="orgceebf6f" class="figure">
 <p><img src="pics/step_too_far_mean.png" alt="step_too_far_mean.png" width="90%" align="center" />
 </p>
 </div>
@@ -365,7 +365,7 @@ such a simple remedy.  Here is a glimpse of the impact of step size on \(t\) rou
 </p>
 
 
-<div id="org5781eb4" class="figure">
+<div id="org48d069b" class="figure">
 <p><img src="pics/step_too_far_tfit.png" alt="step_too_far_tfit.png" width="90%" align="center" />
 </p>
 </div>
