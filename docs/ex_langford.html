@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-18 Mon 15:22 -->
+<!-- 2025-08-20 Wed 13:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>The Langford Attractor</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-18 15:21:31</i></td>
+<td class="org-left"><i>2025-08-20 13:32:51</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-18 15:22:47</i></td>
+<td class="org-left"><i>2025-08-20 13:32:52</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="orgc59d956">
+<div class="org" id="org3c21583">
 <p>
 The Langford attractor is governed by the following equations:
 </p>
@@ -353,8 +353,8 @@ We can translate that equation to code like this:
   <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:), param(:)</span>
-  dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), 
-          param(4)*y(1) + (y(3) - param(2))*y(2), 
+  dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), <span style="color: #00ffff;">&amp;</span> 
+          param(4)*y(1) + (y(3) - param(2))*y(2),     <span style="color: #00ffff;">&amp;</span>
           param(3) + param(1)*y(3) - (y(3)**3/3) - (y(1)**2+y(2)**2)*(1 + param(5)*y(3)) + param(6)*y(3)*y(1)**3]
   status = 0
 <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
@@ -377,7 +377,7 @@ If we then load the data into Paraview, we get something like this:
 </p>
 
 
-<div id="orgc5d2bd7" class="figure">
+<div id="orgc5f0601" class="figure">
 <p><img src="pics/langford_pv_fixed.png" alt="langford_pv_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -387,7 +387,7 @@ We could also graph it with GNUplot:
 </p>
 
 
-<div id="org97b953e" class="figure">
+<div id="org70f7f76" class="figure">
 <p><img src="pics/langford_fixed.png" alt="langford_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -417,7 +417,7 @@ We can take the resulting 20 CSV files, load them up into Paraview, and animate 
 </p>
 
 
-<div id="org9c65322" class="figure">
+<div id="org7cc684b" class="figure">
 <p><img src="pics/langford_mov_050.gif" alt="langford_mov_050.gif" align="center" />
 </p>
 </div>
@@ -473,8 +473,8 @@ We can take the resulting 20 CSV files, load them up into Paraview, and animate 
     <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> dydt(:)</span>
     <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">intent</span>(in)  ::<span style="color: #7fffd4;"> y(:), param(:)</span>
-    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), 
-            param(4)*y(1) + (y(3) - param(2))*y(2), 
+    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), <span style="color: #00ffff;">&amp;</span> 
+            param(4)*y(1) + (y(3) - param(2))*y(2),     <span style="color: #00ffff;">&amp;</span>
             param(3) + param(1)*y(3) - (y(3)**3/3) - (y(1)**2+y(2)**2)*(1 + param(5)*y(3)) + param(6)*y(3)*y(1)**3]
     status = 0
   <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>

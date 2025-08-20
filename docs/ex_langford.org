@@ -106,8 +106,8 @@ We can translate that equation to code like this:
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:), param(:)
-    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), 
-            param(4)*y(1) + (y(3) - param(2))*y(2), 
+    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), & 
+            param(4)*y(1) + (y(3) - param(2))*y(2),     &
             param(3) + param(1)*y(3) - (y(3)**3/3) - (y(1)**2+y(2)**2)*(1 + param(5)*y(3)) + param(6)*y(3)*y(1)**3]
     status = 0
   end subroutine eq
@@ -221,8 +221,8 @@ contains
     integer,          intent(out) :: status
     real(kind=rk),    intent(out) :: dydt(:)
     real(kind=rk),    intent(in)  :: y(:), param(:)
-    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), 
-            param(4)*y(1) + (y(3) - param(2))*y(2), 
+    dydt = [(y(3) - param(2)) * y(1) - param(4) * y(2), & 
+            param(4)*y(1) + (y(3) - param(2))*y(2),     &
             param(3) + param(1)*y(3) - (y(3)**3/3) - (y(1)**2+y(2)**2)*(1 + param(5)*y(3)) + param(6)*y(3)*y(1)**3]
     status = 0
   end subroutine eq
