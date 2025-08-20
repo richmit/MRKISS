@@ -41,13 +41,14 @@
 !!  We can solve this equation symbolically:
 !!     @f[ y(t) = te^t  @f]
 !!
-!!  By construction, the error for an RK method should decrease as the step size decreases, and we see this behavior in our
-!!  numerical results for moderate step sizes.  As the step size gets smaller, we see the accuracy continue to improve as
-!!  expected; however, the nice smooth response curve begins to roughen up a bit with what looks like random noise.  Eventually
-!!  we reach small enough step sizes that round-off error begins to dominate the results, and accuracy degrades as step size
-!!  decreases.  The point at which this happens is very much dependent upon the RK method, the problem, and how the method is
-!!  implemented.  This last point is important.  Simply rearranging the order of operations, while mathematical identical, can
-!!  have dramatic impact on final error.
+!!  By construction, the truncation error for an RK method decreases as the step size decreases.  Round-off error on the other
+!!  hand increases as the step size decreases.  Total error is the sum of truncation and round-off error.  In this experiment
+!!  directly measure total error.  For moderate step sizes we observe truncation error dominating the total error.  As the step
+!!  size gets smaller, we see the total error continue to improve as expected; however, the nice smooth response curve begins to
+!!  roughen up a bit with what looks like random noise.  Eventually we reach small enough step sizes that round-off error begins
+!!  to dominate the results, and accuracy degrades as step size continues to decrease. The point at which this happens is very
+!!  much dependent upon the RK method, the problem, and how the method is implemented.  This last point is important.  Simply
+!!  rearranging the order of operations, while mathematical identical, can have dramatic impact on final error.
 !!
 !.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
@@ -56,8 +57,8 @@ program step_too_far
 
   use :: mrkiss_config,          only: rk, istats_size
   use :: mrkiss_solvers_wt,      only: steps_fixed_stab
-  use :: mrkiss_utils,           only: print_solution, print_istats
-  use :: mrkiss_erk_kutta_4,     only: a=>a, b=>b, c=>c
+  use :: mrkiss_utils,           only: print_solution
+  use :: mrkiss_erk_kutta_4,     only: a, b, c
 
   implicit none
 
@@ -69,14 +70,15 @@ program step_too_far
 
   real(kind=rk)             :: solution(1+2*deq_dim, 1)
   integer                   :: status, istats(istats_size), sso, num_pts
-  character(len=512)        :: filename
+  logical                   :: fi
 
+  fi = .true.
   do sso = 1000,2100
      num_pts = 1.005_rk ** sso
      print '("sso=",i4," num_pts=",i0)', sso, num_pts
      call steps_fixed_stab(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
-     write (filename, '("step_too_far_",i4.4,".csv")') sso
-     call print_solution(status, solution, filename_o=trim(filename))
+     call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, prt_titles_o=fi, append_o=.not. fi)
+     fi = .false.
   end do
 
 contains

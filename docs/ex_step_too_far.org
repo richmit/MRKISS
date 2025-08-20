@@ -75,17 +75,37 @@ Additionally the code may be found at the end of this document in the section [[
   We can solve this equation symbolically:
      \[ y(t) = te^t  \]
 
-  By construction, the error for an RK method should decrease as the step size decreases, and we see this behavior in our
-  numerical results for moderate step sizes.  As the step size gets smaller, we see the accuracy continue to improve as
-  expected; however, the nice smooth response curve begins to roughen up a bit with what looks like random noise.  Eventually
-  we reach small enough step sizes that round-off error begins to dominate the results, and accuracy degrades as step size
-  decreases.  The point at which this happens is very much dependent upon the RK method, the problem, and how the method is
-  implemented.  This last point is important.  Simply rearranging the order of operations, while mathematical identical, can
-  have dramatic impact on final error.
+  By construction, the truncation error for an RK method decreases as the step size decreases.  Round-off error on the other
+  hand increases as the step size decreases.  Total error is the sum of truncation and round-off error.  In this experiment
+  directly measure total error.  For moderate step sizes we observe truncation error dominating the total error.  As the step
+  size gets smaller, we see the total error continue to improve as expected; however, the nice smooth response curve begins to
+  roughen up a bit with what looks like random noise.  Eventually we reach small enough step sizes that round-off error begins
+  to dominate the results, and accuracy degrades as step size continues to decrease. The point at which this happens is very
+  much dependent upon the RK method, the problem, and how the method is implemented.  This last point is important.  Simply
+  rearranging the order of operations, while mathematical identical, can have dramatic impact on final error.
 #+end_org
+
+Here is a log-log plot of our measured results:
 
 #+ATTR_HTML: :width 90% :align center
 file:pics/step_too_far.png
+
+We can statistically decompose the total error into truncation and round-off components.  The results look 
+something like this:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/step_too_far_mean.png
+
+In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of the residual distribution.  When
+truncation error dominates the distribution is very tight and symmetric about the mean.  The round-off errors are quite different in that they have a much higher
+variance, and the distribution has a long tail toward zero.  These observations about round-off error commonly hold in practice.  
+
+The final value of \(t\) for a solution is a sum of \(\Delta{t}\) values, and will therefore be impacted by round-off errors.  For fixed step size algorithms
+round-off errors may be greatly reduced by computing each \(t\) point as a product instead of a running sum.  Unfortunately adaptive algorithms don't provide
+such a simple remedy.  Here is a glimpse of the impact of step size on \(t\) round-off:
+
+#+ATTR_HTML: :width 90% :align center
+file:pics/step_too_far_tfit.png
 
 * Full Code Listing
 :PROPERTIES:
@@ -107,8 +127,8 @@ program step_too_far
 
   use :: mrkiss_config,          only: rk, istats_size
   use :: mrkiss_solvers_wt,      only: steps_fixed_stab
-  use :: mrkiss_utils,           only: print_solution, print_istats
-  use :: mrkiss_erk_kutta_4,     only: a=>a, b=>b, c=>c
+  use :: mrkiss_utils,           only: print_solution
+  use :: mrkiss_erk_kutta_4,     only: a, b, c
 
   implicit none
 
@@ -120,14 +140,15 @@ program step_too_far
 
   real(kind=rk)             :: solution(1+2*deq_dim, 1)
   integer                   :: status, istats(istats_size), sso, num_pts
-  character(len=512)        :: filename
+  logical                   :: fi
 
+  fi = .true.
   do sso = 1000,2100
      num_pts = 1.005_rk ** sso
      print '("sso=",i4," num_pts=",i0)', sso, num_pts
      call steps_fixed_stab(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
-     write (filename, '("step_too_far_",i4.4,".csv")') sso
-     call print_solution(status, solution, filename_o=trim(filename))
+     call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, prt_titles_o=fi, append_o=.not. fi)
+     fi = .false.
   end do
 
 contains
@@ -145,89 +166,116 @@ contains
 end program step_too_far
 #+end_src
 
-** GNUplot Code
+** R Code
 :PROPERTIES:
-:CUSTOM_ID: gnuplotcode
+:CUSTOM_ID: rcode
 :END:
 
-The images were produced with GNUplot.
+The images were produced with R.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
-~/core/codeBits/bin/src2orgListing ../examples/langford.gplt
+~/core/codeBits/bin/src2orgListing ../examples/step_too_far.R
 #+end_src
 
 #+RESULTS:
 #+begin_src R :eval never :tangle no
-set encoding utf8
-set termoption noenhanced
-set datafile separator ','
-set margins 0, 0, 0, 0
-set view 50, 40, 1.3, 1.4
-set xyplane at 0
-unset border
-unset ytics
-unset ztics
-unset xtics
-set terminal svg
-set pointsize 0.2
+solDat <- fread("step_too_far.csv") %>%
+  mutate(errt   = abs(1-t),
+         y      = y1,
+         erryat = abs(y-exp(t)),
+         erry   = abs(y-exp(1)),
+         sso    = tag,
+         pts    = 1.005^sso,
+         delta  = 1/(pts-1)) %>% 
+  filter(errt>0 & erryat>0 & erry>0)
 
-set title "Langford (fixed)"
-set output "langford_fixed.svg"
-splot 'langford_fixed.csv' using 3:4:5 with lines title ""
+# Plot the raw results.
+gp <- ggplot(solDat) +
+  geom_line( aes(x=delta, y=erry)) +
+  scale_y_log10() +
+  scale_x_log10() +
+  labs(title='Accuracy: Step Size Vs. Total Error', 
+       subtitle='Experimental results from RK4 ', x='Step Size', y='Total Error')
+ggsave(filename='step_too_far.png', plot=gp, width=2*1024, height=1023, units='px', dpi=150)
 
-set title "Langford (fixed)"
-set output "langford_multi.svg"
-splot for [i=1:20] sprintf("langford_%02d.csv", i) using 4:5:6 with lines title ""
+# Compute the log transformed linear regression for the truncation error dominated part of the dataset
+treDat <- solDat %>% 
+  transmute(x=delta, y=erryat) %>% 
+  filter(x>0 & y>0) %>% 
+  mutate(xt=log(x), yt=log(y)) %>% 
+  filter(x>1e-3)
+treFit <- lm(yt ~ xt, data=treDat)     
+treDat <- treDat %>% 
+  mutate(yf=exp(coef(treFit)[1])*x^(coef(treFit)[2]))
+
+# Note the value for 'xt' in the fit will be the order of the RK method used.  
+# This is a practical way experimentally to compute the order for a RK method.
+print(summary(treFit))
+
+ggplot(data=treDat, aes(x=x)) +
+  geom_line(aes(y=y), col='red') +
+  geom_line(aes(y=yf), col='blue') +
+  scale_y_log10() +
+  scale_x_log10() 
+
+# Compute the log transformed linear regression for the round-off error dominated part of the dataset
+roeDat <- solDat %>% 
+  transmute(x=delta, y=erryat) %>% 
+  filter(x>0 & y>0) %>% 
+  mutate(xt=log(x), yt=log(y)) %>% 
+  filter(x<2e-4)
+roeFit <- lm(yt ~ xt, data=roeDat)     
+roeDat <- roeDat %>% 
+  mutate(yf=exp(coef(roeFit)[1])*x^(coef(roeFit)[2]))
+
+ggplot(data=roeDat, aes(x=x)) +
+  geom_line(aes(y=y), col='red') +
+  geom_line(aes(y=yf), col='blue') +
+  scale_y_log10() +
+  scale_x_log10() 
+
+# Add total, truncation, round-off error to our solution data and plot everything.
+solDat <- solDat %>% mutate(erryattre=exp(coef(treFit)[1])*delta^(coef(treFit)[2]),
+                            erryatroe=exp(coef(roeFit)[1])*delta^(coef(roeFit)[2]),
+                            erryattoe=erryattre+erryatroe)
+
+gp <- ggplot(data=solDat, aes(x=delta)) +
+  geom_line(aes(y=erryattre, col='Mean Truncation Error'), linewidth=5, alpha=0.7) +
+  geom_line(aes(y=erryatroe, col='Mean Round-off Error'), linewidth=5, alpha=0.7) +
+  geom_line(aes(y=erryattoe, col='Mean Total Error'), linewidth=3) +
+  geom_point(aes(y=erryat, col='True Error'), size=0.5) +
+  scale_y_log10(limits=range(solDat$erryat)) +
+  scale_x_log10() +
+  scale_colour_manual(name='Error Type', 
+                      values=c('Mean Total Error'      = 'darkorchid3',
+                               'Mean Truncation Error' = 'goldenrod',
+                               'Mean Round-off Error'  = 'darkolivegreen3',                               
+                               'True Error'            = 'indianred3')) +
+  labs(title='Error Vs. Step Size', 
+       subtitle='Experimental results from RK4 illustrating total error as a sum of round-off and truncation errors.', 
+       x='Step Size', y='Errors')
+ggsave(filename='step_too_far_mean.png', plot=gp, width=1024, height=600, units='px', dpi=100)
+
+# Compute the log transformed linear regression for t
+troeDat <- solDat %>% 
+  transmute(x=delta, y=errt) %>% 
+  filter(x>0 & y>0) %>% 
+  mutate(xt=log(x), yt=log(y))
+troeFit <- lm(yt ~ xt, data=troeDat)     
+troeDat <- troeDat %>% 
+  mutate(yf=exp(coef(troeFit)[1])*x^(coef(troeFit)[2]))
+
+gp <- ggplot(data=troeDat, aes(x=x)) +
+  geom_line(aes(y=yf, col='Mean Round-off Error'), alpha=0.7, linewidth=10) +
+  geom_point(aes(y=y, col='True Error'), size=0.5) +
+  scale_y_log10() +
+  scale_x_log10() +
+  scale_colour_manual(name='Error Type', 
+                      values=c('Mean Round-off Error'  = 'darkolivegreen3',                               
+                               'True Error'            = 'indianred3')) +
+  labs(title='Independent Variable Error Vs. Step Size', 
+       subtitle='Experimental results from RK4.', 
+       x='Step Size', y='Errors')
+ggsave(filename='step_too_far_tfit.png', plot=gp, width=1024, height=600, units='px', dpi=100)
+
 #+end_src
-
-The multiple curve graph may be explored interactively with the following code.
-
-#+begin_src sh :results output verbatum :exports results :wrap "src R :eval never :tangle no"
-~/core/codeBits/bin/src2orgListing ../examples/langford_interactive.gplt
-#+end_src
-
-#+RESULTS:
-#+begin_src R :eval never :tangle no
-set encoding utf8
-set termoption noenhanced
-set datafile separator ','
-unset xlabel
-unset ylabel
-unset zlabel
-unset grid
-unset border
-unset ytics
-unset ztics
-unset xtics
-set view equal xyz
-set view 160, 90
-
-set title "Langford"
-splot for [i=1:20] sprintf("langford_%02d.csv", i) using 4:5:6 with lines title ""
-
-pause -1
-#+end_src
-
-* Notes :noexport:
-
-Run with various thread counts on linux (eshell):
-#+begin_src sh :eval never :tangle no :results none :exports code
-bash -c 'export OMP_NUM_THREADS=16; time ./langford'
-#+end_src
-
-Run with various thread counts on windows (eshell)
-
-#+begin_src sh :eval never :tangle no :results none :exports code
-bash -c 'export OMP_NUM_THREADS=16; time ./langford.exe '
-#+end_src
-
-Convert CSVs to VTUs (eshell):
-
-#+begin_src sh :eval never :tangle no :results none :exports code
-for f in langford_??.csv {~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb $f points:4:5:6 time:3 tag:1 step:2 derivative:7:8:9 > $(file-name-sans-extension f).vtu}
-#+end_src
-
-#+begin_src sh :eval never :tangle no :results none :exports code
-~/world/my_prog/learn/ex-VTK/xml_files/spaceCurveCSVtoVTU.rb langford_fixed.csv points:3:4:5 time:2 step:1 derivative:6:7:8 > langford_fixed.vtu
-#+end_src
-

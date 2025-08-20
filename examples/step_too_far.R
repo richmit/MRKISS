@@ -31,20 +31,108 @@
 #########################################################################################################################################################.H.E.##
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-solDat <- do.call(rbind, lapply(list.files(pattern = "^step_too_far_[0-9]+\\.csv$"),
-                                function(f) {
-                                  fread(f) %>%
-                                    mutate(errt   = abs(1-t),
-                                           erry1at= abs(y1-exp(t)),
-                                           erry1  = abs(y1-exp(1)),
-                                           sso    = as.integer(first(strsplit(f, "[_.]"))[4]),
-                                           pts    = 1.005^sso,
-                                           delta  = 1/(pts-1)); }))
+solDat <- fread("step_too_far.csv") %>%
+  mutate(errt   = abs(1-t),
+         y      = y1,
+         erryat = abs(y-exp(t)),
+         erry   = abs(y-exp(1)),
+         sso    = tag,
+         pts    = 1.005^sso,
+         delta  = 1/(pts-1)) %>% 
+  filter(errt>0 & erryat>0 & erry>0)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Plot the raw results.
 gp <- ggplot(solDat) +
-  geom_line( aes(x=delta, y=erry1)) +
+  geom_line( aes(x=delta, y=erry)) +
   scale_y_log10() +
   scale_x_log10() +
-  labs(title='Accuracy: Step Size Vs. Absolute Total Error', x='Step Size', y='Absolute Error')
+  labs(title='Accuracy: Step Size Vs. Total Error', 
+       subtitle='Experimental results from RK4 ', x='Step Size', y='Total Error')
 ggsave(filename='step_too_far.png', plot=gp, width=2*1024, height=1023, units='px', dpi=150)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Compute the log transformed linear regression for the truncation error dominated part of the dataset
+treDat <- solDat %>% 
+  transmute(x=delta, y=erryat) %>% 
+  filter(x>0 & y>0) %>% 
+  mutate(xt=log(x), yt=log(y)) %>% 
+  filter(x>1e-3)
+treFit <- lm(yt ~ xt, data=treDat)     
+treDat <- treDat %>% 
+  mutate(yf=exp(coef(treFit)[1])*x^(coef(treFit)[2]))
+
+# Note the value for 'xt' in the fit will be the order of the RK method used.  
+# This is a practical way experimentally to compute the order for a RK method.
+print(summary(treFit))
+
+ggplot(data=treDat, aes(x=x)) +
+  geom_line(aes(y=y), col='red') +
+  geom_line(aes(y=yf), col='blue') +
+  scale_y_log10() +
+  scale_x_log10() 
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Compute the log transformed linear regression for the round-off error dominated part of the dataset
+roeDat <- solDat %>% 
+  transmute(x=delta, y=erryat) %>% 
+  filter(x>0 & y>0) %>% 
+  mutate(xt=log(x), yt=log(y)) %>% 
+  filter(x<2e-4)
+roeFit <- lm(yt ~ xt, data=roeDat)     
+roeDat <- roeDat %>% 
+  mutate(yf=exp(coef(roeFit)[1])*x^(coef(roeFit)[2]))
+
+ggplot(data=roeDat, aes(x=x)) +
+  geom_line(aes(y=y), col='red') +
+  geom_line(aes(y=yf), col='blue') +
+  scale_y_log10() +
+  scale_x_log10() 
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Add total, truncation, round-off error to our solution data and plot everything.
+solDat <- solDat %>% mutate(erryattre=exp(coef(treFit)[1])*delta^(coef(treFit)[2]),
+                            erryatroe=exp(coef(roeFit)[1])*delta^(coef(roeFit)[2]),
+                            erryattoe=erryattre+erryatroe)
+
+gp <- ggplot(data=solDat, aes(x=delta)) +
+  geom_line(aes(y=erryattre, col='Mean Truncation Error'), linewidth=5, alpha=0.7) +
+  geom_line(aes(y=erryatroe, col='Mean Round-off Error'), linewidth=5, alpha=0.7) +
+  geom_line(aes(y=erryattoe, col='Mean Total Error'), linewidth=3) +
+  geom_point(aes(y=erryat, col='True Error'), size=0.5) +
+  scale_y_log10(limits=range(solDat$erryat)) +
+  scale_x_log10() +
+  scale_colour_manual(name='Error Type', 
+                      values=c('Mean Total Error'      = 'darkorchid3',
+                               'Mean Truncation Error' = 'goldenrod',
+                               'Mean Round-off Error'  = 'darkolivegreen3',                               
+                               'True Error'            = 'indianred3')) +
+  labs(title='Error Vs. Step Size', 
+       subtitle='Experimental results from RK4 illustrating total error as a sum of round-off and truncation errors.', 
+       x='Step Size', y='Errors')
+ggsave(filename='step_too_far_mean.png', plot=gp, width=1024, height=600, units='px', dpi=100)
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Compute the log transformed linear regression for t
+troeDat <- solDat %>% 
+  transmute(x=delta, y=errt) %>% 
+  filter(x>0 & y>0) %>% 
+  mutate(xt=log(x), yt=log(y))
+troeFit <- lm(yt ~ xt, data=troeDat)     
+troeDat <- troeDat %>% 
+  mutate(yf=exp(coef(troeFit)[1])*x^(coef(troeFit)[2]))
+
+gp <- ggplot(data=troeDat, aes(x=x)) +
+  geom_line(aes(y=yf, col='Mean Round-off Error'), alpha=0.7, linewidth=10) +
+  geom_point(aes(y=y, col='True Error'), size=0.5) +
+  scale_y_log10() +
+  scale_x_log10() +
+  scale_colour_manual(name='Error Type', 
+                      values=c('Mean Round-off Error'  = 'darkolivegreen3',                               
+                               'True Error'            = 'indianred3')) +
+  labs(title='Independent Variable Error Vs. Step Size', 
+       subtitle='Experimental results from RK4.', 
+       x='Step Size', y='Errors')
+ggsave(filename='step_too_far_tfit.png', plot=gp, width=1024, height=600, units='px', dpi=100)
+
