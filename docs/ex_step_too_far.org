@@ -97,8 +97,8 @@ something like this:
 file:pics/step_too_far_mean.png
 
 In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of the residual distribution.  When
-truncation error dominates the distribution is very tight and symmetric about the mean.  The round-off errors are quite different in that they have a much higher
-variance, and the distribution has a long tail toward zero.  These observations about round-off error commonly hold in practice.  
+truncation error dominates the distribution is very tight and symmetric about the mean.  The round-off errors are quite different in that they have a much
+higher variance.
 
 The final value of \(t\) for a solution is a sum of \(\Delta{t}\) values, and will therefore be impacted by round-off errors.  For fixed step size algorithms
 round-off errors may be greatly reduced by computing each \(t\) point as a product instead of a running sum.  Unfortunately adaptive algorithms don't provide
