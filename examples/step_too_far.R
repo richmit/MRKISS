@@ -57,7 +57,7 @@ treDat <- solDat %>%
   transmute(x=delta, y=erryat) %>% 
   filter(x>0 & y>0) %>% 
   mutate(xt=log(x), yt=log(y)) %>% 
-  filter(x>1e-3)
+  filter(x>2e-3)
 treFit <- lm(yt ~ xt, data=treDat)     
 treDat <- treDat %>% 
   mutate(yf=exp(coef(treFit)[1])*x^(coef(treFit)[2]))
@@ -66,11 +66,11 @@ treDat <- treDat %>%
 # This is a practical way experimentally to compute the order for a RK method.
 print(summary(treFit))
 
-ggplot(data=treDat, aes(x=x)) +
-  geom_line(aes(y=y), col='red') +
-  geom_line(aes(y=yf), col='blue') +
-  scale_y_log10() +
-  scale_x_log10() 
+## ggplot(data=treDat, aes(x=x)) +
+##   geom_line(aes(y=y), col='red') +
+##   geom_line(aes(y=yf), col='blue') +
+##   scale_y_log10() +
+##   scale_x_log10() 
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Compute the log transformed linear regression for the round-off error dominated part of the dataset
@@ -83,11 +83,24 @@ roeFit <- lm(yt ~ xt, data=roeDat)
 roeDat <- roeDat %>% 
   mutate(yf=exp(coef(roeFit)[1])*x^(coef(roeFit)[2]))
 
-ggplot(data=roeDat, aes(x=x)) +
-  geom_line(aes(y=y), col='red') +
-  geom_line(aes(y=yf), col='blue') +
-  scale_y_log10() +
-  scale_x_log10() 
+## ggplot(data=roeDat, aes(x=x)) +
+##   geom_line(aes(y=y), col='red') +
+##   geom_line(aes(y=yf), col='blue') +
+##   scale_y_log10() +
+##   scale_x_log10() 
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+gp <- ggplot() + 
+  geom_density(data=treDat, aes(x=y-yf, fill='Truncation Error'), alpha=0.75, linewidth=0) + 
+  geom_density(data=roeDat, aes(x=y-yf, fill='Round-off Error'), alpha=0.5, linewidth=0) +
+  scale_fill_manual(name='Error Type', 
+                      values=c('Truncation Error' = 'goldenrod',
+                               'Round-off Error'  = 'darkolivegreen3')) +
+  labs(title='Truncation Vs. Round-off Residual Distribution', 
+       subtitle='Experimental results from RK4.', 
+       x='Error', y='') +
+  theme(axis.text.y=element_blank())
+ggsave(filename='step_too_far_trdst.png', plot=gp, width=1024, height=600, units='px', dpi=100)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Add total, truncation, round-off error to our solution data and plot everything.

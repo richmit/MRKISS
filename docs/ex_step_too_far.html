@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-20 Wed 14:40 -->
+<!-- 2025-08-20 Wed 18:22 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>Runge-Kutta Step Size and Accuracy</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-20 14:40:02</i></td>
+<td class="org-left"><i>2025-08-20 18:22:16</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-20 14:40:03</i></td>
+<td class="org-left"><i>2025-08-20 18:22:30</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="orgce1ebb6">
+<div class="org" id="org3bd1240">
 <p>
 In this example we solve a simple equation with various step sizes in order to observe the relationship between step size and
 accuracy.
@@ -336,7 +336,7 @@ Here is a log-log plot of our measured results:
 </p>
 
 
-<div id="org348f284" class="figure">
+<div id="org009760a" class="figure">
 <p><img src="pics/step_too_far.png" alt="step_too_far.png" width="90%" align="center" />
 </p>
 </div>
@@ -347,16 +347,22 @@ something like this:
 </p>
 
 
-<div id="orgdf6badf" class="figure">
+<div id="org9fde0e7" class="figure">
 <p><img src="pics/step_too_far_mean.png" alt="step_too_far_mean.png" width="90%" align="center" />
 </p>
 </div>
 
 <p>
-In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of the residual distribution.  When
-truncation error dominates the distribution is very tight and symmetric about the mean.  The round-off errors are quite different in that they have a much
-higher variance.
+In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of the residual distribution.  In
+particular the variance is much higher for round-off residuals than truncation residuals.  While this is not always the case, it's a pretty common occurance
+in practice.
 </p>
+
+
+<div id="orge286fe3" class="figure">
+<p><img src="pics/step_too_far_trdst.png" alt="step_too_far_trdst.png" width="90%" align="center" />
+</p>
+</div>
 
 <p>
 The final value of \(t\) for a solution is a sum of \(\Delta{t}\) values, and will therefore be impacted by round-off errors.  For fixed step size algorithms
@@ -365,7 +371,7 @@ such a simple remedy.  Here is a glimpse of the impact of step size on \(t\) rou
 </p>
 
 
-<div id="orga56730b" class="figure">
+<div id="org61f4ecd" class="figure">
 <p><img src="pics/step_too_far_tfit.png" alt="step_too_far_tfit.png" width="90%" align="center" />
 </p>
 </div>
