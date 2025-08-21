@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-20 Wed 18:22 -->
+<!-- 2025-08-21 Thu 12:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>Runge-Kutta Step Size and Accuracy</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-20 18:22:16</i></td>
+<td class="org-left"><i>2025-08-21 12:13:00</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-20 18:22:30</i></td>
+<td class="org-left"><i>2025-08-21 12:13:01</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="org3bd1240">
+<div class="org" id="org51f1bc7">
 <p>
 In this example we solve a simple equation with various step sizes in order to observe the relationship between step size and
 accuracy.
@@ -325,8 +325,7 @@ directly measure total error.  For moderate step sizes we observe truncation err
 size gets smaller, we see the total error continue to improve as expected; however, the nice smooth response curve begins to
 roughen up a bit with what looks like random noise.  Eventually we reach small enough step sizes that round-off error begins
 to dominate the results, and accuracy degrades as step size continues to decrease. The point at which this happens is very
-much dependent upon the RK method, the problem, and how the method is implemented.  This last point is important.  Simply
-rearranging the order of operations can have dramatic impact on final error.
+much dependent upon the RK method, the problem, and how both are is implemented.
 </p>
 
 </div>
@@ -336,7 +335,7 @@ Here is a log-log plot of our measured results:
 </p>
 
 
-<div id="org009760a" class="figure">
+<div id="org0241ffd" class="figure">
 <p><img src="pics/step_too_far.png" alt="step_too_far.png" width="90%" align="center" />
 </p>
 </div>
@@ -347,31 +346,30 @@ something like this:
 </p>
 
 
-<div id="org9fde0e7" class="figure">
+<div id="org75ac442" class="figure">
 <p><img src="pics/step_too_far_mean.png" alt="step_too_far_mean.png" width="90%" align="center" />
 </p>
 </div>
 
 <p>
-In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of the residual distribution.  In
-particular the variance is much higher for round-off residuals than truncation residuals.  While this is not always the case, it's a pretty common occurance
-in practice.
+In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of variance in the residual distribution.
+While it is not always the case, it's a pretty common occurrence to see higher variance in round-off error than truncation error in practice.
 </p>
 
 
-<div id="orge286fe3" class="figure">
+<div id="org0716c29" class="figure">
 <p><img src="pics/step_too_far_trdst.png" alt="step_too_far_trdst.png" width="90%" align="center" />
 </p>
 </div>
 
 <p>
-The final value of \(t\) for a solution is a sum of \(\Delta{t}\) values, and will therefore be impacted by round-off errors.  For fixed step size algorithms
-round-off errors may be greatly reduced by computing each \(t\) point as a product instead of a running sum.  Unfortunately adaptive algorithms don't provide
-such a simple remedy.  Here is a glimpse of the impact of step size on \(t\) round-off:
+Truncation error only impacts the accuracy of \(\mathbf{y}\), but round-off error impacts both \(\mathbf{y}\) and \(t\).  For fixed step size algorithms
+round-off errors in \(t\) may be greatly reduced by computing each \(t\) as a product instead of a running sum.  Here is a glimpse of the impact of step size
+on \(t\) round-off:
 </p>
 
 
-<div id="org61f4ecd" class="figure">
+<div id="orge8328ae" class="figure">
 <p><img src="pics/step_too_far_tfit.png" alt="step_too_far_tfit.png" width="90%" align="center" />
 </p>
 </div>
@@ -462,7 +460,7 @@ treDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> solDat <spa
   transmute(x=delta, y=erryat) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
   filter(x&gt;0 &amp; y&gt;0) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
   mutate(xt=log(x), yt=log(y)) <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
-  filter(x&gt;1e-3)
+  filter(x&gt;2e-3)
 treFit <span style="color: #8470ff; font-weight: bold;">&lt;-</span> lm(yt ~ xt, data=treDat)     
 treDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> treDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
   mutate(yf=exp(coef(treFit)[1])*x^(coef(treFit)[2]))
@@ -471,11 +469,11 @@ treDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> treDat <spa
 <span style="color: #ffa500;"># </span><span style="color: #ff7f24;">This is a practical way experimentally to compute the order for a RK method.</span>
 print(summary(treFit))
 
-ggplot(data=treDat, aes(x=x)) +
-  geom_line(aes(y=y), col=<span style="color: #fa8072;">'red'</span>) +
-  geom_line(aes(y=yf), col=<span style="color: #fa8072;">'blue'</span>) +
-  scale_y_log10() +
-  scale_x_log10() 
+<span style="color: #ffa500;">## </span><span style="color: #ff7f24;">ggplot(data=treDat, aes(x=x)) +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">geom_line(aes(y=y), col='red') +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">geom_line(aes(y=yf), col='blue') +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">scale_y_log10() +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">scale_x_log10() </span>
 
 <span style="color: #ffa500;"># </span><span style="color: #ff7f24;">Compute the log transformed linear regression for the round-off error dominated part of the dataset</span>
 roeDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> solDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
@@ -487,11 +485,23 @@ roeFit <span style="color: #8470ff; font-weight: bold;">&lt;-</span> lm(yt ~ xt,
 roeDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> roeDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> 
   mutate(yf=exp(coef(roeFit)[1])*x^(coef(roeFit)[2]))
 
-ggplot(data=roeDat, aes(x=x)) +
-  geom_line(aes(y=y), col=<span style="color: #fa8072;">'red'</span>) +
-  geom_line(aes(y=yf), col=<span style="color: #fa8072;">'blue'</span>) +
-  scale_y_log10() +
-  scale_x_log10() 
+<span style="color: #ffa500;">## </span><span style="color: #ff7f24;">ggplot(data=roeDat, aes(x=x)) +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">geom_line(aes(y=y), col='red') +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">geom_line(aes(y=yf), col='blue') +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">scale_y_log10() +</span>
+<span style="color: #ffa500;">##   </span><span style="color: #ff7f24;">scale_x_log10() </span>
+
+gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot() + 
+  geom_density(data=treDat, aes(x=y-yf, fill=<span style="color: #fa8072;">'Truncation Error'</span>), alpha=0.75, linewidth=0) + 
+  geom_density(data=roeDat, aes(x=y-yf, fill=<span style="color: #fa8072;">'Round-off Error'</span>), alpha=0.5, linewidth=0) +
+  scale_fill_manual(name=<span style="color: #fa8072;">'Error Type'</span>, 
+                      values=c(<span style="color: #fa8072;">'Truncation Error'</span> = <span style="color: #fa8072;">'goldenrod'</span>,
+                               <span style="color: #fa8072;">'Round-off Error'</span>  = <span style="color: #fa8072;">'darkolivegreen3'</span>)) +
+  labs(title=<span style="color: #fa8072;">'Truncation Vs. Round-off Residual Distribution'</span>, 
+       subtitle=<span style="color: #fa8072;">'Experimental results from RK4.'</span>, 
+       x=<span style="color: #fa8072;">'Error'</span>, y=<span style="color: #fa8072;">''</span>) +
+  theme(axis.text.y=element_blank())
+ggsave(filename=<span style="color: #fa8072;">'step_too_far_trdst.png'</span>, plot=gp, width=1024, height=600, units=<span style="color: #fa8072;">'px'</span>, dpi=100)
 
 <span style="color: #ffa500;"># </span><span style="color: #ff7f24;">Add total, truncation, round-off error to our solution data and plot everything.</span>
 solDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> solDat <span style="color: #8470ff; font-weight: bold;">%&gt;%</span> mutate(erryattre=exp(coef(treFit)[1])*delta^(coef(treFit)[2]),

@@ -81,8 +81,7 @@ Additionally the code may be found at the end of this document in the section [[
   size gets smaller, we see the total error continue to improve as expected; however, the nice smooth response curve begins to
   roughen up a bit with what looks like random noise.  Eventually we reach small enough step sizes that round-off error begins
   to dominate the results, and accuracy degrades as step size continues to decrease. The point at which this happens is very
-  much dependent upon the RK method, the problem, and how the method is implemented.  This last point is important.  Simply
-  rearranging the order of operations can have dramatic impact on final error.
+  much dependent upon the RK method, the problem, and how both are is implemented.
 #+end_org
 
 Here is a log-log plot of our measured results:
@@ -96,16 +95,15 @@ something like this:
 #+ATTR_HTML: :width 90% :align center
 file:pics/step_too_far_mean.png
 
-In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of the residual distribution.  In
-particular the variance is much higher for round-off residuals than truncation residuals.  While this is not always the case, it's a pretty common occurrence
-in practice.
+In the above graph notice the distinct difference between the behavior of truncation and round-off errors in terms of variance in the residual distribution.
+While it is not always the case, it's a pretty common occurrence to see higher variance in round-off error than truncation error in practice.
 
 #+ATTR_HTML: :width 90% :align center
 file:pics/step_too_far_trdst.png
 
-The final value of \(t\) for a solution is a sum of \(\Delta{t}\) values, and will therefore be impacted by round-off errors.  For fixed step size algorithms
-round-off errors may be greatly reduced by computing each \(t\) point as a product instead of a running sum.  Unfortunately adaptive algorithms don't provide
-such a simple remedy.  Here is a glimpse of the impact of step size on \(t\) round-off:
+Truncation error only impacts the accuracy of \(\mathbf{y}\), but round-off error impacts both \(\mathbf{y}\) and \(t\).  For fixed step size algorithms
+round-off errors in \(t\) may be greatly reduced by computing each \(t\) as a product instead of a running sum.  Here is a glimpse of the impact of step size
+on \(t\) round-off:
 
 #+ATTR_HTML: :width 90% :align center
 file:pics/step_too_far_tfit.png
@@ -206,7 +204,7 @@ treDat <- solDat %>%
   transmute(x=delta, y=erryat) %>% 
   filter(x>0 & y>0) %>% 
   mutate(xt=log(x), yt=log(y)) %>% 
-  filter(x>1e-3)
+  filter(x>2e-3)
 treFit <- lm(yt ~ xt, data=treDat)     
 treDat <- treDat %>% 
   mutate(yf=exp(coef(treFit)[1])*x^(coef(treFit)[2]))
@@ -215,11 +213,11 @@ treDat <- treDat %>%
 # This is a practical way experimentally to compute the order for a RK method.
 print(summary(treFit))
 
-ggplot(data=treDat, aes(x=x)) +
-  geom_line(aes(y=y), col='red') +
-  geom_line(aes(y=yf), col='blue') +
-  scale_y_log10() +
-  scale_x_log10() 
+## ggplot(data=treDat, aes(x=x)) +
+##   geom_line(aes(y=y), col='red') +
+##   geom_line(aes(y=yf), col='blue') +
+##   scale_y_log10() +
+##   scale_x_log10() 
 
 # Compute the log transformed linear regression for the round-off error dominated part of the dataset
 roeDat <- solDat %>% 
@@ -231,11 +229,23 @@ roeFit <- lm(yt ~ xt, data=roeDat)
 roeDat <- roeDat %>% 
   mutate(yf=exp(coef(roeFit)[1])*x^(coef(roeFit)[2]))
 
-ggplot(data=roeDat, aes(x=x)) +
-  geom_line(aes(y=y), col='red') +
-  geom_line(aes(y=yf), col='blue') +
-  scale_y_log10() +
-  scale_x_log10() 
+## ggplot(data=roeDat, aes(x=x)) +
+##   geom_line(aes(y=y), col='red') +
+##   geom_line(aes(y=yf), col='blue') +
+##   scale_y_log10() +
+##   scale_x_log10() 
+
+gp <- ggplot() + 
+  geom_density(data=treDat, aes(x=y-yf, fill='Truncation Error'), alpha=0.75, linewidth=0) + 
+  geom_density(data=roeDat, aes(x=y-yf, fill='Round-off Error'), alpha=0.5, linewidth=0) +
+  scale_fill_manual(name='Error Type', 
+                      values=c('Truncation Error' = 'goldenrod',
+                               'Round-off Error'  = 'darkolivegreen3')) +
+  labs(title='Truncation Vs. Round-off Residual Distribution', 
+       subtitle='Experimental results from RK4.', 
+       x='Error', y='') +
+  theme(axis.text.y=element_blank())
+ggsave(filename='step_too_far_trdst.png', plot=gp, width=1024, height=600, units='px', dpi=100)
 
 # Add total, truncation, round-off error to our solution data and plot everything.
 solDat <- solDat %>% mutate(erryattre=exp(coef(treFit)[1])*delta^(coef(treFit)[2]),
