@@ -107,9 +107,8 @@ contains
     ! Process arguments
     append = .false.
     if (present(append_o)) append = append_o
-    prt_titles = .not. append_o
+    prt_titles = .not. append
     if (present(prt_titles_o)) prt_titles = prt_titles_o
-
     tag = -1
     if (present(tag_o)) tag = tag_o
     step = 1
