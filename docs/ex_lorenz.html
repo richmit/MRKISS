@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-18 Mon 15:22 -->
+<!-- 2025-08-21 Thu 13:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>The Lorenz Attractor</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-18 15:21:55</i></td>
+<td class="org-left"><i>2025-08-21 13:29:44</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-18 15:22:44</i></td>
+<td class="org-left"><i>2025-08-21 13:29:45</i></td>
 </tr>
 </tbody>
 </table>
@@ -285,7 +285,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
-<li><a href="#fixed-t">2. Curve Evoluation Animation</a></li>
+<li><a href="#fixed-t">2. Curve Evolution Animation</a></li>
 <li><a href="#fixed-y">3. Sphere Sweeps</a></li>
 <li><a href="#max-y">4. Limiting Step Length</a></li>
 <li><a href="#full-code">5. Full Code Listing</a>
@@ -313,39 +313,39 @@ with the spacing of the solution points.  This example uses the <a href="https:/
 </div>
 </div>
 <div id="outline-container-fixed-t" class="outline-2">
-<h2 id="fixed-t"><span class="section-number-2">2.</span> Curve Evoluation Animation</h2>
+<h2 id="fixed-t"><span class="section-number-2">2.</span> Curve Evolution Animation</h2>
 <div class="outline-text-2" id="text-fixed-t">
 <p>
-For animations of the evolution of the curve, we normally use a fixed \(\Delta{t}\) because this preserves time in the animation so we can see the point
-tracing the curve speed up and slow down as the dirivative changes.  We can produce such a solution with the <code>steps_fixed_stab_*t()</code> solvers. Here is an
+For animations of the evolution of the curve we normally use a fixed \(\Delta{t}\) because this preserves time in the animation. That is to say we can see the
+point tracing the curve speed up and slow down as the derivative changes.  We can produce such a solution with the <code>steps_fixed_stab</code> solvers. Here is an
 example of such a curve:
 </p>
 
 
-<div id="orgb399800" class="figure">
+<div id="orgaf48d47" class="figure">
 <p><img src="pics/lorenz_fixed.png" alt="lorenz_fixed.png" width="90%" align="center" />
 </p>
 </div>
 
 <p>
-Notice the way some of the steps are much longer than others.  This is especially apparnet in the upper right:
+Notice the way some of the steps are much longer than others.  This is especially apparent in the upper left:
 </p>
 
 
-<div id="org34bbf4d" class="figure">
+<div id="orgfed4928" class="figure">
 <p><img src="pics/lorenz_fixed-c.png" alt="lorenz_fixed-c.png" width="90%" align="center" />
 </p>
 </div>
 
 <p>
-Many path animation tools have teh ablity to interpolate nitermediate points on peiceweise curves.  SOme even have the ablty to use derviative information and
-do Hermite interpolation.  Having a few longer steps when using such a tool is no issue.  OTOH, when simply animating successve solution steps, large steps
-can make the animation jerkey.  When this happens, if you still want to preserve time in the animation, the only real solution is to decrease the value used
+Many path animation tools have the ability to interpolate intermediate points on piecewise curves.  Some even have the ability to use derivative information and
+do Hermite interpolation.  Having a few longer steps when using such a tool is no issue.  OTOH, when simply animating successive solution steps, large steps
+can make the animation jerky.  When this happens, if you still want to preserve time in the animation, the only real solution is to decrease the value used
 for \(\Delta{t}\).
 </p>
 
 <p>
-THe solutions used in the images above were created by this snippit of <a href="https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90"><code>examples/lorenz.f90</code></a>:
+The solutions used in the images above were created by this snippet of <a href="https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90"><code>examples/lorenz.f90</code></a>:
 </p>
 
 <div class="org-src-container">
@@ -361,7 +361,7 @@ THe solutions used in the images above were created by this snippit of <a href="
 <h2 id="fixed-y"><span class="section-number-2">3.</span> Sphere Sweeps</h2>
 <div class="outline-text-2" id="text-fixed-y">
 <p>
-Ray tracing tools can render seines made up of spheres orders of magnitude faster than they can deal with things like triangle.  Because of this fact it is
+Ray tracing tools can render scenes made up of spheres orders of magnitude faster than they can deal with things like triangles.  Because of this fact it is
 common practice to represent curves in space as thousands, or millions, of spheres tightly packed along the curve &#x2013; this is called a "sphere sweep".  In
 order for this to work out the spheres need to be close together so that the angles of intersection are very small.  Still we don't want too many spheres as
 every sphere adds time to the overall render.  What we really want is to compute the optimal distance between the sphere centers, and then use this distance
@@ -377,10 +377,10 @@ with groups of stream lines.
 <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides two solvers for this situation:
 </p>
 <dl class="org-dl">
-<dt><code>steps_condy_stab_*t()</code></dt><dd>This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
+<dt><code>steps_condy_stab</code></dt><dd>This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
 minimum and maximum bounds for \(\Delta{t}\) which will bracket the correct value.  The resulting curves are perfect for high quality sphere sweep
 renders.</dd>
-<dt><code>steps_sloppy_condy_stab_*t()</code></dt><dd>This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is <i>much</i> faster than the previous option.  The
+<dt><code>steps_sloppy_condy_stab</code></dt><dd>This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is <i>much</i> faster than the previous option.  The
 resulting solutions frequently good enough for a sphere sweep.</dd>
 </dl>
 
@@ -389,13 +389,13 @@ Here are some representative samples:
 </p>
 
 
-<div id="orgadff524" class="figure">
+<div id="org2f402f9" class="figure">
 <p><img src="pics/lorenz_condy.png" alt="lorenz_condy.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="org319e77b" class="figure">
+<div id="org0f1cabc" class="figure">
 <p><img src="pics/lorenz_sloppy_condy_short.png" alt="lorenz_sloppy_condy_short.png" width="90%" align="center" />
 </p>
 </div>
@@ -437,8 +437,8 @@ intervals because every point impacts rendering speed.  In addition, with some t
 </p>
 
 <p>
-Of course we can use <code>steps_condy_stab_*t()</code> and <code>steps_sloppy_condy_stab_*t(..., adj_short_o=1)</code> as we did in the <a href="#fixed-y">previous section</a>; however,
-<code>steps_sloppy_condy_stab_*t()</code> without the <code>adj_short_o=1</code> argument that may be more useful.  Without this option only steps longer than the target are adjusted.
+Of course we can use <code>steps_condy_stab</code> and <code>steps_sloppy_condy_stab(..., adj_short_o=1)</code> as we did in the <a href="#fixed-y">previous section</a>; however,
+<code>steps_sloppy_condy_stab</code> without the <code>adj_short_o=1</code> argument that may be more useful.  Without this option only steps longer than the target are adjusted.
 </p>
 
 <p>
@@ -446,7 +446,7 @@ Here is the result:
 </p>
 
 
-<div id="org2d549f9" class="figure">
+<div id="orgabfe89d" class="figure">
 <p><img src="pics/lorenz_sloppy_condy.png" alt="lorenz_sloppy_condy.png" width="90%" align="center" />
 </p>
 </div>

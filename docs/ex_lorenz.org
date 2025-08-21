@@ -65,29 +65,29 @@ with the spacing of the solution points.  This example uses the [[https://www.mi
 *[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides for these kinds of problems.
 
 
-* Curve Evoluation Animation
+* Curve Evolution Animation
 :PROPERTIES:
 :CUSTOM_ID: fixed-t
 :END:
 
-For animations of the evolution of the curve, we normally use a fixed \(\Delta{t}\) because this preserves time in the animation so we can see the point
-tracing the curve speed up and slow down as the dirivative changes.  We can produce such a solution with the ~steps_fixed_stab_*t()~ solvers. Here is an
+For animations of the evolution of the curve we normally use a fixed \(\Delta{t}\) because this preserves time in the animation. That is to say we can see the
+point tracing the curve speed up and slow down as the derivative changes.  We can produce such a solution with the ~steps_fixed_stab~ solvers. Here is an
 example of such a curve:
 
 #+ATTR_HTML: :width 90% :align center
 file:pics/lorenz_fixed.png
 
-Notice the way some of the steps are much longer than others.  This is especially apparnet in the upper right:
+Notice the way some of the steps are much longer than others.  This is especially apparent in the upper left:
 
 #+ATTR_HTML: :width 90% :align center
 file:pics/lorenz_fixed-c.png
 
-Many path animation tools have teh ablity to interpolate nitermediate points on peiceweise curves.  SOme even have the ablty to use derviative information and
-do Hermite interpolation.  Having a few longer steps when using such a tool is no issue.  OTOH, when simply animating successve solution steps, large steps
-can make the animation jerkey.  When this happens, if you still want to preserve time in the animation, the only real solution is to decrease the value used
+Many path animation tools have the ability to interpolate intermediate points on piecewise curves.  Some even have the ability to use derivative information and
+do Hermite interpolation.  Having a few longer steps when using such a tool is no issue.  OTOH, when simply animating successive solution steps, large steps
+can make the animation jerky.  When this happens, if you still want to preserve time in the animation, the only real solution is to decrease the value used
 for \(\Delta{t}\).
 
-THe solutions used in the images above were created by this snippit of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
+The solutions used in the images above were created by this snippet of [[https://github.com/richmit/MRKISS/blob/master/examples/lorenz.f90][~examples/lorenz.f90~]]:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
 ~/core/codeBits/bin/getSnip.sh ../examples/lorenz.f90 lorenz_fixed
@@ -106,7 +106,7 @@ THe solutions used in the images above were created by this snippit of [[https:/
 :CUSTOM_ID: fixed-y
 :END:
 
-Ray tracing tools can render seines made up of spheres orders of magnitude faster than they can deal with things like triangle.  Because of this fact it is
+Ray tracing tools can render scenes made up of spheres orders of magnitude faster than they can deal with things like triangles.  Because of this fact it is
 common practice to represent curves in space as thousands, or millions, of spheres tightly packed along the curve -- this is called a "sphere sweep".  In
 order for this to work out the spheres need to be close together so that the angles of intersection are very small.  Still we don't want too many spheres as
 every sphere adds time to the overall render.  What we really want is to compute the optimal distance between the sphere centers, and then use this distance
@@ -116,11 +116,11 @@ Solutions with constant \(\mathbf{\Delta{y}}\) steps are also used for /constant
 with groups of stream lines.
 
 *[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides two solvers for this situation:
-  - ~steps_condy_stab_*t()~ ::
+  - ~steps_condy_stab~ ::
     This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
     minimum and maximum bounds for \(\Delta{t}\) which will bracket the correct value.  The resulting curves are perfect for high quality sphere sweep
     renders.
-  - ~steps_sloppy_condy_stab_*t()~ ::
+  - ~steps_sloppy_condy_stab~ ::
     This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is /much/ faster than the previous option.  The
     resulting solutions frequently good enough for a sphere sweep.
 
@@ -167,8 +167,8 @@ When rendering curves as tubes most tools render a sphere at each point and a cy
 appear smooth, and so we wish to avoid large values for \(\mathbf{\Delta{y}}\).  When rendering tubes we /are/ more sensitive to excessive numbers of short
 intervals because every point impacts rendering speed.  In addition, with some tools, very short intervals can introduce rendering glitches.
 
-Of course we can use ~steps_condy_stab_*t()~ and ~steps_sloppy_condy_stab_*t(..., adj_short_o=1)~ as we did in the [[#fixed-y][previous section]]; however,
-~steps_sloppy_condy_stab_*t()~ without the ~adj_short_o=1~ argument that may be more useful.  Without this option only steps longer than the target are adjusted.
+Of course we can use ~steps_condy_stab~ and ~steps_sloppy_condy_stab(..., adj_short_o=1)~ as we did in the [[#fixed-y][previous section]]; however,
+~steps_sloppy_condy_stab~ without the ~adj_short_o=1~ argument that may be more useful.  Without this option only steps longer than the target are adjusted.
 
 Here is the result:
 
