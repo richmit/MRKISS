@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-21 Thu 12:13 -->
+<!-- 2025-08-21 Thu 12:20 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>Runge-Kutta Step Size and Accuracy</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-21 12:13:00</i></td>
+<td class="org-left"><i>2025-08-21 12:19:59</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-21 12:13:01</i></td>
+<td class="org-left"><i>2025-08-21 12:20:00</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="org51f1bc7">
+<div class="org" id="org5bdd595">
 <p>
 In this example we solve a simple equation with various step sizes in order to observe the relationship between step size and
 accuracy.
@@ -335,7 +335,7 @@ Here is a log-log plot of our measured results:
 </p>
 
 
-<div id="org0241ffd" class="figure">
+<div id="org7c0a408" class="figure">
 <p><img src="pics/step_too_far.png" alt="step_too_far.png" width="90%" align="center" />
 </p>
 </div>
@@ -346,7 +346,7 @@ something like this:
 </p>
 
 
-<div id="org75ac442" class="figure">
+<div id="orgbb8c13d" class="figure">
 <p><img src="pics/step_too_far_mean.png" alt="step_too_far_mean.png" width="90%" align="center" />
 </p>
 </div>
@@ -357,7 +357,7 @@ While it is not always the case, it's a pretty common occurrence to see higher v
 </p>
 
 
-<div id="org0716c29" class="figure">
+<div id="org13d40dc" class="figure">
 <p><img src="pics/step_too_far_trdst.png" alt="step_too_far_trdst.png" width="90%" align="center" />
 </p>
 </div>
@@ -369,7 +369,7 @@ on \(t\) round-off:
 </p>
 
 
-<div id="orge8328ae" class="figure">
+<div id="org6e9e707" class="figure">
 <p><img src="pics/step_too_far_tfit.png" alt="step_too_far_tfit.png" width="90%" align="center" />
 </p>
 </div>
@@ -400,15 +400,15 @@ on \(t\) round-off:
 
   <span style="color: #63b8ff;">real</span>(kind=rk)             ::<span style="color: #7fffd4;"> solution(1+2*deq_dim, 1)</span>
   <span style="color: #63b8ff;">integer</span>                   ::<span style="color: #7fffd4;"> status, istats(istats_size), sso, num_pts</span>
-  <span style="color: #63b8ff;">logical</span>                   ::<span style="color: #7fffd4;"> fi</span>
+  <span style="color: #63b8ff;">logical</span>                   ::<span style="color: #7fffd4;"> append</span>
 
-  fi = <span style="color: #00ffff;">.true.</span>
+  append = <span style="color: #00ffff;">.false.</span>
   <span style="color: #00ffff;">do</span> sso = 1000,2100
      num_pts = 1.005_rk ** sso
      <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'("sso=",i4," num_pts=",i0)'</span>, sso, num_pts
      <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
-     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"step_too_far.csv"</span>, tag_o=sso, prt_titles_o=fi, append_o=<span style="color: #00ffff;">.not.</span> fi)
-     fi = <span style="color: #00ffff;">.false.</span>
+     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"step_too_far.csv"</span>, tag_o=sso, append_o=append)
+     append = <span style="color: #00ffff;">.true.</span>
   <span style="color: #00ffff;">end do</span>
 
 <span style="color: #00ffff;">contains</span>

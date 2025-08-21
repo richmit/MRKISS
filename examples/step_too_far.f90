@@ -47,8 +47,7 @@
 !!  size gets smaller, we see the total error continue to improve as expected; however, the nice smooth response curve begins to
 !!  roughen up a bit with what looks like random noise.  Eventually we reach small enough step sizes that round-off error begins
 !!  to dominate the results, and accuracy degrades as step size continues to decrease. The point at which this happens is very
-!!  much dependent upon the RK method, the problem, and how the method is implemented.  This last point is important.  Simply
-!!  rearranging the order of operations can have dramatic impact on final error.
+!!  much dependent upon the RK method, the problem, and how both are is implemented.
 !!
 !.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
@@ -70,15 +69,15 @@ program step_too_far
 
   real(kind=rk)             :: solution(1+2*deq_dim, 1)
   integer                   :: status, istats(istats_size), sso, num_pts
-  logical                   :: fi
+  logical                   :: append
 
-  fi = .true.
+  append = .false.
   do sso = 1000,2100
      num_pts = 1.005_rk ** sso
      print '("sso=",i4," num_pts=",i0)', sso, num_pts
      call steps_fixed_stab(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
-     call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, prt_titles_o=fi, append_o=.not. fi)
-     fi = .false.
+     call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, append_o=append)
+     append = .true.
   end do
 
 contains

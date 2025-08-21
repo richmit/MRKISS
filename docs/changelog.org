@@ -53,7 +53,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Known Issues
     - N/A
   - API breaking Changes
-    - N/A
+    - print_solution: Default for prt_titles_o changed from .TRUE. to .NOT. append_o.
   - Deprecated functionality
     - N/A
   - New functionality

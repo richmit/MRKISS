@@ -141,15 +141,15 @@ program step_too_far
 
   real(kind=rk)             :: solution(1+2*deq_dim, 1)
   integer                   :: status, istats(istats_size), sso, num_pts
-  logical                   :: fi
+  logical                   :: append
 
-  fi = .true.
+  append = .false.
   do sso = 1000,2100
      num_pts = 1.005_rk ** sso
      print '("sso=",i4," num_pts=",i0)', sso, num_pts
      call steps_fixed_stab(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
-     call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, prt_titles_o=fi, append_o=.not. fi)
-     fi = .false.
+     call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, append_o=append)
+     append = .true.
   end do
 
 contains

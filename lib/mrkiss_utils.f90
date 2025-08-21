@@ -79,7 +79,7 @@ contains
   !! @param start_o       Starting index to print in \p solution. Default: 1
   !! @param end_o         Ending index to print in \p solution.  Default: Number of columns in \p solution.
   !! @param step_o        Print only every \p step_o th value in solution. Default: 1
-  !! @param prt_titles_o  Print titles if `.TRUE.`  Default: `.TRUE.`
+  !! @param prt_titles_o  Print titles if `.TRUE.`  Default: `.not. append_o`
   !! @param separator_o   String to place between fields.  Default: ',' if fmt_w_o missing, and ' ' otherwise.
   !! @param t_min_o       Print only solutions with time values `>= t_min_o`
   !! @param t_max_o       Print only solutions with time values `<= t_min_o`
@@ -100,21 +100,18 @@ contains
     logical,          intent(in), optional :: prt_titles_o, append_o
     ! Local variables
     integer                                :: fmt_e, fmt_d, fmt_w, start_idx, end_idx, step, y_dim, sol_y_idx, tag
-    logical                                :: prt_titles
+    logical                                :: prt_titles, append
     integer                                :: i, num_int, num_real, out_io_stat, out_io_unit
     character(len=:), allocatable          :: fmt, separator, access_mode, fmt_r_str, fmt_i_str, fmt_a_str
     character(len=512)                     :: tmp_str
     ! Process arguments
-    access_mode = 'SEQUENTIAL'
-    if (present(append_o)) then
-       if (append_o) then
-          access_mode = 'APPEND'
-       end if
-    end if
+    append = .false.
+    if (present(append_o)) append = append_o
+    prt_titles = .not. append_o
+    if (present(prt_titles_o)) prt_titles = prt_titles_o
+
     tag = -1
     if (present(tag_o)) tag = tag_o
-    prt_titles = .true.
-    if (present(prt_titles_o)) prt_titles = prt_titles_o
     step = 1
     if (present(step_o)) step = step_o
     fmt_d = fmt_d_ai
@@ -171,6 +168,11 @@ contains
        num_int = 2
     end if
     ! Open file
+    if (append) then
+       access_mode = 'APPEND'
+    else
+       access_mode = 'SEQUENTIAL'
+    end if
     if (present(filename_o)) then
        open(newunit=out_io_unit, file=filename_o, form='formatted', action='write', access=access_mode, iostat=out_io_stat)
        if (out_io_stat /= 0) then
