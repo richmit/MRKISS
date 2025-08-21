@@ -77,14 +77,6 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :PROPERTIES:
 :CUSTOM_ID: v2025-08-15
 :END:
-  - Fixed Bugs
-    - N/A
-  - Known Issues
-    - N/A
-  - API breaking Changes
-    - N/A
-  - Deprecated functionality
-    - N/A
   - New functionality
     - seq has new argument: max_pts_o
   - Documentation
@@ -92,16 +84,6 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - Added inline source to small Butcher Tableaux
     - Added details to some example top comments.
     - Example org docs now pull summary from oxygen comments
-  - Examples
-    - New
-      - N/A
-    - Updated
-      - N/A
-  - Tests
-    - New
-      - N/A
-    - Updated
-      - N/A
   - Miscellaneous
     - one_step_stab() & one_step_etab() are slightly faster.
 
@@ -111,8 +93,6 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :END:
   - Fixed Bugs
     - analyze_solution(): Fixed bug with output files going to STDOUT.
-  - Known Issues
-    - N/A
   - API breaking Changes
     - analyze_solution(): removed arguments:
       - y_dim_o
@@ -121,8 +101,6 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
       - width_o => fmt_w_o
       - digits_o => fmt_d_o
     - Renumbered istats elements
-  - Deprecated functionality
-    - N/A
   - New functionality
     - Reworked I/O significantly across mrkiss_utils functions.
     - Finalized a stepsize control in steps_adapt_etab
@@ -151,16 +129,9 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Documentation
     - Rewrote much of main index page.
     - Cleaned up whitespace in several comments.
-  - Examples
-    - New
-      - N/A
-    - Updated
-      - N/A
   - Tests
     - New
       - utils.f90: Test utilities print functions.
-    - Updated
-      - N/A
   - Miscellaneous
     - Collapsed declaration lines in all modules.
     - Removed unnecessary imports of t_delta_tiny
@@ -171,16 +142,12 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :END:
   - Fixed Bugs
     - Fixed integer type for out_io_stat & out_io_unit
-  - Known Issues
-    - N/A
   - API breaking Changes
     - interpolate_solution(): Add istats() argument.
     - Removed logical kind from library.
     - Removed integer kind from library.
     - status_to_origin() return changed from len=64 to len=32
     - Removed _wt & _nt suffixes on contents of mrkiss_solvers_wt & mrkiss_solvers_nt
-  - Deprecated functionality
-    - N/A
   - New functionality
     - print_istats()
     - istats constants:
@@ -201,21 +168,12 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - Added refs to all called routines from callers
     - Added returns from all called routines
   - Examples
-    - New
-      - N/A
     - Updated
       - Langford
         - Updated for OpenMP
         - Added writeup
       - three_body
         - Now demos print_istats() & status_to_message()
-  - Tests
-    - New
-      - N/A
-    - Updated
-      - N/A
-  - Miscellaneous
-    - N/A
 
 * v2025-08-04: Feature Release
 :PROPERTIES:
@@ -226,16 +184,12 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - print_solution: Fixed bug with
     - interpolate_solution: Fixed bug with optional argument
     - steps_condy_stab_*t & steps_adapt_etab_*t: : Fixed bug with optional argument
-  - Known Issues
-    - N/A
   - API breaking Changes
     - Removed 'version' from mrkiss_config
     - Removed all sol_no_dy_o, sol_no_t_o, sol_w_dy_o, sol_w_t_o, sol_y_idx_o arguments.
     - no_bisect_error_o is not logical, and it's value matters.
     - Richardson extrapolation used in steps_fixed_stab_wt() when when p_o>0 -- not just present().
     - no_titles_o => titles_o in print_solution.  Value now used.  Usage inverted.
-  - Deprecated functionality
-    - N/A
   - New functionality
     - status_to_origin(): Returns source for status code
     - status_to_message(): Returns message for status code
@@ -250,15 +204,11 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Examples
     - New
       - step_order_vs_error.f90
-    - Updated
-      - N/A
   - Tests
     - New
       - tests/test_rk4_frog_vs_steps: Compare frog output to last line of steps
       - lib/test_build: Test code generation & module build
       - tests/test_statuscodes: Test status_to_origin() & status_to_message().
-    - Updated
-      - N/A
   - Miscellaneous
     - Release automation complete
     - Added makefile to scripts directory to update them from primary copies
