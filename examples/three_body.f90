@@ -35,8 +35,9 @@
 !!  This is one of my favorite IVP example problems.
 !!  
 !!  This is a dimensionless, restricted three gravitational body problem.  The Earth is stationary at the origin.  The Moon
-!!  orbits the Earth at a radius of $1$ and is at @f$(1,0)@f$ at @f$t=0@f$.  The mass ratio is @f$\frac{100}{8145}@f$.  The
-!!  position, @f$(x_1,x_2)@f$, and velocity, @f$(v_1,v_2)@f$, are governed by the following differential equation:
+!!  orbits the Earth at a radius of $1$ and is at @f$(1,0)@f$ at @f$t=0@f$.  The Moon to Earth mass ratio is
+!!  @f$\frac{100}{8145}@f$.  We wish to model the movement of a small satellite with negligible mass.  The position,
+!!  @f$(x_1,x_2)@f$, and velocity, @f$(v_1,v_2)@f$, of this satellite are governed by the following differential equation:
 !!  
 !!   @f[\begin{align*}
 !!       \frac{\mathrm{d}v_1}{\mathrm{d}t} & = v_1 \\
@@ -248,7 +249,7 @@ contains
   end subroutine eq
   
   ! SS-BEGIN:steps_adapt_etab-pho-t-max-stepp:
-  ! Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab().
+  ! Example subroutine replicating the functionality of t_max_o in steps_adapt_etab().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer,          intent(out) :: status
     integer,          intent(out) :: end_run
@@ -269,7 +270,7 @@ contains
   ! SS-END:steps_adapt_etab-pho-t-max-stepp:
 
   ! SS-BEGIN:steps_adapt_etab-fix-delta-stepp:
-  ! Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.
+  ! Example subroutine to adjust t_delta in an attempt to keep y_delta under a maximum value.
   ! It is sloppy because we assume t_delta is linearly proportional to y_delta_len
   subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer,          intent(out) :: status, end_run

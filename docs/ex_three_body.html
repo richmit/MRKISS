@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-18 Mon 15:22 -->
+<!-- 2025-08-21 Thu 14:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>A Three Body Problem</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-18 15:22:16</i></td>
+<td class="org-left"><i>2025-08-21 14:01:05</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-18 15:22:42</i></td>
+<td class="org-left"><i>2025-08-21 14:01:06</i></td>
 </tr>
 </tbody>
 </table>
@@ -305,7 +305,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <h2 id="introduction"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-introduction">
 <p>
-The code for this example is found in <a href="https://github.com/richmit/MRKISS/blob/master/examples/three_body.f90">~examples/three_body.f90</a>.  Additionally the
+The code for this example is found in <a href="https://github.com/richmit/MRKISS/blob/master/examples/three_body.f90">MRKISS/examples/three_body.f90</a>.  Additionally the
 code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
@@ -314,15 +314,16 @@ This example makes several <b><a href="https://github.com/richmit/MRKISS"><code>
 the sections that follow we examine each of those calls in detail.
 </p>
 
-<div class="org" id="org60b4fe1">
+<div class="org" id="org186a6a8">
 <p>
 This is one of my favorite IVP example problems.
 </p>
 
 <p>
 This is a dimensionless, restricted three gravitational body problem.  The Earth is stationary at the origin.  The Moon
-orbits the Earth at a radius of \(1\) and is at \((1,0)\) at \(t=0\).  The mass ratio is \(\frac{100}{8145}\).  The
-position, \((x_1,x_2)\), and velocity, \((v_1,v_2)\), are governed by the following differential equation:
+orbits the Earth at a radius of \(1\) and is at \((1,0)\) at \(t=0\).  The Moon to Earth mass ratio is
+\(\frac{100}{8145}\).  We wish to model the movement of a small satellite with negligible mass.  The position,
+\((x_1,x_2)\), and velocity, \((v_1,v_2)\), of this satellite are governed by the following differential equation:
 </p>
 
 <p>
@@ -394,7 +395,7 @@ In this section we produce the classical image of the solution.
 </p>
 
 
-<div id="orgc8cb198" class="figure">
+<div id="orgdeb7d6e" class="figure">
 <p><img src="pics/three_body.png" alt="three_body.png" />
 </p>
 </div>
@@ -425,13 +426,8 @@ adaptive run takes less than one millisecond.
 
 <p>
 More sophisticated libraries offer the ability to interpolate between solution points at pretty low cost while maintaining the accuracy of the overall method.
-For generative art and visualization we can use Hermite interpolation at an even lower cost.  Normally interpolation is achieved outside the ODE solver and
-directly inside a visualization software platform &#x2013; we simply provide the points and derivatives.
-</p>
-
-<p>
-Notice in the snippet above we only report <code>istats(1)</code> and <code>istats(2)</code> because these are the only two values in <code>istats</code> updated by <code>steps_fixed_stab()</code>.
-In the code below we add <code>istats(4)</code> because <code>steps_adapt_etab()</code> updates this value.  
+For generative art and visualization we can use Hermite interpolation at an even lower cost.  Normally interpolation is not performed in the ODE solver, but
+directly by a visualization software platform &#x2013; we simply provide the points and derivatives.
 </p>
 
 <div class="org-src-container">
@@ -455,13 +451,13 @@ More common is the need to "line up" two solutions on the same \(t\) values for 
 </p>
 
 
-<div id="org25886c3" class="figure">
+<div id="org9717955" class="figure">
 <p><a href="pics/three_body_interp_adapt_path.png"><img src="pics/three_body_interp_adapt_path.png" alt="three_body_interp_adapt_path.png" /></a>
 </p>
 </div>
 
 <p>
-The data for the images above was produced by this code:
+The data for the image above was produced by this code:
 </p>
 
 <div class="org-src-container">
@@ -477,13 +473,13 @@ Less common is linear interpolation:
 </p>
 
 
-<div id="orgcd71590" class="figure">
+<div id="orgd565e5b" class="figure">
 <p><a href="pics/three_body_lin_interp_adapt_path.png"><img src="pics/three_body_lin_interp_adapt_path.png" alt="three_body_lin_interp_adapt_path.png" /></a>
 </p>
 </div>
 
 <p>
-The data for the images above was produced by this code:
+The data for the image above was produced by this code:
 </p>
 
 <div class="org-src-container">
@@ -495,12 +491,12 @@ The data for the images above was produced by this code:
 </div>
 
 <p>
-Note that Hermite interpolation provides an O(3) solution to the IVP. So both are inappropriate if high accuracy solutions are required.  Here we can see the
-errors:
+Note that Hermite interpolation provides an O(3) solution to the IVP, but that may still be inappropriate if high accuracy solutions are required.  Here we
+can see the errors in Hermite interpolation used above:
 </p>
 
 
-<div id="org6f68660" class="figure">
+<div id="orgee99c28" class="figure">
 <p><a href="pics/three_body_interp_adapt_error.png"><img src="pics/three_body_interp_adapt_error.png" alt="three_body_interp_adapt_error.png" /></a>
 </p>
 </div>
@@ -518,7 +514,7 @@ plotting program.
 <p>
 From the perspective of generative art and visualization, fixed time step solutions are important because they preserve "time" in animations.  We can achieve
 fixed steps via interpolation; however, it is frequently more convenient to simply use a fixed step size solver.  Method order for generative art and
-visualization is often thought of as a tool to allow for ascetic step sizes instead of a way to achieve a solution accuracy requirement.
+visualization is often thought of as a tool to allow for aesthetic step sizes instead of a way to achieve a solution accuracy requirement.
 </p>
 
 <p>
@@ -526,7 +522,7 @@ In the following image we see the unsatisfactory result of using a 5th order sol
 </p>
 
 
-<div id="org8ec0043" class="figure">
+<div id="org2c0fa89" class="figure">
 <p><a href="pics/three_body-dp.png"><img src="pics/three_body-dp.png" alt="three_body-dp.png" /></a>
 </p>
 </div>
@@ -548,7 +544,7 @@ The code for the above solution is identical except for a change in Runge-Kutta 
 <h2 id="adaptiveylim"><span class="section-number-2">5.</span> Adaptive Solution With More Steps For A Nice Plot</h2>
 <div class="outline-text-2" id="text-adaptiveylim">
 
-<div id="orgd07b6e1" class="figure">
+<div id="orgeabd7ed" class="figure">
 <p><img src="pics/three_body_ylen.png" alt="three_body_ylen.png" />
 </p>
 </div>
@@ -563,7 +559,7 @@ away from the first two points of the previous solution.  The following subrouti
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.</span>
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to adjust t_delta in an attempt to keep y_delta under a maximum value.</span>
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">It is sloppy because we assume t_delta is linearly proportional to y_delta_len</span>
 <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_sloppy_y_delta_len_max</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
   <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status, end_run</span>
@@ -588,14 +584,13 @@ away from the first two points of the previous solution.  The following subrouti
 </div>
 
 <p>
-This isn't a perfect solution as we make the assumpiont that the length of the difference in y-space is proportional to \(\Delta{t}\), but it works pretty well
-in practice.  A more robust solution can be achieved by adding an <code>sdf_o</code> function and isolating a \(\Delta{t}\) that produces a precisely separated solution.  We touch
-on this topic <a href="#fixedyspace">later</a> when we consider the  <code>steps_condy_stab_*t()</code> solvers.
+This isn't a perfect solution as we make the assumption that the length of the difference in \(\mathbf{y}\mathrm{-space}\) is proportional to \(\Delta{t}\),
+but it works pretty well in practice.  A more robust solution can be achieved by adding an <code>sdf_o</code> function and isolating a \(\Delta{t}\) that produces a
+precisely separated solution.  We touch on this topic <a href="#fixedyspace">later</a> when we consider the <code>steps_condy_stab()</code> solvers.
 </p>
 
 <p>
-We "wire up" the above subroutine into <code>steps_adapt_etab()</code> via the <code>stepp_o</code> argument.  Also make note of the addition of <code>istats(5)</code> to our output
-report.  This value is the number of steps recomputed because <code>stepp_o</code> provided a new <code>t_delta</code> value.
+We "wire up" the above subroutine into <code>steps_adapt_etab()</code> via the <code>stepp_o</code> argument.  
 </p>
 
 <div class="org-src-container">
@@ -614,13 +609,13 @@ report.  This value is the number of steps recomputed because <code>stepp_o</cod
 <h2 id="fixedyspace"><span class="section-number-2">6.</span> Truly Fixed Steps in y-space</h2>
 <div class="outline-text-2" id="text-fixedyspace">
 <p>
-We can achieve truly fixed step sizes in \(\mathbf{y}\mathrm{-space}\) with the <code>steps_condy_stab_*t()</code> solvers. In the image below we see the difference
-between fixed steps in \(t\mathrm{-space}\) vs \(\mathbf{y}\mathrm{-space}\) &#x2013; remember the are only using the position components of the \(\mathbf{y}\)
+We can achieve truly fixed step sizes in \(\mathbf{y}\mathrm{-space}\) with the <code>steps_condy_stab()</code> solvers. In the image below we see the difference
+between fixed steps in \(t\mathrm{-space}\) vs \(\mathbf{y}\mathrm{-space}\) &#x2013; remember we are only using the position components of the \(\mathbf{y}\)
 vector (the first two components) and not the velocity components (the last two components).
 </p>
 
 
-<div id="org75b7c82" class="figure">
+<div id="org994d9da" class="figure">
 <p><img src="pics/three_body_fixed_pos.png" alt="three_body_fixed_pos.png" />
 </p>
 </div>
@@ -630,15 +625,14 @@ Below are the velocity components plotted in the same manner as the position com
 </p>
 
 
-<div id="orgb742f91" class="figure">
+<div id="org6bbd183" class="figure">
 <p><img src="pics/three_body_fixed_vel.png" alt="three_body_fixed_vel.png" />
 </p>
 </div>
 
 <p>
 In the code below we set <code>y_delta_len_idxs_o</code> to <code>[1, 2]</code> in order to have <code>steps_condy_stab()</code> only use the first two components of the solution vector in
-it's length computation.  This will produce steps that are <code>0.0034</code> long with an accuracy of <code>1.0e-5</code>.  Also note the addition of <code>istats(3)</code>, <code>istats(7)</code> and
-<code>istats(8)</code> to our output report.
+it's length computation.  This will produce steps that are <code>0.0034</code> long with an accuracy of <code>1.0e-5</code>.  
 </p>
 
 <div class="org-src-container">
@@ -670,14 +664,13 @@ with <code>steps_sloppy_condy_stab()</code>.
 <h2 id="progstop"><span class="section-number-2">7.</span> Knowing When To Stop</h2>
 <div class="outline-text-2" id="text-progstop">
 <p>
-Sometimes you don't know beforehand when you want the solver to stop.  This is another place where <code>stepp_o</code> can help by providing a way to tell the solver
-when it's time to stop.  For this example we simply tell the solver to stop when we get past a particular value of \(t\).  Of course we could have done this
-with the <code>t_max_o</code> argument.  The <a href="#moonsatorb">next section</a> will explore a more realistic example, but it is complicated by the addition of an SDF
-function.  In this example we keep it simple, and just use the 
+Sometimes you don't know beforehand when you want the solver to stop.  This is another place where <code>stepp_o</code> can help.  For this example we simply tell the
+solver to stop when we get past a particular value of \(t\).  Of course we could have done this with the <code>t_max_o</code> argument.  The <a href="#moonsatorb">next
+section</a> will explore a more realistic example.
 </p>
 
 
-<div id="org12b5b1f" class="figure">
+<div id="org186b15e" class="figure">
 <p><img src="pics/three_body_maxt.png" alt="three_body_maxt.png" />
 </p>
 </div>
@@ -688,7 +681,7 @@ do the trick:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab().</span>
+<pre class="src src-f90"><span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine replicating the functionality of t_max_o in steps_adapt_etab().</span>
 <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_max_t</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
   <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
   <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> end_run</span>
@@ -729,7 +722,7 @@ We wire up this subroutine to <code>steps_adapt_etab()</code> via the <code>step
 <h2 id="moonsatorb"><span class="section-number-2">8.</span> Satellite &amp; Moon Orbit Intersection</h2>
 <div class="outline-text-2" id="text-moonsatorb">
 
-<div id="orgaf6229a" class="figure">
+<div id="org0f8b6e6" class="figure">
 <p><img src="pics/three_body_moon.png" alt="three_body_moon.png" />
 </p>
 </div>
@@ -802,7 +795,6 @@ the solution's position from 1!
 
 <p>
 As usual we wire these two functions up to <code>steps_adapt_etab()</code> via the <code>stepp_o</code> and <code>sdf_o</code> arguments.
-Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the reporting.
 </p>
 
 <div class="org-src-container">
@@ -972,7 +964,7 @@ Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the 
     status = 0
   <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">eq</span>
 
-  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine replicateing the functionality of t_max_o in steps_adapt_etab().</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine replicating the functionality of t_max_o in steps_adapt_etab().</span>
   <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_max_t</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status</span>
     <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> end_run</span>
@@ -991,7 +983,7 @@ Notice the addition of <code>istats(7)</code> and <code>istats(8)</code> to the 
     <span style="color: #00ffff;">end if</span>
   <span style="color: #00ffff;">end subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_max_t</span>
 
-  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to adjust t_delta in an atempt to keep y_delta under a maximum value.</span>
+  <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">Example subroutine to adjust t_delta in an attempt to keep y_delta under a maximum value.</span>
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">It is sloppy because we assume t_delta is linearly proportional to y_delta_len</span>
   <span style="color: #00ffff;">subroutine</span> <span style="color: #00fa9a; font-weight: bold;">sp_sloppy_y_delta_len_max</span>(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">intent</span>(out) ::<span style="color: #7fffd4;"> status, end_run</span>
