@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-21 Thu 12:20 -->
+<!-- 2025-08-22 Fri 13:04 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>Runge-Kutta Step Size and Accuracy</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-21 12:19:59</i></td>
+<td class="org-left"><i>2025-08-22 13:04:20</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-21 12:20:00</i></td>
+<td class="org-left"><i>2025-08-22 13:04:21</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="org5bdd595">
+<div class="org" id="org0821fe5">
 <p>
 In this example we solve a simple equation with various step sizes in order to observe the relationship between step size and
 accuracy.
@@ -335,7 +335,7 @@ Here is a log-log plot of our measured results:
 </p>
 
 
-<div id="org7c0a408" class="figure">
+<div id="org029b5b2" class="figure">
 <p><img src="pics/step_too_far.png" alt="step_too_far.png" width="90%" align="center" />
 </p>
 </div>
@@ -346,7 +346,7 @@ something like this:
 </p>
 
 
-<div id="orgbb8c13d" class="figure">
+<div id="orgbd93ae8" class="figure">
 <p><img src="pics/step_too_far_mean.png" alt="step_too_far_mean.png" width="90%" align="center" />
 </p>
 </div>
@@ -357,7 +357,7 @@ While it is not always the case, it's a pretty common occurrence to see higher v
 </p>
 
 
-<div id="org13d40dc" class="figure">
+<div id="org84d2e64" class="figure">
 <p><img src="pics/step_too_far_trdst.png" alt="step_too_far_trdst.png" width="90%" align="center" />
 </p>
 </div>
@@ -369,7 +369,7 @@ on \(t\) round-off:
 </p>
 
 
-<div id="org6e9e707" class="figure">
+<div id="org6ff79ba" class="figure">
 <p><img src="pics/step_too_far_tfit.png" alt="step_too_far_tfit.png" width="90%" align="center" />
 </p>
 </div>
@@ -448,7 +448,7 @@ The images were produced with R.
 
 <span style="color: #ffa500;"># </span><span style="color: #ff7f24;">Plot the raw results.</span>
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(solDat) +
-  geom_line( aes(x=delta, y=erry)) +
+  geom_line( aes(x=delta, y=erry), col=<span style="color: #fa8072;">'indianred3'</span>) +
   scale_y_log10() +
   scale_x_log10() +
   labs(title=<span style="color: #fa8072;">'Accuracy: Step Size Vs. Total Error'</span>, 
@@ -512,14 +512,14 @@ gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(data=sol
   geom_line(aes(y=erryattre, col=<span style="color: #fa8072;">'Mean Truncation Error'</span>), linewidth=5, alpha=0.7) +
   geom_line(aes(y=erryatroe, col=<span style="color: #fa8072;">'Mean Round-off Error'</span>), linewidth=5, alpha=0.7) +
   geom_line(aes(y=erryattoe, col=<span style="color: #fa8072;">'Mean Total Error'</span>), linewidth=3) +
-  geom_point(aes(y=erryat, col=<span style="color: #fa8072;">'True Error'</span>), size=0.5) +
+  geom_point(aes(y=erryat, col=<span style="color: #fa8072;">'Total Error'</span>), size=0.5) +
   scale_y_log10(limits=range(solDat$erryat)) +
   scale_x_log10() +
   scale_colour_manual(name=<span style="color: #fa8072;">'Error Type'</span>, 
                       values=c(<span style="color: #fa8072;">'Mean Total Error'</span>      = <span style="color: #fa8072;">'darkorchid3'</span>,
                                <span style="color: #fa8072;">'Mean Truncation Error'</span> = <span style="color: #fa8072;">'goldenrod'</span>,
                                <span style="color: #fa8072;">'Mean Round-off Error'</span>  = <span style="color: #fa8072;">'darkolivegreen3'</span>,                               
-                               <span style="color: #fa8072;">'True Error'</span>            = <span style="color: #fa8072;">'indianred3'</span>)) +
+                               <span style="color: #fa8072;">'Total Error'</span>           = <span style="color: #fa8072;">'indianred3'</span>)) +
   labs(title=<span style="color: #fa8072;">'Error Vs. Step Size'</span>, 
        subtitle=<span style="color: #fa8072;">'Experimental results from RK4 illustrating total error as a sum of round-off and truncation errors.'</span>, 
        x=<span style="color: #fa8072;">'Step Size'</span>, y=<span style="color: #fa8072;">'Errors'</span>)
@@ -536,12 +536,12 @@ troeDat <span style="color: #8470ff; font-weight: bold;">&lt;-</span> troeDat <s
 
 gp <span style="color: #8470ff; font-weight: bold;">&lt;-</span> ggplot(data=troeDat, aes(x=x)) +
   geom_line(aes(y=yf, col=<span style="color: #fa8072;">'Mean Round-off Error'</span>), alpha=0.7, linewidth=10) +
-  geom_point(aes(y=y, col=<span style="color: #fa8072;">'True Error'</span>), size=0.5) +
+  geom_point(aes(y=y, col=<span style="color: #fa8072;">'Total Error'</span>), size=0.5) +
   scale_y_log10() +
   scale_x_log10() +
   scale_colour_manual(name=<span style="color: #fa8072;">'Error Type'</span>, 
                       values=c(<span style="color: #fa8072;">'Mean Round-off Error'</span>  = <span style="color: #fa8072;">'darkolivegreen3'</span>,                               
-                               <span style="color: #fa8072;">'True Error'</span>            = <span style="color: #fa8072;">'indianred3'</span>)) +
+                               <span style="color: #fa8072;">'Total Error'</span>           = <span style="color: #fa8072;">'indianred3'</span>)) +
   labs(title=<span style="color: #fa8072;">'Independent Variable Error Vs. Step Size'</span>, 
        subtitle=<span style="color: #fa8072;">'Experimental results from RK4.'</span>, 
        x=<span style="color: #fa8072;">'Step Size'</span>, y=<span style="color: #fa8072;">'Errors'</span>)

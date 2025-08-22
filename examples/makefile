@@ -207,16 +207,18 @@ step_too_far_csv : step_too_far.csv
 step_too_far.csv &: step_too_far
 	./step_too_far$(EXE_SUFFIX)
 
-step_too_far.png &: step_too_far.csv step_too_far.R
+STEP_TOO_FAR_PNGS = step_too_far.png step_too_far_mean.png step_too_far_tfit.png step_too_far_trdst.png
+
+$(STEP_TOO_FAR_PNGS) &: step_too_far.csv step_too_far.R
 	R --no-save --no-echo -q -f step_too_far.R
 
 .PHONY: step_too_far_png
-step_too_far_png : step_too_far.png
-	$(IMG_VIEWER) step_too_far.png &
+step_too_far_png : $(STEP_TOO_FAR_PNGS)
+	$(IMG_VIEWER) $(STEP_TOO_FAR_PNGS) &
 
 .PHONY: step_too_far_clean
 step_too_far_clean :
-	rm -f step_too_far?.csv step_too_far_err.png step_too_far.exe step_too_far step_too_far.o step_too_far.obj
+	rm -f step_too_far.csv $(STEP_TOO_FAR_PNGS) step_too_far.exe step_too_far step_too_far.o step_too_far.obj
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 brusselator : brusselator.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)

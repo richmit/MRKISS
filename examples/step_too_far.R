@@ -44,7 +44,8 @@ solDat <- fread("step_too_far.csv") %>%
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Plot the raw results.
 gp <- ggplot(solDat) +
-  geom_line( aes(x=delta, y=erry)) +
+  geom_line( aes(x=delta, y=erry), col='indianred3') +
+  geom_point( aes(x=delta, y=erry), col='brown4', size=0.25) +
   scale_y_log10() +
   scale_x_log10() +
   labs(title='Accuracy: Step Size Vs. Total Error', 
@@ -112,14 +113,14 @@ gp <- ggplot(data=solDat, aes(x=delta)) +
   geom_line(aes(y=erryattre, col='Mean Truncation Error'), linewidth=5, alpha=0.7) +
   geom_line(aes(y=erryatroe, col='Mean Round-off Error'), linewidth=5, alpha=0.7) +
   geom_line(aes(y=erryattoe, col='Mean Total Error'), linewidth=3) +
-  geom_point(aes(y=erryat, col='True Error'), size=0.5) +
+  geom_point(aes(y=erryat, col='Total Error'), size=0.5) +
   scale_y_log10(limits=range(solDat$erryat)) +
   scale_x_log10() +
   scale_colour_manual(name='Error Type', 
                       values=c('Mean Total Error'      = 'darkorchid3',
                                'Mean Truncation Error' = 'goldenrod',
                                'Mean Round-off Error'  = 'darkolivegreen3',                               
-                               'True Error'            = 'indianred3')) +
+                               'Total Error'           = 'indianred3')) +
   labs(title='Error Vs. Step Size', 
        subtitle='Experimental results from RK4 illustrating total error as a sum of round-off and truncation errors.', 
        x='Step Size', y='Errors')
@@ -138,12 +139,12 @@ troeDat <- troeDat %>%
 
 gp <- ggplot(data=troeDat, aes(x=x)) +
   geom_line(aes(y=yf, col='Mean Round-off Error'), alpha=0.7, linewidth=10) +
-  geom_point(aes(y=y, col='True Error'), size=0.5) +
+  geom_point(aes(y=y, col='Total Error'), size=0.5) +
   scale_y_log10() +
   scale_x_log10() +
   scale_colour_manual(name='Error Type', 
                       values=c('Mean Round-off Error'  = 'darkolivegreen3',                               
-                               'True Error'            = 'indianred3')) +
+                               'Total Error'           = 'indianred3')) +
   labs(title='Independent Variable Error Vs. Step Size', 
        subtitle='Experimental results from RK4.', 
        x='Step Size', y='Errors')
