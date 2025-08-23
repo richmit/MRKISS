@@ -42,7 +42,7 @@
 !! Known Aliases p1: 'the trapezoidal rule', 'explicit trapezoidal rule'
 !! Known Aliases p2: 'mrkiss_erk_euler_1' (MRKISS)
 !!
-!! References:
+!! \par References:
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p98-99
 !!
 module mrkiss_eerk_heun_euler_2_1

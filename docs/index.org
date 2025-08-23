@@ -334,7 +334,7 @@ To make all this concrete, here is what one of these modules looks like (~mrkiss
 !!
 !! Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), & 'The Runge-Kutta Method'.
 !!
-!! References:
+!! \par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
@@ -679,8 +679,6 @@ DO_OPENMP = NO
  include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
 # include $(MRKISS_PATH)/make_includes/tools_flang.mk
 # include $(MRKISS_PATH)/make_includes/tools_ifx.mk
-# include $(MRKISS_PATH)/make_includes/tools_lfortran.mk
-# include $(MRKISS_PATH)/make_includes/tools_nvfortran.mk
 
 include $(MRKISS_PATH)/make_includes/include.mk
 ###############################################################

@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_6_4_5' (SUNDIALS).
 !!
-!! References:
+!! \par References:
 !!  - Erwin Fehlberg (1972); Classical eight and lower-order Runge-Kutta-Nystroem formulas with stepsize control for special second-order differential equations; NASA Tech. Rep. M-533
 !!  - Butcher (2008); Numerical Methods for Ordinary Differential Equations; p209; zotero://select/items/0_8V2GY73E
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations; p222; zotero://select/items/0_V7UTIRPT

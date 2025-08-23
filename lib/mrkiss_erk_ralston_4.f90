@@ -39,7 +39,7 @@
 !! IMO: This method was designed to minimize truncation error over every other consideration includeing stability, roundoff
 !!      error, performance, and storage.
 !!
-!! References:
+!! \par References:
 !!  - Ralston (1962); Runge-Kutta Methods with Minimum Error Bounds; Math. of Comp. 16 (80); p431-437; zotero://select/items/0_2FK7F4J3
 !!
 module mrkiss_erk_ralston_4

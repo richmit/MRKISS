@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: 'Vern9' (OrdinaryDiffEq.jl), 'ARKODE_VERNER_16_8_9' (SUNDIALS).
 !!
-!! References:
+!! \par References:
 !!  - Verner (1978) "Explicit Runge-Kutta Methods with Estimates of the Local Truncation Error"; SIAM J. Num. Anal. 15 (4); p772-790
 !!  - Jim Verner's Refuge for Runge-Kutta Pairs
 !!     - Retrieved on 2025-07-16 from :

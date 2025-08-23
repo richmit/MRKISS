@@ -42,7 +42,7 @@
 !!
 !! More precise than RK4.
 !!
-!! References:
+!! \par References:
 !!  - Kutta (1901), Beitrag zur n\"herungsweisen Integration totaler Differentialgleichungen; Z. Math. Phys. 46; p435-453.
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
 !!

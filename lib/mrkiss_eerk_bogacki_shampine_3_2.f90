@@ -38,7 +38,7 @@
 !!
 !! Known Aliases: 'Shampine3' OrdinaryDiffEq.jl), 'ode23' (MATLAB & Octave), 'ARKODE_BOGACKI_SHAMPINE_4_2_3' (SUNDIALS).
 !!
-!! References:
+!! \par References:
 !!  - Bogacki & Shampine (1989); A 3(2) pair of Runge-Kutta formulas; Applied Mathematics Letters; zotero://select/items/0_66MV7TIP
 !!
 module mrkiss_eerk_bogacki_shampine_3_2

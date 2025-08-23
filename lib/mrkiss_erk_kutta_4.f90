@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), & 'The Runge-Kutta Method'.
 !!
-!! References:
+!! \par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
