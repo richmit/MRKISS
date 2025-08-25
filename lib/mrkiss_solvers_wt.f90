@@ -445,12 +445,12 @@ contains
     if (status > 0) return
     call deq(status, k5, t+t_delta*8.0_rk/9.0_rk,  y + t_delta * (k1*19372.0_rk/6561.0_rk - k2*25360.0_rk/2187.0_rk + k3*64448.0_rk/6561.0_rk - k4*212.0_rk/729.0_rk), param)
     if (status > 0) return
-    call deq(status, k6, t+t_delta,                y + t_delta * (k1*9017.0_rk/3168.0_rk  - k2*355.0_rk/33.0_rk     + k3*46732.0_rk/5247.0_rk + k4*49.0_rk/176.0_rk    - k5*5103.0_rk/18656.0_rk), param)
+    call deq(status, k6, t+t_delta,                y + t_delta * (k1*9017.0_rk/3168.0_rk  - k2*355.0_rk/33.0_rk     + k3*46732.0_rk/5247.0_rk + k4*49.0_rk/176.0_rk  - k5*5103.0_rk/18656.0_rk), param)
     if (status > 0) return
-    call deq(status, k7, t+t_delta,                y + t_delta * (k1*35.0_rk/384.0_rk                               + k3*500.0_rk/1113.0_rk   + k4*125.0_rk/192.0_rk   - k5*2187.0_rk/6784.0_rk + k6*11.0_rk/84.0_rk), param)
+    call deq(status, k7, t+t_delta,                y + t_delta * (k1*35.0_rk/384.0_rk                               + k3*500.0_rk/1113.0_rk   + k4*125.0_rk/192.0_rk - k5*2187.0_rk/6784.0_rk    + k6*11.0_rk/84.0_rk), param)
     if (status > 0) return
-    y1_delta = t_delta * (k1*35.0_rk/384.0_rk     + k3*500.0_rk/1113.0_rk   + k4*125.0_rk/192.0_rk - k5*2187.0_rk/6784.0_rk    + k6*11.0_rk/84.0_rk)
-    y2_delta = t_delta * (k1*5179.0_rk/57600.0_rk + k3*7571.0_rk/16695.0_rk + k4*393.0_rk/640.0_rk - k5*92097.0_rk/339200.0_rk + k6*187.0_rk/2100.0_rk + k7*1.0_rk/40.0_rk)
+    y1_delta =                                         t_delta * (k1*35.0_rk/384.0_rk                               + k3*500.0_rk/1113.0_rk   + k4*125.0_rk/192.0_rk - k5*2187.0_rk/6784.0_rk    + k6*11.0_rk/84.0_rk)
+    y2_delta =                                         t_delta * (k1*5179.0_rk/57600.0_rk                           + k3*7571.0_rk/16695.0_rk + k4*393.0_rk/640.0_rk - k5*92097.0_rk/339200.0_rk + k6*187.0_rk/2100.0_rk  + k7*1.0_rk/40.0_rk)
     status = 0
   end subroutine one_step_dp54
 

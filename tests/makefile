@@ -100,11 +100,11 @@ $(DP54_OUTS) &: dp54
 
 .PHONY: test_dp54_ref_vs_stab_5
 test_dp54_ref_vs_stab_5 : dp54_ref_5.out dp54_stab_5.out
-	$(FD) -Zdqn -e 1e-7 dp54_ref_5.out dp54_stab_5.out
+	$(FD) -Zdqn -e 1e-10 dp54_ref_5.out dp54_stab_5.out
 
 .PHONY: test_dp54_ref_vs_stab_4
 test_dp54_ref_vs_stab_4 : dp54_ref_4.out dp54_stab_4.out
-	$(FD) -Zdqn -e 1e-7 dp54_ref_4.out dp54_stab_4.out
+	$(FD) -Zdqn -e 1e-10 dp54_ref_4.out dp54_stab_4.out
 
 .PHONY: test_dp54_stab_vs_etab_5
 test_dp54_stab_vs_etab_5 : dp54_stab_5.out dp54_etab_5.out

@@ -34,10 +34,10 @@
 
 !----------------------------------------------------------------------------------------------------------------------------------
 program dp54
-  use :: mrkiss_config,            only: rk
-  use :: mrkiss_solvers_wt,        only: one_step_dp54, one_step_etab, one_step_stab
-  use :: mrkiss_utils,             only: print_solution
-  use :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, c
+  use :: mrkiss_config,                  only: rk
+  use :: mrkiss_solvers_wt,              only: one_step_dp54, one_step_etab, one_step_stab
+  use :: mrkiss_utils,                   only: print_solution
+  use :: mrkiss_eerk_dormand_prince_5_4, only: a, b1, b2, c
 
   implicit none
 
