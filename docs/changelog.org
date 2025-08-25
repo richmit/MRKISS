@@ -49,7 +49,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :CUSTOM_ID: latest
 :END:
   - Fixed Bugs
-    - N/A
+    - dp54 unit test.
   - Known Issues
     - N/A
   - API breaking Changes

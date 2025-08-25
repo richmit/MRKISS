@@ -437,7 +437,7 @@ contains
     if (status > 0) return
     dy = k1;
     call deq(status, k2,  y + t_delta * (k1*1.0_rk/5.0_rk), param)
-    if (status > 0) return   
+    if (status > 0) return
     call deq(status, k3, y + t_delta * (k1*3.0_rk/40.0_rk       + k2*9.0_rk/40.0_rk), param)
     if (status > 0) return
     call deq(status, k4,  y + t_delta * (k1*44.0_rk/45.0_rk      - k2*56.0_rk/15.0_rk      + k3*32.0_rk/9.0_rk), param)
