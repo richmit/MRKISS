@@ -41,7 +41,7 @@
 !!
 !! Known Aliases: 'The Euler Mmethod', 'Euler 1 step', 'RK1', 'Forward Euler', 'ARKODE_FORWARD_EULER_1_1' (SUNDIALS)
 !!
-!! \par References:
+!! @par References:
 !!  - Euler (1768); Institutionum Calculi Integralis. Volumen Primum, Opera Omnia, Vol XI. p424
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p35"
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p98

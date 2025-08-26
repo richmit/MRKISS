@@ -41,7 +41,7 @@
 !!
 !! Known Aliases: 'ARKODE_TSITOURAS_7_4_5' (SUNDIALS)
 !!
-!! \par References:
+!! @par References:
 !!  - Tsitouras (2011); Runge-Kutta Pairs of Order 5(4) Satisfying Only the First Column Simplifying Assumption; Comp. & Math. w/ Appl. 62 (2); p770-775; zotero://select/items/0_WHVVHHDH
 !!
 module mrkiss_eerk_tsitouras_arkode_5_4

@@ -70,7 +70,7 @@
 !!      (v_1,v_2) & = (0, -0.3797)  
 !!   \end{align*}@f]
 !!
-!!  \par References:
+!!  @par References:
 !!   - Arenstorf (1963); Periodic Solutions of the Restricted Three Body Problem Representing Analytic Continuations 
 !!       of Keplerian Elliptic Motions; American J. of Math. 85 (1); p27-35; zotero://select/items/0_JPDZ7KNL
 !!   - Butcher (2008); Numerical Methods for Ordinary Differential Equations; p29-30; zotero://select/items/0_8V2GY73E
