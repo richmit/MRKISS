@@ -86,8 +86,8 @@ contains
   !! @param tag_o         If non-negative, this integer that will become the first column of the output. Default: -1
   !! @param append_o      Append to file instead of overwriting.  Default: `.FALSE.`
   !!
-  subroutine print_solution(status, solution, filename_o, separator_o, fmt_w_o, fmt_d_o, fmt_e_o, start_o, end_o, step_o, prt_titles_o, &
-                            t_min_o, t_max_o, tag_o, append_o)
+  subroutine print_solution(status, solution, filename_o, separator_o, fmt_w_o, fmt_d_o, fmt_e_o, start_o, end_o, step_o, &
+       &                    prt_titles_o, t_min_o, t_max_o, tag_o, append_o)
     use, intrinsic :: iso_fortran_env, only: output_unit
     use            :: mrkiss_config,   only: rk, fmt_d_ai, fmt_w_ai, fmt_e_ai
     implicit none

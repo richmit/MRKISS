@@ -494,7 +494,7 @@ contains
   !! @param t_max_o    Maximum value for @f$t@f$
   !!
   subroutine steps_fixed_stab(status, istats, solution, deq, y, param, a, b, c, p_o, max_pts_o, t_delta_o, &
-                                 t_end_o, t_max_o)
+       &                      t_end_o, t_max_o)
     use mrkiss_config, only: rk, t_delta_ai, istats_size, isi_num_pts, isi_stab_norm
     implicit none
     ! Arguments
@@ -838,9 +838,8 @@ contains
   !! @param y_sol_len_max_o     Maximum length of the solution curve
   !! @param t_max_o             Maximum value for @f$t@f$
   !!
-  subroutine steps_sloppy_condy_stab(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, &
-                                        t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o,        &
-                                        y_sol_len_max_o, t_max_o)
+  subroutine steps_sloppy_condy_stab(status, istats, solution, deq, y, param, a, b, c, y_delta_len_targ, t_delta_ini, t_max_o, &
+       &                             t_delta_min_o, t_delta_max_o, y_delta_len_idxs_o, adj_short_o, max_pts_o, y_sol_len_max_o)
     use mrkiss_config, only: rk, t_delta_min_ai, istats_size, isi_num_pts, isi_stab_norm, isi_stab_y_len
     implicit none
     ! Arguments
@@ -1016,9 +1015,9 @@ contains
   !! @param stepp_o            Step processing subroutine.  Called after each step.
   !!
   subroutine steps_adapt_etab(status, istats, solution, deq, y, param, a, b1, b2, c, p1, p2, t_max_o, t_end_o, &
-                                 t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o, &
-                                 t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,      &
-                                 no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
+       &                      t_delta_ini_o, t_delta_min_o, t_delta_max_o, t_delta_fac_min_o, t_delta_fac_max_o,  &
+       &                      t_delta_fac_fdg_o, error_tol_abs_o, error_tol_rel_o, max_pts_o, max_bisect_o,       &
+       &                      no_bisect_error_o, sdf_o, sdf_tol_o, stepp_o)
     use mrkiss_config
     implicit none
     ! Arguments
