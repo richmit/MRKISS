@@ -68,6 +68,7 @@ program tc2_TCASEN
 ! use :: mrkiss_eerk_verner_9_8,             only: a, b=>b2, c   ! TCASE_COM: verner_9_8_b2
 ! use :: mrkiss_erk_euler_1,                 only: a, b, c       ! TCASE_COM: euler_1
 ! use :: mrkiss_erk_feagin_10,               only: a, b, c       ! TCASE_COM: feagin_10
+! use :: mrkiss_erk_nystrom_5,               only: a, b, c       ! TCASE_COM: nystrom_5
 ! use :: mrkiss_erk_knoth_wolke_3,           only: a, b, c       ! TCASE_COM: knoth_wolke_3
 ! use :: mrkiss_erk_kutta_4,                 only: a, b, c       ! TCASE_COM: kutta_4
 ! use :: mrkiss_erk_kutta_three_eight_4,     only: a, b, c       ! TCASE_COM: kutta_three_eight_4

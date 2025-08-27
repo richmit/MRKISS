@@ -17,8 +17,7 @@ else
 endif
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-MRKISS_MODS := mrkiss_config mrkiss_utils mrkiss_solvers_wt mrkiss_erk_kutta_4 mrkiss_eerk_dormand_prince_5_4 mrkiss_eerk_fehlberg_7_8 mrkiss_eerk_verner_9_8 mrkiss_eerk_bogacki_shampine_3_2 mrkiss_eerk_bogacki_shampine_4_5 mrkiss_eerk_fehlberg_4_5 mrkiss_erk_euler_1 mrkiss_eerk_heun_euler_2_1 mrkiss_erk_midpoint_2 mrkiss_eerk_dormand_prince_7_8 mrkiss_erk_kutta_three_eight_4 mrkiss_erk_feagin_10 mrkiss_solvers_nt mrkiss_eerk_cash_karp_5_4 mrkiss_erk_ralston_2 mrkiss_erk_ralston_3 mrkiss_erk_ralston_4 mrkiss_erk_knoth_wolke_3 mrkiss_eerk_sofroniou_spaletta_4_3 mrkiss_eerk_verner_2010_6_5 mrkiss_eerk_verner_1978_6_5 mrkiss_eerk_tsitouras_arkode_5_4 mrkiss_eerk_verner_7_6 mrkiss_eerk_verner_8_7
-
+MRKISS_MODS := mrkiss_config mrkiss_utils mrkiss_solvers_wt mrkiss_erk_kutta_4 mrkiss_eerk_dormand_prince_5_4 mrkiss_eerk_fehlberg_7_8 mrkiss_eerk_verner_9_8 mrkiss_eerk_bogacki_shampine_3_2 mrkiss_eerk_bogacki_shampine_4_5 mrkiss_eerk_fehlberg_4_5 mrkiss_erk_euler_1 mrkiss_eerk_heun_euler_2_1 mrkiss_erk_midpoint_2 mrkiss_eerk_dormand_prince_7_8 mrkiss_erk_kutta_three_eight_4 mrkiss_erk_feagin_10 mrkiss_solvers_nt mrkiss_eerk_cash_karp_5_4 mrkiss_erk_ralston_2 mrkiss_erk_ralston_3 mrkiss_erk_ralston_4 mrkiss_erk_knoth_wolke_3 mrkiss_eerk_sofroniou_spaletta_4_3 mrkiss_eerk_verner_2010_6_5 mrkiss_eerk_verner_1978_6_5 mrkiss_eerk_tsitouras_arkode_5_4 mrkiss_eerk_verner_7_6 mrkiss_eerk_verner_8_7 mrkiss_erk_nystrom_5
 
 MRKISS_MOD_FILES := $(addsuffix .mod,$(MRKISS_MODS))
 MRKISS_OBJ_FILES := $(addsuffix $(OBJ_SUFFIX),$(MRKISS_MODS))
@@ -35,6 +34,10 @@ mrkiss_config$(OBJ_SUFFIX) mrkiss_config.mod &: $(MRKISS_PATH)/lib/mrkiss_config
 	$(FC) $(FFLAGS) -c $< -o $(basename $@)$(OBJ_SUFFIX)
 
 mrkiss_utils$(OBJ_SUFFIX) mrkiss_utils.mod &: $(MRKISS_PATH)/lib/mrkiss_utils.f90 mrkiss_config.mod
+	rm -f $(basename $@)$(OBJ_SUFFIX) $(basename $@).mod
+	$(FC) $(FFLAGS) -c $< -o $(basename $@)$(OBJ_SUFFIX)
+
+mrkiss_erk_nystrom_5$(OBJ_SUFFIX) mrkiss_erk_nystrom_5.mod &: $(MRKISS_PATH)/lib/mrkiss_erk_nystrom_5.f90 mrkiss_config.mod
 	rm -f $(basename $@)$(OBJ_SUFFIX) $(basename $@).mod
 	$(FC) $(FFLAGS) -c $< -o $(basename $@)$(OBJ_SUFFIX)
 

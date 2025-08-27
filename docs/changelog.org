@@ -57,7 +57,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
   - Deprecated functionality
     - N/A
   - New functionality
-    - N/A
+    - mrkiss_erk_nystrom_5.f90
   - Documentation
     - Changed \par to @par in Doxygen comments.
   - Examples
