@@ -1288,14 +1288,14 @@ contains
     y_dim = size(y, 1)
     istats = 0
     solution(2:(2+y_dim-1), 1) = y
-    call deq(status, dy, &    ! wt2nt:IGNORE
-         y, param)
+    call deq(status, dy,     &    ! wt2nt:IGNORE
+         &   y, param)
     if (status > 0) return
     solution((2+y_dim):(2+2*y_dim-1), 1) = dy
     do cur_pnt_idx=2,size(solution, 2)
        call steps_fixed_stab(status, jstats, solution(:, cur_pnt_idx:cur_pnt_idx), deq, &   ! wt2nt:IGNORE
-                                solution(2:(2+y_dim-1), cur_pnt_idx-1), param, a, b, c, p, &
-                                t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1)
+            &                solution(2:(2+y_dim-1), cur_pnt_idx-1), param, a, b, c, p, &
+            &                t_end_o=solution(1,cur_pnt_idx), max_pts_o=steps_per_pnt+1)
        istats = istats + jstats
        if (status > 0) return
     end do
@@ -1419,7 +1419,7 @@ contains
        end if
        solution(2:(2+y_dim-1), new_sol_idx) = yat
        call deq(status, solution((2+y_dim):(2+2*y_dim-1), new_sol_idx), & ! wt2nt:IGNORE
-                yat, param)
+            &   yat, param)
        if (status > 0) return
        istats(isi_num_pts) = istats(isi_num_pts) + 1
     end do
