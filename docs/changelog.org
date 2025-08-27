@@ -69,7 +69,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - New
       - N/A
     - Updated
-      - N/A
+      - tc_make_make.rb now removes test case selector lines that don't match.
   - Miscellaneous
     - N/A
 

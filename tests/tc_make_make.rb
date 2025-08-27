@@ -69,7 +69,13 @@ end
 all_tcases.each do |tcase|
   open("#{tgroup}_#{tcase}.f90", "wb") do |src_file|
     template.each do |line|
-      src_file.puts(line.sub(/^(\s*)!(.*TCASE_COM:\s+#{tcase})\W.*$/, '\1 \2').gsub(/TCASEN/, tcase))
+       if (line.match(/^\s*!.*TCASE_COM:/)) then
+         if (line.match(/^\s*!.*TCASE_COM:\s+#{tcase}/)) then
+           src_file.puts(line.sub(/^(\s*)!(.*TCASE_COM:\s+#{tcase})\W.*$/, '\1 \2').gsub(/TCASEN/, tcase));
+         end
+       else
+        src_file.puts(line.gsub(/TCASEN/, tcase))
+       end
     end
   end
 end

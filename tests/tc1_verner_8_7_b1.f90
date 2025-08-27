@@ -36,45 +36,7 @@
 program tc1_verner_8_7_b1
   use :: mrkiss_config,                      only: rk
   use :: mrkiss_solvers_wt,                  only: one_step_stab
-! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b=>b1, c   ! TCASE_COM: bogacki_shampine_3_2_b1
-! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b=>b2, c   ! TCASE_COM: bogacki_shampine_3_2_b2
-! use :: mrkiss_eerk_bogacki_shampine_4_5,   only: a, b=>b1, c   ! TCASE_COM: bogacki_shampine_4_5_b1
-! use :: mrkiss_eerk_bogacki_shampine_4_5,   only: a, b=>b2, c   ! TCASE_COM: bogacki_shampine_4_5_b2
-! use :: mrkiss_eerk_cash_karp_5_4,          only: a, b=>b1, c   ! TCASE_COM: cash_karp_5_4_b1
-! use :: mrkiss_eerk_cash_karp_5_4,          only: a, b=>b2, c   ! TCASE_COM: cash_karp_5_4_b2
-! use :: mrkiss_eerk_dormand_prince_5_4,     only: a, b=>b1, c   ! TCASE_COM: dormand_prince_5_4_b1
-! use :: mrkiss_eerk_dormand_prince_5_4,     only: a, b=>b2, c   ! TCASE_COM: dormand_prince_5_4_b2
-! use :: mrkiss_eerk_dormand_prince_7_8,     only: a, b=>b1, c   ! TCASE_COM: dormand_prince_7_8_b1
-! use :: mrkiss_eerk_dormand_prince_7_8,     only: a, b=>b2, c   ! TCASE_COM: dormand_prince_7_8_b2
-! use :: mrkiss_eerk_fehlberg_4_5,           only: a, b=>b1, c   ! TCASE_COM: fehlberg_4_5_b1
-! use :: mrkiss_eerk_fehlberg_4_5,           only: a, b=>b2, c   ! TCASE_COM: fehlberg_4_5_b2
-! use :: mrkiss_eerk_fehlberg_7_8,           only: a, b=>b1, c   ! TCASE_COM: fehlberg_7_8_b1
-! use :: mrkiss_eerk_fehlberg_7_8,           only: a, b=>b2, c   ! TCASE_COM: fehlberg_7_8_b2
-! use :: mrkiss_eerk_heun_euler_2_1,         only: a, b=>b1, c   ! TCASE_COM: heun_euler_2_1_b1
-! use :: mrkiss_eerk_heun_euler_2_1,         only: a, b=>b2, c   ! TCASE_COM: heun_euler_2_1_b2
-! use :: mrkiss_eerk_sofroniou_spaletta_4_3, only: a, b=>b1, c   ! TCASE_COM: sofroniou_spaletta_4_3_b1
-! use :: mrkiss_eerk_sofroniou_spaletta_4_3, only: a, b=>b2, c   ! TCASE_COM: sofroniou_spaletta_4_3_b2
-! use :: mrkiss_eerk_tsitouras_arkode_5_4,   only: a, b=>b1, c   ! TCASE_COM: tsitouras_arkode_5_4_b1
-! use :: mrkiss_eerk_tsitouras_arkode_5_4,   only: a, b=>b2, c   ! TCASE_COM: tsitouras_arkode_5_4_b2
-! use :: mrkiss_eerk_verner_1978_6_5,        only: a, b=>b1, c   ! TCASE_COM: verner_1978_6_5_b1
-! use :: mrkiss_eerk_verner_1978_6_5,        only: a, b=>b2, c   ! TCASE_COM: verner_1978_6_5_b2
-! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b=>b1, c   ! TCASE_COM: verner_2010_6_5_b1
-! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b=>b2, c   ! TCASE_COM: verner_2010_6_5_b2
-! use :: mrkiss_eerk_verner_7_6,             only: a, b=>b1, c   ! TCASE_COM: verner_7_6_b1
-! use :: mrkiss_eerk_verner_7_6,             only: a, b=>b2, c   ! TCASE_COM: verner_7_6_b2
   use :: mrkiss_eerk_verner_8_7,             only: a, b=>b1, c   ! TCASE_COM: verner_8_7_b1
-! use :: mrkiss_eerk_verner_8_7,             only: a, b=>b2, c   ! TCASE_COM: verner_8_7_b2
-! use :: mrkiss_eerk_verner_9_8,             only: a, b=>b1, c   ! TCASE_COM: verner_9_8_b1
-! use :: mrkiss_eerk_verner_9_8,             only: a, b=>b2, c   ! TCASE_COM: verner_9_8_b2
-! use :: mrkiss_erk_euler_1,                 only: a, b, c       ! TCASE_COM: euler_1
-! use :: mrkiss_erk_feagin_10,               only: a, b, c       ! TCASE_COM: feagin_10
-! use :: mrkiss_erk_knoth_wolke_3,           only: a, b, c       ! TCASE_COM: knoth_wolke_3
-! use :: mrkiss_erk_kutta_4,                 only: a, b, c       ! TCASE_COM: kutta_4
-! use :: mrkiss_erk_kutta_three_eight_4,     only: a, b, c       ! TCASE_COM: kutta_three_eight_4
-! use :: mrkiss_erk_midpoint_2,              only: a, b, c       ! TCASE_COM: midpoint_2
-! use :: mrkiss_erk_ralston_2,               only: a, b, c       ! TCASE_COM: ralston_2
-! use :: mrkiss_erk_ralston_3,               only: a, b, c       ! TCASE_COM: ralston_3
-! use :: mrkiss_erk_ralston_4,               only: a, b, c       ! TCASE_COM: ralston_4
 
   implicit none
 
