@@ -48,19 +48,22 @@ module mrkiss_erk_ralston_4
   public
   !> The order of the overall method
   integer,          parameter :: s      = 4
-  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk, &
-                                                    0.4000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk,  0.0000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk, &
-                                                    0.2969776092477536000706054677229125627_rk, 0.1587596449710358318526744693899731432_rk,  0.0000000000000000000000000000000000000_rk, 0.0000000000000000000000000000000000000_rk, &
-                                                    0.2181003882259204675961605401197504035_rk, -3.0509651486929308053535826782740859769_rk, 3.8328647604670103377574221381543355735_rk, 0.0000000000000000000000000000000000000_rk], [s, s])
-  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: c(s)   = [         0.0000000000000000000000000000000000000_rk,  0.4000000000000000000000000000000000000_rk, 0.4557372542187894319232799371128857059_rk, 1.0000000000000000000000000000000000000_rk]                 
-  !> The order of the method
-  integer,          parameter :: p      = 4
-  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b(s)   = [         0.1747602822626903712548676424114517824_rk, -0.5514806628787329405457611464815246174_rk, 1.2055355993965235350277772006141793793_rk, 0.1711847812195190342631163034558934558_rk]                 
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: a(s,s) = reshape([         0.0_rk,         0.0_rk,         0.0_rk,       0.0_rk,                             &
+       &                                             98650112.0_rk,         0.0_rk,         0.0_rk,       0.0_rk,                             &
+       &                                           -695801205.0_rk, 911598325.0_rk,         0.0_rk,       0.0_rk,                             &
+       &                                           -137399680.0_rk, -94224000.0_rk, 478248960.0_rk,       0.0_rk], [s, s]) / 246625280.0_rk + &
+       &                                  reshape([         0.0_rk,         0.0_rk,         0.0_rk,       0.0_rk,                             &
+       &                                                    0.0_rk,         0.0_rk,         0.0_rk,       0.0_rk,                             &
+       &                                             85981665.0_rk, -97542225.0_rk,         0.0_rk,       0.0_rk,                             &
+       &                                             21375552.0_rk, -73591360.0_rk,  52215808.0_rk,       0.0_rk], [s, s]) /  61656320.0_rk * sqrt(5.0_rk)
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: c(s)   = [                 0.0_rk,        16.0_rk,        35.0_rk,      40.0_rk ]         /        40.0_rk + &
+       &                                  [                 0.0_rk,         0.0_rk,        -3.0_rk,       0.0_rk ]         /        16.0_rk * sqrt(5.0_rk)
+  !> The order of the method                                                                                                         
+  integer,          parameter :: p      = 4                                                                                          
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource                                         
+  real(kind=rk),    parameter :: b(s)   = [           3439777.0_rk,    773875.0_rk,  13705216.0_rk, 5780280.0_rk ]         /  23699148.0_rk + &
+       &                                  [             78474.0_rk,  -1547750.0_rk,   1661952.0_rk, -192676.0_rk ]         /   5924787.0_rk * sqrt(5.0_rk)
 end module mrkiss_erk_ralston_4
-
-
-
 
