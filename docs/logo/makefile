@@ -83,3 +83,6 @@ all : $(IMAGES)
 
 clean : 
 	rm -f $(IMAGES) *.pdf *.log *.aux *~
+
+deploy : $(IMAGES)
+	cp $(IMAGES) ../pics/	
