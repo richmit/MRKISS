@@ -42,8 +42,9 @@
 !!
 !! @par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
-!!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138
-!!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p102
+!!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138; 
+!!    zotero://select/items/0_VLZWN2CT
+!!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3ed; p102; zotero://select/items/0_V7UTIRPT
 !!
 module mrkiss_erk_kutta_4
   use mrkiss_config, only: rk

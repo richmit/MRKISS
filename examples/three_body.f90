@@ -73,8 +73,8 @@
 !!  @par References:
 !!   - Arenstorf (1963); Periodic Solutions of the Restricted Three Body Problem Representing Analytic Continuations 
 !!       of Keplerian Elliptic Motions; American J. of Math. 85 (1); p27-35; zotero://select/items/0_JPDZ7KNL
-!!   - Butcher (2008); Numerical Methods for Ordinary Differential Equations; p29-30; zotero://select/items/0_8V2GY73E
-!!   - Butcher (2016); Numerical Methods for Ordinary Differential Equations; p28-31; zotero://select/items/0_V7UTIRPT
+!!   - Butcher (2008); Numerical Methods for Ordinary Differential Equations. 2ed; p29-30; zotero://select/items/0_8V2GY73E
+!!   - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3ed; p28-31; zotero://select/items/0_V7UTIRPT
 !!   - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p129-130; 
 !!       zotero://select/items/0_VLZWN2CT
 !!

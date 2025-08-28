@@ -42,7 +42,8 @@
 !!
 !! @par References:
 !!  - Verner (2010); Numerically Optimal Runge-Kutta Pairs with Interpolants; Num. Alg. 53 (2-3); p383-396;
-!!  - Verner (2007); A "more efficient" Runge--Kutta (8)7 Pair with Interpolants; https://www.sfu.ca/~jverner/; zotero://select/items/0_8SNJI34E
+!!  - Verner (2007); A "more efficient" Runge--Kutta (8)7 Pair with Interpolants; https://www.sfu.ca/~jverner/; 
+!!    zotero://select/items/0_8SNJI34E
 !!     - Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV87.IIa.Efficient.000000282866.081208.CoeffsOnlyRATandFLOAT
 !!     - Retreived 2025-07-26: https://www.sfu.ca/~jverner/RKV87.IIa.Efficient.000000282866.081208.CoeffsOnlyFLOAT
 !!

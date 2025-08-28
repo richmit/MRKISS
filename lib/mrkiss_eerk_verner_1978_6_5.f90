@@ -41,7 +41,8 @@
 !! Known Aliases: 'ARKODE_VERNER_8_5_6' (SUNDIALS).
 !!
 !! @par References:
-!!  - Verner (1978); Explicit Runge-Kutta methods with estimates of the local truncation error; SIAM J. Numer. Anal 15 (4)l p772-790; zotero://select/items/0_9HLA6P9B
+!!  - Verner (1978); Explicit Runge-Kutta methods with estimates of the local truncation error; SIAM J. Numer. Anal 15; 
+!!    (4)1; p772-790; zotero://select/items/0_9HLA6P9B
 !!
 module mrkiss_eerk_verner_1978_6_5
   use mrkiss_config, only: rk

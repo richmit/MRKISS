@@ -47,8 +47,9 @@
 !! @par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
 !!  - Nystr\"om (1925); Uber die numerische Integration von Differentialgleichungen; Acta Soc. Sci. Fennicae; 50(13); 
-!!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems; p155; zotero://select/items/0_VLZWN2CT
-!!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3rd Ed; Wiley; p206; zotero://select/items/0_V7UTIRPT
+!!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems; p155; 
+!!    zotero://select/items/0_VLZWN2CT
+!!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3ed; p206; zotero://select/items/0_V7UTIRPT
 !!
 module mrkiss_erk_nystrom_5
   use mrkiss_config, only: rk
