@@ -36,7 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Fehlberg's 13 stage, Order (7,8) Runge-Kutta method
 !!
-!! IMO: Included for historical reasons.  Performs poorly in local extrapolation mode.
+!! IMO: Included for historical reasons.  Performs poorly in local extrapolation mode.  This one was pretty broadly used, but not
+!!      nearly as much as mrkiss_eerk_fehlberg_4_5.  It was largely replaced by mrkiss_eerk_dormand_prince_7_8.
 !!
 !! Known Aliases: 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_13_7_8' (SUNDIALS).
 !!

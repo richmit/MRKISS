@@ -36,7 +36,9 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Fehlberg's 6 stage, Order (4,5) Runge-Kutta method
 !!
-!! IMO: Included for historical reasons and for unit tests.  Performs poorly in local extrapolation mode.
+!! IMO: Included for historical reasons and for unit tests.  Performs poorly in local extrapolation mode.  This method was
+!!      broadly implemented, and widely used.  As such it is a standard used for comparison frequently in older literature.  It
+!!      was largely replaced by mrkiss_eerk_dormand_prince_5_4.
 !!
 !! Known Aliases: 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_6_4_5' (SUNDIALS).
 !!

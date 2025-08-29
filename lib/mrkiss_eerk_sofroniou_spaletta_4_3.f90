@@ -37,7 +37,7 @@
 !> Butcher tableau for Sofroniou Spaletta's 5 step, order (4,3) Runge-Kutta method
 !!
 !! IMO: This is an interesting method in that one of the goals was to detect stiffness.  That said, it's a very good general
-!!      purpose method of order 4.  This is my go-to O(4) method.
+!!      purpose method of order 4.  
 !!
 !! Known Aliases: 'ARKODE_SOFRONIOU_SPALETTA_5_3_4' (SUNDIALS)
 !!
