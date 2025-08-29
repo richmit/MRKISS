@@ -36,12 +36,12 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Euler 1 step, order (1) Runge-Kutta method
 !!
-!! @image html erk_euler_1-stab.gif
-!!
 !! IMO: This algorithm is commonly used for strange attractors, and by some combined algorithms as an error estimator.  I include
 !!      it mostly for historical reasons.
 !!
 !! Known Aliases: 'The Euler Mmethod', 'Euler 1 step', 'RK1', 'Forward Euler', 'ARKODE_FORWARD_EULER_1_1' (SUNDIALS)
+!!
+!! @image html erk_euler_1-stab.gif
 !!
 !! @par References:
 !!  - Euler (1768); Institutionum Calculi Integralis. Volumen Primum, Opera Omnia, Vol XI. p424

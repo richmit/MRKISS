@@ -36,12 +36,12 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Sofroniou Spaletta's 5 step, order (4,3) Runge-Kutta method
 !!
-!! @image html eerk_sofroniou_spaletta_4_3-stab.gif
-!!
 !! IMO: This is an interesting method in that one of the goals was to detect stiffness.  That said, it's a very good general
-!!      purpose method of order 4.  This is my recommendation for methods of order 4.
+!!      purpose method of order 4.  This is my go-to O(4) method.
 !!
 !! Known Aliases: 'ARKODE_SOFRONIOU_SPALETTA_5_3_4' (SUNDIALS)
+!!
+!! @image html eerk_sofroniou_spaletta_4_3-stab.gif
 !!
 !! @par References:
 !!  - Sofroniou & Spaletta (2004); Construction of Explicit Runge-Kutta Pairs with Stiffness Detection; Math. and Comp. Modelling; 

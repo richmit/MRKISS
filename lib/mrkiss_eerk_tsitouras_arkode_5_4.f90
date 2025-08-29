@@ -36,12 +36,12 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for ARKODE's Tsitouras 7 stage Order (5,4) Runge-Kutta method
 !!
-!! @image html eerk_tsitouras_arkode_5_4-stab.gif
-!!
 !! IMO: This tableau came directly from the ARKODE source.  It's *not* the same one from tsitouras' paper.  It is also not the
 !!      same one used in OrdinaryDiffEq.jl.  So far my testing has shown to be a solid method.
 !!
 !! Known Aliases: 'ARKODE_TSITOURAS_7_4_5' (SUNDIALS)
+!!
+!! @image html eerk_tsitouras_arkode_5_4-stab.gif
 !!
 !! @par References:
 !!  - Tsitouras (2011); Runge-Kutta Pairs of Order 5(4) Satisfying Only the First Column Simplifying Assumption; 

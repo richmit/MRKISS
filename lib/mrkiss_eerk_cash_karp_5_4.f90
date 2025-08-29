@@ -36,13 +36,13 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Cash & Karp's 4 step, order (5,4) Runge-Kutta method
 !!
-!! @image html eerk_cash_karp_5_4-stab.gif
-!!
 !! IMO: I don't recommend this method as a 2 step embedded method for general use.  It was designed with five embedded methods
 !!      for use with stiff applications.  It's an interesting method from both a historical and research perspective.  Note this
-!!      one has all five embedded methods defined (b1/p1-b5/p5).
+!!      module has all five embedded methods defined (b1/p1-b5/p5).
 !!
 !! Known Aliases: 'ARKODE_CASH_KARP_6_4_5' (SUNDIALS)
+!!
+!! @image html eerk_cash_karp_5_4-stab.gif
 !!
 !! @par References:
 !!  - Cash & Karp(1990);  A variable order Runge-Kutta method for initial value problems with rapidly varying 

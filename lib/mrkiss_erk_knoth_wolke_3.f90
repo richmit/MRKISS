@@ -36,11 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Knoth & wolke's 3 stage Runge-Kutta method of O(3)
 !!
-!! @image html erk_knoth_wolke_3-stab.gif
-!!
 !! IMO: Included for historical reasons.
 !!
 !! Known Aliases: 'ARKODE_KNOTH_WOLKE_3_3' (SUNDIALS)
+!!
+!! @image html erk_knoth_wolke_3-stab.gif
 !!
 !! @par References:
 !!  - Knoth & Wolke (1988); Implicit-explicit runge-kutta methods for computiong atmospheric reactive flows; Appl. Num. Anal;

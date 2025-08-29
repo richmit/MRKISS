@@ -36,10 +36,10 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for ralston's 2 stage order (4) Runge-Kutta method
 !!
-!! @image html erk_ralston_2-stab.gif
-!!
 !! IMO: This method was designed to minimize truncation error over every other consideration includeing stability, roundoff
 !!      error, performance, and storage.
+!!
+!! @image html erk_ralston_2-stab.gif
 !!
 !! @par References:
 !!  - Ralston (1962); Runge-Kutta Methods with Minimum Error Bounds; Math. of Comp. 16 (80); p431-437; 

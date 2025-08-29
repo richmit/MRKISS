@@ -36,11 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Verner's 16 stage, Order (9,8) Runge-Kutta method.
 !!
+!! Known Aliases: 'Vern9' (OrdinaryDiffEq.jl), 'ARKODE_VERNER_16_8_9' (SUNDIALS).
+!!
 !! @image html eerk_verner_9_8-stab.gif
 !!
-!! IMO: This is my go-to 9th order method.
-!!
-!! Known Aliases: 'Vern9' (OrdinaryDiffEq.jl), 'ARKODE_VERNER_16_8_9' (SUNDIALS).
+!! IMO: This is my go-to O(9,8) method.
 !!
 !! @par References:
 !!  - Verner (1978) "Explicit Runge-Kutta Methods with Estimates of the Local Truncation Error"; SIAM J. Num. Anal. 15 (4); p772-790

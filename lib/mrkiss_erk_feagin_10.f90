@@ -36,11 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Feagin's 16 stage order (10) Runge-Kutta method
 !!
-!! @image html erk_feagin_10-stab.gif
-!!
-!! IMO: I haven't done much testing on this one, but it seems to work well with 128-bit & 80-bit floats.  Use it with care.
+!! IMO: I have limited experience with this method. I have had good results with well with 128-bit & 80-bit floats.  Use with care!
 !!
 !! Known Aliases: 'feagin10' (OrdinaryDiffEq.jl)
+!!
+!! @image html erk_feagin_10-stab.gif
 !!
 !! @par References:
 !!  - Feagin (2006); "A Tenth-Order Runge-Kutta Method with Error Estimate"; zotero://select/items/0_PGRJDU9M

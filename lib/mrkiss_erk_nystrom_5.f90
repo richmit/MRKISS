@@ -36,15 +36,15 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Nystrom's 6 stage Runge-Kutta method of O(5).
 !!
-!! @image html erk_nystrom_5-stab.gif
-!!
-!! Known Aliases: 'RKN5', 'RK41' (Butcher), & 'The Runge-Kutta Method'.
+!! IMO: I have included this method mostly for historical and reference reasons.  It is frequently used for comparisons and
+!!      experiments in the literature.
 !!
 !! Color commentary: This method was proposed in Kutta (1901), and later corrected by Nystrom (1925).  The original appears in
 !!                   an exercise in Hairer et al. (2009).
 !!
-!! IMO: I have included this method mostly for historical and reference reasons.  It is frequently used for comparisons and
-!!      experiments in the literature.
+!! Known Aliases: 'RKN5', 'RK41' (Butcher), & 'The Runge-Kutta Method'.
+!!
+!! @image html erk_nystrom_5-stab.gif
 !!
 !! @par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53

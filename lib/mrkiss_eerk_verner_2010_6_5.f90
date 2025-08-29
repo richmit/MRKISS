@@ -36,11 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Verner's 9 stage, Order (6,5) Runge-Kutta method (2010)
 !!
-!! @image html eerk_verner_2010_6_5-stab.gif
-!!
-!! IMO: This is a good general use method.  Be sure and use 64-bit floats or larger.
+!! IMO: This is a good general use method.  Be sure and use 64-bit floats or larger.  This is my go-to O(6,5) method.
 !!
 !! Known Aliases: 'ARKODE_VERNER_9_5_6' (SUNDIALS).
+!!
+!! @image html eerk_verner_2010_6_5-stab.gif
 !!
 !! @par References:
 !!  - Verner (2010); Numerically Optimal Runge-Kutta Pairs with Interpolants; Num. Alg. 53 (2-3); p383-396; 

@@ -60,6 +60,8 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - mrkiss_erk_nystrom_5.f90
   - Documentation
     - Changed \par to @par in Doxygen comments.
+    - Updated index.org RK methods tables.
+    - Added stability region images to doxygen
   - Examples
     - New
       - step_too_small.f90
@@ -71,7 +73,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
     - Updated
       - tc_make_make.rb now removes test case selector lines that don't match.
   - Miscellaneous
-    - N/A
+    - Added stability region and order star graphs to maple worksheets
 
 * v2025-08-15: Documentation & Cleanup Release
 :PROPERTIES:

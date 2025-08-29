@@ -36,13 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for the three eights rule.  A 4 step, order (4) Runge-Kutta method
 !!
-!! @image html erk_kutta_three_eight_4-stab.gif
-!!
-!! IMO: Included for historical reasons.
+!! IMO: Included for historical reasons.  More precise than RK4.
 !!
 !! Known Aliases: '3/8 rule', 'RK42' (Butcher), 'GIRK438' (OrdinaryDiffEq.jl).
 !!
-!! More precise than RK4.
+!! @image html erk_kutta_three_eight_4-stab.gif
 !!
 !! @par References:
 !!  - Kutta (1901), Beitrag zur n\"herungsweisen Integration totaler Differentialgleichungen; Z. Math. Phys. 46; p435-453.

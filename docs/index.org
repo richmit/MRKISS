@@ -334,6 +334,8 @@ To make all this concrete, here is what one of these modules looks like (~mrkiss
 !!
 !! Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), & 'The Runge-Kutta Method'.
 !!
+!! @image html erk_kutta_4-stab.gif
+!!
 !! @par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138; 
@@ -373,24 +375,28 @@ In addition to the module files, several maple worksheets may be found in the
 These worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the
 method's stability region.
 
+I use *BOO* to mean /Best Of Order/.  When used with two integers it is for an embedded method.  I use *RC* to indicate a method is a /Release Candidate/ --
+i.e. it may well become a future *BOO*.  Not the contents of the *Status* columns are simply /my personal opinion/ based on my experience.  *~YMMV~*
+
 ** Predefined Non-embedded Methods
 :PROPERTIES:
 :CUSTOM_ID: def-premethod-stab
 :END:
 
 #+ATTR_HTML: :align center
-| Module Name                      | Order | Stages | Status |
-|                                  |  <c>  |  <c>   |  <c>   |
-|----------------------------------+-------+--------+--------|
-| ~mrkiss_erk_euler_1~             |   1   |   1    |  BOO   |
-| ~mrkiss_erk_midpoint_2~          |   2   |   2    |        |
-| ~mrkiss_erk_ralston_2~           |   2   |   2    |  BOO   |
-| ~mrkiss_erk_ralston_3~           |   3   |   3    |        |
-| ~mrkiss_erkknoth_wolke_3~        |   3   |   3    |        |
-| ~mrkiss_erk_ralston_4~           |   4   |   4    |        |
-| ~mrkiss_erk_kutta_4~             |   4   |   4    |        |
-| ~mrkiss_erk_kutta_three_eight_4~ |   4   |   4    |        |
-| ~mrkiss_erk_feagin_10~           |  10   |   17   |  EXP   |
+| Module Name                      | Order | Stages |   Status   |
+|                                  |  <c>  |  <c>   |    <c>     |
+|----------------------------------+-------+--------+------------|
+| ~mrkiss_erk_euler_1~             |   1   |   1    |   BOO(1)   |
+| ~mrkiss_erk_midpoint_2~          |   2   |   2    |            |
+| ~mrkiss_erk_ralston_2~           |   2   |   2    |   BOO(2)   |
+| ~mrkiss_erk_ralston_3~           |   3   |   3    |            |
+| ~mrkiss_erkknoth_wolke_3~        |   3   |   3    |            |
+| ~mrkiss_erk_ralston_4~           |   4   |   4    |            |
+| ~mrkiss_erk_kutta_4~             |   4   |   4    |            |
+| ~mrkiss_erk_kutta_three_eight_4~ |   4   |   4    |            |
+| ~mrkiss_erk_nystrom_5~           |   5   |   6    |            |
+| ~mrkiss_erk_feagin_10~           |  10   |   17   | RC BOO(10) |
 
 ** Predefined Embedded Methods
 :PROPERTIES:
@@ -398,21 +404,27 @@ method's stability region.
 :END:
 
 #+ATTR_HTML: :align center
-| Module Name                          | Ord_1 | Ord_2 | Stages | Status |
-|                                      |  <c>  |  <c>  |  <c>   |  <c>   |
-|--------------------------------------+-------+-------+--------+--------|
-| ~mrkiss_eerk_heun_euler_2_1~         |   2   |   1   |   2    |        |
-| ~mrkiss_eerk_bogacki_shampine_3_2~   |   3   |   2   |   4    |  BOO   |
-| ~mrkiss_eerk_fehlberg_4_5~           |   4   |   5   |   6    |        |
-| ~mrkiss_eerk_sofroniou_spaletta_4_3~ |   4   |   3   |   5    |  BOO   |
-| ~mrkiss_eerk_cash_karp_5_4~          |   5   |   4   |   6    |        |
-| ~mrkiss_eerk_bogacki_shampine_4_5~   |   4   |   5   |   7    |        |
-| ~mrkiss_eerk_dormand_prince_5_4~     |   5   |   4   |   7    |  BOO   |
-| ~mrkiss_eerk_verner_7_6~             |   7   |   6   |   10   |        |
-| ~mrkiss_eerk_fehlberg_7_8~           |   7   |   8   |   13   |        |
-| ~mrkiss_eerk_dormand_prince_7_8~     |   7   |   8   |   13   |  BOO   |
-| ~mrkiss_eerk_verner_8_7~             |   8   |   7   |   13   |        |
-| ~mrkiss_eerk_verner_9_8~             |   9   |   8   |   16   |  BOO   |
+| Module Name                          | Ord_1 | Ord_2 | Stages |      Status       |
+|                                      |  <c>  |  <c>  |  <c>   |        <c>        |
+|--------------------------------------+-------+-------+--------+-------------------|
+| ~mrkiss_eerk_heun_euler_2_1~         |   2   |   1   |   2    |                   |
+| ~mrkiss_eerk_bogacki_shampine_3_2~   |   3   |   2   |   4    |     BOO(3,2)      |
+| ~mrkiss_eerk_fehlberg_4_5~           |   4   |   5   |   6    |                   |
+| ~mrkiss_eerk_sofroniou_spaletta_4_3~ |   4   |   3   |   5    |     BOO(4,3)      |
+| ~mrkiss_eerk_cash_karp_5_4~          |   5   |   4   |   6    |                   |
+| ~mrkiss_eerk_bogacki_shampine_4_5~   |   4   |   5   |   7    |                   |
+| ~mrkiss_eerk_dormand_prince_5_4~     |   5   |   4   |   7    |                   |
+| ~mrkiss_eerk_tsitouras_arkode_5_4~   |   5   |   4   |   7    | BOO(5,4) & BOO(5) |
+| ~mrkiss_eerk_verner_1978_6_5~        |   6   |   5   |   8    |                   |
+| ~mrkiss_eerk_verner_2010_6_5~        |   6   |   5   |   9    | BOO(6,5) & BOO(6) |
+| ~mrkiss_eerk_verner_7_6~             |   7   |   6   |   10   | BOO(7,6) & BOO(7) |
+| ~mrkiss_eerk_fehlberg_7_8~           |   7   |   8   |   13   |                   |
+| ~mrkiss_eerk_dormand_prince_7_8~     |   7   |   8   |   13   |                   |
+| ~mrkiss_eerk_verner_8_7~             |   8   |   7   |   13   | BOO(8,7) & BOO(8) |
+| ~mrkiss_eerk_verner_9_8~             |   9   |   8   |   16   | BOO(9,8) & BOO(9) |
+
+*Ord_1* is the order of the method used for the solution while *Ord_2* is the order used for error estimation.  
+*Stages* column is the maximum number of stages for each embedded method.
 
 * Providing ODE Equations For Solvers
 :PROPERTIES:

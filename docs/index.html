@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-28 Thu 10:37 -->
+<!-- 2025-08-29 Fri 14:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-28 10:37:28</i></td>
+<td class="org-left"><i>2025-08-29 14:29:24</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-28 10:37:33</i></td>
+<td class="org-left"><i>2025-08-29 14:32:28</i></td>
 </tr>
 </tbody>
 </table>
@@ -718,6 +718,8 @@ To make all this concrete, here is what one of these modules looks like (<code>m
 <span style="color: #ffa500;">!!</span>
 <span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), &amp; 'The Runge-Kutta Method'.</span>
 <span style="color: #ffa500;">!!</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">@image html erk_kutta_4-stab.gif</span>
+<span style="color: #ffa500;">!!</span>
 <span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">@par References:</span>
 <span style="color: #ffa500;">!!  </span><span style="color: #ff7f24;">- Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53</span>
 <span style="color: #ffa500;">!!  </span><span style="color: #ff7f24;">- Hairer, Norsett &amp; Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138; </span>
@@ -763,6 +765,11 @@ In addition to the module files, several maple worksheets may be found in the
 These worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the
 method's stability region.
 </p>
+
+<p>
+I use <b>BOO</b> to mean <i>Best Of Order</i>.  When used with two integers it is for an embedded method.  I use <b>RC</b> to indicate a method is a <i>Release Candidate</i> &#x2013;
+i.e. it may well become a future <b>BOO</b>.  Not the contents of the <b>Status</b> columns are simply <i>my personal opinion</i> based on my experience.  <b><code>YMMV</code></b>
+</p>
 </div>
 <div id="outline-container-def-premethod-stab" class="outline-3">
 <h3 id="def-premethod-stab"><span class="section-number-3">5.1.</span> Predefined Non-embedded Methods</h3>
@@ -792,7 +799,7 @@ method's stability region.
 <td class="org-left"><code>mrkiss_erk_euler_1</code></td>
 <td class="org-center">1</td>
 <td class="org-center">1</td>
-<td class="org-center">BOO</td>
+<td class="org-center">BOO(1)</td>
 </tr>
 
 <tr>
@@ -806,7 +813,7 @@ method's stability region.
 <td class="org-left"><code>mrkiss_erk_ralston_2</code></td>
 <td class="org-center">2</td>
 <td class="org-center">2</td>
-<td class="org-center">BOO</td>
+<td class="org-center">BOO(2)</td>
 </tr>
 
 <tr>
@@ -845,10 +852,17 @@ method's stability region.
 </tr>
 
 <tr>
+<td class="org-left"><code>mrkiss_erk_nystrom_5</code></td>
+<td class="org-center">5</td>
+<td class="org-center">6</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
 <td class="org-left"><code>mrkiss_erk_feagin_10</code></td>
 <td class="org-center">10</td>
 <td class="org-center">17</td>
-<td class="org-center">EXP</td>
+<td class="org-center">RC BOO(10)</td>
 </tr>
 </tbody>
 </table>
@@ -894,7 +908,7 @@ method's stability region.
 <td class="org-center">3</td>
 <td class="org-center">2</td>
 <td class="org-center">4</td>
-<td class="org-center">BOO</td>
+<td class="org-center">BOO(3,2)</td>
 </tr>
 
 <tr>
@@ -910,7 +924,7 @@ method's stability region.
 <td class="org-center">4</td>
 <td class="org-center">3</td>
 <td class="org-center">5</td>
-<td class="org-center">BOO</td>
+<td class="org-center">BOO(4,3)</td>
 </tr>
 
 <tr>
@@ -934,7 +948,31 @@ method's stability region.
 <td class="org-center">5</td>
 <td class="org-center">4</td>
 <td class="org-center">7</td>
-<td class="org-center">BOO</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_tsitouras_arkode_5_4</code></td>
+<td class="org-center">5</td>
+<td class="org-center">4</td>
+<td class="org-center">7</td>
+<td class="org-center">BOO(5,4) &amp; BOO(5)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_verner_1978_6_5</code></td>
+<td class="org-center">6</td>
+<td class="org-center">5</td>
+<td class="org-center">8</td>
+<td class="org-center">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>mrkiss_eerk_verner_2010_6_5</code></td>
+<td class="org-center">6</td>
+<td class="org-center">5</td>
+<td class="org-center">9</td>
+<td class="org-center">BOO(6,5) &amp; BOO(6)</td>
 </tr>
 
 <tr>
@@ -942,7 +980,7 @@ method's stability region.
 <td class="org-center">7</td>
 <td class="org-center">6</td>
 <td class="org-center">10</td>
-<td class="org-center">&#xa0;</td>
+<td class="org-center">BOO(7,6) &amp; BOO(7)</td>
 </tr>
 
 <tr>
@@ -958,7 +996,7 @@ method's stability region.
 <td class="org-center">7</td>
 <td class="org-center">8</td>
 <td class="org-center">13</td>
-<td class="org-center">BOO</td>
+<td class="org-center">&#xa0;</td>
 </tr>
 
 <tr>
@@ -966,7 +1004,7 @@ method's stability region.
 <td class="org-center">8</td>
 <td class="org-center">7</td>
 <td class="org-center">13</td>
-<td class="org-center">&#xa0;</td>
+<td class="org-center">BOO(8,7) &amp; BOO(8)</td>
 </tr>
 
 <tr>
@@ -974,10 +1012,15 @@ method's stability region.
 <td class="org-center">9</td>
 <td class="org-center">8</td>
 <td class="org-center">16</td>
-<td class="org-center">BOO</td>
+<td class="org-center">BOO(9,8) &amp; BOO(9)</td>
 </tr>
 </tbody>
 </table>
+
+<p>
+<b>Ord_1</b> is the order of the method used for the solution while <b>Ord_2</b> is the order used for error estimation.  
+<b>Stages</b> column is the maximum number of stages for each embedded method.
+</p>
 </div>
 </div>
 </div>
@@ -1355,7 +1398,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org4345e78" class="figure">
+<div id="org76f057c" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1635,7 +1678,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org6f4f6d5" class="figure">
+<div id="org7ad3358" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1684,7 +1727,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org1765138" class="figure">
+<div id="org95ef3e0" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1708,7 +1751,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orge04e14f" class="figure">
+<div id="org61b28a2" class="figure">
 <p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
 </p>
 </div>

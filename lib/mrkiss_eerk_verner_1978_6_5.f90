@@ -36,11 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Verner's 8 stage, Order (6,5) Runge-Kutta method (1978)
 !!
-!! @image html eerk_verner_1978_6_5-stab.gif
-!!
 !! IMO: This is a good general method; however, I think mrkiss_eerk_verner_2010_6_5 should be preferred.
 !!
 !! Known Aliases: 'ARKODE_VERNER_8_5_6' (SUNDIALS).
+!!
+!! @image html eerk_verner_1978_6_5-stab.gif
 !!
 !! @par References:
 !!  - Verner (1978); Explicit Runge-Kutta methods with estimates of the local truncation error; SIAM J. Numer. Anal 15; 
