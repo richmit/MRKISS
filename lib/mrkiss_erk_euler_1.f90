@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Euler 1 step, order (1) Runge-Kutta method
 !!
+!! @image html erk_euler_1-stab.gif
+!!
 !! IMO: This algorithm is commonly used for strange attractors, and by some combined algorithms as an error estimator.  I include
 !!      it mostly for historical reasons.
 !!

@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Fehlberg's 13 stage, Order (7,8) Runge-Kutta method
 !!
+!! @image html eerk_fehlberg_7_8-stab.gif
+!!
 !! IMO: Included for historical reasons.
 !!
 !! Known Aliases: 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_13_7_8' (SUNDIALS).

@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Verner's 10 stage, Order (7,6) Runge-Kutta method
 !!
+!! @image html eerk_verner_7_6-stab.gif
+!!
 !! IMO: This is a good general use method.
 !!
 !! Known Aliases: 'ARKODE_VERNER_10_6_7' (SUNDIALS).

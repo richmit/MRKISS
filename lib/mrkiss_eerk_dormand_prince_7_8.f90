@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Dormand & Prince's 13 stage, Order (7,8) Runge-Kutta method
 !!
+!! @image html eerk_dormand_prince_7_8-stab.gif
+!!
 !! @par References:
 !!  - Prince & Dormand(1981); High Order Embedded Runge-Kutta Formulae; J. of Comp. and Appl. Math. 7 (1); p67-75;
 !!    zotero://select/items/0_N9KVWVST

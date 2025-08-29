@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for the three eights rule.  A 4 step, order (4) Runge-Kutta method
 !!
+!! @image html erk_kutta_three_eight_4-stab.gif
+!!
 !! IMO: Included for historical reasons.
 !!
 !! Known Aliases: '3/8 rule', 'RK42' (Butcher), 'GIRK438' (OrdinaryDiffEq.jl).

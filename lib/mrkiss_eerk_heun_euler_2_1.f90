@@ -38,8 +38,10 @@
 !!
 !! IMO: Included for historical reasons.
 !!
+!! @image html eerk_heun_euler_2_1-stab.gif
+!!
 !! Known Aliases: 'RK21' (Butcher), 'ARKODE_HEUN_EULER_2_1_2' (SUNDIALS)
-!! Known Aliases p1: 'the trapezoidal rule', 'explicit trapezoidal rule'
+!! Known Aliases p1: 'the trapezoidal rule', 'explicit trapezoidal rule', heun2, SSPRK2
 !! Known Aliases p2: 'mrkiss_erk_euler_1' (MRKISS)
 !!
 !! @par References:

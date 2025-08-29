@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for the classic 4 stage Runge-Kutta method of O(4)
 !!
+!! @image html erk_kutta_4-stab.gif
+!!
 !! IMO: Useful for low accuracy applications; however, I find I rarely use it.
 !!
 !! Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), & 'The Runge-Kutta Method'.

@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Bogacki Shampine's 4 step, order (3,2) Runge-Kutta method
 !!
+!! @image html eerk_bogacki_shampine_3_2-stab.gif
+!!
 !! Known Aliases: 'Shampine3' OrdinaryDiffEq.jl), 'ode23' (MATLAB & Octave), 'ARKODE_BOGACKI_SHAMPINE_4_2_3' (SUNDIALS).
 !!
 !! @par References:

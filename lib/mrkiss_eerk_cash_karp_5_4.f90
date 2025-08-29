@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Cash & Karp's 4 step, order (5,4) Runge-Kutta method
 !!
+!! @image html eerk_cash_karp_5_4-stab.gif
+!!
 !! IMO: I don't recommend this method as a 2 step embedded method for general use.  It was designed with five embedded methods
 !!      for use with stiff applications.  It's an interesting method from both a historical and research perspective.  Note this
 !!      one has all five embedded methods defined (b1/p1-b5/p5).

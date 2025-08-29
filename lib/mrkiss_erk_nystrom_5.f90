@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Nystrom's 6 stage Runge-Kutta method of O(5).
 !!
+!! @image html erk_nystrom_5-stab.gif
+!!
 !! Known Aliases: 'RKN5', 'RK41' (Butcher), & 'The Runge-Kutta Method'.
 !!
 !! Color commentary: This method was proposed in Kutta (1901), and later corrected by Nystrom (1925).  The original appears in

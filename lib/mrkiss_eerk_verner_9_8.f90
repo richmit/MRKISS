@@ -34,7 +34,9 @@
 !.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.H.E.!!
 
 !----------------------------------------------------------------------------------------------------------------------------------
-!> Butcher tableau for Verner's 16 stage, Order (9,8) Runge-Kutta method
+!> Butcher tableau for Verner's 16 stage, Order (9,8) Runge-Kutta method.
+!!
+!! @image html eerk_verner_9_8-stab.gif
 !!
 !! IMO: This is my go-to 9th order method.
 !!

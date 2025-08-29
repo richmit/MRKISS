@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Dormand & Prince's 7 stage, Order (5,4) Runge-Kutta method
 !!
+!! @image html eerk_dormand_prince_5_4-stab.gif
+!!
 !! IMO: This is a good general use method with excellent principle truncation error coefficients.
 !!
 !! Known Aliases: 'The Dormand-Prince Method', 'RKDP', 'DOPRI', 'DP5' (OrdinaryDiffEq.jl), 'ode45' (MATLAB & Octave), 

@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Bogacki Shampine's 7 step, order (4,5) Runge-Kutta method
 !!
+!! @image html eerk_bogacki_shampine_4_5-stab.gif
+!!
 !! IMO: This is a good general use method with excellent error coefficients.
 !!
 !! Known Aliases: 'bs5' (OrdinaryDiffEq.jl)

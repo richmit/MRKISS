@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for ralston's 3 stage order (3) Runge-Kutta method
 !!
+!! @image html erk_ralston_3-stab.gif
+!!
 !! IMO: This method was designed to minimize truncation error over every other consideration includeing stability, roundoff error,
 !!      performance, and storage.
 !!

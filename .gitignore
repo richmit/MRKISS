@@ -17,6 +17,9 @@
 /examples/*.png
 /examples/*.svg
 
+/rk_methods_maple/*.gif
+/rk_methods_maple/inwork
+
 /tests/*.csv
 /tests/*.vtu
 /tests/*.exe

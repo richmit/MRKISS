@@ -36,6 +36,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Verner's 13 stage, Order (8,7) Runge-Kutta method
 !!
+!! @image html eerk_verner_8_7-stab.gif
+!!
 !! IMO: This is a good general use method.
 !!
 !! Known Aliases: 'ARKODE_VERNER_13_7_8' (SUNDIALS).
