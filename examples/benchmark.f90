@@ -54,17 +54,19 @@ program langford
   implicit none
 
   integer,       parameter :: y_dim         = 3
-  integer,       parameter :: np            = 10000000
+  integer,       parameter :: np            = 20000000
   real(kind=rk), parameter :: param(6)      = [0.95_rk, 0.7_rk, 0.6_rk, 3.5_rk, 0.25_rk, 0.1_rk]
   real(kind=rk), parameter :: t_delta       = 0.01_rk
   real(kind=rk), parameter :: y_iv(y_dim)   = [0.1_rk, 0.0_rk, 0.0_rk]
   real(kind=rk)            :: solution(1+2*y_dim, np)
   integer                  :: status, istats(istats_size)
 
+  print *, "benchmark.f90 Start"
   call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta)
   call print_solution(status, solution, fmt_w_o=-1, start_o=istats(1)-10)
   call analyze_solution(status, solution)
   call print_istats(status, istats)
+  print *, "benchmark.f90 End"
 
 contains
   

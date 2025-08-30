@@ -177,6 +177,7 @@ contains
     if (status > 0) return
     k(:,1) = dy * t_delta
     do stage=2,size(b1, 1)
+       ! Same as 'stage_y_delta = matmul(k(:,1:stage-1), a(:,stage))', but faster...
        stage_y_delta = 0.0_rk
        do i=1,(stage-1)
           if (abs(a(i,stage)) > zero_epsilon) then
@@ -188,12 +189,9 @@ contains
        if (status > 0) return
        k(:,stage) = y_tmp * t_delta
     end do
-    y1_delta = 0.0_rk
-    y2_delta = 0.0_rk
-    do i=1,size(b1, 1)
-       y1_delta = y1_delta + k(:,i) * b1(i)
-       y2_delta = y2_delta + k(:,i) * b2(i)
-    end do
+    ! Use k vectors to compute deltas
+    y1_delta = matmul(k, b1)
+    y2_delta = matmul(k, b2)
     status = 0
   end subroutine one_step_etab
 
@@ -236,6 +234,7 @@ contains
     if (status > 0) return
     k(:,1) = dy * t_delta
     do stage=2,size(b, 1)
+       ! Same as 'stage_y_delta = matmul(k(:,1:stage-1), a(:,stage))', but faster...
        stage_y_delta = 0.0_rk
        do i=1,(stage-1)
           if (abs(a(i,stage)) > zero_epsilon) then
@@ -247,10 +246,8 @@ contains
        if (status > 0) return
        k(:,stage) = y_tmp * t_delta
     end do
-    y_delta = 0.0_rk
-    do i=1,size(b, 1)
-       y_delta = y_delta + k(:,i) * b(i)
-    end do
+    ! Use k vectors to compute deltas
+    y_delta = matmul(k, b)
     status = 0
   end subroutine one_step_stab
 
