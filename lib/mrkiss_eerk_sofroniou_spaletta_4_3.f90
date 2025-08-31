@@ -41,7 +41,7 @@
 !!
 !! Known Aliases: 'ARKODE_SOFRONIOU_SPALETTA_5_3_4' (SUNDIALS)
 !!
-!! @image html eerk_sofroniou_spaletta_4_3-stab.gif
+!! @image html eerk_sofroniou_spaletta_4_3-stab.png
 !!
 !! @par References:
 !!  - Sofroniou & Spaletta (2004); Construction of Explicit Runge-Kutta Pairs with Stiffness Detection; Math. and Comp. Modelling; 

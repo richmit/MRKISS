@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: 'RK22' (Butcher), 'midpoint method', 'the modpoint rule', 'Explicit midpoint method', 'Runge-2', 'R2'
 !!
-!! @image html erk_midpoint_2-stab.gif
+!! @image html erk_midpoint_2-stab.png
 !!
 !! @par References:
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3ed; p98-99; zotero://select/items/0_V7UTIRPT

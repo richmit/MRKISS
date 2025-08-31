@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: 'feagin10' (OrdinaryDiffEq.jl)
 !!
-!! @image html erk_feagin_10-stab.gif
+!! @image html erk_feagin_10-stab.png
 !!
 !! @par References:
 !!  - Feagin (2006); "A Tenth-Order Runge-Kutta Method with Error Estimate"; zotero://select/items/0_PGRJDU9M

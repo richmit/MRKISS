@@ -38,7 +38,7 @@
 !!
 !! Known Aliases: 'Vern9' (OrdinaryDiffEq.jl), 'ARKODE_VERNER_16_8_9' (SUNDIALS).
 !!
-!! @image html eerk_verner_9_8-stab.gif
+!! @image html eerk_verner_9_8-stab.png
 !!
 !! IMO: This is my go-to O(9,8) method.
 !!

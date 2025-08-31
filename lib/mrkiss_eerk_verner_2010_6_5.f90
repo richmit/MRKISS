@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: 'ARKODE_VERNER_9_5_6' (SUNDIALS).
 !!
-!! @image html eerk_verner_2010_6_5-stab.gif
+!! @image html eerk_verner_2010_6_5-stab.png
 !!
 !! @par References:
 !!  - Verner (2010); Numerically Optimal Runge-Kutta Pairs with Interpolants; Num. Alg. 53 (2-3); p383-396; 

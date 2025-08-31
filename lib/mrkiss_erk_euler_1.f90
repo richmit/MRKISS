@@ -41,7 +41,7 @@
 !!
 !! Known Aliases: 'The Euler Mmethod', 'Euler 1 step', 'RK1', 'Forward Euler', 'ARKODE_FORWARD_EULER_1_1' (SUNDIALS)
 !!
-!! @image html erk_euler_1-stab.gif
+!! @image html erk_euler_1-stab.png
 !!
 !! @par References:
 !!  - Euler (1768); Institutionum Calculi Integralis. Volumen Primum, Opera Omnia, Vol XI. p424

@@ -42,7 +42,7 @@
 !!
 !! Known Aliases: 'ARKODE_CASH_KARP_6_4_5' (SUNDIALS)
 !!
-!! @image html eerk_cash_karp_5_4-stab.gif
+!! @image html eerk_cash_karp_5_4-stab.png
 !!
 !! @par References:
 !!  - Cash & Karp(1990);  A variable order Runge-Kutta method for initial value problems with rapidly varying 

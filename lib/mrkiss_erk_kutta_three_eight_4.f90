@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: '3/8 rule', 'RK42' (Butcher), 'GIRK438' (OrdinaryDiffEq.jl).
 !!
-!! @image html erk_kutta_three_eight_4-stab.gif
+!! @image html erk_kutta_three_eight_4-stab.png
 !!
 !! @par References:
 !!  - Kutta (1901), Beitrag zur n\"herungsweisen Integration totaler Differentialgleichungen; Z. Math. Phys. 46; p435-453.

@@ -18,6 +18,7 @@
 /examples/*.svg
 
 /rk_methods_maple/*.gif
+/rk_methods_maple/*.png
 /rk_methods_maple/inwork
 
 /tests/*.csv

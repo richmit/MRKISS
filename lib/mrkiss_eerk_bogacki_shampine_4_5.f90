@@ -40,7 +40,7 @@
 !!
 !! Known Aliases: 'bs5' (OrdinaryDiffEq.jl)
 !!
-!! @image html eerk_bogacki_shampine_4_5-stab.gif
+!! @image html eerk_bogacki_shampine_4_5-stab.png
 !!
 !! @par References:
 !!  - Bogacki & Shampine (1996); An Efficient Runge-Kutta (4,5) Pair; Comp. & Math. with Appl. 32 (6); p15-28; 

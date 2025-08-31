@@ -44,7 +44,7 @@
 !!
 !! Known Aliases: 'RKN5', 'RK41' (Butcher), & 'The Runge-Kutta Method'.
 !!
-!! @image html erk_nystrom_5-stab.gif
+!! @image html erk_nystrom_5-stab.png
 !!
 !! @par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53

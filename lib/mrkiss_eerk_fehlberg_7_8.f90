@@ -41,7 +41,7 @@
 !!
 !! Known Aliases: 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_13_7_8' (SUNDIALS).
 !!
-!! @image html eerk_fehlberg_7_8-stab.gif
+!! @image html eerk_fehlberg_7_8-stab.png
 !!
 !! @par References:
 !!  - Erwin Fehlberg (1972); Classical eight- and lower-order Runge-Kutta-Nystroem formulas with stepsize control for 

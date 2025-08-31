@@ -44,7 +44,7 @@
 !! Known Aliases: 'The Dormand-Prince Method', 'RKDP', 'DOPRI', 'DP5' (OrdinaryDiffEq.jl), 'ode45' (MATLAB & Octave), 
 !!                'RK5(4)7M' (Dormand & Prince), & DOPRI5 (Hairer), 'ARKODE_DORMAND_PRINCE_7_4_5' (SUNDIALS)
 !!
-!! @image html eerk_dormand_prince_5_4-stab.gif
+!! @image html eerk_dormand_prince_5_4-stab.png
 !!
 !! @par References:
 !!  - Dormand & Prince (1980); A family of embedded Runge-Kutta formulae; J. Comput. Appl. Math. 6, no. 1
