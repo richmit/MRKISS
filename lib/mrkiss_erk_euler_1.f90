@@ -43,6 +43,12 @@
 !!
 !! @image html erk_euler_1-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="erk_euler_1-stab.png">  <img src="erk_euler_1-stab.png"  width="256px"> </a>
+!! <a href="erk_euler_1-astab.png"> <img src="erk_euler_1-astab.png" width="256px"> </a>
+!! <a href="erk_euler_1-star1.png"> <img src="erk_euler_1-star1.png" width="256px"> </a>
+!! <a href="erk_euler_1-star2.png"> <img src="erk_euler_1-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Euler (1768); Institutionum Calculi Integralis. Volumen Primum, Opera Omnia, Vol XI. p424
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p35;

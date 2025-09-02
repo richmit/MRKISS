@@ -43,6 +43,12 @@
 !!
 !! @image html eerk_tsitouras_arkode_5_4-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_tsitouras_arkode_5_4-stab.png">  <img src="eerk_tsitouras_arkode_5_4-stab.png"  width="256px"> </a>
+!! <a href="eerk_tsitouras_arkode_5_4-astab.png"> <img src="eerk_tsitouras_arkode_5_4-astab.png" width="256px"> </a>
+!! <a href="eerk_tsitouras_arkode_5_4-star1.png"> <img src="eerk_tsitouras_arkode_5_4-star1.png" width="256px"> </a>
+!! <a href="eerk_tsitouras_arkode_5_4-star2.png"> <img src="eerk_tsitouras_arkode_5_4-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Tsitouras (2011); Runge-Kutta Pairs of Order 5(4) Satisfying Only the First Column Simplifying Assumption; 
 !!    Comp. & Math. w/ Appl. 62 (2); p770-775; zotero://select/items/0_WHVVHHDH

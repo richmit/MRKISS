@@ -44,6 +44,12 @@
 !!
 !! @image html eerk_heun_euler_2_1-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_heun_euler_2_1-stab.png">  <img src="eerk_heun_euler_2_1-stab.png"  width="256px"> </a>
+!! <a href="eerk_heun_euler_2_1-astab.png"> <img src="eerk_heun_euler_2_1-astab.png" width="256px"> </a>
+!! <a href="eerk_heun_euler_2_1-star1.png"> <img src="eerk_heun_euler_2_1-star1.png" width="256px"> </a>
+!! <a href="eerk_heun_euler_2_1-star2.png"> <img src="eerk_heun_euler_2_1-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3ed; p98-99; zotero://select/items/0_V7UTIRPT
 !!

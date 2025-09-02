@@ -40,6 +40,12 @@
 !!
 !! @image html eerk_verner_9_8-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_verner_9_8-stab.png">  <img src="eerk_verner_9_8-stab.png"  width="256px"> </a>
+!! <a href="eerk_verner_9_8-astab.png"> <img src="eerk_verner_9_8-astab.png" width="256px"> </a>
+!! <a href="eerk_verner_9_8-star1.png"> <img src="eerk_verner_9_8-star1.png" width="256px"> </a>
+!! <a href="eerk_verner_9_8-star2.png"> <img src="eerk_verner_9_8-star2.png" width="256px"> </a>
+!!
 !! IMO: This is my go-to O(9,8) method.
 !!
 !! @par References:

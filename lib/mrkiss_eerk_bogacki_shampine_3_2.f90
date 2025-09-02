@@ -42,6 +42,12 @@
 !!
 !! @image html eerk_bogacki_shampine_3_2-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_bogacki_shampine_3_2-stab.png">  <img src="eerk_bogacki_shampine_3_2-stab.png"  width="256px"> </a>
+!! <a href="eerk_bogacki_shampine_3_2-astab.png"> <img src="eerk_bogacki_shampine_3_2-astab.png" width="256px"> </a>
+!! <a href="eerk_bogacki_shampine_3_2-star1.png"> <img src="eerk_bogacki_shampine_3_2-star1.png" width="256px"> </a>
+!! <a href="eerk_bogacki_shampine_3_2-star2.png"> <img src="eerk_bogacki_shampine_3_2-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Bogacki & Shampine (1989); A 3(2) pair of Runge-Kutta formulas; Applied Mathematics Letters; zotero://select/items/0_66MV7TIP
 !!

@@ -43,6 +43,12 @@
 !!
 !! @image html eerk_fehlberg_7_8-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_fehlberg_7_8-stab.png">  <img src="eerk_fehlberg_7_8-stab.png"  width="256px"> </a>
+!! <a href="eerk_fehlberg_7_8-astab.png"> <img src="eerk_fehlberg_7_8-astab.png" width="256px"> </a>
+!! <a href="eerk_fehlberg_7_8-star1.png"> <img src="eerk_fehlberg_7_8-star1.png" width="256px"> </a>
+!! <a href="eerk_fehlberg_7_8-star2.png"> <img src="eerk_fehlberg_7_8-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Erwin Fehlberg (1972); Classical eight- and lower-order Runge-Kutta-Nystroem formulas with stepsize control for 
 !!    special second-order differential equations; NASA Technical Report M-533

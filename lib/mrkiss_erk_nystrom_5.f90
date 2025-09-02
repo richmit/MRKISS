@@ -46,6 +46,12 @@
 !!
 !! @image html erk_nystrom_5-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="erk_nystrom_5-stab.png">  <img src="erk_nystrom_5-stab.png"  width="256px"> </a>
+!! <a href="erk_nystrom_5-astab.png"> <img src="erk_nystrom_5-astab.png" width="256px"> </a>
+!! <a href="erk_nystrom_5-star1.png"> <img src="erk_nystrom_5-star1.png" width="256px"> </a>
+!! <a href="erk_nystrom_5-star2.png"> <img src="erk_nystrom_5-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
 !!  - Nystr\"om (1925); Uber die numerische Integration von Differentialgleichungen; Acta Soc. Sci. Fennicae; 50(13); 

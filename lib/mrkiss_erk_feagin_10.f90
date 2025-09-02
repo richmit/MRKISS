@@ -42,6 +42,12 @@
 !!
 !! @image html erk_feagin_10-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="erk_feagin_10-stab.png">  <img src="erk_feagin_10-stab.png"  width="256px"> </a>
+!! <a href="erk_feagin_10-astab.png"> <img src="erk_feagin_10-astab.png" width="256px"> </a>
+!! <a href="erk_feagin_10-star1.png"> <img src="erk_feagin_10-star1.png" width="256px"> </a>
+!! <a href="erk_feagin_10-star2.png"> <img src="erk_feagin_10-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Feagin (2006); "A Tenth-Order Runge-Kutta Method with Error Estimate"; zotero://select/items/0_PGRJDU9M
 !!

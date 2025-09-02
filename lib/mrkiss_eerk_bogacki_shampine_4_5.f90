@@ -42,6 +42,12 @@
 !!
 !! @image html eerk_bogacki_shampine_4_5-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_bogacki_shampine_4_5-stab.png">  <img src="eerk_bogacki_shampine_4_5-stab.png"  width="256px"> </a>
+!! <a href="eerk_bogacki_shampine_4_5-astab.png"> <img src="eerk_bogacki_shampine_4_5-astab.png" width="256px"> </a>
+!! <a href="eerk_bogacki_shampine_4_5-star1.png"> <img src="eerk_bogacki_shampine_4_5-star1.png" width="256px"> </a>
+!! <a href="eerk_bogacki_shampine_4_5-star2.png"> <img src="eerk_bogacki_shampine_4_5-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Bogacki & Shampine (1996); An Efficient Runge-Kutta (4,5) Pair; Comp. & Math. with Appl. 32 (6); p15-28; 
 !!    zotero://select/items/0_3SDMHUHW

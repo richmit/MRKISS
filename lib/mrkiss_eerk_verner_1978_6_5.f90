@@ -42,6 +42,12 @@
 !!
 !! @image html eerk_verner_1978_6_5-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_verner_1978_6_5-stab.png">  <img src="eerk_verner_1978_6_5-stab.png"  width="256px"> </a>
+!! <a href="eerk_verner_1978_6_5-astab.png"> <img src="eerk_verner_1978_6_5-astab.png" width="256px"> </a>
+!! <a href="eerk_verner_1978_6_5-star1.png"> <img src="eerk_verner_1978_6_5-star1.png" width="256px"> </a>
+!! <a href="eerk_verner_1978_6_5-star2.png"> <img src="eerk_verner_1978_6_5-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Verner (1978); Explicit Runge-Kutta methods with estimates of the local truncation error; SIAM J. Numer. Anal 15; 
 !!    (4)1; p772-790; zotero://select/items/0_9HLA6P9B

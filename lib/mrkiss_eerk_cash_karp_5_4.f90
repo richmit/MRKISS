@@ -44,6 +44,15 @@
 !!
 !! @image html eerk_cash_karp_5_4-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_cash_karp_5_4-stab.png">  <img src="eerk_cash_karp_5_4-stab.png"  width="256px"> </a>
+!! <a href="eerk_cash_karp_5_4-astab.png"> <img src="eerk_cash_karp_5_4-astab.png" width="256px"> </a><br>
+!! <a href="eerk_cash_karp_5_4-star1.png"> <img src="eerk_cash_karp_5_4-star1.png" width="256px"> </a>
+!! <a href="eerk_cash_karp_5_4-star2.png"> <img src="eerk_cash_karp_5_4-star2.png" width="256px"> </a>
+!! <a href="eerk_cash_karp_5_4-star3.png"> <img src="eerk_cash_karp_5_4-star3.png" width="256px"> </a>
+!! <a href="eerk_cash_karp_5_4-star4.png"> <img src="eerk_cash_karp_5_4-star4.png" width="256px"> </a>
+!! <a href="eerk_cash_karp_5_4-star5.png"> <img src="eerk_cash_karp_5_4-star5.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Cash & Karp(1990);  A variable order Runge-Kutta method for initial value problems with rapidly varying 
 !!    right-hand sides; TOMS 16; zotero://select/items/0_2YSGGWSD

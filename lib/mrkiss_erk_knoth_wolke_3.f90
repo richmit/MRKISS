@@ -42,6 +42,12 @@
 !!
 !! @image html erk_knoth_wolke_3-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="erk_knoth_wolke_3-stab.png">  <img src="erk_knoth_wolke_3-stab.png"  width="256px"> </a>
+!! <a href="erk_knoth_wolke_3-astab.png"> <img src="erk_knoth_wolke_3-astab.png" width="256px"> </a>
+!! <a href="erk_knoth_wolke_3-star1.png"> <img src="erk_knoth_wolke_3-star1.png" width="256px"> </a>
+!! <a href="erk_knoth_wolke_3-star2.png"> <img src="erk_knoth_wolke_3-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Knoth & Wolke (1988); Implicit-explicit runge-kutta methods for computiong atmospheric reactive flows; Appl. Num. Anal;
 !!    28(2-4); p327-341

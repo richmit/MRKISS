@@ -46,6 +46,12 @@
 !!
 !! @image html eerk_dormand_prince_5_4-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_dormand_prince_5_4-stab.png">  <img src="eerk_dormand_prince_5_4-stab.png"  width="256px"> </a>
+!! <a href="eerk_dormand_prince_5_4-astab.png"> <img src="eerk_dormand_prince_5_4-astab.png" width="256px"> </a>
+!! <a href="eerk_dormand_prince_5_4-star1.png"> <img src="eerk_dormand_prince_5_4-star1.png" width="256px"> </a>
+!! <a href="eerk_dormand_prince_5_4-star2.png"> <img src="eerk_dormand_prince_5_4-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Dormand & Prince (1980); A family of embedded Runge-Kutta formulae; J. Comput. Appl. Math. 6, no. 1
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p178; 

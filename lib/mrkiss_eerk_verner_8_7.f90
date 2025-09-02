@@ -42,6 +42,12 @@
 !!
 !! @image html eerk_verner_8_7-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_verner_8_7-stab.png">  <img src="eerk_verner_8_7-stab.png"  width="256px"> </a>
+!! <a href="eerk_verner_8_7-astab.png"> <img src="eerk_verner_8_7-astab.png" width="256px"> </a>
+!! <a href="eerk_verner_8_7-star1.png"> <img src="eerk_verner_8_7-star1.png" width="256px"> </a>
+!! <a href="eerk_verner_8_7-star2.png"> <img src="eerk_verner_8_7-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Verner (2010); Numerically Optimal Runge-Kutta Pairs with Interpolants; Num. Alg. 53 (2-3); p383-396;
 !!  - Verner (2007); A "more efficient" Runge--Kutta (8)7 Pair with Interpolants; https://www.sfu.ca/~jverner/; 

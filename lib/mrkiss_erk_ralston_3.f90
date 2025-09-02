@@ -41,6 +41,12 @@
 !!
 !! @image html erk_ralston_3-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="erk_ralston_3-stab.png">  <img src="erk_ralston_3-stab.png"  width="256px"> </a>
+!! <a href="erk_ralston_3-astab.png"> <img src="erk_ralston_3-astab.png" width="256px"> </a>
+!! <a href="erk_ralston_3-star1.png"> <img src="erk_ralston_3-star1.png" width="256px"> </a>
+!! <a href="erk_ralston_3-star2.png"> <img src="erk_ralston_3-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Ralston (1962); Runge-Kutta Methods with Minimum Error Bounds; Math. of Comp. 16 (80); p431-437; 
 !!    zotero://select/items/0_2FK7F4J3

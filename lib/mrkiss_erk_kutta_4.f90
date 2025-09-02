@@ -42,6 +42,12 @@
 !!
 !! @image html erk_kutta_4-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="erk_kutta_4-stab.png">  <img src="erk_kutta_4-stab.png"  width="256px"> </a>
+!! <a href="erk_kutta_4-astab.png"> <img src="erk_kutta_4-astab.png" width="256px"> </a>
+!! <a href="erk_kutta_4-star1.png"> <img src="erk_kutta_4-star1.png" width="256px"> </a>
+!! <a href="erk_kutta_4-star2.png"> <img src="erk_kutta_4-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53
 !!  - Hairer, Norsett & Wanner (2009). Solving Ordinary Differential Equations. I: Nonstiff Problems. p138; 

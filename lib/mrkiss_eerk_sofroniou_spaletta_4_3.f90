@@ -43,6 +43,12 @@
 !!
 !! @image html eerk_sofroniou_spaletta_4_3-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_sofroniou_spaletta_4_3-stab.png">  <img src="eerk_sofroniou_spaletta_4_3-stab.png"  width="256px"> </a>
+!! <a href="eerk_sofroniou_spaletta_4_3-astab.png"> <img src="eerk_sofroniou_spaletta_4_3-astab.png" width="256px"> </a>
+!! <a href="eerk_sofroniou_spaletta_4_3-star1.png"> <img src="eerk_sofroniou_spaletta_4_3-star1.png" width="256px"> </a>
+!! <a href="eerk_sofroniou_spaletta_4_3-star2.png"> <img src="eerk_sofroniou_spaletta_4_3-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Sofroniou & Spaletta (2004); Construction of Explicit Runge-Kutta Pairs with Stiffness Detection; Math. and Comp. Modelling; 
 !!    40(11); p1157-1169; zotero://select/items/0_52X4WPJK

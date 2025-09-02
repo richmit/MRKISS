@@ -42,6 +42,12 @@
 !!
 !! @image html erk_midpoint_2-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="erk_midpoint_2-stab.png">  <img src="erk_midpoint_2-stab.png"  width="256px"> </a>
+!! <a href="erk_midpoint_2-astab.png"> <img src="erk_midpoint_2-astab.png" width="256px"> </a>
+!! <a href="erk_midpoint_2-star1.png"> <img src="erk_midpoint_2-star1.png" width="256px"> </a>
+!! <a href="erk_midpoint_2-star2.png"> <img src="erk_midpoint_2-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Butcher (2016); Numerical Methods for Ordinary Differential Equations. 3ed; p98-99; zotero://select/items/0_V7UTIRPT
 !!

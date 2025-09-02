@@ -38,6 +38,12 @@
 !!
 !! @image html eerk_dormand_prince_7_8-stab.png
 !!
+!! @par Stability Image Links
+!! <a href="eerk_dormand_prince_7_8-stab.png">  <img src="eerk_dormand_prince_7_8-stab.png"  width="256px"> </a>
+!! <a href="eerk_dormand_prince_7_8-astab.png"> <img src="eerk_dormand_prince_7_8-astab.png" width="256px"> </a>
+!! <a href="eerk_dormand_prince_7_8-star1.png"> <img src="eerk_dormand_prince_7_8-star1.png" width="256px"> </a>
+!! <a href="eerk_dormand_prince_7_8-star2.png"> <img src="eerk_dormand_prince_7_8-star2.png" width="256px"> </a>
+!!
 !! @par References:
 !!  - Prince & Dormand(1981); High Order Embedded Runge-Kutta Formulae; J. of Comp. and Appl. Math. 7 (1); p67-75;
 !!    zotero://select/items/0_N9KVWVST
