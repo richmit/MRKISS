@@ -1,0 +1,6 @@
+
+This directory contains data and associated Maple worksheets for the Butcher tableaux used by [[https://github.com/richmit/MRKISS][MRKISS]].
+
+   - ~*-a.txt~: \(a\) matrix
+   - ~*-b.txt~: \(b\) matrix
+   - ~*-c.txt~: \(c\) vector

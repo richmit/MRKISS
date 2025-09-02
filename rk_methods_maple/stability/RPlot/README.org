@@ -1,1 +1,8 @@
- 
+
+This directory contains data and associated Maple worksheets for the Butcher tableaux used by [[https://github.com/richmit/MRKISS][MRKISS]].
+
+   - ~*-astab.png~: Combined stability plots
+   - ~*-stab.png~: Stability plot for first one or two methods in each tableau
+   - ~*-star#.png~: Order star plot for each method in a tableau
+
+

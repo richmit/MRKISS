@@ -1,0 +1,9 @@
+
+This directory contains data and associated Maple worksheets for the Butcher tableaux used by [[https://github.com/richmit/MRKISS][MRKISS]].
+
+   - ~*-RNpoly#.txt~: Numerator polynomial for each method in a tableau
+   - ~*-RNroots#.txt~: Numerator polynomial roots for each method in a tableau
+   - ~*-RDpoly#.txt~: Denominator polynomial
+   - ~*-RDroots#.txt~: Denominator polynomial roots
+
+

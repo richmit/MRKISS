@@ -1,0 +1,8 @@
+
+This directory contains data and associated Maple worksheets for the Butcher tableaux used by [[https://github.com/richmit/MRKISS][MRKISS]].
+
+   - ~convert.mpl~: Procedures to process tableaux files
+   - ~convert_all.mw~:  Process all tableaux
+   - ~convert_test.mw~: Test procedures
+
+

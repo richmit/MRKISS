@@ -1,0 +1,7 @@
+
+This directory contains data and associated Maple worksheets for the Butcher tableaux used by [[https://github.com/richmit/MRKISS][MRKISS]].
+
+   - ~eerk_bogacki_shampine_3_2~: Typical full matrix approach
+   - ~eerk_bogacki_shampine_4_5~: Typical element assignment approach
+
+
