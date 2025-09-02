@@ -17,10 +17,16 @@
 /examples/*.png
 /examples/*.svg
 
+/rk_methods_maple/README.html
+/rk_methods_maple/convert/README.html
+/rk_methods_maple/source/README.html
+/rk_methods_maple/stability/README.html
+/rk_methods_maple/stability/RFunc/README.html
+/rk_methods_maple/stability/RPlot/README.html
+/rk_methods_maple/tableaux/README.html
 
 /rk_methods_maple/stability/RPlot/*.png
 /rk_methods_maple/inwork
-/rk_methods_maple/README.html
 
 /tests/*.csv
 /tests/*.vtu
