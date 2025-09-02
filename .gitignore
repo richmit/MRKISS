@@ -17,9 +17,10 @@
 /examples/*.png
 /examples/*.svg
 
-/rk_methods_maple/*.gif
-/rk_methods_maple/*.png
+
+/rk_methods_maple/stability/RPlot/*.png
 /rk_methods_maple/inwork
+/rk_methods_maple/README.html
 
 /tests/*.csv
 /tests/*.vtu
