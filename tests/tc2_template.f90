@@ -35,47 +35,47 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program tc2_TCASEN
   use :: mrkiss_config,                      only: rk
-  use :: mrkiss_solvers_nt,                  only: one_step_stab
-! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b=>b1, c   ! TCASE_COM: bogacki_shampine_3_2_b1
-! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b=>b2, c   ! TCASE_COM: bogacki_shampine_3_2_b2
-! use :: mrkiss_eerk_bogacki_shampine_4_5,   only: a, b=>b1, c   ! TCASE_COM: bogacki_shampine_4_5_b1
-! use :: mrkiss_eerk_bogacki_shampine_4_5,   only: a, b=>b2, c   ! TCASE_COM: bogacki_shampine_4_5_b2
-! use :: mrkiss_eerk_cash_karp_5_4,          only: a, b=>b1, c   ! TCASE_COM: cash_karp_5_4_b1
-! use :: mrkiss_eerk_cash_karp_5_4,          only: a, b=>b2, c   ! TCASE_COM: cash_karp_5_4_b2
-! use :: mrkiss_eerk_dormand_prince_5_4,     only: a, b=>b1, c   ! TCASE_COM: dormand_prince_5_4_b1
-! use :: mrkiss_eerk_dormand_prince_5_4,     only: a, b=>b2, c   ! TCASE_COM: dormand_prince_5_4_b2
-! use :: mrkiss_eerk_dormand_prince_7_8,     only: a, b=>b1, c   ! TCASE_COM: dormand_prince_7_8_b1
-! use :: mrkiss_eerk_dormand_prince_7_8,     only: a, b=>b2, c   ! TCASE_COM: dormand_prince_7_8_b2
-! use :: mrkiss_eerk_fehlberg_4_5,           only: a, b=>b1, c   ! TCASE_COM: fehlberg_4_5_b1
-! use :: mrkiss_eerk_fehlberg_4_5,           only: a, b=>b2, c   ! TCASE_COM: fehlberg_4_5_b2
-! use :: mrkiss_eerk_fehlberg_7_8,           only: a, b=>b1, c   ! TCASE_COM: fehlberg_7_8_b1
-! use :: mrkiss_eerk_fehlberg_7_8,           only: a, b=>b2, c   ! TCASE_COM: fehlberg_7_8_b2
-! use :: mrkiss_eerk_heun_euler_2_1,         only: a, b=>b1, c   ! TCASE_COM: heun_euler_2_1_b1
-! use :: mrkiss_eerk_heun_euler_2_1,         only: a, b=>b2, c   ! TCASE_COM: heun_euler_2_1_b2
-! use :: mrkiss_eerk_sofroniou_spaletta_4_3, only: a, b=>b1, c   ! TCASE_COM: sofroniou_spaletta_4_3_b1
-! use :: mrkiss_eerk_sofroniou_spaletta_4_3, only: a, b=>b2, c   ! TCASE_COM: sofroniou_spaletta_4_3_b2
-! use :: mrkiss_eerk_tsitouras_arkode_5_4,   only: a, b=>b1, c   ! TCASE_COM: tsitouras_arkode_5_4_b1
-! use :: mrkiss_eerk_tsitouras_arkode_5_4,   only: a, b=>b2, c   ! TCASE_COM: tsitouras_arkode_5_4_b2
-! use :: mrkiss_eerk_verner_1978_6_5,        only: a, b=>b1, c   ! TCASE_COM: verner_1978_6_5_b1
-! use :: mrkiss_eerk_verner_1978_6_5,        only: a, b=>b2, c   ! TCASE_COM: verner_1978_6_5_b2
-! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b=>b1, c   ! TCASE_COM: verner_2010_6_5_b1
-! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b=>b2, c   ! TCASE_COM: verner_2010_6_5_b2
-! use :: mrkiss_eerk_verner_7_6,             only: a, b=>b1, c   ! TCASE_COM: verner_7_6_b1
-! use :: mrkiss_eerk_verner_7_6,             only: a, b=>b2, c   ! TCASE_COM: verner_7_6_b2
-! use :: mrkiss_eerk_verner_8_7,             only: a, b=>b1, c   ! TCASE_COM: verner_8_7_b1
-! use :: mrkiss_eerk_verner_8_7,             only: a, b=>b2, c   ! TCASE_COM: verner_8_7_b2
-! use :: mrkiss_eerk_verner_9_8,             only: a, b=>b1, c   ! TCASE_COM: verner_9_8_b1
-! use :: mrkiss_eerk_verner_9_8,             only: a, b=>b2, c   ! TCASE_COM: verner_9_8_b2
-! use :: mrkiss_erk_euler_1,                 only: a, b, c       ! TCASE_COM: euler_1
-! use :: mrkiss_erk_feagin_10,               only: a, b, c       ! TCASE_COM: feagin_10
-! use :: mrkiss_erk_nystrom_5,               only: a, b, c       ! TCASE_COM: nystrom_5
-! use :: mrkiss_erk_knoth_wolke_3,           only: a, b, c       ! TCASE_COM: knoth_wolke_3
-! use :: mrkiss_erk_kutta_4,                 only: a, b, c       ! TCASE_COM: kutta_4
-! use :: mrkiss_erk_kutta_three_eight_4,     only: a, b, c       ! TCASE_COM: kutta_three_eight_4
-! use :: mrkiss_erk_midpoint_2,              only: a, b, c       ! TCASE_COM: midpoint_2
-! use :: mrkiss_erk_ralston_2,               only: a, b, c       ! TCASE_COM: ralston_2
-! use :: mrkiss_erk_ralston_3,               only: a, b, c       ! TCASE_COM: ralston_3
-! use :: mrkiss_erk_ralston_4,               only: a, b, c       ! TCASE_COM: ralston_4
+  use :: mrkiss_solvers_nt,                  only: one_step
+! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b, c   ! TCASE_COM: bogacki_shampine_3_2_b1
+! use :: mrkiss_eerk_bogacki_shampine_3_2,   only: a, b, c   ! TCASE_COM: bogacki_shampine_3_2_b2
+! use :: mrkiss_eerk_bogacki_shampine_4_5,   only: a, b, c   ! TCASE_COM: bogacki_shampine_4_5_b1
+! use :: mrkiss_eerk_bogacki_shampine_4_5,   only: a, b, c   ! TCASE_COM: bogacki_shampine_4_5_b2
+! use :: mrkiss_eerk_cash_karp_5_4,          only: a, b, c   ! TCASE_COM: cash_karp_5_4_b1
+! use :: mrkiss_eerk_cash_karp_5_4,          only: a, b, c   ! TCASE_COM: cash_karp_5_4_b2
+! use :: mrkiss_eerk_dormand_prince_5_4,     only: a, b, c   ! TCASE_COM: dormand_prince_5_4_b1
+! use :: mrkiss_eerk_dormand_prince_5_4,     only: a, b, c   ! TCASE_COM: dormand_prince_5_4_b2
+! use :: mrkiss_eerk_dormand_prince_7_8,     only: a, b, c   ! TCASE_COM: dormand_prince_7_8_b1
+! use :: mrkiss_eerk_dormand_prince_7_8,     only: a, b, c   ! TCASE_COM: dormand_prince_7_8_b2
+! use :: mrkiss_eerk_fehlberg_4_5,           only: a, b, c   ! TCASE_COM: fehlberg_4_5_b1
+! use :: mrkiss_eerk_fehlberg_4_5,           only: a, b, c   ! TCASE_COM: fehlberg_4_5_b2
+! use :: mrkiss_eerk_fehlberg_7_8,           only: a, b, c   ! TCASE_COM: fehlberg_7_8_b1
+! use :: mrkiss_eerk_fehlberg_7_8,           only: a, b, c   ! TCASE_COM: fehlberg_7_8_b2
+! use :: mrkiss_eerk_heun_euler_2_1,         only: a, b, c   ! TCASE_COM: heun_euler_2_1_b1
+! use :: mrkiss_eerk_heun_euler_2_1,         only: a, b, c   ! TCASE_COM: heun_euler_2_1_b2
+! use :: mrkiss_eerk_sofroniou_spaletta_4_3, only: a, b, c   ! TCASE_COM: sofroniou_spaletta_4_3_b1
+! use :: mrkiss_eerk_sofroniou_spaletta_4_3, only: a, b, c   ! TCASE_COM: sofroniou_spaletta_4_3_b2
+! use :: mrkiss_eerk_tsitouras_arkode_5_4,   only: a, b, c   ! TCASE_COM: tsitouras_arkode_5_4_b1
+! use :: mrkiss_eerk_tsitouras_arkode_5_4,   only: a, b, c   ! TCASE_COM: tsitouras_arkode_5_4_b2
+! use :: mrkiss_eerk_verner_1978_6_5,        only: a, b, c   ! TCASE_COM: verner_1978_6_5_b1
+! use :: mrkiss_eerk_verner_1978_6_5,        only: a, b, c   ! TCASE_COM: verner_1978_6_5_b2
+! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b, c   ! TCASE_COM: verner_2010_6_5_b1
+! use :: mrkiss_eerk_verner_2010_6_5,        only: a, b, c   ! TCASE_COM: verner_2010_6_5_b2
+! use :: mrkiss_eerk_verner_7_6,             only: a, b, c   ! TCASE_COM: verner_7_6_b1
+! use :: mrkiss_eerk_verner_7_6,             only: a, b, c   ! TCASE_COM: verner_7_6_b2
+! use :: mrkiss_eerk_verner_8_7,             only: a, b, c   ! TCASE_COM: verner_8_7_b1
+! use :: mrkiss_eerk_verner_8_7,             only: a, b, c   ! TCASE_COM: verner_8_7_b2
+! use :: mrkiss_eerk_verner_9_8,             only: a, b, c   ! TCASE_COM: verner_9_8_b1
+! use :: mrkiss_eerk_verner_9_8,             only: a, b, c   ! TCASE_COM: verner_9_8_b2
+! use :: mrkiss_erk_euler_1,                 only: a, b, c   ! TCASE_COM: euler_1
+! use :: mrkiss_erk_feagin_10,               only: a, b, c   ! TCASE_COM: feagin_10
+! use :: mrkiss_erk_nystrom_5,               only: a, b, c   ! TCASE_COM: nystrom_5
+! use :: mrkiss_erk_knoth_wolke_3,           only: a, b, c   ! TCASE_COM: knoth_wolke_3
+! use :: mrkiss_erk_kutta_4,                 only: a, b, c   ! TCASE_COM: kutta_4
+! use :: mrkiss_erk_kutta_three_eight_4,     only: a, b, c   ! TCASE_COM: kutta_three_eight_4
+! use :: mrkiss_erk_midpoint_2,              only: a, b, c   ! TCASE_COM: midpoint_2
+! use :: mrkiss_erk_ralston_2,               only: a, b, c   ! TCASE_COM: ralston_2
+! use :: mrkiss_erk_ralston_3,               only: a, b, c   ! TCASE_COM: ralston_3
+! use :: mrkiss_erk_ralston_4,               only: a, b, c   ! TCASE_COM: ralston_4
 
   implicit none
 
@@ -86,9 +86,49 @@ program tc2_TCASEN
   real(kind=rk),     parameter :: param(1)      = [0.0_rk]
   real(kind=rk),     parameter :: t_iv          = 0.0_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
+! integer,           parameter :: n             = 1  ! TCASE_COM: bogacki_shampine_3_2_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: bogacki_shampine_3_2_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: bogacki_shampine_4_5_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: bogacki_shampine_4_5_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: cash_karp_5_4_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: cash_karp_5_4_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: dormand_prince_5_4_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: dormand_prince_5_4_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: dormand_prince_7_8_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: dormand_prince_7_8_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: fehlberg_4_5_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: fehlberg_4_5_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: fehlberg_7_8_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: fehlberg_7_8_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: heun_euler_2_1_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: heun_euler_2_1_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: sofroniou_spaletta_4_3_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: sofroniou_spaletta_4_3_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: tsitouras_arkode_5_4_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: tsitouras_arkode_5_4_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: verner_1978_6_5_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: verner_1978_6_5_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: verner_2010_6_5_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: verner_2010_6_5_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: verner_7_6_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: verner_7_6_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: verner_8_7_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: verner_8_7_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: verner_9_8_b1
+! integer,           parameter :: n             = 2  ! TCASE_COM: verner_9_8_b2
+! integer,           parameter :: n             = 1  ! TCASE_COM: euler_1
+! integer,           parameter :: n             = 1  ! TCASE_COM: feagin_10
+! integer,           parameter :: n             = 1  ! TCASE_COM: nystrom_5
+! integer,           parameter :: n             = 1  ! TCASE_COM: knoth_wolke_3
+! integer,           parameter :: n             = 1  ! TCASE_COM: kutta_4
+! integer,           parameter :: n             = 1  ! TCASE_COM: kutta_three_eight_4
+! integer,           parameter :: n             = 1  ! TCASE_COM: midpoint_2
+! integer,           parameter :: n             = 1  ! TCASE_COM: ralston_2
+! integer,           parameter :: n             = 1  ! TCASE_COM: ralston_3
+! integer,           parameter :: n             = 1  ! TCASE_COM: ralston_4
 
   integer          :: step, status
-  real(kind=rk)    :: y_delta(deq_dim), y_cv(deq_dim), t_cv, y_tmp(deq_dim), yd(deq_dim)
+  real(kind=rk)    :: y_deltas(deq_dim, 1), y_cv(deq_dim), t_cv, y_tmp(deq_dim), yd(deq_dim)
   integer          :: out_io_stat, out_io_unit
 
   character(len=*), parameter  :: fmt = "(a40,i5,f23.17,f23.17,f23.17,f23.17)"
@@ -99,9 +139,9 @@ program tc2_TCASEN
   do step=1,max_steps
      call ysol(status, y_tmp, t_cv, param)
      write (out_io_unit, fmt=fmt) "TCASEN", step, t_cv, y_cv, y_tmp, abs(y_tmp-y_cv)
-     call one_step_stab(status, y_delta, yd, eq, y_cv, param, a, b, c, t_delta=t_delta)
+     call one_step(status, y_deltas, yd, eq, y_cv, param, a, b(:,n:n), c, t_delta=t_delta)
      t_cv = t_cv + t_delta
-     y_cv = y_cv + y_delta
+     y_cv = y_cv + y_deltas(:,1)
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 

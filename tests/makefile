@@ -45,9 +45,9 @@ IMG_VIEWER = nomacs
 FD = ../scripts/float_diff.rb
 TD = diff
 
-TESTS = test_dp54 test_rkf45 test_rk4 test_rich test_short_b test_statuscodes test_utils test_seqt
+TESTS = test_dp54 test_rkf45 test_rk4 test_short_b test_statuscodes test_utils test_seqt
 
-EXE_TARGETS = rkf45 rk4 short_b rich dp54 seqt statuscodes utils
+EXE_TARGETS = rkf45 rk4 short_b dp54 seqt statuscodes utils
 
 all : $(EXE_TARGETS)
 
@@ -93,127 +93,97 @@ test_short_b : test_short_b_sub_vs_arc test_short_b_all_vs_sub
 dp54 : dp54.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) dp54.f90 $(MRKISS_OBJ_FILES) -o $@
 
-DP54_OUTS = dp54_stab_5.out dp54_stab_4.out dp54_ref_5.out dp54_ref_4.out dp54_etab_5.out dp54_etab_4.out
+DP54_OUTS = dp54_one_5.out dp54_one_4.out dp54_ref_5.out dp54_ref_4.out
 
 $(DP54_OUTS) &: dp54
 	dp54$(EXE_SUFFIX)
 
-.PHONY: test_dp54_ref_vs_stab_5
-test_dp54_ref_vs_stab_5 : dp54_ref_5.out dp54_stab_5.out
-	$(FD) -Zdqn -e 1e-10 dp54_ref_5.out dp54_stab_5.out
+.PHONY: test_dp54_ref_vs_tab_5
+test_dp54_ref_vs_tab_5 : dp54_ref_5.out dp54_one_5.out
+	$(FD) -Zdqn -e 1e-10 dp54_ref_5.out dp54_one_5.out
 
-.PHONY: test_dp54_ref_vs_stab_4
-test_dp54_ref_vs_stab_4 : dp54_ref_4.out dp54_stab_4.out
-	$(FD) -Zdqn -e 1e-10 dp54_ref_4.out dp54_stab_4.out
-
-.PHONY: test_dp54_stab_vs_etab_5
-test_dp54_stab_vs_etab_5 : dp54_stab_5.out dp54_etab_5.out
-	$(FD) -Zdqn -e 1e-10 dp54_stab_5.out dp54_etab_5.out
-
-.PHONY: test_dp54_stab_vs_etab_4
-test_dp54_stab_vs_etab_4 : dp54_stab_4.out dp54_etab_4.out
-	$(FD) -Zdqn -e 1e-10 dp54_stab_4.out dp54_etab_4.out
+.PHONY: test_dp54_ref_vs_tab_4
+test_dp54_ref_vs_tab_4 : dp54_ref_4.out dp54_one_4.out
+	$(FD) -Zdqn -e 1e-10 dp54_ref_4.out dp54_one_4.out
 
 .PHONY: test_dp54_archive
 test_dp54_archive: $(DP54_OUTS)
 	$(foreach fil,$^,$(FD) -Zdqn $(fil) data/$(fil); )
 
 .PHONY: test_dp54
-test_dp54 : test_dp54_ref_vs_stab_5 test_dp54_ref_vs_stab_4 test_dp54_stab_vs_etab_5 test_dp54_stab_vs_etab_4 test_dp54_archive
+test_dp54 : test_dp54_ref_vs_tab_5 test_dp54_ref_vs_tab_4 test_dp54_archive
 
 ####################################################################################################
 rkf45 : rkf45.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rkf45.f90 $(MRKISS_OBJ_FILES) -o $@
 
-RKF45_OUTS = rkf45_stab_5.out rkf45_stab_4.out rkf45_ref_5.out rkf45_ref_4.out rkf45_etab_5.out rkf45_etab_4.out
+RKF45_OUTS = rkf45_ref_5.out rkf45_ref_4.out rkf45_one_5.out rkf45_one_4.out
 
 $(RKF45_OUTS) &: rkf45
 	rkf45$(EXE_SUFFIX)
 
-.PHONY: test_rkf45_ref_vs_stab_5
-test_rkf45_ref_vs_stab_5 : rkf45_ref_5.out rkf45_stab_5.out
-	$(FD) -Zdqn -e 1e-10 rkf45_ref_5.out rkf45_stab_5.out
+.PHONY: test_rkf45_ref_vs_one_5
+test_rkf45_ref_vs_one_5 : rkf45_ref_5.out rkf45_one_5.out
+	$(FD) -Zdqn -e 1e-10 rkf45_ref_5.out rkf45_one_5.out
 
-.PHONY: test_rkf45_ref_vs_stab_4
-test_rkf45_ref_vs_stab_4 : rkf45_ref_4.out rkf45_stab_4.out
-	$(FD) -Zdqn -e 1e-10 rkf45_ref_4.out rkf45_stab_4.out
-
-.PHONY: test_rkf45_stab_vs_etab_5
-test_rkf45_stab_vs_etab_5 : rkf45_stab_5.out rkf45_etab_5.out
-	$(FD) -Zdqn -e 1e-10 rkf45_stab_5.out rkf45_etab_5.out
-
-.PHONY: test_rkf45_stab_vs_etab_4
-test_rkf45_stab_vs_etab_4 : rkf45_stab_4.out rkf45_etab_4.out
-	$(FD) -Zdqn -e 1e-10 rkf45_stab_4.out rkf45_etab_4.out
+.PHONY: test_rkf45_ref_vs_one_4
+test_rkf45_ref_vs_one_4 : rkf45_ref_4.out rkf45_one_4.out
+	$(FD) -Zdqn -e 1e-10 rkf45_ref_4.out rkf45_one_4.out
 
 .PHONY: test_rkf45_archive
 test_rkf45_archive: $(RKF45_OUTS)
 	$(foreach fil,$^,$(FD) -Zdqn $(fil) data/$(fil); )
 
 .PHONY: test_rkf45
-test_rkf45 : test_rkf45_ref_vs_stab_5 test_rkf45_ref_vs_stab_4 test_rkf45_stab_vs_etab_5 test_rkf45_stab_vs_etab_4 test_rkf45_archive
+test_rkf45 : test_rkf45_ref_vs_one_5 test_rkf45_ref_vs_one_4 test_rkf45_archive
 
 ####################################################################################################
 rk4 : rk4.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) rk4.f90 $(MRKISS_OBJ_FILES) -o $@
 
-RK4_OUTS = rk4_steps.out rk4_hnd.out rk4_stab.out rk4_ref.out rk4_frog.out rk4_frog_end.out rk4_steps_end.out rk4_steps_end_points10.out
+RK4_OUTS = rk4_fixed.out rk4_hnd.out rk4_one.out rk4_ref.out rk4_fixed_frog_delta.out rk4_fixed_frog_end.out rk4_fixed_end.out rk4_points10.out rk4_points1.out
 
 $(RK4_OUTS) &: rk4
 	rk4$(EXE_SUFFIX)
 
-.PHONY: test_rk4_stab_vs_steps
-test_rk4_stab_vs_steps : rk4_steps.out rk4_stab.out 
-	$(FD) -Zdqn -e 1e-10 rk4_steps.out rk4_stab.out 
+.PHONY: test_rk4_ref_vs_one
+test_rk4_ref_vs_one : rk4_ref.out rk4_one.out 
+	$(FD) -Zdqn -e 1e-10 rk4_ref.out rk4_one.out 
 
-.PHONY: test_rk4_ref_vs_stab
-test_rk4_ref_vs_stab : rk4_ref.out rk4_stab.out 
-	$(FD) -Zdqn -e 1e-10 rk4_ref.out rk4_stab.out 
+.PHONY: test_rk4_one_vs_steps
+test_rk4_one_vs_steps : rk4_fixed.out rk4_one.out 
+	$(FD) -Zdqn -e 1e-10 rk4_fixed.out rk4_one.out 
 
 .PHONY: test_rk4_ref_vs_hnd
 test_rk4_ref_vs_hnd : rk4_ref.out rk4_hnd.out 
 	$(FD) -Zdqn -e 1e-6 rk4_ref.out rk4_hnd.out 
 
 .PHONY: test_rk4_frog_d_vs_e
-test_rk4_frog_d_vs_e : rk4_frog.out rk4_frog_end.out
-	$(FD) -Zdqn -e 1e-10 rk4_frog.out rk4_frog_end.out
+test_rk4_frog_d_vs_e : rk4_fixed_frog_delta.out rk4_fixed_frog_end.out
+	$(FD) -Zdqn -e 1e-10 rk4_fixed_frog_delta.out rk4_fixed_frog_end.out
 
 .PHONY: test_rk4_frog_vs_steps
-test_rk4_frog_vs_steps : rk4_frog.out rk4_steps.out 
-	$(FD) -Zdqn -e 1e-10 -k '^ +11 ' rk4_frog.out rk4_steps.out 
+test_rk4_frog_vs_steps : rk4_fixed_frog_delta.out rk4_fixed.out 
+	$(FD) -Zdqn -e 1e-10 -k '^ +11 ' rk4_fixed_frog_delta.out rk4_fixed.out 
 
-.PHONY: test_rk4_steps_d_vs_e
-test_rk4_steps_d_vs_e : rk4_steps.out rk4_steps_end.out
-	$(FD) -Zdqn -e 1e-10 rk4_steps.out rk4_steps_end.out
+.PHONY: test_rk4_points1_vs_steps
+test_rk4_points1_vs_steps : rk4_points1.out rk4_fixed.out 
+	$(FD) -Zdqn -e 1e-10 -k '^ +11 ' rk4_points1.out rk4_fixed.out 
 
-.PHONY: test_rk4_steps_p10
-test_rk4_steps_p10 : rk4_steps.out rk4_steps_end.out
-	$(FD) -Zdqn -e 1e-5 rk4_steps_end_points10.out rk4_steps_end.out
+.PHONY: test_rk4_fixed_d_vs_e
+test_rk4_fixed_d_vs_e : rk4_fixed.out rk4_fixed_end.out
+	$(FD) -Zdqn -e 1e-10 rk4_fixed.out rk4_fixed_end.out
+
+.PHONY: test_rk4_fixed_p10
+test_rk4_fixed_p10 : rk4_fixed.out rk4_fixed_end.out
+	$(FD) -Zdqn -e 1e-5 rk4_points10.out rk4_fixed_end.out
 
 .PHONY: test_rk4_archive
 test_rk4_archive: $(RK4_OUTS)
 	$(foreach fil,$^,$(FD) -Zdqn $(fil) data/$(fil); )
 
 .PHONY: test_rk4
-test_rk4 : test_rk4_stab_vs_steps test_rk4_ref_vs_stab test_rk4_ref_vs_hnd test_rk4_frog_d_vs_e test_rk4_steps_d_vs_e test_rk4_frog_vs_steps test_rk4_steps_p10 test_rk4_archive 
-
-####################################################################################################
-rich : rich.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
-	$(FC) $(FFLAGS) rich.f90 $(MRKISS_OBJ_FILES) -o $@
-
-rich.out : rich
-	./rich$(EXE_SUFFIX)
-
-.PHONY: test_rich
-test_rich : rich.out 
-	$(FD) -Zdqn -e 1e-10 rich.out data/rich.out
-
-rich_sol.png rich_error.png &: rich.R rich.out
-	R --no-save --no-echo -q -f rich.R
-
-.PHONY: rich_png
-rich_png: rich_sol.png rich_error.png
-	$(IMG_VIEWER) rich_sol.png rich_error.png
+test_rk4 : test_rk4_ref_vs_one test_rk4_one_vs_steps test_rk4_ref_vs_hnd test_rk4_frog_d_vs_e test_rk4_fixed_d_vs_e test_rk4_frog_vs_steps test_rk4_fixed_p10 test_rk4_points1_vs_steps test_rk4_archive 
 
 ####################################################################################################
 

@@ -35,8 +35,8 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program tc2_cash_karp_5_4_b2
   use :: mrkiss_config,                      only: rk
-  use :: mrkiss_solvers_nt,                  only: one_step_stab
-  use :: mrkiss_eerk_cash_karp_5_4,          only: a, b=>b2, c   ! TCASE_COM: cash_karp_5_4_b2
+  use :: mrkiss_solvers_nt,                  only: one_step
+  use :: mrkiss_eerk_cash_karp_5_4,          only: a, b, c   ! TCASE_COM: cash_karp_5_4_b2
 
   implicit none
 
@@ -47,9 +47,10 @@ program tc2_cash_karp_5_4_b2
   real(kind=rk),     parameter :: param(1)      = [0.0_rk]
   real(kind=rk),     parameter :: t_iv          = 0.0_rk
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
+  integer,           parameter :: n             = 2  ! TCASE_COM: cash_karp_5_4_b2
 
   integer          :: step, status
-  real(kind=rk)    :: y_delta(deq_dim), y_cv(deq_dim), t_cv, y_tmp(deq_dim), yd(deq_dim)
+  real(kind=rk)    :: y_deltas(deq_dim, 1), y_cv(deq_dim), t_cv, y_tmp(deq_dim), yd(deq_dim)
   integer          :: out_io_stat, out_io_unit
 
   character(len=*), parameter  :: fmt = "(a40,i5,f23.17,f23.17,f23.17,f23.17)"
@@ -60,9 +61,9 @@ program tc2_cash_karp_5_4_b2
   do step=1,max_steps
      call ysol(status, y_tmp, t_cv, param)
      write (out_io_unit, fmt=fmt) "cash_karp_5_4_b2", step, t_cv, y_cv, y_tmp, abs(y_tmp-y_cv)
-     call one_step_stab(status, y_delta, yd, eq, y_cv, param, a, b, c, t_delta=t_delta)
+     call one_step(status, y_deltas, yd, eq, y_cv, param, a, b(:,n:n), c, t_delta=t_delta)
      t_cv = t_cv + t_delta
-     y_cv = y_cv + y_delta
+     y_cv = y_cv + y_deltas(:,1)
   end do
   close(unit=out_io_unit, status='keep', iostat=out_io_stat)
 

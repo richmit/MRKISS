@@ -35,9 +35,9 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program rkf45
   use :: mrkiss_config,            only: rk
-  use :: mrkiss_solvers_wt,        only: one_step_rkf45, one_step_etab, one_step_stab
+  use :: mrkiss_solvers_wt,        only: one_step_rkf45, one_step
   use :: mrkiss_utils,             only: print_solution
-  use :: mrkiss_eerk_fehlberg_4_5, only: a, b1, b2, c
+  use :: mrkiss_eerk_fehlberg_4_5, only: a, b, c, m
 
   implicit none
 
@@ -49,13 +49,13 @@ program rkf45
   real(kind=rk),     parameter :: y_iv(deq_dim) = [1.0_rk]
 
   integer                      :: step, status
-  real(kind=rk)                :: y_delta(deq_dim), y_tmp(deq_dim), sol(1+2*deq_dim, max_step)
+  real(kind=rk)                :: y_deltas(deq_dim, m), sol(1+2*deq_dim, max_step)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_rkf45(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
+     call one_step_rkf45(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,2) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
   call print_solution(status, sol, filename_o="rkf45_ref_5.out", fmt_w_o=-1)
@@ -63,8 +63,8 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_rkf45(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
+     call one_step_rkf45(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,1) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
   call print_solution(status, sol, filename_o="rkf45_ref_4.out", fmt_w_o=-1)
@@ -72,38 +72,20 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_etab(status, y_delta, y_tmp, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
+     call one_step(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,2) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="rkf45_etab_5.out", fmt_w_o=-1)
+  call print_solution(status, sol, filename_o="rkf45_one_5.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_etab(status, y_tmp, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, b2, c, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
+     call one_step(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,1) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="rkf45_etab_4.out", fmt_w_o=-1)
-
-  sol = 0
-  sol(1:2,1) = [ t_iv, y_iv ]
-  do step=2,max_step
-     call one_step_stab(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b1, c, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
-  end do
-  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="rkf45_stab_5.out", fmt_w_o=-1)
-
-  sol = 0
-  sol(1:2,1) = [ t_iv, y_iv ]
-  do step=2,max_step
-     call one_step_stab(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b2, c, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
-  end do
-  call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
-  call print_solution(status, sol, filename_o="rkf45_stab_4.out", fmt_w_o=-1)
+  call print_solution(status, sol, filename_o="rkf45_one_4.out", fmt_w_o=-1)
 
 contains
 
