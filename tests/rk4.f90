@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program rk4
   use            :: mrkiss_config,      only: rk, istats_size
-  use            :: mrkiss_solvers_wt,  only: one_step_rk4, one_step, fixed_t_steps, fixed_t_steps_between
+  use            :: mrkiss_solvers_wt,  only: one_step_rk4, one_step_one, fixed_t_steps, fixed_t_steps_between
   use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -59,15 +59,15 @@ program rk4
                                                                          0.9000000000_rk, 1.0246280460_rk,  0.4414926096_rk, &
                                                                          1.0000000000_rk, 1.0715783953_rk,  0.4949291477_rk], [1+2*deq_dim, max_pts])
   integer                     :: step, status, istats(istats_size)
-  real(kind=rk)               :: y_deltas(deq_dim, size(b, 2)), sol(1+2*deq_dim, max_pts)
+  real(kind=rk)               :: y_delta(deq_dim), y_deltas(deq_dim, size(b, 2)), sol(1+2*deq_dim, max_pts)
 
   call print_solution(status, sol_h, filename_o="rk4_hnd.out", fmt_w_o=-1)
 
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_pts
-     call one_step_rk4(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,1) ]
+     call one_step_rk4(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
   call print_solution(status, sol, filename_o="rk4_ref.out", fmt_w_o=-1)
@@ -75,8 +75,8 @@ program rk4
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_pts
-     call one_step(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
-     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,1) ]
+     call one_step_one(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
   call print_solution(status, sol, filename_o="rk4_one.out", fmt_w_o=-1)
