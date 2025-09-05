@@ -36,13 +36,15 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Cash & Karp's 4 step, order (5,4) Runge-Kutta method
 !!
-!! IMO: I don't recommend this method as a 2 step embedded method for general use.  It was designed with five embedded methods
-!!      for use with stiff applications.  It's an interesting method from both a historical and research perspective.  Note this
-!!      module has all five embedded methods defined (b1/p1-b5/p5).
-!!
-!! Known Aliases: 'ARKODE_CASH_KARP_6_4_5' (SUNDIALS)
-!!
 !! @image html eerk_cash_karp_5_4-stab.png
+!!
+!! @par IMO
+!! I don't recommend this method as a 2 step embedded method for general use.  It was designed with five embedded methods for use
+!! with stiff applications.  It's an interesting method from both a historical and research perspective.  Note this module has
+!! all five embedded methods defined (b1/p1-b5/p5).
+!!
+!! @par Known Aliases
+!! 'ARKODE_CASH_KARP_6_4_5' (SUNDIALS)
 !!
 !! @par Stability Image Links
 !! <a href="eerk_cash_karp_5_4-stab.png">  <img src="eerk_cash_karp_5_4-stab.png"  width="256px"> </a>
@@ -63,33 +65,25 @@ module mrkiss_eerk_cash_karp_5_4
   public
   !> The order of the overall method
   integer,          parameter :: s      = 6
+  !> Number of methods
+  integer,          parameter :: m      = 5
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: a(s,s) = reshape([      0.0_rk,       0.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
-                                                    110592.0_rk,       0.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
-                                                     41472.0_rk,  124416.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
-                                                    165888.0_rk, -497664.0_rk,   663552.0_rk,      0.0_rk,     0.0_rk,     0.0_rk, &
-                                                   -112640.0_rk, 1382400.0_rk, -1433600.0_rk, 716800.0_rk,     0.0_rk,     0.0_rk, &
-                                                     16310.0_rk,  189000.0_rk,    23000.0_rk, 221375.0_rk, 34155.0_rk,     0.0_rk], [s, s]) / 552960.0_rk
+  real(kind=rk),    parameter :: a(s,s) = reshape([        0.0_rk,         0.0_rk,         0.0_rk,        0.0_rk,       0.0_rk,        0.0_rk,  &
+                                                      110592.0_rk,         0.0_rk,         0.0_rk,        0.0_rk,       0.0_rk,        0.0_rk,  &
+                                                       41472.0_rk,    124416.0_rk,         0.0_rk,        0.0_rk,       0.0_rk,        0.0_rk,  &
+                                                      165888.0_rk,   -497664.0_rk,    663552.0_rk,        0.0_rk,       0.0_rk,        0.0_rk,  &
+                                                     -112640.0_rk,   1382400.0_rk,  -1433600.0_rk,   716800.0_rk,       0.0_rk,        0.0_rk,  &
+                                                       16310.0_rk,    189000.0_rk,     23000.0_rk,   221375.0_rk,   34155.0_rk,        0.0_rk], [s, s]) /   552960.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource                  
+  real(kind=rk),    parameter :: b(s,m) = reshape([  9585664.0_rk,         0.0_rk,  39424000.0_rk, 20608000.0_rk,       0.0_rk, 28311552.0_rk,  &
+       &                                            10006150.0_rk,         0.0_rk,  37595800.0_rk, 23952775.0_rk, 1892187.0_rk, 24482304.0_rk,  &
+       &                                            34456576.0_rk,         0.0_rk, -36270080.0_rk, 99742720.0_rk,       0.0_rk,        0.0_rk,  &
+       &                                          -146893824.0_rk, 244823040.0_rk,         0.0_rk,        0.0_rk,       0.0_rk,        0.0_rk,  &
+       &                                            97929216.0_rk,         0.0_rk,         0.0_rk,        0.0_rk,       0.0_rk,        0.0_rk], [s, m]) / 97929216.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: c(s)   = [              0.0_rk,       8.0_rk,       12.0_rk,     24.0_rk,    40.0_rk,    35.0_rk]          /     40.0_rk
-  !> The order of the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: p1     = 5
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b1(s)  = [           9361.0_rk,       0.0_rk,    38500.0_rk,  20125.0_rk,     0.0_rk, 27648.0_rk]          /  95634.0_rk
-  !> The order of the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: p2     = 4
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b2(s)  = [          39550.0_rk,       0.0_rk,   148600.0_rk,  94675.0_rk,  7479.0_rk, 96768.0_rk]          / 387072.0_rk
-  !> The order of the @f$\mathbf{b_3}@f$ method
-  integer,          parameter :: p3     = 3
-  !> The @f$\mathbf{b_3}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b3(s)  = [             19.0_rk,       0.0_rk,      -20.0_rk,     55.0_rk,     0.0_rk,     0.0_rk]          /     54.0_rk
-  !> The order of the @f$\mathbf{b_4}@f$ method
-  integer,          parameter :: p4     = 2
-  !> The @f$\mathbf{b_4}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b4(s)  = [             -3.0_rk,       5.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk]          /      2.0_rk
-  !> The order of the @f$\mathbf{b_5}@f$ method
-  integer,          parameter :: p5     = 1
-  !> The @f$\mathbf{b_5}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b5(s)  = [              1.0_rk,       0.0_rk,        0.0_rk,      0.0_rk,     0.0_rk,     0.0_rk]          /      1.0_rk
+  real(kind=rk),    parameter :: c(s)   = [                0.0_rk,         8.0_rk,        12.0_rk,       24.0_rk,      40.0_rk,       35.0_rk]          /       40.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [5, 4, 3, 2, 1]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [6, 6, 4, 2, 1]
 end module mrkiss_eerk_cash_karp_5_4

@@ -36,11 +36,13 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for the three eights rule.  A 4 step, order (4) Runge-Kutta method
 !!
-!! IMO: Included for historical reasons.  More precise than RK4.
-!!
-!! Known Aliases: '3/8 rule', 'RK42' (Butcher), 'GIRK438' (OrdinaryDiffEq.jl).
-!!
 !! @image html erk_kutta_three_eight_4-stab.png
+!!
+!! @par IMO
+!! Included for historical reasons.  More precise than RK4.
+!!
+!! @par Known Aliases
+!! '3/8 rule', 'RK42' (Butcher), 'GIRK438' (OrdinaryDiffEq.jl).
 !!
 !! @par Stability Image Links
 !! <a href="erk_kutta_three_eight_4-stab.png">  <img src="erk_kutta_three_eight_4-stab.png"  width="256px"> </a>
@@ -59,15 +61,19 @@ module mrkiss_erk_kutta_three_eight_4
   public
   !> The order of the overall method
   integer,          parameter :: s      = 4
+  !> Number of methods
+  integer,          parameter :: m      = 1
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0_rk,  0.0_rk, 0.0_rk, 0.0_rk, &
                                                     1.0_rk,  0.0_rk, 0.0_rk, 0.0_rk, &
                                                    -1.0_rk,  3.0_rk, 0.0_rk, 0.0_rk, &
                                                     3.0_rk, -3.0_rk, 3.0_rk, 0.0_rk], [s, s]) / 3.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([ 1.0_rk,  3.0_rk, 3.0_rk, 1.0_rk], [s, m]) / 8.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [         0.0_rk,  1.0_rk, 2.0_rk, 3.0_rk]          / 3.0_rk
-  !> The order of the method
-  integer,          parameter :: p      = 4
-  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b(s)   = [         1.0_rk,  3.0_rk, 3.0_rk, 1.0_rk]          / 8.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [4]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [4]
 end module mrkiss_erk_kutta_three_eight_4

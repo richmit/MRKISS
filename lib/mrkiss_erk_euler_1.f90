@@ -36,12 +36,14 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Euler 1 step, order (1) Runge-Kutta method
 !!
-!! IMO: This algorithm is commonly used for strange attractors, and by some combined algorithms as an error estimator.  I include
-!!      it mostly for historical reasons.
-!!
-!! Known Aliases: 'The Euler Mmethod', 'Euler 1 step', 'RK1', 'Forward Euler', 'ARKODE_FORWARD_EULER_1_1' (SUNDIALS)
-!!
 !! @image html erk_euler_1-stab.png
+!!
+!! @par IMO
+!! This algorithm is commonly used for strange attractors, and by some combined algorithms as an error estimator.  I include
+!! it mostly for historical reasons.
+!!
+!! @par Known Aliases
+!! 'The Euler Mmethod', 'Euler 1 step', 'RK1', 'Forward Euler', 'ARKODE_FORWARD_EULER_1_1' (SUNDIALS)
 !!
 !! @par Stability Image Links
 !! <a href="erk_euler_1-stab.png">  <img src="erk_euler_1-stab.png"  width="256px"> </a>
@@ -61,12 +63,16 @@ module mrkiss_erk_euler_1
   public
   !> The order of the overall method
   integer,          parameter :: s      = 1
+  !> Number of methods
+  integer,          parameter :: m      = 1
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk], [s, s])
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([  1.0_rk], [s, m])
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk]
-  !> The order of the method
-  integer,          parameter :: p      = 1
-  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b(s)   = [          1.0_rk]
+  !> The method orders
+  integer,          parameter :: p(m)   = [1]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [1]
 end module mrkiss_erk_euler_1

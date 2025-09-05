@@ -543,21 +543,21 @@ contains
   !!   | 0001-0255 | mrkiss_solvers_wt::deq_iface & mrkiss_solvers_nt::deq_iface
   !!   | 0256-0511 | mrkiss_solvers_wt::stepp_iface & mrkiss_solvers_nt::stepp_iface
   !!   | 0512-0767 | mrkiss_solvers_wt::sdf_iface & mrkiss_solvers_nt::sdf_iface
-  !!   | 1232-1247 | mrkiss_solvers_wt::one_step_etab & mrkiss_solvers_nt::one_step_etab
-  !!   | 1248-1263 | mrkiss_solvers_wt::one_step_stab & mrkiss_solvers_nt::one_step_stab
-  !!   | 1216-1231 | mrkiss_solvers_wt::one_richardson_step_stab & mrkiss_solvers_nt::one_richardson_step_stab
-  !!   | 1200-1215 | mrkiss_solvers_wt::one_step_rk4 & mrkiss_solvers_nt::one_step_rk4
-  !!   | 1184-1199 | mrkiss_solvers_wt::one_step_rkf45 & mrkiss_solvers_nt::one_step_rkf45
-  !!   | 1263-1279 | mrkiss_solvers_wt::one_step_dp54 & mrkiss_solvers_nt::one_step_dp54
-  !!   | 1120-1151 | mrkiss_solvers_wt::steps_fixed_stab & mrkiss_solvers_nt::steps_fixed_stab
-  !!   | 1024-1055 | mrkiss_solvers_wt::steps_condy_stab & mrkiss_solvers_nt::steps_condy_stab
-  !!   | 1280-1296 | mrkiss_solvers_wt::steps_sloppy_condy_stab & mrkiss_solvers_nt::steps_sloppy_condy_stab
-  !!   | 1056-1119 | mrkiss_solvers_wt::steps_adapt_etab & mrkiss_solvers_nt::steps_adapt_etab
+  !!   | 1232-1247 | mrkiss_solvers_wt::step_all & mrkiss_solvers_nt::step_all
+  !!   | 1248-1263 | mrkiss_solvers_wt::step_one & mrkiss_solvers_nt::step_one
+  !!   | 1216-1231 | mrkiss_solvers_wt::step_richardson & mrkiss_solvers_nt::step_richardson
+  !!   | 1200-1215 | mrkiss_solvers_wt::step_rk4 & mrkiss_solvers_nt::step_rk4
+  !!   | 1184-1199 | mrkiss_solvers_wt::step_rkf45 & mrkiss_solvers_nt::step_rkf45
+  !!   | 1263-1279 | mrkiss_solvers_wt::step_dp54 & mrkiss_solvers_nt::step_dp54
+  !!   | 1120-1151 | mrkiss_solvers_wt::fixed_t_steps & mrkiss_solvers_nt::fixed_t_steps
+  !!   | 1024-1055 | mrkiss_solvers_wt::fixed_y_steps & mrkiss_solvers_nt::fixed_y_steps
+  !!   | 1280-1296 | mrkiss_solvers_wt::sloppy_fixed_y_steps & mrkiss_solvers_nt::sloppy_fixed_y_steps
+  !!   | 1056-1119 | mrkiss_solvers_wt::adaptive_steps & mrkiss_solvers_nt::adaptive_steps
   !!   | 1152-1183 | mrkiss_utils::print_solution
   !!   | 1297-1313 | mrkiss_utils::analyze_solution
   !!   | 1314:1330 | mrkiss_utils::seq
   !!   | 1331:1347 | mrkiss_solvers_wt::interpolate_solution & mrkiss_solvers_nt::interpolate_solution
-  !!   | 1348-1364 | mrkiss_solvers_wt::steps_points_stab & mrkiss_solvers_nt::steps_points_stab
+  !!   | 1348-1364 | mrkiss_solvers_wt::fixed_t_steps_between & mrkiss_solvers_nt::fixed_t_steps_between
   !!   | 1365-1381 | mrkiss_utils::print_istats
   !!   | 1382-1398 | Unallocated
   !!   | 1399-1415 | Unallocated
@@ -591,25 +591,25 @@ contains
     elseif ((status >=  512) .and. (status <=  767)) then
        status_to_origin = "sdf_iface_*t"
     elseif ((status >= 1232) .and. (status <= 1247)) then
-       status_to_origin = "one_step_etab_*t"
+       status_to_origin = "step_all_*t"
     elseif ((status >= 1248) .and. (status <= 1263)) then
-       status_to_origin = "one_step_stab_*t"
+       status_to_origin = "step_one_*t"
     elseif ((status >= 1216) .and. (status <= 1231)) then
-       status_to_origin = "one_richardson_step_stab_*t"
+       status_to_origin = "step_richardson_*t"
     elseif ((status >= 1200) .and. (status <= 1215)) then
-       status_to_origin = "one_step_rk4_*t"
+       status_to_origin = "step_rk4_*t"
     elseif ((status >= 1184) .and. (status <= 1199)) then
-       status_to_origin = "one_step_rkf45_*t"
+       status_to_origin = "step_rkf45_*t"
     elseif ((status >= 1263) .and. (status <= 1279)) then
-       status_to_origin = "one_step_dp54_*t"
+       status_to_origin = "step_dp54_*t"
     elseif ((status >= 1120) .and. (status <= 1151)) then
-       status_to_origin = "steps_fixed_stab_*t"
+       status_to_origin = "fixed_t_steps_*t"
     elseif ((status >= 1024) .and. (status <= 1055)) then
-       status_to_origin = "steps_condy_stab_*t"
+       status_to_origin = "fixed_y_steps_*t"
     elseif ((status >= 1280) .and. (status <= 1296)) then
-       status_to_origin = "steps_sloppy_condy_stab_*t"
+       status_to_origin = "sloppy_fixed_y_steps_*t"
     elseif ((status >= 1056) .and. (status <= 1119)) then
-       status_to_origin = "steps_adapt_etab_*t"
+       status_to_origin = "adaptive_steps_*t"
     elseif ((status >= 1152) .and. (status <= 1183)) then
        status_to_origin = "print_solution"
     elseif ((status >= 1297) .and. (status <= 1313)) then
@@ -619,7 +619,7 @@ contains
     elseif ((status >= 1331) .and. (status <= 1347)) then
        status_to_origin = "interpolate_solution"
     elseif ((status >= 1348) .and. (status <= 1364)) then
-       status_to_origin = "steps_points_stab_*t"
+       status_to_origin = "fixed_t_steps_between_*t"
     elseif ((status >= 1365) .and. (status <= 1381)) then
        status_to_origin = "print_istats"
     else

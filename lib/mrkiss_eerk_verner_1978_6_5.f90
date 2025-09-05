@@ -36,11 +36,13 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Verner's 8 stage, Order (6,5) Runge-Kutta method (1978)
 !!
-!! IMO: This is a good general method; however, I think mrkiss_eerk_verner_2010_6_5 should be preferred.
-!!
-!! Known Aliases: 'ARKODE_VERNER_8_5_6' (SUNDIALS).
-!!
 !! @image html eerk_verner_1978_6_5-stab.png
+!!
+!! @par IMO
+!! This is a good general method; however, I think mrkiss_eerk_verner_2010_6_5 should be preferred.
+!!
+!! @par Known Aliases
+!! 'ARKODE_VERNER_8_5_6' (SUNDIALS).
 !!
 !! @par Stability Image Links
 !! <a href="eerk_verner_1978_6_5-stab.png">  <img src="eerk_verner_1978_6_5-stab.png"  width="256px"> </a>
@@ -58,25 +60,24 @@ module mrkiss_eerk_verner_1978_6_5
   public
   !> The order of the overall method
   integer,          parameter :: s      = 8
+  !> Number of methods
+  integer,          parameter :: m      = 2
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: a(s,s) = reshape([           0.0_rk,             0.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
-                                                     3026340000.0_rk,             0.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
-                                                      968428800.0_rk,    3873715200.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
-                                                    15131700000.0_rk,  -48421440000.0_rk,   45395100000.0_rk,           0.0_rk,          0.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
-                                                   -46813696875.0_rk,  166448700000.0_rk, -120580734375.0_rk, 16077431250.0_rk,          0.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
-                                                    43579296000.0_rk, -145264320000.0_rk,  119125050000.0_rk, -5548290000.0_rk, 6266304000.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
-                                                   -10002658968.0_rk,   30021292800.0_rk,  -17170029000.0_rk, -5883204960.0_rk, 4245136128.0_rk,    0.0_rk,          0.0_rk,      0.0_rk, &
-                                                    36960057000.0_rk, -126684000000.0_rk,  102559875000.0_rk, -2494580000.0_rk, 5198688000.0_rk,    0.0_rk, 2618000000.0_rk,      0.0_rk], [s, s]) / 18158040000.0_rk
+  real(kind=rk),    parameter :: a(s,s) = reshape([           0.0_rk,             0.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,       0.0_rk,          0.0_rk,       0.0_rk,  &
+       &                                             3026340000.0_rk,             0.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,       0.0_rk,          0.0_rk,       0.0_rk,  &
+       &                                              968428800.0_rk,    3873715200.0_rk,             0.0_rk,           0.0_rk,          0.0_rk,       0.0_rk,          0.0_rk,       0.0_rk,  &
+       &                                            15131700000.0_rk,  -48421440000.0_rk,   45395100000.0_rk,           0.0_rk,          0.0_rk,       0.0_rk,          0.0_rk,       0.0_rk,  &
+       &                                           -46813696875.0_rk,  166448700000.0_rk, -120580734375.0_rk, 16077431250.0_rk,          0.0_rk,       0.0_rk,          0.0_rk,       0.0_rk,  &
+       &                                            43579296000.0_rk, -145264320000.0_rk,  119125050000.0_rk, -5548290000.0_rk, 6266304000.0_rk,       0.0_rk,          0.0_rk,       0.0_rk,  &
+       &                                           -10002658968.0_rk,   30021292800.0_rk,  -17170029000.0_rk, -5883204960.0_rk, 4245136128.0_rk,       0.0_rk,          0.0_rk,       0.0_rk,  &
+       &                                            36960057000.0_rk, -126684000000.0_rk,  102559875000.0_rk, -2494580000.0_rk, 5198688000.0_rk,       0.0_rk, 2618000000.0_rk,       0.0_rk], [s, s]) / 18158040000.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource                                                                                     
+  real(kind=rk),    parameter :: b(s,m) = reshape([     3251556.0_rk,             0.0_rk,      16905000.0_rk,    13849220.0_rk,    5854464.0_rk,       0.0_rk,     467500.0_rk, 3026340.0_rk,  &
+       &                                                3522519.0_rk,             0.0_rk,      17206875.0_rk,    13548150.0_rk,    6120576.0_rk, 2955960.0_rk,          0.0_rk,       0.0_rk], [s, m]) /    43354080.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: c(s)   = [                   0.0_rk,             5.0_rk,             8.0_rk,          20.0_rk,         25.0_rk,   30.0_rk,          2.0_rk,     30.0_rk]          /          30.0_rk
-  !> The order of the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: p1     = 6
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b1(s)  = [              812889.0_rk,             0.0_rk,       4226250.0_rk,     3462305.0_rk,    1463616.0_rk,    0.0_rk,     116875.0_rk, 756585.0_rk]          /    10838520.0_rk
-  !> The order of the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: p2     = 5
-  !> Number of stages for the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: s2     = 6
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b2(s)  = [                2431.0_rk,             0.0_rk,         11875.0_rk,        9350.0_rk,       4224.0_rk, 2040.0_rk,          0.0_rk,      0.0_rk]          /       29920.0_rk
+  real(kind=rk),    parameter :: c(s)   = [                   0.0_rk,             5.0_rk,             8.0_rk,          20.0_rk,         25.0_rk,      30.0_rk,          2.0_rk,      30.0_rk]          /          30.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [6, 5]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [8, 6]
 end module mrkiss_eerk_verner_1978_6_5

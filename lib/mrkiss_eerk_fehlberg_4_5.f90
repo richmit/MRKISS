@@ -36,13 +36,15 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Fehlberg's 6 stage, Order (4,5) Runge-Kutta method
 !!
-!! IMO: Included for historical reasons and for unit tests.  Performs poorly in local extrapolation mode.  This method was
-!!      broadly implemented, and widely used.  As such it is a standard used for comparison frequently in older literature.  It
-!!      was largely replaced by mrkiss_eerk_dormand_prince_5_4.
-!!
-!! Known Aliases: 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_6_4_5' (SUNDIALS).
-!!
 !! @image html eerk_fehlberg_4_5-stab.png
+!!
+!! @par IMO
+!! Included for historical reasons and for unit tests.  Performs poorly in local extrapolation mode.  This method was broadly
+!! implemented, and widely used.  As such it is a standard used for comparison frequently in older literature.  It was largely
+!! replaced by mrkiss_eerk_dormand_prince_5_4.
+!!
+!! @par Known Aliases
+!! 'RKF78'', 'ode78' (OrdinaryDiffEq.jl), 'ARKODE_FEHLBERG_6_4_5' (SUNDIALS).
 !!
 !! @par Stability Image Links
 !! <a href="eerk_fehlberg_4_5-stab.png">  <img src="eerk_fehlberg_4_5-stab.png"  width="256px"> </a>
@@ -64,22 +66,22 @@ module mrkiss_eerk_fehlberg_4_5
   public
   !> The order of the overall method
   integer,          parameter :: s      = 6
-  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
+  !> Number of methods
+  integer,          parameter :: m      = 2
+  !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([         0.0_rk,           0.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
-                                                     45082440.0_rk,           0.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
-                                                     16905915.0_rk,    50717745.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
-                                                    158578560.0_rk,  -590976000.0_rk,  598855680.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
-                                                    366503540.0_rk, -1442638080.0_rk, 1293593600.0_rk, -37129300.0_rk,         0.0_rk,         0.0_rk, &
-                                                    -53431040.0_rk,   360659520.0_rk, -249157376.0_rk,  81684460.0_rk, -49590684.0_rk,         0.0_rk], [s, s]) / 180329760.0_rk
-  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
+       &                                             45082440.0_rk,           0.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
+       &                                             16905915.0_rk,    50717745.0_rk,          0.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
+       &                                            158578560.0_rk,  -590976000.0_rk,  598855680.0_rk,         0.0_rk,         0.0_rk,         0.0_rk, &
+       &                                            366503540.0_rk, -1442638080.0_rk, 1293593600.0_rk, -37129300.0_rk,         0.0_rk,         0.0_rk, &
+       &                                            -53431040.0_rk,   360659520.0_rk, -249157376.0_rk,  81684460.0_rk, -49590684.0_rk,         0.0_rk], [s, s]) / 180329760.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([    130625.0_rk,          0.0_rk,      619520.0_rk,   604175.0_rk,    -225720.0_rk,       0.0_rk, &
+       &                                               133760.0_rk,          0.0_rk,      585728.0_rk,   571220.0_rk,    -203148.0_rk,   41040.0_rk], [s, m]) /     1128600.0_rk
+  !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [                 0.0_rk,          26.0_rk,         39.0_rk,        96.0_rk,       104.0_rk,       52.0_rk ]          /       104.0_rk
-  !> The order of the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: p1     = 4                                                                                                  
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b1(s)  = [              2375.0_rk,           0.0_rk,       11264.0_rk,    10985.0_rk,      -4104.0_rk,       0.0_rk ]          /     20520.0_rk
-  !> The order of the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: p2     = 5                                                                                              
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b2(s)  = [             33440.0_rk,           0.0_rk,      146432.0_rk,   142805.0_rk,     -50787.0_rk,   10260.0_rk ]          /    282150.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [ 4, 5 ]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [ 5, 6 ]
 end module mrkiss_eerk_fehlberg_4_5
-

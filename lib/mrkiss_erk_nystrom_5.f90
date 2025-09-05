@@ -36,15 +36,18 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Nystrom's 6 stage Runge-Kutta method of O(5).
 !!
-!! IMO: I have included this method mostly for historical and reference reasons.  It is frequently used for comparisons and
-!!      experiments in the literature.
-!!
-!! Color commentary: This method was proposed in Kutta (1901), and later corrected by Nystrom (1925).  The original appears in
-!!                   an exercise in Hairer et al. (2009).
-!!
-!! Known Aliases: 'RKN5', 'RK41' (Butcher), & 'The Runge-Kutta Method'.
-!!
 !! @image html erk_nystrom_5-stab.png
+!!
+!! @par IMO
+!! I have included this method mostly for historical and reference reasons.  It is frequently used for comparisons and
+!! experiments in the literature.
+!!
+!! @par Color commentary
+!! This method was proposed in Kutta (1901), and later corrected by Nystrom (1925).  The original appears in
+!! an exercise in Hairer et al. (2009).
+!!
+!! @par Known Aliases
+!! 'RKN5', 'RK41' (Butcher), & 'The Runge-Kutta Method'.
 !!
 !! @par Stability Image Links
 !! <a href="erk_nystrom_5-stab.png">  <img src="erk_nystrom_5-stab.png"  width="256px"> </a>
@@ -65,6 +68,8 @@ module mrkiss_erk_nystrom_5
   public
   !> The order of the overall method
   integer,          parameter :: s      = 6
+  !> Number of methods
+  integer,          parameter :: m      = 1
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([     0.0_rk,      0.0_rk,     0.0_rk,   0.0_rk,   0.0_rk,   0.0_rk, &
        &                                             2700.0_rk,      0.0_rk,     0.0_rk,   0.0_rk,   0.0_rk,   0.0_rk, &
@@ -72,10 +77,12 @@ module mrkiss_erk_nystrom_5
        &                                             2025.0_rk, -24300.0_rk, 30375.0_rk,   0.0_rk,   0.0_rk,   0.0_rk, &
        &                                              600.0_rk,   9000.0_rk, -5000.0_rk, 800.0_rk,   0.0_rk,   0.0_rk, &
        &                                              648.0_rk,   3888.0_rk,  1080.0_rk, 864.0_rk,   0.0_rk,   0.0_rk], [s, s]) / 8100.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([    23.0_rk,      0.0_rk,   125.0_rk,   0.0_rk, -81.0_rk, 125.0_rk], [s, m]) /  192.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [             0.0_rk,      5.0_rk,     6.0_rk,  15.0_rk,  10.0_rk,  12.0_rk]          /   15.0_rk
-  !> The order of the method
-  integer,          parameter :: p      = 5
-  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b(s)   = [            23.0_rk,      0.0_rk,   125.0_rk,   0.0_rk, -81.0_rk, 125.0_rk]          /  192.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [5]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [6]
 end module mrkiss_erk_nystrom_5

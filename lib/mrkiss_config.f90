@@ -55,43 +55,45 @@ module mrkiss_config
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to istats
 
-  integer,       parameter, public :: istats_size        = 16  !< Number of elements in istats(:)
-  integer,       parameter, public :: istats_max_idx     = 10  !< Number of used elements in istats(:)
+  integer,       parameter, public :: istats_size      = 16  !< Number of elements in istats(:)
+  integer,       parameter, public :: istats_max_idx   = 10  !< Number of used elements in istats(:)
 
-  integer,       parameter, public :: isi_num_pts        = 1   !< istats index num_pts
-  integer,       parameter, public :: isi_stab_norm      = 2   !< istats index one_step_norm
-  integer,       parameter, public :: isi_etab_norm      = 3   !< istats index one_etab_norm
-  integer,       parameter, public :: isi_stab_y_err     = 4   !< istats index one_step_y_delta_err
-  integer,       parameter, public :: isi_etab_y_err     = 5   !< istats index one_stab_y_delta_err
-  integer,       parameter, public :: isi_stab_y_len     = 6   !< istats index one_step_y_delta_len
-  integer,       parameter, public :: isi_stab_spp_td    = 7   !< istats index one_step_stepp_t_delta
-  integer,       parameter, public :: isi_stab_sdf_bic   = 8   !< istats index one_step_sdf_bisection
-  integer,       parameter, public :: isi_bic_fail_max   = 9   !< istats index bisect_fail_max
-  integer,       parameter, public :: isi_bic_fail_bnd   = 10  !< istats index bisect_fail_containment
+  integer,       parameter, public :: isi_num_pts      = 1   !< istats index num_pts
+  integer,       parameter, public :: isi_one_reg      = 2   !< istats index one_step_norm
+  integer,       parameter, public :: isi_all_norm     = 3   !< istats index one_etab_norm
+  integer,       parameter, public :: isi_one_y_err    = 4   !< istats index one_step_y_delta_err
+  integer,       parameter, public :: isi_all_y_err    = 5   !< istats index one_stab_y_delta_err
+  integer,       parameter, public :: isi_one_y_len    = 6   !< istats index one_step_y_delta_len
+  integer,       parameter, public :: isi_one_spp_td   = 7   !< istats index one_step_stepp_t_delta
+  integer,       parameter, public :: isi_sdf_step     = 8   !< istats index one_step_sdf_bisection
+  integer,       parameter, public :: isi_bic_max      = 9   !< istats index bisect_fail_max
+  integer,       parameter, public :: isi_bic_bnd      = 10  !< istats index bisect_fail_containment
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Constants related to istats messages
 
-  integer,                       parameter, public :: istats_str_lng           = 76       !< Length of istats content message
+  integer,                       parameter, public :: istats_str_lng           = 62       !< Length of istats content message
   !> Array of istats descriptions
   !! @showinlinesource
   character(len=istats_str_lng), parameter, public :: istats_strs(istats_size) = [     &
-       "Computed solution points                                                    ", &  ! istats( 1)
-       "Number of one_step_stab calls not triggered by an event                     ", &  ! istats( 2)
-       "Number of one_step_etab calls not triggered by an event                     ", &  ! istats( 3)
-       "Number of one_step_stab calls triggered by y_delta error constraint         ", &  ! istats( 4)
-       "Number of one_step_etab calls triggered by y_delta error constraint         ", &  ! istats( 5)
-       "Number of one_step_stab calls triggered by y_delta length constraint        ", &  ! istats( 6)
-       "Number of one_step_stab calls triggered by step processing with new t_delta ", &  ! istats( 7)
-       "Number of one_step_stab calls triggered by SDF bisection                    ", &  ! istats( 8)
-       "Bisection failures due to max_bisect_o                                      ", &  ! istats( 9)
-       "Bisection failures due to target containment                                ", &  ! istats(10)
-       "                                                                            ", &  ! istats(11)
-       "                                                                            ", &  ! istats(12)
-       "                                                                            ", &  ! istats(13)
-       "                                                                            ", &  ! istats(14)
-       "                                                                            ", &  ! istats(15)
-       "                                                                            "  ]
+! SS-BEGIN:istats_strings:
+       "Computed solution points                                      ", &  ! istats( 1)
+       "step_one call count not caused by an event                    ", &  ! istats( 2)
+       "step_all call count not caused by an event                    ", &  ! istats( 3)
+       "step_one call count caused by y_delta error constraint        ", &  ! istats( 4)
+       "step_all call count caused by y_delta error constraint        ", &  ! istats( 5)
+       "step_one call count caused by y_delta length constraint       ", &  ! istats( 6)
+       "step_one call count caused by step processing with new t_delta", &  ! istats( 7)
+       "step_one call count caused by SDF bisection                   ", &  ! istats( 8)
+       "Bisection failures due to max_bisect_o                        ", &  ! istats( 9)
+       "Bisection failures due to target containment                  ", &  ! istats(10)
+       "                                                              ", &  ! istats(11)
+       "                                                              ", &  ! istats(12)
+       "                                                              ", &  ! istats(13)
+       "                                                              ", &  ! istats(14)
+       "                                                              ", &  ! istats(15)
+       "                                                              "  ]
+! SS-END:istats_strings:
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> @name Absolute constants

@@ -36,11 +36,13 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for midpoint 2 step, order (2) Runge-Kutta method
 !!
-!! IMO: Included for historical reasons.
-!!
-!! Known Aliases: 'RK22' (Butcher), 'midpoint method', 'the modpoint rule', 'Explicit midpoint method', 'Runge-2', 'R2'
-!!
 !! @image html erk_midpoint_2-stab.png
+!!
+!! @par IMO
+!! Included for historical reasons.
+!!
+!! @par Known Aliases
+!! 'RK22' (Butcher), 'midpoint method', 'the modpoint rule', 'Explicit midpoint method', 'Runge-2', 'R2'
 !!
 !! @par Stability Image Links
 !! <a href="erk_midpoint_2-stab.png">  <img src="erk_midpoint_2-stab.png"  width="256px"> </a>
@@ -57,13 +59,17 @@ module mrkiss_erk_midpoint_2
   public
   !> The order of the overall method
   integer,          parameter :: s      = 2
+  !> Number of methods
+  integer,          parameter :: m      = 1
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0_rk,  0.0_rk, &
                                                     1.0_rk,  0.0_rk], [s, s]) / 2.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([ 0.0_rk,  1.0_rk], [s, m]) / 1.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  1.0_rk]         / 2.0_rk
-  !> The order of the method
-  integer,          parameter :: p      = 2
-  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b(s)   = [          0.0_rk,  1.0_rk]         / 1.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [2]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [2]
 end module mrkiss_erk_midpoint_2

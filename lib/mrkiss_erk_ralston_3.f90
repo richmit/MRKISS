@@ -36,10 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for ralston's 3 stage order (3) Runge-Kutta method
 !!
-!! IMO: This method was designed to minimize truncation error over every other consideration includeing stability, roundoff error,
-!!      performance, and storage.
-!!
 !! @image html erk_ralston_3-stab.png
+!!
+!! @par IMO
+!! This method was designed to minimize truncation error over every other consideration includeing stability, roundoff error,
+!! performance, and storage.
 !!
 !! @par Stability Image Links
 !! <a href="erk_ralston_3-stab.png">  <img src="erk_ralston_3-stab.png"  width="256px"> </a>
@@ -57,14 +58,18 @@ module mrkiss_erk_ralston_3
   public
   !> The order of the overall method
   integer,          parameter :: s      = 3
+  !> Number of methods
+  integer,          parameter :: m      = 1
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([ 0.0_rk, 0.0_rk, 0.0_rk, &
                                                     2.0_rk, 0.0_rk, 0.0_rk, &
                                                     0.0_rk, 3.0_rk, 0.0_rk], [s, s]) / 4.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([ 2.0_rk, 3.0_rk, 4.0_rk], [s, m]) / 9.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [         0.0_rk, 2.0_rk, 3.0_rk]          / 4.0_rk
-  !> The order of the method
-  integer,          parameter :: p      = 3
-  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b(s)   = [         2.0_rk, 3.0_rk, 4.0_rk]          / 9.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [3]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [3]
 end module mrkiss_erk_ralston_3

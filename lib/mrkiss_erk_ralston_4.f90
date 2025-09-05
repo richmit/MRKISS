@@ -36,10 +36,11 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for ralston's 4 stage order (4) Runge-Kutta method
 !!
-!! IMO: This method was designed to minimize truncation error over every other consideration includeing stability, roundoff
-!!      error, performance, and storage.
-!!
 !! @image html erk_ralston_4-stab.png
+!!
+!! @par IMO
+!! This method was designed to minimize truncation error over every other consideration includeing stability, roundoff
+!! error, performance, and storage.
 !!
 !! @par Stability Image Links
 !! <a href="erk_ralston_4-stab.png">  <img src="erk_ralston_4-stab.png"  width="256px"> </a>
@@ -57,6 +58,8 @@ module mrkiss_erk_ralston_4
   public
   !> The order of the overall method
   integer,          parameter :: s      = 4
+  !> Number of methods
+  integer,          parameter :: m      = 1
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([         0.0_rk,         0.0_rk,         0.0_rk,       0.0_rk,                             &
        &                                             98650112.0_rk,         0.0_rk,         0.0_rk,       0.0_rk,                             &
@@ -66,13 +69,15 @@ module mrkiss_erk_ralston_4
        &                                                    0.0_rk,         0.0_rk,         0.0_rk,       0.0_rk,                             &
        &                                             85981665.0_rk, -97542225.0_rk,         0.0_rk,       0.0_rk,                             &
        &                                             21375552.0_rk, -73591360.0_rk,  52215808.0_rk,       0.0_rk], [s, s]) /  61656320.0_rk * sqrt(5.0_rk)
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource                                         
+  real(kind=rk),    parameter :: b(s,m) = reshape([   3439777.0_rk,    773875.0_rk,  13705216.0_rk, 5780280.0_rk], [s, m]) /  23699148.0_rk + &
+       &                                  reshape([     78474.0_rk,  -1547750.0_rk,   1661952.0_rk, -192676.0_rk], [s, m]) /   5924787.0_rk * sqrt(5.0_rk)
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [                 0.0_rk,        16.0_rk,        35.0_rk,      40.0_rk ]         /        40.0_rk + &
        &                                  [                 0.0_rk,         0.0_rk,        -3.0_rk,       0.0_rk ]         /        16.0_rk * sqrt(5.0_rk)
-  !> The order of the method                                                                                                         
-  integer,          parameter :: p      = 4                                                                                          
-  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource                                         
-  real(kind=rk),    parameter :: b(s)   = [           3439777.0_rk,    773875.0_rk,  13705216.0_rk, 5780280.0_rk ]         /  23699148.0_rk + &
-       &                                  [             78474.0_rk,  -1547750.0_rk,   1661952.0_rk, -192676.0_rk ]         /   5924787.0_rk * sqrt(5.0_rk)
+  !> The method orders
+  integer,          parameter :: p(m)   = [4]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [4]
 end module mrkiss_erk_ralston_4
 

@@ -36,15 +36,17 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Dormand & Prince's 7 stage, Order (5,4) Runge-Kutta method
 !!
-!! IMO: I include this method for historical reasons and for unit tests.  It's a good general use method with excellent principle
-!!      truncation error coefficients.  It has been very widely used, frequently as the default method, across many software
-!!      packages with good results.  It's a standard method to use for comparisons in the literature. Today it has largely been
-!!      replaced by newer methods.
-!!
-!! Known Aliases: 'The Dormand-Prince Method', 'RKDP', 'DOPRI', 'DP5' (OrdinaryDiffEq.jl), 'ode45' (MATLAB & Octave), 
-!!                'RK5(4)7M' (Dormand & Prince), & DOPRI5 (Hairer), 'ARKODE_DORMAND_PRINCE_7_4_5' (SUNDIALS)
-!!
 !! @image html eerk_dormand_prince_5_4-stab.png
+!!
+!! @par IMO
+!! I include this method for historical reasons and for unit tests.  It's a good general use method with excellent principle
+!! truncation error coefficients.  It has been very widely used, frequently as the default method, across many software packages
+!! with good results.  It's a standard method to use for comparisons in the literature. Today it has largely been replaced by
+!! newer methods.
+!!
+!! @par Known Aliases
+!! 'The Dormand-Prince Method', 'RKDP', 'DOPRI', 'DP5' (OrdinaryDiffEq.jl), 'ode45' (MATLAB & Octave), 
+!! 'RK5(4)7M' (Dormand & Prince), & DOPRI5 (Hairer), 'ARKODE_DORMAND_PRINCE_7_4_5' (SUNDIALS)
 !!
 !! @par Stability Image Links
 !! <a href="eerk_dormand_prince_5_4-stab.png">  <img src="eerk_dormand_prince_5_4-stab.png"  width="256px"> </a>
@@ -64,24 +66,23 @@ module mrkiss_eerk_dormand_prince_5_4
   public
   !> The order of the overall method
   integer,          parameter :: s      = 7
+  !> Number of methods
+  integer,          parameter :: m      = 2
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([          0.0_rk,             0.0_rk,            0.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
-                                                    3427256448.0_rk,             0.0_rk,            0.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
-                                                    1285221168.0_rk,    3855663504.0_rk,            0.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
-                                                   16755475968.0_rk,  -63975453696.0_rk,  60929003520.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
-                                                   50596564480.0_rk, -198708787200.0_rk, 168327864320.0_rk, -4983390720.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
-                                                   48774576060.0_rk, -184344854400.0_rk, 152622973440.0_rk,  4770896760.0_rk, -4687309620.0_rk,          0.0_rk,      0.0_rk, &
-                                                    1561900725.0_rk,             0.0_rk,   7698240000.0_rk, 11156433750.0_rk, -5524329195.0_rk, 2244036960.0_rk,      0.0_rk], [s, s]) / 17136282240.0_rk
+       &                                            3427256448.0_rk,             0.0_rk,            0.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
+       &                                            1285221168.0_rk,    3855663504.0_rk,            0.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
+       &                                           16755475968.0_rk,  -63975453696.0_rk,  60929003520.0_rk,           0.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
+       &                                           50596564480.0_rk, -198708787200.0_rk, 168327864320.0_rk, -4983390720.0_rk,           0.0_rk,          0.0_rk,      0.0_rk, &
+       &                                           48774576060.0_rk, -184344854400.0_rk, 152622973440.0_rk,  4770896760.0_rk, -4687309620.0_rk,          0.0_rk,      0.0_rk, &
+       &                                            1561900725.0_rk,             0.0_rk,   7698240000.0_rk, 11156433750.0_rk, -5524329195.0_rk, 2244036960.0_rk,      0.0_rk], [s, s]) / 17136282240.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([    1947750.0_rk,             0.0_rk,      9600000.0_rk,    13912500.0_rk,    -6889050.0_rk,    2798400.0_rk,      0.0_rk, &
+       &                                               1921409.0_rk,             0.0_rk,      9690880.0_rk,    13122270.0_rk,    -5802111.0_rk,    1902912.0_rk, 534240.0_rk], [s, m]) /    21369600.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: c(s)   = [                  0.0_rk,            18.0_rk,           27.0_rk,          72.0_rk,          80.0_rk,         90.0_rk,     90.0_rk]          /          90.0_rk
-  !> The order of the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: p1     = 5
-  !> Number of stages for the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: s1     = 6
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b1(s)  = [              12985.0_rk,             0.0_rk,        64000.0_rk,       92750.0_rk,      -45927.0_rk,      18656.0_rk,      0.0_rk]          /      142464.0_rk
-  !> The order of the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: p2     = 4
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b2(s)  = [            1921409.0_rk,             0.0_rk,      9690880.0_rk,    13122270.0_rk,    -5802111.0_rk,    1902912.0_rk, 534240.0_rk]          /    21369600.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [5, 4]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [6, 7]
 end module mrkiss_eerk_dormand_prince_5_4

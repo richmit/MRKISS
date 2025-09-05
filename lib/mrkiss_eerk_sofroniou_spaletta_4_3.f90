@@ -36,12 +36,14 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Sofroniou Spaletta's 5 step, order (4,3) Runge-Kutta method
 !!
-!! IMO: This is an interesting method in that one of the goals was to detect stiffness.  That said, it's a very good general
-!!      purpose method of order 4.  
-!!
-!! Known Aliases: 'ARKODE_SOFRONIOU_SPALETTA_5_3_4' (SUNDIALS)
-!!
 !! @image html eerk_sofroniou_spaletta_4_3-stab.png
+!!
+!! @par IMO
+!! This is an interesting method in that one of the goals was to detect stiffness.  That said, it's a very good general
+!! purpose method of order 4.  
+!!
+!! @par Known Aliases
+!! 'ARKODE_SOFRONIOU_SPALETTA_5_3_4' (SUNDIALS)
 !!
 !! @par Stability Image Links
 !! <a href="eerk_sofroniou_spaletta_4_3-stab.png">  <img src="eerk_sofroniou_spaletta_4_3-stab.png"  width="256px"> </a>
@@ -59,22 +61,21 @@ module mrkiss_eerk_sofroniou_spaletta_4_3
   public
   !> The order of the overall method
   integer,          parameter :: s      = 5
+  !> Number of methods
+  integer,          parameter :: m      = 2
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: a(s,s) = reshape([     0.0_rk,        0.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
-                                                     1584.0_rk,        0.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
-                                                     -594.0_rk,     2970.0_rk,       0.0_rk,    0.0_rk,        0.0_rk, &
-                                                     1710.0_rk,    -1350.0_rk,    3600.0_rk,    0.0_rk,        0.0_rk, &
-                                                      605.0_rk,     1375.0_rk,    1375.0_rk,  605.0_rk,        0.0_rk], [s, s]) /    3960.0_rk
+  real(kind=rk),    parameter :: a(s,s) = reshape([      0.0_rk,        0.0_rk,       0.0_rk,       0.0_rk,        0.0_rk, &
+                                                      1584.0_rk,        0.0_rk,       0.0_rk,       0.0_rk,        0.0_rk, &
+                                                      -594.0_rk,     2970.0_rk,       0.0_rk,       0.0_rk,        0.0_rk, &
+                                                      1710.0_rk,    -1350.0_rk,    3600.0_rk,       0.0_rk,        0.0_rk, &
+                                                       605.0_rk,     1375.0_rk,    1375.0_rk,     605.0_rk,        0.0_rk], [s, s]) /    3960.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([1370556.0_rk,  3114900.0_rk, 3114900.0_rk, 1370556.0_rk,        0.0_rk, &
+       &                                           1251515.0_rk,  3710105.0_rk, 2519695.0_rk,   61105.0_rk, 1428492.0_rk], [s, m]) /  8970912.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: c(s)   = [             0.0_rk,        2.0_rk,       3.0_rk,    5.0_rk,        5.0_rk]          /       5.0_rk
-  !> The order of the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: p1     = 4
-  !> Number of stages for the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: s1     = 4
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b1(s)  = [            11.0_rk,       25.0_rk,      25.0_rk,   11.0_rk,        0.0_rk]          /      72.0_rk
-  !> The order of the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: p2     = 3
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b2(s)  = [        1251515.0_rk, 3710105.0_rk, 2519695.0_rk, 61105.0_rk, 1428492.0_rk]          / 8970912.0_rk
+  real(kind=rk),    parameter :: c(s)   = [             0.0_rk,         2.0_rk,       3.0_rk,       5.0_rk,       5.0_rk]          /       5.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [4, 3]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [4, 5]
 end module mrkiss_eerk_sofroniou_spaletta_4_3

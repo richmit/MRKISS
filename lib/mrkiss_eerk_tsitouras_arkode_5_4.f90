@@ -36,12 +36,14 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for ARKODE's Tsitouras 7 stage Order (5,4) Runge-Kutta method
 !!
-!! IMO: This tableau came directly from the ARKODE source.  It's *not* the same one from tsitouras' paper.  It is also not the
-!!      same one used in OrdinaryDiffEq.jl.  So far my testing has shown to be a solid method.
-!!
-!! Known Aliases: 'ARKODE_TSITOURAS_7_4_5' (SUNDIALS)
-!!
 !! @image html eerk_tsitouras_arkode_5_4-stab.png
+!!
+!! @par IMO
+!! This tableau came directly from the ARKODE source.  It's *not* the same one from tsitouras' paper.  It is also not the
+!! same one used in OrdinaryDiffEq.jl.  So far my testing has shown to be a solid method.
+!!
+!! @par Known Aliases
+!! 'ARKODE_TSITOURAS_7_4_5' (SUNDIALS)
 !!
 !! @par Stability Image Links
 !! <a href="eerk_tsitouras_arkode_5_4-stab.png">  <img src="eerk_tsitouras_arkode_5_4-stab.png"  width="256px"> </a>
@@ -59,22 +61,23 @@ module mrkiss_eerk_tsitouras_arkode_5_4
   public
   !> The order of the overall method
   integer,          parameter :: s      = 7
+  !> Number of methods
+  integer,          parameter :: m      = 2
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: a(s,s) = reshape([ 0.000000000000000000_rk,   0.000000000000000000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
-                                                    0.161000000000000000_rk,   0.000000000000000000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
-                                                   -0.008480655492356989_rk,   0.335480655492357000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
-                                                    2.897153057105493000_rk,  -6.359448489975075000_rk, 4.362295432869581000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
-                                                    5.325864828439257000_rk, -11.748883564062830000_rk, 7.495539342889836000_rk, -0.092495066361755250_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
-                                                    5.861455442946420000_rk, -12.920969317847110000_rk, 8.159367898576159000_rk, -0.071584973281401000_rk, -0.028269050394068380_rk, 0.000000000000000000_rk, 0.000000000000000000_rk, &
+  real(kind=rk),    parameter :: a(s,s) = reshape([ 0.000000000000000000_rk,   0.000000000000000000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk,  &
+                                                    0.161000000000000000_rk,   0.000000000000000000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk,  &
+                                                   -0.008480655492356989_rk,   0.335480655492357000_rk, 0.000000000000000000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk,  &
+                                                    2.897153057105493000_rk,  -6.359448489975075000_rk, 4.362295432869581000_rk,  0.000000000000000000_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk,  &
+                                                    5.325864828439257000_rk, -11.748883564062830000_rk, 7.495539342889836000_rk, -0.092495066361755250_rk,  0.000000000000000000_rk, 0.000000000000000000_rk, 0.000000000000000000_rk,  &
+                                                    5.861455442946420000_rk, -12.920969317847110000_rk, 8.159367898576159000_rk, -0.071584973281401000_rk, -0.028269050394068380_rk, 0.000000000000000000_rk, 0.000000000000000000_rk,  &
                                                     0.096460766818065230_rk,   0.010000000000000000_rk, 0.479889650414499600_rk,  1.379008574103742000_rk, -3.290069515436081000_rk, 2.324710524099774000_rk, 0.000000000000000000_rk], [s, s])
+  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([ 0.096460766818065230_rk,   0.010000000000000000_rk, 0.479889650414499600_rk,  1.379008574103742000_rk, -3.290069515436081000_rk, 2.324710524099774000_rk, 0.000000000000000000_rk,  &
+       &                                            0.093523748581892710_rk,   0.008652883141566368_rk, 0.492893099131431900_rk,  1.140235412267858000_rk, -2.329180192439365000_rk, 1.568875049316616000_rk, 0.025000000000000000_rk], [s, m])
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
   real(kind=rk),    parameter :: c(s)   = [         0.000000000000000000_rk,   0.161000000000000000_rk, 0.327000000000000000_rk,  0.900000000000000000_rk,  0.980025540904509700_rk, 1.000000000000000000_rk, 1.000000000000000000_rk]
-  !> The order of the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: p1     = 5
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b1(s)  = [         0.096460766818065230_rk,   0.010000000000000000_rk, 0.479889650414499600_rk,  1.379008574103742000_rk, -3.290069515436081000_rk, 2.324710524099774000_rk, 0.000000000000000000_rk]
-  !> The order of the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: p2     = 4
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
-  real(kind=rk),    parameter :: b2(s)  = [         0.093523748581892710_rk,   0.008652883141566368_rk, 0.492893099131431900_rk,  1.140235412267858000_rk, -2.329180192439365000_rk, 1.568875049316616000_rk, 0.025000000000000000_rk]
+  !> The method orders
+  integer,          parameter :: p(m)   = [5, 4]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [6, 7]
 end module mrkiss_eerk_tsitouras_arkode_5_4

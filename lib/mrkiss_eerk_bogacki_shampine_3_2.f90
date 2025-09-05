@@ -36,11 +36,13 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 !> Butcher tableau for Bogacki Shampine's 4 step, order (3,2) Runge-Kutta method
 !!
-!! IMO: This is my go-to O(3) method.
-!!
-!! Known Aliases: 'Shampine3' OrdinaryDiffEq.jl), 'ode23' (MATLAB & Octave), 'ARKODE_BOGACKI_SHAMPINE_4_2_3' (SUNDIALS).
-!!
 !! @image html eerk_bogacki_shampine_3_2-stab.png
+!!
+!! @par IMO
+!! This is my go-to O(3) method.
+!!
+!! @par Known Aliases
+!! 'Shampine3' (OrdinaryDiffEq.jl), 'ode23' (MATLAB & Octave), 'ARKODE_BOGACKI_SHAMPINE_4_2_3' (SUNDIALS).
 !!
 !! @par Stability Image Links
 !! <a href="eerk_bogacki_shampine_3_2-stab.png">  <img src="eerk_bogacki_shampine_3_2-stab.png"  width="256px"> </a>
@@ -57,21 +59,20 @@ module mrkiss_eerk_bogacki_shampine_3_2
   public
   !> The order of the overall method
   integer,          parameter :: s      = 4
+  !> Number of methods
+  integer,          parameter :: m      = 2
   !> The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: a(s,s) = reshape([  0.0_rk,  0.0_rk,  0.0_rk, 0.0_rk, &
-                                                    18.0_rk,  0.0_rk,  0.0_rk, 0.0_rk, &
-                                                     0.0_rk, 27.0_rk,  0.0_rk, 0.0_rk, &
-                                                     8.0_rk, 12.0_rk, 16.0_rk, 0.0_rk], [s, s]) / 36.0_rk
+       &                                            18.0_rk,  0.0_rk,  0.0_rk, 0.0_rk, &
+       &                                             0.0_rk, 27.0_rk,  0.0_rk, 0.0_rk, &
+       &                                             8.0_rk, 12.0_rk, 16.0_rk, 0.0_rk], [s, s]) / 36.0_rk
+  !> The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @hideinlinesource
+  real(kind=rk),    parameter :: b(s,m) = reshape([ 16.0_rk, 24.0_rk, 32.0_rk, 0.0_rk, &
+       &                                            21.0_rk, 18.0_rk, 24.0_rk, 9.0_rk], [s, m]) / 72.0_rk
   !> The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
   real(kind=rk),    parameter :: c(s)   = [          0.0_rk,  2.0_rk,  3.0_rk, 4.0_rk]          /  4.0_rk
-  !> The order of the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: p1     = 3
-  !> Number of stages for the @f$\mathbf{b_1}@f$ method
-  integer,          parameter :: s1     = 3
-  !> The @f$\mathbf{b_1}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b1(s)  = [          2.0_rk,  3.0_rk,  4.0_rk, 0.0_rk]          /  9.0_rk
-  !> The order of the @f$\mathbf{b_2}@f$ method
-  integer,          parameter :: p2     = 2
-  !> The @f$\mathbf{b_2}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource
-  real(kind=rk),    parameter :: b2(s)  = [          7.0_rk,  6.0_rk,  8.0_rk, 3.0_rk]          / 24.0_rk
+  !> The method orders
+  integer,          parameter :: p(m)   = [3, 2]
+  !> Number of stages for each method
+  integer,          parameter :: se(m)  = [3, 4]
 end module mrkiss_eerk_bogacki_shampine_3_2

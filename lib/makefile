@@ -91,7 +91,7 @@ test-build :
 clean : clean_multi_mrkiss
 	rm -f $(addsuffix .exe,$(EXE_TARGETS)) $(EXE_TARGETS) *.csv *.png *~ a.out a.exe
 
-.PHONY: clean_clean
-clean_clean : clean
+.PHONY: clean_src
+clean_src : clean
 	rm -f mrkiss_solvers_nt.f90
 
