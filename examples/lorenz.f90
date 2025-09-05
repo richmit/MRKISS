@@ -36,7 +36,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program lorenz
   use :: mrkiss_config,      only: rk, istats_size
-  use :: mrkiss_solvers_nt,  only: steps_fixed_stab, steps_sloppy_condy_stab, steps_condy_stab
+  use :: mrkiss_solvers_nt,  only: fixed_t_steps, sloppy_fixed_y_steps, fixed_y_steps
   use :: mrkiss_utils,       only: print_solution, print_istats, status_to_message
   use :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -56,7 +56,7 @@ program lorenz
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run"
   ! SS-BEGIN:lorenz_fixed:
-  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  call fixed_t_steps(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
@@ -64,17 +64,17 @@ program lorenz
 
   ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
   print '(a)', repeat('*', 120)
-  print '(a)', "steps_sloppy_condy_stab"
+  print '(a)', "sloppy_fixed_y_steps"
   ! SS-BEGIN:lorenz_fixed-y:
-  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  call sloppy_fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
 
   ! This solution will have y-delta approximately equal to 1.0 for all steps.
   print '(a)', repeat('*', 120)
-  print '(a)', "steps_sloppy_condy_stab short"
-  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
+  print '(a)', "sloppy_fixed_y_steps short"
+  call sloppy_fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
                                   adj_short_o=1)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
@@ -83,9 +83,9 @@ program lorenz
 
   ! This solution will have y-delta equal to 1.0 for all steps.
   print '(a)', repeat('*', 120)
-  print '(a)', "steps_condy_stab"
+  print '(a)', "fixed_y_steps"
   ! SS-BEGIN:lorenz_clip-y:
-  call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  call fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)

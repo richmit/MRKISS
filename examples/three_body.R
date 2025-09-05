@@ -31,14 +31,14 @@
 #########################################################################################################################################################.H.E.##
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-adDat <- fread('three_body_steps_adapt_etab-std.csv')
-ftDat <- fread('tree_body_steps_fixed_stab.csv')
-fyDat <- fread('three_body_steps_condy_stab.csv')
-loDat <- fread('steps_fixed_stab-dp.csv')
-slDat <- fread('steps_sloppy_condy_stab.csv')
-a2Dat <- fread('three_body_steps_adapt_etab-fix-delta-steps.csv')
-a3Dat <- fread('three_body_steps_adapt_etab-pho-t-max.csv')
-a4Dat <- fread('three_body_steps_adapt_etab-isct.csv')
+adDat <- fread('three_body_adaptive_steps-std.csv')
+ftDat <- fread('tree_body_fixed_t_steps.csv')
+fyDat <- fread('three_body_fixed_y_steps.csv')
+loDat <- fread('fixed_t_steps-dp.csv')
+slDat <- fread('sloppy_fixed_y_steps.csv')
+a2Dat <- fread('three_body_adaptive_steps-fix-delta-steps.csv')
+a3Dat <- fread('three_body_adaptive_steps-pho-t-max.csv')
+a4Dat <- fread('three_body_adaptive_steps-isct.csv')
 aiDat <- fread('three_body_steps_adapt_std_interpolated.csv')
 alDat <- fread('three_body_steps_adapt_std_interpolated_lin.csv')
 erDat <- data.table(b=c('Earth'), x=c(0), y=c(0))

@@ -55,7 +55,7 @@
 program step_too_far
 
   use :: mrkiss_config,          only: rk, istats_size
-  use :: mrkiss_solvers_wt,      only: steps_fixed_stab
+  use :: mrkiss_solvers_wt,      only: fixed_t_steps
   use :: mrkiss_utils,           only: print_solution
   use :: mrkiss_erk_kutta_4,     only: a, b, c
 
@@ -75,7 +75,7 @@ program step_too_far
   do sso = 1000,2100
      num_pts = 1.005_rk ** sso
      print '("sso=",i4," num_pts=",i0)', sso, num_pts
-     call steps_fixed_stab(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
+     call fixed_t_steps(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
      call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, append_o=append)
      append = .true.
   end do

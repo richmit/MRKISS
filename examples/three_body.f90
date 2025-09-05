@@ -84,11 +84,11 @@
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
   use            :: mrkiss_config,                  only: rk, istats_size
-  use            :: mrkiss_solvers_wt,              only: steps_fixed_stab, steps_condy_stab, steps_adapt_etab, &
-                                                          steps_sloppy_condy_stab, interpolate_solution
+  use            :: mrkiss_solvers_wt,              only: fixed_t_steps, fixed_y_steps, adaptive_steps, &
+                                                          sloppy_fixed_y_steps, interpolate_solution
   use            :: mrkiss_utils,                   only: print_solution, seq, print_istats, status_to_message
-  use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
-  use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
+  use            :: mrkiss_eerk_verner_9_8,         only: a, b, c, p
+  use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b, dpc=>c
 
   implicit none
 
@@ -106,53 +106,53 @@ program three_body
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run V(9)"
-  ! SS-BEGIN:steps_fixed_stab:
-  call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
+  ! SS-BEGIN:fixed_t_steps:
+  call fixed_t_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="tree_body_steps_fixed_stab.csv", end_o=istats1(1))
-  ! SS-END:steps_fixed_stab:
+  call print_solution(status, sol1, filename_o="tree_body_fixed_t_steps.csv", end_o=istats1(1))
+  ! SS-END:fixed_t_steps:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run DP(5)"
-  ! SS-BEGIN:steps_fixed_stab-dp:
-  call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
+  ! SS-BEGIN:fixed_t_steps-dp:
+  call fixed_t_steps(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="steps_fixed_stab-dp.csv", end_o=istats1(1))
-  ! SS-END:steps_fixed_stab-dp:
+  call print_solution(status, sol1, filename_o="fixed_t_steps-dp.csv", end_o=istats1(1))
+  ! SS-END:fixed_t_steps-dp:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed y_delta run"
-  ! SS-BEGIN:steps_condy_stab:
-  call steps_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  ! SS-BEGIN:fixed_y_steps:
+  call fixed_y_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
 
-  call print_solution(status, sol1, filename_o="three_body_steps_condy_stab.csv", end_o=istats1(1))
-  ! SS-END:steps_condy_stab:
+  call print_solution(status, sol1, filename_o="three_body_fixed_y_steps.csv", end_o=istats1(1))
+  ! SS-END:fixed_y_steps:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Sloppy Fixed y_delta run"
-  ! SS-BEGIN:steps_sloppy_condy_stab:
-  call steps_sloppy_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  ! SS-BEGIN:sloppy_fixed_y_steps:
+  call sloppy_fixed_y_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="steps_sloppy_condy_stab.csv", end_o=istats1(1))
-  ! SS-END:steps_sloppy_condy_stab:
+  call print_solution(status, sol1, filename_o="sloppy_fixed_y_steps.csv", end_o=istats1(1))
+  ! SS-END:sloppy_fixed_y_steps:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run"
-  ! SS-BEGIN:steps_adapt_etab-std:
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  ! SS-BEGIN:adaptive_steps-std:
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-std.csv", end_o=istats1(1))
-  ! SS-END:steps_adapt_etab-std:
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-std.csv", end_o=istats1(1))
+  ! SS-END:adaptive_steps-std:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive hermite interpolation run"
@@ -176,39 +176,39 @@ program three_body
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max y_delta length"
-  ! SS-BEGIN:steps_adapt_etab-fix-delta-steps:
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  ! SS-BEGIN:adaptive_steps-fix-delta-steps:
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_sloppy_y_delta_len_max);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-fix-delta-steps.csv", end_o=istats1(1))
-  ! SS-END:steps_adapt_etab-fix-delta-steps:
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-fix-delta-steps.csv", end_o=istats1(1))
+  ! SS-END:adaptive_steps-fix-delta-steps:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max t"
-  ! SS-BEGIN:steps_adapt_etab-pho-t-max:
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  ! SS-BEGIN:adaptive_steps-pho-t-max:
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_max_t);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-pho-t-max.csv", end_o=istats1(1))
-  ! SS-END:steps_adapt_etab-pho-t-max:
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-pho-t-max.csv", end_o=istats1(1))
+  ! SS-END:adaptive_steps-pho-t-max:
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w moon orbit hit"
-  ! SS-BEGIN:steps_adapt_etab-isct:
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  ! SS-BEGIN:adaptive_steps-isct:
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-isct.csv", end_o=istats1(1))
-  ! SS-END:steps_adapt_etab-isct:
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-isct.csv", end_o=istats1(1))
+  ! SS-END:adaptive_steps-isct:
 
 contains
   
@@ -248,8 +248,8 @@ contains
     status = 0
   end subroutine eq
   
-  ! SS-BEGIN:steps_adapt_etab-pho-t-max-stepp:
-  ! Example subroutine replicating the functionality of t_max_o in steps_adapt_etab().
+  ! SS-BEGIN:adaptive_steps-pho-t-max-stepp:
+  ! Example subroutine replicating the functionality of t_max_o in adaptive_steps().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer,          intent(out) :: status
     integer,          intent(out) :: end_run
@@ -267,9 +267,9 @@ contains
        end_run = 0
     end if
   end subroutine sp_max_t
-  ! SS-END:steps_adapt_etab-pho-t-max-stepp:
+  ! SS-END:adaptive_steps-pho-t-max-stepp:
 
-  ! SS-BEGIN:steps_adapt_etab-fix-delta-stepp:
+  ! SS-BEGIN:adaptive_steps-fix-delta-stepp:
   ! Example subroutine to adjust t_delta in an attempt to keep y_delta under a maximum value.
   ! It is sloppy because we assume t_delta is linearly proportional to y_delta_len
   subroutine sp_sloppy_y_delta_len_max(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -291,9 +291,9 @@ contains
        new_t_delta = -1.0_rk
     end if
   end subroutine sp_sloppy_y_delta_len_max
-  ! SS-END:steps_adapt_etab-fix-delta-stepp:
+  ! SS-END:adaptive_steps-fix-delta-stepp:
 
-  ! SS-BEGIN:steps_adapt_etab-isct-stepp:
+  ! SS-BEGIN:adaptive_steps-isct-stepp:
   ! Example subroutine to find the first intersection of the satellite path and the moon's orbit.  It works 
   ! in conjunction with sdf_cross_moon().
   subroutine sp_cross_moon(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
@@ -321,9 +321,9 @@ contains
        end if
     end if
   end subroutine sp_cross_moon
-  ! SS-END:steps_adapt_etab-isct-stepp:
+  ! SS-END:adaptive_steps-isct-stepp:
 
-  ! SS-BEGIN:steps_adapt_etab-isct-sdf:
+  ! SS-BEGIN:adaptive_steps-isct-sdf:
   ! Example SDF subroutine to isolate a point on a solution segment that crosses the unit circle.
   subroutine sdf_cross_moon(status, dist, sdf_flags, t, y)
     use mrkiss_config, only: rk
@@ -335,6 +335,6 @@ contains
     status = 0
     dist = 1.0_rk - norm2(y(1:2))
   end subroutine sdf_cross_moon
-  ! SS-END:steps_adapt_etab-isct-sdf:
+  ! SS-END:adaptive_steps-isct-sdf:
 
 end program three_body

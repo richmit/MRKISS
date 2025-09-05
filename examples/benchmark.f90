@@ -46,9 +46,9 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program langford
   use :: mrkiss_config,          only: rk, istats_size
-  use :: mrkiss_solvers_nt,      only: steps_fixed_stab
+  use :: mrkiss_solvers_nt,      only: fixed_t_steps
   use :: mrkiss_utils,           only: analyze_solution, print_istats, print_solution
-  use :: mrkiss_eerk_verner_9_8, only: a, b=>b1, c
+  use :: mrkiss_eerk_verner_9_8, only: a, b, c
   use :: omp_lib
 
   implicit none
@@ -62,7 +62,7 @@ program langford
   integer                  :: status, istats(istats_size)
 
   print *, "benchmark.f90 Start"
-  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta)
+  call fixed_t_steps(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta)
   call print_solution(status, solution, fmt_w_o=-1, start_o=istats(1)-10)
   call analyze_solution(status, solution)
   call print_istats(status, istats)

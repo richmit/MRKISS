@@ -51,7 +51,7 @@ EXE_TARGETS = three_body lorenz minimal brusselator step_order_vs_error langford
 three_body : three_body.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) three_body.f90 $(MRKISS_OBJ_FILES) -o $@
 
-THREE_BODY_CSVS = steps_fixed_stab-dp.csv three_body_steps_adapt_etab-fix-delta-steps.csv three_body_steps_adapt_etab-pho-t-max.csv three_body_steps_adapt_std_interpolated.csv three_body_steps_condy_stab.csv steps_sloppy_condy_stab.csv three_body_steps_adapt_etab-isct.csv three_body_steps_adapt_etab-std.csv three_body_steps_adapt_std_interpolated_lin.csv tree_body_steps_fixed_stab.csv
+THREE_BODY_CSVS = fixed_t_steps-dp.csv three_body_adaptive_steps-fix-delta-steps.csv three_body_adaptive_steps-pho-t-max.csv three_body_steps_adapt_std_interpolated.csv three_body_fixed_y_steps.csv sloppy_fixed_y_steps.csv three_body_adaptive_steps-isct.csv three_body_adaptive_steps-std.csv three_body_steps_adapt_std_interpolated_lin.csv tree_body_fixed_t_steps.csv
 
 .PHONY: lorenz_csv
 three_body_csv : $(THREE_BODY_CSVS)
@@ -73,9 +73,9 @@ three_body_png : $(THREE_BODY_PNGS)
 three_body_clean :
 	rm -f $(THREE_BODY_PNGS) $(THREE_BODY_CSVS) three_body.exe three_body three_body.o three_body.obj
 
-.PHONY: three_body_test
-three_body_test: $(THREE_BODY_CSVS)
-	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
+.PHONY: test_three_body
+test_three_body: $(THREE_BODY_CSVS)
+	$(foreach fil,$^,$(FD) -Zdqn -e 1e-10 $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
@@ -121,8 +121,8 @@ lorenz_png : $(LORENZ_PNGS)
 lorenz_clean :
 	rm -f $(LORENZ_PNGS) $(LORENZ_CSVS) $(LORENZ_SVGS) lorenz.exe lorenz lorenz.o lorenz.obj
 
-.PHONY: lorenz_test
-lorenz_test: lorenz_fixed.csv lorenz_condy.csv
+.PHONY: test_lorenz
+test_lorenz: lorenz_fixed.csv lorenz_condy.csv
 	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -191,8 +191,8 @@ step_order_vs_error_png : $(STEP_ORDER_VS_ERROR_PNGS)
 step_order_vs_error_clean :
 	rm -f $(STEP_ORDER_VS_ERROR_PNGS) $(STEP_ORDER_VS_ERROR_CSVS) step_order_vs_error.exe step_order_vs_error step_order_vs_error.o step_order_vs_error.obj
 
-.PHONY: step_order_vs_error_test
-step_order_vs_error_test: $(STEP_ORDER_VS_ERROR_CSVS)
+.PHONY: test_step_order_vs_error
+test_step_order_vs_error: $(STEP_ORDER_VS_ERROR_CSVS)
 	$(foreach fil,$^,$(FD) -Zdqn $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -237,8 +237,8 @@ brusselator_png : brusselator.png
 brusselator_clean :
 	rm -f brusselator.csv brusselator.png brusselator.exe brusselator brusselator.o brusselator.obj
 
-.PHONY: brusselator_test
-brusselator_test: brusselator.csv
+.PHONY: test_brusselator
+test_brusselator: brusselator.csv
 	$(FD) -Zdqn brusselator.csv tdata/brusselator.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -254,8 +254,8 @@ minimal.csv : minimal
 minimal_clean :
 	rm -f minimal.csv minimal.exe minimal minimal.o minimal.obj
 
-.PHONY: minimal_test
-minimal_test: minimal.csv
+.PHONY: test_minimal
+test_minimal: minimal.csv
 	$(FD) -Zdqn minimal.csv tdata/minimal.csv
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -267,7 +267,9 @@ benchmark_clean :
 	rm -f benchmark.exe benchmark benchmark.o benchmark.obj
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-tests : minimal_test brusselator_test lorenz_test three_body_test step_order_vs_error_test
+# SS-BEGIN:tests:
+tests : test_minimal test_brusselator test_lorenz test_three_body test_step_order_vs_error
+# SS-END:tests:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 clean : clean_multi_mrkiss

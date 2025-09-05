@@ -47,10 +47,10 @@
 program step_order_vs_error
 
   use :: mrkiss_config,          only: rk, istats_size
-  use :: mrkiss_solvers_wt,      only: steps_fixed_stab, steps_points_stab
+  use :: mrkiss_solvers_wt,      only: fixed_t_steps, fixed_t_steps_between
   use :: mrkiss_utils,           only: print_solution, seq
   use :: mrkiss_erk_kutta_4,     only: a4=>a, b4=>b, c4=>c
-  use :: mrkiss_eerk_verner_9_8, only: a9=>a, b9=>b1, c9=>c
+  use :: mrkiss_eerk_verner_9_8, only: a9=>a, b9=>b, c9=>c
 
   implicit none
 
@@ -69,11 +69,11 @@ program step_order_vs_error
   call seq(status, solution(1,:), from_o=t_start, to_o=t_end)
 
   do spp = 1,10
-     call steps_points_stab(status, istats, solution, eq, y_iv, param, a4, b4, c4, spp)
+     call fixed_t_steps_between(status, istats, solution, eq, y_iv, param, a4, b4, c4, spp)
      write (filename, '("step_order_vs_error_04_",i2.2,".csv")') spp
      call print_solution(status, solution, filename_o=trim(filename))
 
-     call steps_points_stab(status, istats, solution, eq, y_iv, param, a9, b9, c9, spp)
+     call fixed_t_steps_between(status, istats, solution, eq, y_iv, param, a9, b9, c9, spp)
      write (filename, '("step_order_vs_error_09_",i2.2,".csv")') spp
      call print_solution(status, solution, filename_o=trim(filename))
   end do
