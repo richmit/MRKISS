@@ -46,7 +46,7 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 
 I don't have any specific plans for refactoring, cleanup, or new functionality.  I do have a few examples I would like to add.
 
- - +Finalize step-size and error computation in ~steps_adapt_etab_*t()~+ *DONE*
+ - +Finalize step-size and error computation in ~adaptive_steps_*t()~+ *DONE*
  - +Add tests for high level solvers+ *CANCELED*
  - +Add dy to a solution without it already+ *CANCELED*
  - +Add status -> message function in mrkiss_utils+ *DONE*
@@ -55,8 +55,8 @@ I don't have any specific plans for refactoring, cleanup, or new functionality. 
  - +Example showing error V with t_delta size+ *CANCELED*
  - +Example showing error vs. order+ *CANCELED*
  - +Multi-solver+ *CANCELED*
-   - +Give it multiple IVs and produce a steps_fixed_* multi-solution+ *CANCELED*
-   - +Give it multiple PARAMs and produce a steps_fixed_* multi-solution+ *CANCELED*
+   - +Give it multiple IVs and produce a fixed_t_steps_* multi-solution+ *CANCELED*
+   - +Give it multiple PARAMs and produce a fixed_t_steps_* multi-solution+ *CANCELED*
    - +Run parallel across cores using OpenMP+ *CANCELED*
  - +Message table+
    - +status -> source: ~status_to_origin~+ *DONE*
@@ -79,7 +79,7 @@ I don't have any specific plans for refactoring, cleanup, or new functionality. 
  - +Given scalar t & sol; compute y(t)+ *CANCELED*
  - +Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta+ *DONE*
  - +Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps+ *DONE*
-   - +Add single point mode to steps_fixed_*+ *DONE*
+   - +Add single point mode to fixed_t_steps_*+ *DONE*
    - +Flesh out tests for this feature*+ *DONE*
  - +Consider how to use examples as consistency tests+ *DONE*
  - +Add dy to solver output+ *DONE*
@@ -89,23 +89,23 @@ I don't have any specific plans for refactoring, cleanup, or new functionality. 
  - +Add ARKODE_VERNER_10_6_7+ *DONE*
    - +BT: https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7+ *DONE*
    - +Added ref for Verner's site.+ *DONE*
- - +Create /sloppy/ version of ~steps_condy_stab_*t~ called ~steps_sloppy_condy_stab_*t~+ *DONE*
+ - +Create /sloppy/ version of ~fixed_y_steps_*t~ called ~sloppy_fixed_y_steps_*t~+ *DONE*
  - +Update comments on ~steps_*~ solvers to reflect all options and algorithm.+ *DONE*
  - +Add ~t_min_o~ and ~t_max_o~ options to ~print_solution()~+ *DONE*
  - +Add example documentation pages+ *DONE*
    - +~three_body~+ *DONE*
    - +~lorenz~+ *DONE*
- - +Add aspect ratio argument to ~steps_condy_stab_*t()~+ *CANCELED**
- - +Add "sloppy" option to ~steps_condy_stab_*t~+ *CANCELED**
- - +Add option to not error out on bisection problems in ~steps_condy_stab_*t()~+ *DONE*
- - +Add option to not error out on bisection problems in ~steps_adapt_etab_*t()~+ *DONE*
+ - +Add aspect ratio argument to ~fixed_y_steps_*t()~+ *CANCELED**
+ - +Add "sloppy" option to ~fixed_y_steps_*t~+ *CANCELED**
+ - +Add option to not error out on bisection problems in ~fixed_y_steps_*t()~+ *DONE*
+ - +Add option to not error out on bisection problems in ~adaptive_steps_*t()~+ *DONE*
  - +Consider "verbosity" options for high level solvers.+ *CANCELED*
- - +Add option to print diagnostics to ~steps_condy_stab_*t()~+ *CANCELED*
+ - +Add option to print diagnostics to ~fixed_y_steps_*t()~+ *CANCELED*
  - +Add ~istats~ docs to each solver with components used.+ *DONE*
  - +Make comment formatting uniform+ *DONE*
  - +Document all function arguments+ *DONE*
- - +Compare ~steps_fixed_stab_wt()~ to other files in ~rk4.f90~+ *DONE*
- - +Use ~b1~ for stage count in ~one_step_etab_wt()~, and ~b~ in ~in one_step_stab_wt()~+ *DONE*
+ - +Compare ~fixed_t_steps_wt()~ to other files in ~rk4.f90~+ *DONE*
+ - +Use ~b1~ for stage count in ~step_one_etab_wt()~, and ~b~ in ~in step_one_stab_wt()~+ *DONE*
  - +Think about how to document b vectors that require fewer stages than in b+ *DONE*
    - +~mrkiss_eerk_bogacki_shampine_3_2.f90 ..... sd1 1~+ *DONE*
    - +~mrkiss_eerk_dormand_prince_5_4.f90 ....... sd1 1~+ *DONE*

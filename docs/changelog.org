@@ -48,32 +48,35 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
 :PROPERTIES:
 :CUSTOM_ID: latest
 :END:
-  - Fixed Bugs
-    - dp54 unit test.
-  - Known Issues
-    - N/A
-  - API breaking Changes
-    - print_solution: Default for prt_titles_o changed from .TRUE. to .NOT. append_o.
-  - Deprecated functionality
-    - N/A
-  - New functionality
-    - mrkiss_erk_nystrom_5.f90
-  - Documentation
-    - Changed \par to @par in Doxygen comments.
-    - Updated index.org RK methods tables.
-    - Added stability region images to doxygen
-  - Examples
-    - New
-      - step_too_small.f90
-    - Updated
-      - N/A
-  - Tests
-    - New
-      - N/A
-    - Updated
-      - tc_make_make.rb now removes test case selector lines that don't match.
-  - Miscellaneous
-    - Added stability region and order star graphs to maple worksheets
+  This release is a major refactor:
+    - Renamed solvers:
+      - Single step: step_rk4, step_rkf45, step_dp54, step_all, step_one, step_richardson
+      - High level: fixed_t_steps, fixed_y_steps, sloppy_fixed_y_steps, adaptive_steps
+      - Meta: fixed_t_steps_between, interpolate_solution
+    - Any routine that worked with etabs, now works with an arbitrary number of embedded methods
+    - All solvers now take uniform tableau arguments
+    - All tableaux now have:
+      - A single b matrix instead of vectors for each method
+      - A p vector for the order of each method
+      - An se vector for the number of steps for each method
+      - m -- the number of methods
+    - Tableau Data
+      - Machine readable tableaux for all methods
+        - Tab separated, dense matrices
+        - Support algebraic expressions for entries (rational numbers, roots, etc...)
+        - Example Maple worksheets to create these kinds of files
+      - Maple procedures to read tableaux, and
+        - Process them for inclusion into Fortran & C
+        - Produce stability region plots
+        - Produce stability star plots
+        - Produce numerator and denominator polynomials for stability functions
+        - Compute roots for stability function numerator and denominator
+    - Documentation
+      - Doxygen comments now consistently use @ instead of \
+      - All tableau modules now have stability graphs
+      - Updated the tableau tables in index.org
+    - Examples
+      - Added step_too_small.f90
 
 * v2025-08-15: Documentation & Cleanup Release
 :PROPERTIES:

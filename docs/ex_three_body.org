@@ -128,15 +128,15 @@ The solid pink curve is generated from 4000 points on the orbit generated with a
 16 milliseconds on my computer.  Still, it produces a very nice curve.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_fixed_stab
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 fixed_t_steps
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
+  call fixed_t_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="tree_body_steps_fixed_stab.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="tree_body_fixed_t_steps.csv", end_o=istats1(1))
 #+end_src
 
 The red dots on the solid pink curve are solution points generated using a classical, adaptive Runge-Kutta scheme.
@@ -151,17 +151,17 @@ For generative art and visualization we can use Hermite interpolation at an even
 directly by a visualization software platform -- we simply provide the points and derivatives.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-std
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-std
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-std.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-std.csv", end_o=istats1(1))
 #+end_src
 
 * Interpolation
@@ -232,15 +232,15 @@ In the following image we see the unsatisfactory result of using a 5th order sol
 The code for the above solution is identical except for a change in Runge-Kutta method arguments:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_fixed_stab-dp
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 fixed_t_steps-dp
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
+  call fixed_t_steps(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="steps_fixed_stab-dp.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="fixed_t_steps-dp.csv", end_o=istats1(1))
 #+end_src
 
 * Adaptive Solution With More Steps For A Nice Plot
@@ -253,12 +253,12 @@ file:pics/three_body_ylen.png
 If we wanted more points in the adaptive solution we could use ~t_delta_max_o~.  This will get us more points, but it's not necessarily what we want for a
 nice graph.  What we really want for a nice graph is a fixed maximum distance between plotted points which a fixed \(\Delta{t}\) will not necessarily deliver.
 That said we still want the adaptive algorithm to produce points closer together when accuracy requires it.  One way to achieve that is with the step
-processing capability of ~steps_adapt_etab()~ via the ~stepp_o~ argument.  Only the first two components of the solution are plotted (the position of the
+processing capability of ~adaptive_steps()~ via the ~stepp_o~ argument.  Only the first two components of the solution are plotted (the position of the
 satellite).  What we want the ~stepp_o~ subroutine to do is shrink \(\Delta{t}\) if the distance between the first two components of the solution are too far
 away from the first two points of the previous solution.  The following subroutine will do the trick:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-fix-delta-stepp
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-fix-delta-stepp
 #+end_src
 
 #+RESULTS:
@@ -288,23 +288,23 @@ away from the first two points of the previous solution.  The following subrouti
 
 This isn't a perfect solution as we make the assumption that the length of the difference in \(\mathbf{y}\mathrm{-space}\) is proportional to \(\Delta{t}\),
 but it works pretty well in practice.  A more robust solution can be achieved by adding an ~sdf_o~ function and isolating a \(\Delta{t}\) that produces a
-precisely separated solution.  We touch on this topic [[#fixedyspace][later]] when we consider the ~steps_condy_stab()~ solvers.
+precisely separated solution.  We touch on this topic [[#fixedyspace][later]] when we consider the ~fixed_y_steps()~ solvers.
 
-We "wire up" the above subroutine into ~steps_adapt_etab()~ via the ~stepp_o~ argument.  
+We "wire up" the above subroutine into ~adaptive_steps()~ via the ~stepp_o~ argument.  
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-fix-delta-steps
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-fix-delta-steps
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_sloppy_y_delta_len_max);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-fix-delta-steps.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-fix-delta-steps.csv", end_o=istats1(1))
 #+end_src
 
 * Truly Fixed Steps in y-space
@@ -312,7 +312,7 @@ We "wire up" the above subroutine into ~steps_adapt_etab()~ via the ~stepp_o~ ar
 :CUSTOM_ID: fixedyspace
 :END:
 
-We can achieve truly fixed step sizes in \(\mathbf{y}\mathrm{-space}\) with the ~steps_condy_stab()~ solvers. In the image below we see the difference
+We can achieve truly fixed step sizes in \(\mathbf{y}\mathrm{-space}\) with the ~fixed_y_steps()~ solvers. In the image below we see the difference
 between fixed steps in \(t\mathrm{-space}\) vs \(\mathbf{y}\mathrm{-space}\) -- remember we are only using the position components of the \(\mathbf{y}\)
 vector (the first two components) and not the velocity components (the last two components).
 
@@ -322,37 +322,37 @@ Below are the velocity components plotted in the same manner as the position com
 
 file:pics/three_body_fixed_vel.png
 
-In the code below we set ~y_delta_len_idxs_o~ to ~[1, 2]~ in order to have ~steps_condy_stab()~ only use the first two components of the solution vector in
+In the code below we set ~y_delta_len_idxs_o~ to ~[1, 2]~ in order to have ~fixed_y_steps()~ only use the first two components of the solution vector in
 it's length computation.  This will produce steps that are ~0.0034~ long with an accuracy of ~1.0e-5~.  
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_condy_stab
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 fixed_y_steps
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  call fixed_y_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
 
-  call print_solution(status, sol1, filename_o="three_body_steps_condy_stab.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_fixed_y_steps.csv", end_o=istats1(1))
 #+end_src
 
-We can also achieve a sloppy constant length \(\mathbf{y}\mathrm{-space}\) much like we did [[#adaptiveylim][previously]] with ~steps_adapt_etab()~ but
-with ~steps_sloppy_condy_stab()~.
+We can also achieve a sloppy constant length \(\mathbf{y}\mathrm{-space}\) much like we did [[#adaptiveylim][previously]] with ~adaptive_steps()~ but
+with ~sloppy_fixed_y_steps()~.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_sloppy_condy_stab
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 sloppy_fixed_y_steps
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_sloppy_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  call sloppy_fixed_y_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="steps_sloppy_condy_stab.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="sloppy_fixed_y_steps.csv", end_o=istats1(1))
 #+end_src
 
 * Knowing When To Stop
@@ -366,16 +366,16 @@ section]] will explore a more realistic example.
 
 file:pics/three_body_maxt.png
 
-The idea is to use a subroutine for ~stepp_o~ that will tell ~steps_adapt_etab()~ to quit when we hit a maximum value for \(t\).  The following code will
+The idea is to use a subroutine for ~stepp_o~ that will tell ~adaptive_steps()~ to quit when we hit a maximum value for \(t\).  The following code will
 do the trick:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-pho-t-max-stepp
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-pho-t-max-stepp
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  ! Example subroutine replicating the functionality of t_max_o in steps_adapt_etab().
+  ! Example subroutine replicating the functionality of t_max_o in adaptive_steps().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer,          intent(out) :: status
     integer,          intent(out) :: end_run
@@ -395,21 +395,21 @@ do the trick:
   end subroutine sp_max_t
 #+end_src
 
-We wire up this subroutine to ~steps_adapt_etab()~ via the ~stepp_o~ argument like so:
+We wire up this subroutine to ~adaptive_steps()~ via the ~stepp_o~ argument like so:
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-pho-t-max
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-pho-t-max
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_max_t);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-pho-t-max.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-pho-t-max.csv", end_o=istats1(1))
 #+end_src
 
 * Satellite & Moon Orbit Intersection
@@ -423,15 +423,15 @@ In the image above note the last adaptive point is precisely on the intersection
 routine after we cross the moon orbit -- much like we did in the [[#progstop][previous section]].  If we did that we would have a final solution segment that
 straddled the orbit, but it is unlikely that the final end point would be precisely on the orbit.  What we need here is a way to find a \(\Delta{t}\) for our
 last interval that leads to a solution that precisely hits the moon's orbit.  We can do that by adding and ~sdf_o~ subroutine and having our ~stepp_o~
-subroutine tell ~steps_adapt_etab()~ when to use it.
+subroutine tell ~adaptive_steps()~ when to use it.
 
 Lets take a look at the ~stepp_o~ subroutine first.  This routine first checks to see if the solution point is on the moon's orbit, and tells
-~steps_adapt_etab()~ to quit if it is.  This is very unlikely to happen, but we check anyhow.  Next it checks to see if the solution segment straddles the
+~adaptive_steps()~ to quit if it is.  This is very unlikely to happen, but we check anyhow.  Next it checks to see if the solution segment straddles the
 moons orbit -- i.e. if the previous solution was on one side of the orbit while the current on is on the other.  If this occurs the ~stepp_o~ tells
-~steps_adapt_etab()~ two things: 1) Solve for the final \(\Delta{t}\) with ~sdf_o~, and 2) quit after this solution.
+~adaptive_steps()~ two things: 1) Solve for the final \(\Delta{t}\) with ~sdf_o~, and 2) quit after this solution.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-isct-stepp
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-isct-stepp
 #+end_src
 
 #+RESULTS:
@@ -469,7 +469,7 @@ The magical SDF function is pretty simple in this case.  The moon's orbit in thi
 the solution's position from 1!
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-isct-sdf
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-isct-sdf
 #+end_src
 
 #+RESULTS:
@@ -487,21 +487,21 @@ the solution's position from 1!
   end subroutine sdf_cross_moon
 #+end_src
 
-As usual we wire these two functions up to ~steps_adapt_etab()~ via the ~stepp_o~ and ~sdf_o~ arguments.
+As usual we wire these two functions up to ~adaptive_steps()~ via the ~stepp_o~ and ~sdf_o~ arguments.
 
 #+begin_src sh :results output verbatum :exports results :wrap "src f90 :eval never :tangle no"
-~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 steps_adapt_etab-isct
+~/core/codeBits/bin/getSnip.sh ../examples/three_body.f90 adaptive_steps-isct
 #+end_src
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-isct.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-isct.csv", end_o=istats1(1))
 #+end_src
 
 * Full Code Listing
@@ -523,11 +523,11 @@ As usual we wire these two functions up to ~steps_adapt_etab()~ via the ~stepp_o
 program three_body
   use, intrinsic :: iso_fortran_env,                only: output_unit, error_unit
   use            :: mrkiss_config,                  only: rk, istats_size
-  use            :: mrkiss_solvers_wt,              only: steps_fixed_stab, steps_condy_stab, steps_adapt_etab, &
-                                                          steps_sloppy_condy_stab, interpolate_solution
+  use            :: mrkiss_solvers_wt,              only: fixed_t_steps, fixed_y_steps, adaptive_steps, &
+                                                          sloppy_fixed_y_steps, interpolate_solution
   use            :: mrkiss_utils,                   only: print_solution, seq, print_istats, status_to_message
-  use            :: mrkiss_eerk_verner_9_8,         only: a, b1, b2, c, p1, p2
-  use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b1, dpc=>c
+  use            :: mrkiss_eerk_verner_9_8,         only: a, b, c, p
+  use            :: mrkiss_eerk_dormand_prince_5_4, only: dpa=>a, dpb=>b, dpc=>c
 
   implicit none
 
@@ -545,43 +545,43 @@ program three_body
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run V(9)"
-  call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, t_end_o=t_end)
+  call fixed_t_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="tree_body_steps_fixed_stab.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="tree_body_fixed_t_steps.csv", end_o=istats1(1))
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run DP(5)"
-  call steps_fixed_stab(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
+  call fixed_t_steps(status, istats1, sol1, eq, t_iv, y_iv, param, dpa, dpb, dpc, t_end_o=t_end)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="steps_fixed_stab-dp.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="fixed_t_steps-dp.csv", end_o=istats1(1))
 
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed y_delta run"
-  call steps_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  call fixed_y_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, 0.0034_rk, .01_rk, &
                            y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length, y_delta_len_tol_o=1.0e-5_rk)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
 
-  call print_solution(status, sol1, filename_o="three_body_steps_condy_stab.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_fixed_y_steps.csv", end_o=istats1(1))
 
   print '(a)', repeat('*', 120)
   print '(a)', "Sloppy Fixed y_delta run"
-  call steps_sloppy_condy_stab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, c, 0.0034_rk, .01_rk, &
+  call sloppy_fixed_y_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, 0.0034_rk, .01_rk, &
                                   y_delta_len_idxs_o=[1,2], y_sol_len_max_o=path_length)
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="steps_sloppy_condy_stab.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="sloppy_fixed_y_steps.csv", end_o=istats1(1))
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run"
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-std.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-std.csv", end_o=istats1(1))
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive hermite interpolation run"
@@ -601,33 +601,33 @@ program three_body
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max y_delta length"
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_sloppy_y_delta_len_max);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-fix-delta-steps.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-fix-delta-steps.csv", end_o=istats1(1))
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w max t"
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_max_t);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-pho-t-max.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-pho-t-max.csv", end_o=istats1(1))
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run w moon orbit hit"
-  call steps_adapt_etab(status, istats1, sol1, eq, t_iv, y_iv, param, a, b1, b2, c, p1, p2, &
+  call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
                            error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end, &
                            stepp_o=sp_cross_moon, sdf_o=sdf_cross_moon);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
-  call print_solution(status, sol1, filename_o="three_body_steps_adapt_etab-isct.csv", end_o=istats1(1))
+  call print_solution(status, sol1, filename_o="three_body_adaptive_steps-isct.csv", end_o=istats1(1))
 
 contains
   
@@ -667,7 +667,7 @@ contains
     status = 0
   end subroutine eq
   
-  ! Example subroutine replicating the functionality of t_max_o in steps_adapt_etab().
+  ! Example subroutine replicating the functionality of t_max_o in adaptive_steps().
   subroutine sp_max_t(status, end_run, sdf_flags, new_t_delta, pnt_idx, solution, t_delta, y_delta)
     integer,          intent(out) :: status
     integer,          intent(out) :: end_run
@@ -764,14 +764,14 @@ The images were produced with R.
 
 #+RESULTS:
 #+begin_src R :eval never :tangle no
-adDat <- fread('three_body_steps_adapt_etab-std.csv')
-ftDat <- fread('tree_body_steps_fixed_stab.csv')
-fyDat <- fread('three_body_steps_condy_stab.csv')
-loDat <- fread('steps_fixed_stab-dp.csv')
-slDat <- fread('steps_sloppy_condy_stab.csv')
-a2Dat <- fread('three_body_steps_adapt_etab-fix-delta-steps.csv')
-a3Dat <- fread('three_body_steps_adapt_etab-pho-t-max.csv')
-a4Dat <- fread('three_body_steps_adapt_etab-isct.csv')
+adDat <- fread('three_body_adaptive_steps-std.csv')
+ftDat <- fread('tree_body_fixed_t_steps.csv')
+fyDat <- fread('three_body_fixed_y_steps.csv')
+loDat <- fread('fixed_t_steps-dp.csv')
+slDat <- fread('sloppy_fixed_y_steps.csv')
+a2Dat <- fread('three_body_adaptive_steps-fix-delta-steps.csv')
+a3Dat <- fread('three_body_adaptive_steps-pho-t-max.csv')
+a4Dat <- fread('three_body_adaptive_steps-isct.csv')
 aiDat <- fread('three_body_steps_adapt_std_interpolated.csv')
 alDat <- fread('three_body_steps_adapt_std_interpolated_lin.csv')
 erDat <- data.table(b=c('Earth'), x=c(0), y=c(0))

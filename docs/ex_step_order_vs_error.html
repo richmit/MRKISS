@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-18 Mon 15:22 -->
+<!-- 2025-09-05 Fri 17:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>Step Size &amp; Order Vs Accuracy</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-18 15:22:34</i></td>
+<td class="org-left"><i>2025-09-04 13:34:55</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-18 15:22:39</i></td>
+<td class="org-left"><i>2025-09-05 17:01:13</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="org9bc9d5b">
+<div class="org" id="org2025cdb">
 <p>
 In this example we solve the same equation with two different Runge-Kutta methods &#x2013; the classical \(\mathcal{O}(4)\)
 method and a newer \(\mathcal{O}(0)\) method.  For each method we use 10 different step sizes.
@@ -326,13 +326,13 @@ Here are a copule plots
 </p>
 
 
-<div id="org7f2be10" class="figure">
+<div id="orgffa14b9" class="figure">
 <p><img src="pics/step_order_vs_error_soly.png" alt="step_order_vs_error_soly.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="org956d826" class="figure">
+<div id="orga002ed2" class="figure">
 <p><img src="pics/step_order_vs_error_sold.png" alt="step_order_vs_error_sold.png" width="90%" align="center" />
 </p>
 </div>
@@ -343,7 +343,7 @@ plot:
 </p>
 
 
-<div id="org698dde5" class="figure">
+<div id="orgec31340" class="figure">
 <p><img src="pics/step_order_vs_error_err.png" alt="step_order_vs_error_err.png" width="90%" align="center" />
 </p>
 </div>
@@ -360,10 +360,10 @@ plot:
 <pre class="src src-f90"><span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">step_order_vs_error</span>
 
   <span style="color: #00ffff;">use</span> :: mrkiss_config,          <span style="color: #00ffff;">only</span>: rk, istats_size
-  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_wt,      <span style="color: #00ffff;">only</span>: steps_fixed_stab, steps_points_stab
+  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_wt,      <span style="color: #00ffff;">only</span>: fixed_t_steps, fixed_t_steps_between
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,           <span style="color: #00ffff;">only</span>: print_solution, seq
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4,     <span style="color: #00ffff;">only</span>: a4=&gt;a, b4=&gt;b, c4=&gt;c
-  <span style="color: #00ffff;">use</span> :: mrkiss_eerk_verner_9_8, <span style="color: #00ffff;">only</span>: a9=&gt;a, b9=&gt;b1, c9=&gt;c
+  <span style="color: #00ffff;">use</span> :: mrkiss_eerk_verner_9_8, <span style="color: #00ffff;">only</span>: a9=&gt;a, b9=&gt;b, c9=&gt;c
 
   <span style="color: #00ffff;">implicit</span> <span style="color: #63b8ff;">none</span>
 
@@ -382,11 +382,11 @@ plot:
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">seq</span>(status, solution(1,:), from_o=t_start, to_o=t_end)
 
   <span style="color: #00ffff;">do</span> spp = 1,10
-     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_points_stab</span>(status, istats, solution, eq, y_iv, param, a4, b4, c4, spp)
+     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps_between</span>(status, istats, solution, eq, y_iv, param, a4, b4, c4, spp)
      <span style="color: #00ffff;">write</span> (filename, <span style="color: #fa8072;">'("step_order_vs_error_04_",i2.2,".csv")'</span>) spp
      <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #00ffff;">trim</span>(filename))
 
-     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_points_stab</span>(status, istats, solution, eq, y_iv, param, a9, b9, c9, spp)
+     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps_between</span>(status, istats, solution, eq, y_iv, param, a9, b9, c9, spp)
      <span style="color: #00ffff;">write</span> (filename, <span style="color: #fa8072;">'("step_order_vs_error_09_",i2.2,".csv")'</span>) spp
      <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #00ffff;">trim</span>(filename))
   <span style="color: #00ffff;">end do</span>

@@ -127,7 +127,7 @@ file:pics/step_too_far_tfit.png
 program step_too_far
 
   use :: mrkiss_config,          only: rk, istats_size
-  use :: mrkiss_solvers_wt,      only: steps_fixed_stab
+  use :: mrkiss_solvers_wt,      only: fixed_t_steps
   use :: mrkiss_utils,           only: print_solution
   use :: mrkiss_erk_kutta_4,     only: a, b, c
 
@@ -147,7 +147,7 @@ program step_too_far
   do sso = 1000,2100
      num_pts = 1.005_rk ** sso
      print '("sso=",i4," num_pts=",i0)', sso, num_pts
-     call steps_fixed_stab(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
+     call fixed_t_steps(status, istats, solution, eq, t_iv, y_iv, param, a, b, c, max_pts_o=num_pts, t_end_o=t_end)
      call print_solution(status, solution, filename_o="step_too_far.csv", tag_o=sso, append_o=append)
      append = .true.
   end do
@@ -193,6 +193,7 @@ solDat <- fread("step_too_far.csv") %>%
 # Plot the raw results.
 gp <- ggplot(solDat) +
   geom_line( aes(x=delta, y=erry), col='indianred3') +
+  geom_point( aes(x=delta, y=erry), col='brown4', size=0.25) +
   scale_y_log10() +
   scale_x_log10() +
   labs(title='Accuracy: Step Size Vs. Total Error', 

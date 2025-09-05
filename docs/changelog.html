@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-29 Fri 14:33 -->
+<!-- 2025-09-05 Fri 17:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS changelog</title>
@@ -208,38 +208,6 @@
 <style>pre.example { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; font-family: Lucida Console, monospace; font-size: 80%; background: #404040; color: white; display: block; padding: 0em; border: 2px solid black; }</style>
 <style>blockquote { margin-bottom: 0.5em; padding: 0.5em; background-color: #FFF8DC; border-left: 2px solid #A5573E; border-left-color: rgb(255, 228, 102); display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 5em; margin-inline-end: 5em; } </style>
 <style>#content { max-width: 60em; }</style>
-<script>
-  window.MathJax = {
-    tex: {
-      ams: {
-        multlineWidth: '85%'
-      },
-      tags: 'ams',
-      tagSide: 'right',
-      tagIndent: '.8em'
-    },
-    chtml: {
-      scale: 1.0,
-      displayAlign: 'center',
-      displayIndent: '0em'
-    },
-    svg: {
-      scale: 1.0,
-      displayAlign: 'center',
-      displayIndent: '0em'
-    },
-    output: {
-      font: 'mathjax-modern',
-      displayOverflow: 'overflow'
-    }
-  };
-</script>
-
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -264,12 +232,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-29 14:33:39</i></td>
+<td class="org-left"><i>2025-09-05 17:02:07</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-29 14:33:42</i></td>
+<td class="org-left"><i>2025-09-05 17:02:09</i></td>
 </tr>
 </tbody>
 </table>
@@ -293,58 +261,51 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <div id="outline-container-latest" class="outline-2">
 <h2 id="latest"><span class="section-number-2">1.</span> Changes On HEAD Since Last Release TEMPLATE</h2>
 <div class="outline-text-2" id="text-latest">
+<p>
+This release is a major refactor:
+</p>
 <ul class="org-ul">
-<li>Fixed Bugs
+<li>Renamed solvers:
 <ul class="org-ul">
-<li>dp54 unit test.</li>
+<li>Single step: step_rk4, step_rkf45, step_dp54, step_all, step_one, step_richardson</li>
+<li>High level: fixed_t_steps, fixed_y_steps, sloppy_fixed_y_steps, adaptive_steps</li>
+<li>Meta: fixed_t_steps_between, interpolate_solution</li>
 </ul></li>
-<li>Known Issues
+<li>Any routine that worked with etabs, now works with an arbitrary number of embedded methods</li>
+<li>All solvers now take uniform tableau arguments</li>
+<li>All tableaux now have:
 <ul class="org-ul">
-<li>N/A</li>
+<li>A single b matrix instead of vectors for each method</li>
+<li>A p vector for the order of each method</li>
+<li>An se vector for the number of steps for each method</li>
+<li>m &#x2013; the number of methods</li>
 </ul></li>
-<li>API breaking Changes
+<li>Tableau Data
 <ul class="org-ul">
-<li>print_solution: Default for prt_titles_o changed from .TRUE. to .NOT. append_o.</li>
+<li>Machine readable tableaux for all methods
+<ul class="org-ul">
+<li>Tab separated, dense matrices</li>
+<li>Support algebraic expressions for entries (rational numbers, roots, etc&#x2026;)</li>
+<li>Example Maple worksheets to create these kinds of files</li>
 </ul></li>
-<li>Deprecated functionality
+<li>Maple procedures to read tableaux, and
 <ul class="org-ul">
-<li>N/A</li>
+<li>Process them for inclusion into Fortran &amp; C</li>
+<li>Produce stability region plots</li>
+<li>Produce stability star plots</li>
+<li>Produce numerator and denominator polynomials for stability functions</li>
+<li>Compute roots for stability function numerator and denominator</li>
 </ul></li>
-<li>New functionality
-<ul class="org-ul">
-<li>mrkiss_erk_nystrom_5.f90</li>
 </ul></li>
 <li>Documentation
 <ul class="org-ul">
-<li>Changed \par to @par in Doxygen comments.</li>
-<li>Updated index.org RK methods tables.</li>
-<li>Added stability region images to doxygen</li>
+<li>Doxygen comments now consistently use @ instead of \</li>
+<li>All tableau modules now have stability graphs</li>
+<li>Updated the tableau tables in index.org</li>
 </ul></li>
 <li>Examples
 <ul class="org-ul">
-<li>New
-<ul class="org-ul">
-<li>step_too_small.f90</li>
-</ul></li>
-<li>Updated
-<ul class="org-ul">
-<li>N/A</li>
-</ul></li>
-</ul></li>
-<li>Tests
-<ul class="org-ul">
-<li>New
-<ul class="org-ul">
-<li>N/A</li>
-</ul></li>
-<li>Updated
-<ul class="org-ul">
-<li>tc_make_make.rb now removes test case selector lines that don't match.</li>
-</ul></li>
-</ul></li>
-<li>Miscellaneous
-<ul class="org-ul">
-<li>Added stability region and order star graphs to maple worksheets</li>
+<li>Added step_too_small.f90</li>
 </ul></li>
 </ul>
 </div>

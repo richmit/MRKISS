@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-29 Fri 14:32 -->
+<!-- 2025-09-05 Fri 16:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-29 14:29:24</i></td>
+<td class="org-left"><i>2025-09-05 16:54:09</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-29 14:32:28</i></td>
+<td class="org-left"><i>2025-09-05 16:54:09</i></td>
 </tr>
 </tbody>
 </table>
@@ -287,12 +287,7 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#voc-def">2. Vocabulary &amp; Definitions</a></li>
 <li><a href="#features">3. Features &amp; Requirements</a></li>
-<li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a>
-<ul>
-<li><a href="#def-method-stab">4.1. Non-embedded Methods</a></li>
-<li><a href="#def-method-etab">4.2. Embedded Method</a></li>
-</ul>
-</li>
+<li><a href="#def-method">4. Defining Runge-Kutta Methods in <code>MRKISS</code></a></li>
 <li><a href="#predefinedrk">5. Predefined Runge-Kutta Methods in <code>MRKISS</code></a>
 <ul>
 <li><a href="#def-premethod-stab">5.1. Predefined Non-embedded Methods</a></li>
@@ -320,12 +315,11 @@ Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </li>
 <li><a href="#test-mrkiss">12. <code>MRKISS</code> Testing</a>
 <ul>
-<li><a href="#test-mrkiss-ref-one-step">12.1. Refrence One Step Solvers</a></li>
+<li><a href="#test-mrkiss-ref-one-step">12.1. Reference One Step Solvers</a></li>
 <li><a href="#test-mrkiss-tab-ok">12.2. Tableau Plausibility Tests</a></li>
 <li><a href="#test-mrkiss-homo-tab-ok">12.3. Autonomous Solvers and More Tableau Plausibility Tests</a></li>
-<li><a href="#test-mrkiss-rich">12.4. Richardson Extrapolation</a></li>
-<li><a href="#test-mrkiss-short">12.5. Short Stages</a></li>
-<li><a href="#test-mrkiss-examples">12.6. Examples Are Tests Too</a></li>
+<li><a href="#test-mrkiss-short">12.4. Short Stages</a></li>
+<li><a href="#test-mrkiss-examples">12.5. Examples Are Tests Too</a></li>
 </ul>
 </li>
 <li><a href="#faq">13. FAQ</a>
@@ -358,8 +352,8 @@ and <b>experiment with</b> explicit Runge-Kutta methods.
 From a feature standpoint this library doesn't do anything you can't find in more comprehensive packages like
 <a href="https://www.mitchr.me/SS/tools/index.html#lib-sci">SUNDIALS</a> or <a href="https://www.mitchr.me/SS/tools/index.html#imath-inla">Julia</a>'s
 <code>DifferentialEquations.jl</code>; however, it has the rather charming feature of being super simple and self contained.  This makes it ideal for sharing results and
-code with others others without asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things
-up and and running quickly when moving to a new supercomputer, cloud, or HPC cluster.
+code with others without asking them to recreate my technical computing environment or learn about new software.  It also makes it easy to get things up and
+and running quickly when moving to a new supercomputer, cloud, or HPC cluster.
 </p>
 
 <p>
@@ -370,7 +364,7 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
 <pre class="src src-f90"><span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">minimal</span>
 
   <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, istats_size
-  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab
+  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: fixed_t_steps
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
 
@@ -383,7 +377,7 @@ Here is a complete example in 23 lines that solves <a href="https://www.mitchr.m
   <span style="color: #63b8ff;">real</span>(kind=rk)            ::<span style="color: #7fffd4;"> solution(7, 10000)</span>
   <span style="color: #63b8ff;">integer</span>                  ::<span style="color: #7fffd4;"> status, istats(istats_size)</span>
 
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_end_o=t_end)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"minimal.csv"</span>)
 
 <span style="color: #00ffff;">contains</span>
@@ -417,17 +411,22 @@ If you just want to jump in, then take a look at the <a href="#qs-min">Quick Sta
 <h2 id="voc-def"><span class="section-number-2">2.</span> Vocabulary &amp; Definitions</h2>
 <div class="outline-text-2" id="text-voc-def">
 <p>
-Before discussing the software, it is best if we define the problem we are solving and fix some definitions and notation.  I use the notation from this
-section throughout this document.
+Before discussing the software, it is best if we define the problem we are solving and fix some definitions and notation &#x2013; notation that is used throughout
+the source code and documentation.
 </p>
 
 <p>
-<b>Solving an ODE (Ordenary Differental Equation):</b><br />
+Please note that the material below deviates from the standard presentation of Runge-Kutta methods and the Butcher tableau.  In particular we dispense with
+separate \(\mathbf{b}\) vectors per method, the silly hats, and express most of the computations in terms of linear algebra.  
+</p>
+
+<p>
+<b>Solving an ODE (Ordinary Differential Equation):</b><br />
 </p>
 <blockquote>
 <p>
-We wish to compute values for an unknown function \(\mathbf{y}:\mathbb{R}\rightarrow\mathbb{R}^n\) on some interval \([t_0, t_\mathrm{max}]\) given an
-initial value \(\mathbf{y}(t_0)=\mathbf{y_0}\) and an implicit equation  involving \(t\), \(\mathbf{y}\), and it's derivatives:
+We wish to compute values for an unknown function \(\mathbf{y}:\mathbb{R}\rightarrow\mathbb{R}^n\) on some interval \([t_\mathrm{iv}, t_\mathrm{max}]\) given an
+initial value \(\mathbf{y}(t_\mathrm{iv})=\mathbf{y_\mathrm{iv}}\) and an implicit equation  involving \(t\), \(\mathbf{y}\), and it's derivatives:
 </p>
 
 <p>
@@ -468,62 +467,129 @@ We define an \(s\)-stage embedded explicit Runge-Kutta method via a set of coeff
 
 <p>
 \[ \begin{array}{l|llll}
-     c_1              & a_{11}      & a_{12}      & \dots  & a_{1s}      \\
-     c_2              & a_{21}      & a_{22}      & \dots  & a_{2s}      \\
-     c_3              & a_{31}      & a_{32}      & \dots  & a_{3s}      \\
-     \vdots           & \vdots      & \vdots      & \ddots & \vdots      \\
-     c_s              & a_{s1}      & a_{s2}      & \dots  & a_{ss}      \\
-     \hline                                       
-     \rule{0pt}{12pt} & \check{b}_1 & \check{b}_2 & \dots  & \check{b}_s \\
-                      &   \hat{b}_1 &   \hat{b}_2 & \dots  &   \hat{b}_s \\
+     c_1              & a_{1,1}  & a_{1,2}  & \dots  & a_{1,s}  \\
+     c_2              & a_{2,1}  & a_{2,2}  & \dots  & a_{2,s}  \\
+     c_3              & a_{3,1}  & a_{3,2}  & \dots  & a_{3,s}  \\
+     \vdots           & \vdots   & \vdots   & \ddots & \vdots   \\
+     c_s              & a_{s,1}  & a_{s,2}  & \dots  & a_{s,s}  \\
+     \hline                                 
+     \rule{0pt}{12pt} & b_{1,1}  & b_{1,2}  & \dots  & b_{1,s}  \\
+                      & \vdots   & \vdots   & \ddots & \vdots   \\
+                      & b_{m,1}  & b_{m,2}  & \dots  & b_{m,s}  \\
    \end{array} \]
 </p>
 
 <p>
-Explicit methods, which are the focus of <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>, have \(c_1=0\) and \(a_{ij}=0\) for \(i\le j\).  
+We reference the blocks of the tableau as (Note \(\mathbf{b}\) is transposed compared to the tableau):
 </p>
 
 <p>
-The word <i>embedded</i> indicates that we actually have two explicit Runge-Kutta methods using the same \(\mathbf{a}\) matrix and \(\mathbf{c}\) vector.  That is
-to say each \(\mathbf{b}\) vector defines a unique, explicit Runge-Kutta method.  <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> supports both embedded and
-non-embedded (no \(\mathbf{\hat{b}}\) vector defined) methods.  At least one of \(\check{b}_s\) and \(\hat{b}_s\) must be non-zero for the overall method to
-be considered \(s\)-stage; however, if one of them has \(k\) trailing zeros the Runge-Kutta method associated with that vector is said to be a \(s-k\)-stage
-method.  We use \(\check{s}\) for the stage count of the \(\mathbf{\check{b}}\) method and \(\hat{s}\) for the \(\mathbf{\hat{b}}\) method.
+\[ \mathbf{a} = \begin{bmatrix} 
+                  a_{1,1}  & a_{1,2}  & \dots  & a_{1,s}  \\
+                  a_{2,1}  & a_{2,2}  & \dots  & a_{2,s}  \\
+                  a_{3,1}  & a_{3,2}  & \dots  & a_{3,s}  \\
+                  \vdots   & \vdots   & \ddots & \vdots   \\
+                  a_{s,1}  & a_{s,2}  & \dots  & a_{s,s}  
+                \end{bmatrix}  
+   \,\,\,\,\,\,\,\,
+   \mathbf{c} = \begin{bmatrix} 
+                  c_{1}  \\
+                  c_{2}  \\
+                  c_{3}  \\
+                  \vdots \\
+                  c_{s}  
+                \end{bmatrix}  
+   \,\,\,\,\,\,\,\,
+   \mathbf{b} = \begin{bmatrix} 
+                  b_{1,1}  & \dots  & b_{1,m}  \\
+                  b_{2,1}  & \dots  & b_{2,m}  \\
+                  b_{3,1}  & \dots  & b_{3,m}  \\
+                  \vdots   & \ddots & \vdots   \\
+                  b_{s,1}  & \dots  & b_{s,m}  
+                \end{bmatrix}  
+              = \begin{bmatrix} 
+                  \vert          &        & \vert        \\
+                  \mathbf{b}_1   & \dots  & \mathbf{b}_m \\
+                  \vert          &        & \vert        \\
+                \end{bmatrix}  
+\]
 </p>
 
 <p>
-Given \(\Delta{t}\) and initial conditions (\(t_0\) and \(\mathbf{y_0}\)), we may form an approximation of \(\mathbf{y}(t_0+\Delta{t})\) as:
+Note we use \(\mathbf{b}_i\) with an index to indicate the \(i\)-th column of the matrix, and \(b_{i,j}\) to indicate the \(i,j\)-th element of the matrix.
 </p>
 
 <p>
-\[ \mathbf{y}(t_0+\Delta{t}) \approx \mathbf{y_0}+\mathbf{\Delta\check{y}} \] 
+The word <i>embedded</i> is used to indicate that the tableau actually defines \(m\) Runge-Kutta methods &#x2013; one for each column of \(\mathbf{b}\).  The most common
+cases are \(m=1\) and \(m=2\) with the first being most commonly used for simple, fixed step size solvers and second most commonly used for adaptive step size
+solvers.
 </p>
 
 <p>
-and, for embedded methods, an estimate of this approximation's error from:
+We say the overall number of stages for the entire <i>embedded</i> method is \(s\), but the number of stages required for an individual method associated with a
+column of \(\mathbf{b}\) might be lower if that column has trailing zeros.  If a column has \(k\) trailing zeros the Runge-Kutta method associated with that
+column has\(s-k\) stages.
 </p>
 
 <p>
-\[\vert\mathbf{\Delta\check{y}} - \mathbf{\Delta\hat{y}} \vert\]
+Our goal is to compute values of \(\mathbf{y}(t)\) for \(t\in[t_\mathrm{iv}, t_\mathrm{max}]\).  We are given the value of \(\mathbf{y}(t_\mathrm{iv})\).  So
+we define a small, positive value \(\Delta{t}\in\mathbb{R}\), and attempt to find \(\mathbf{\Delta{y}}\) such that
+\(\mathbf{y}(t_\mathrm{iv})+\mathbf{\Delta{y}}\approx\mathbf{y}(t_\mathrm{iv}+\Delta{t})\).
 </p>
 
 <p>
-With \(\mathbf{\Delta\check{y}}\) and \(\mathbf{\Delta\hat{y}}\) (we only have \(\mathbf{\Delta\hat{y}}\) for embedded methods) computed as follows:
+We begin by defining an \(s\times s\) matrix \(\mathbf{k}\):
 </p>
 
 <p>
-\[ \begin{array}{l}
-        \mathbf{\Delta\check{y}} = \Delta{t}\sum_{i=1}^s \check{b}_i \mathbf{k}_i    \\
-        \mathbf{\Delta\hat{y}}   = \Delta{t}\sum_{i=1}^s \hat{b}_i   \mathbf{k}_i    \\
-   \end{array} \]
+\[ \mathbf{a} = \begin{bmatrix} 
+                  k_{1,1}  & k_{1,2}  & \dots  & k_{1,s}  \\
+                  k_{2,1}  & k_{2,2}  & \dots  & k_{2,s}  \\
+                  k_{3,1}  & k_{3,2}  & \dots  & k_{3,s}  \\
+                  \vdots   & \vdots   & \ddots & \vdots   \\
+                  k_{s,1}  & k_{s,2}  & \dots  & k_{s,s}  
+                \end{bmatrix}  
+              = \begin{bmatrix} 
+                  \vert          &        & \vert        \\
+                  \mathbf{k}_1   & \dots  & \mathbf{k}_s \\
+                  \vert          &        & \vert        \\
+                \end{bmatrix}  
+\]
 </p>
 
 <p>
-and the \(\mathbf{k}_i\) defined as:
+Using
 </p>
 
 <p>
-\[ \mathbf{k}_i = \mathbf{f}\left(t + c_i \Delta{t},\, \mathbf{y} + \Delta{t} \sum_{j=1}^{i-1} a_{ij} \mathbf{k}_j\right) \]
+\[ \mathbf{k}_i = \mathbf{f}\left(t + c_i \Delta{t},\, \mathbf{y} + \Delta{t} \mathbf{k}_{1..s,1..i} \mathbf{a}_{1..i,1..i}  \right) \]
+</p>
+
+<p>
+Explicit methods, which are the focus of <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>, have \(c_1=0\) and \(a_{ij}=0\) for \(i\le j\).  Therefore
+\(\mathbf{k}_1 = \mathbf{f}(t,\, \mathbf{y})\), and each subsequent \(\mathbf{k}\) value may be computed in sequence.
+</p>
+
+<p>
+Each column of \(\mathbf{k}\mathbf{b}\) forms a \(\mathbf{\Delta{y}}\) we can use to approximate \(\mathbf{y}(t_\mathrm{iv}+\Delta{t})\):
+</p>
+
+<p>
+\[ \mathbf{k}\mathbf{b} = \begin{bmatrix} 
+                            \vert                 &        & \vert                \\
+                            \mathbf{\Delta{y}}_1  & \dots  & \mathbf{\Delta{y}}_m \\
+                            \vert                 &        & \vert                \\
+                          \end{bmatrix}  
+\]
+</p>
+
+<p>
+If we use \(\mathbf{\Delta{y}}_1\) to approximate \(\mathbf{y}(t_\mathrm{iv}+\Delta{t})\), then we can use \(\mathbf{\Delta{y}}_2\) to approximate
+the error like this:
+</p>
+
+<p>
+\[\vert\mathbf{\Delta{y}}_1 - \mathbf{\Delta{y}}_2 \vert\]
 </p>
 
 <p>
@@ -531,23 +597,19 @@ We say that a Runge-Kutta method is of order \(p\in\mathbb{Z_+}=\{i\in\mathbb{Z}
 \(\mathcal{O}(\Delta{t}^{p+1})\) and the accumulated error of multiple steps is of order \(\mathcal{O}(\Delta{t}^{p})\).  This abuse of big-O terminology is
 traditionally also extended to an abuse of big-O notation by saying the Runge-Kutta method is \(\mathcal{O}(p)\).
 </p>
-
-<p>
-The \(\mathbf{\check{b}}\) method is \(\mathcal{O}(\check{p})\) and the \(\mathbf{\hat{b}}\) method is \(\mathcal{O}(\hat{p})\).
-</p>
 </div>
 </div>
 <div id="outline-container-features" class="outline-2">
 <h2 id="features"><span class="section-number-2">3.</span> Features &amp; Requirements</h2>
 <div class="outline-text-2" id="text-features">
 <p>
-<b>The IVPs I work with are generally pretty well behavied</b>
+<b>The IVPs I work with are generally pretty well behaved</b>
 </p>
 
 <ul class="org-ul">
 <li>Non-stiff</li>
 <li>Time forward (\(\Delta{t} \ge 0\))</li>
-<li>Defined by a small (&lt;50) set of equations expressable in closed form.</li>
+<li>Defined by a small (&lt;50) set of equations expressible in closed form.</li>
 </ul>
 
 <p>
@@ -562,22 +624,37 @@ see this in the code and feature set of the library.
 
 <ul class="org-ul">
 <li>Simple to use for simple problems.</li>
-<li>Easily create custom solvers for the, admittedly bizarre, demands of generative art.</li>
 <li>Graceful response to evaluation failure in derivative functions</li>
 <li>A good selection of predefined RK methods</li>
-<li>Easy to use, hardwired methods for <i>fixed step size</i> visualization use cases:
+<li>Standard, adaptive step solver with programmable step processing:</li>
+<li>Easy deployment &amp; sharing
 <ul class="org-ul">
-<li>Fixed \(t\) step size solvers</li>
-<li>Fixed \(\mathbf{y}\)-space step size solvers</li>
+<li>Easy to compile and tune for a new hardware architectures.</li>
+<li>Zero external dependencies<a href="#faq-deps">[*</a>] except a Fortran compiler.</li>
+<li>100% standard Fortran that works with various compilers.</li>
+<li>Simple text output that can be compressed and sent back home or shared with others.</li>
 </ul></li>
-<li>Solutions include derivative values for visualization tools.</li>
-<li>Interpolate entire solutions to new time points (Hermite &amp; linear).</li>
-<li>Programmable step processing.  Examples:
+<li>Runge-Kutta Research
 <ul class="org-ul">
-<li>Stop the routine if the solution curve is too long in \(\mathbf{y}\)-space</li>
-<li>Stop the routine if the step delta, or some components of it, are too long in \(\mathbf{y}\)-space</li>
-<li>Stop the routine if the solution has returned to the IV</li>
-<li>Stop the routine if the solution intersects itself</li>
+<li>Try out new RK methods by simply feeding the solvers a Butcher tableau.</li>
+<li>Directly accessible one step routines for assembling custom solvers.</li>
+<li>Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.</li>
+<li>Individual access to each method in an embedded tableau, and control over how each is used.</li>
+<li>Machine readable butcher tableau data and Maple worksheets to process that data.</li>
+<li>A few of the RK methods included are of historical or research interest &#x2013; not necessarily very practical.</li>
+</ul></li>
+<li>Generative art and visualization functionality
+<ul class="org-ul">
+<li>Solutions include derivative values for visualization tools.</li>
+<li>Programmable step processing tuned for visualization problems.
+<ul class="org-ul">
+<li>Stopping integration.  Examples:
+<ul class="org-ul">
+<li>If the solution curve is too long in \(\mathbf{y}\)-space</li>
+<li>If the step delta, or some components of it, are too long in \(\mathbf{y}\)-space</li>
+<li>If the solution has returned to the IV</li>
+<li>If the solution intersects itself</li>
+</ul></li>
 <li>Provide an alternate \(\Delta{t}\) and redo the step based on some condition.</li>
 <li>Trigger a bisection search for a \(\Delta{t}\) fitting some condition based on t-space and/or \(\mathbf{y}\)-space.  Examples:
 <ul class="org-ul">
@@ -586,21 +663,13 @@ see this in the code and feature set of the library.
 <li>Find where a step approaches closest to a point (ex: like the problem's IV)</li>
 </ul></li>
 </ul></li>
-<li>Runge-Kutta Research
+<li>Easy to use, hardwired methods for <i>fixed step size</i> visualization use cases:
 <ul class="org-ul">
-<li>Try out new RK methods by simply feeding the solvers a Butcher tableau.</li>
-<li>Directly accessible one step routines for assembling custom solvers.</li>
-<li>Simple code flow to facilitate instrumentation and deep runtime analysis and reporting.</li>
-<li>Individual access to each method in an embedded tableau, and control over how each is used.</li>
-<li>Maple worksheets with rational values, variable floating point approximations, and stability graphs for every Tableau.</li>
-<li>A few of the RK methods included are of historical or research interest &#x2013; not necessarily very practical.</li>
+<li>Fixed \(t\) step size solvers</li>
+<li>Fixed \(\mathbf{y}\) step size solver with hard bounds on length error</li>
+<li>Fixed \(\mathbf{y}\) step size solver with soft bounds on length error</li>
 </ul></li>
-<li>Easy deployment &amp; sharing
-<ul class="org-ul">
-<li>Easy to compile and tune for a new hardware architectures.</li>
-<li>Zero external dependencies<a href="#faq-deps">[*</a>] except a Fortran compiler.</li>
-<li>100% standard Fortran that works with various compilers.</li>
-<li>Simple text output that can be compressed and sent back home or shared with others.</li>
+<li>Interpolate entire solutions to new time points (Hermite &amp; linear).</li>
 </ul></li>
 </ul>
 
@@ -614,7 +683,7 @@ numerical techniques and related software.  For the IVPs we are interested in th
 themselves generally dominate the computation time.  This changes things quite dramatically.  For example, techniques like embedded polynomial schemes for
 intrastep interpolation designed to minimize function evaluation may actually perform worse than simply making more Runge-Kutta steps for our problems!  As
 another example, performing iterative algorithms, like bisection, directly on the Runge-Kutta method itself is quite practical.  Keeping this in mind will
-reduce the number of "<i>WTH?!?!</i>" moments you have while reading the code, and will keep you from applying some features, like <code>steps_condy_stab()</code>, to
+reduce the number of "<i>WTH?!?!</i>" moments you have while reading the code, and will keep you from applying some features, like <code>fixed_y_steps()</code>, to
 problems that <b>do</b> have difficult derivatives to compute.
 </p>
 
@@ -628,45 +697,81 @@ While <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> provid
 <h2 id="def-method"><span class="section-number-2">4.</span> Defining Runge-Kutta Methods in <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></h2>
 <div class="outline-text-2" id="text-def-method">
 <p>
-In <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> an explicit Runge-Kutta method is specified by directly providing the Butcher tableau via arguments to
+In <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> explicit Runge-Kutta methods are specified by directly providing the Butcher tableau via arguments to
 subroutines.
 </p>
-</div>
-<div id="outline-container-def-method-stab" class="outline-3">
-<h3 id="def-method-stab"><span class="section-number-3">4.1.</span> Non-embedded Methods</h3>
-<div class="outline-text-3" id="text-def-method-stab">
-<ul class="org-ul">
-<li><code>a</code>  &#x2013; The \(\mathbf{a}\) matrix.</li>
-<li><code>c</code>  &#x2013; The \(\mathbf{c}\) vector.</li>
-<li><code>p</code>  &#x2013; The order of the methd, \(\check{p}\)</li>
-<li><code>b</code>  &#x2013; The \(\mathbf{\check{b}}\) vector.</li>
-</ul>
 
-<p>
-Wherever arguments <code>a</code>, <code>c</code>, or <code>b</code> appear together, they must have consistent sizes, and the value of <code>p</code> must be a positive integer.
-</p>
-</div>
-</div>
-<div id="outline-container-def-method-etab" class="outline-3">
-<h3 id="def-method-etab"><span class="section-number-3">4.2.</span> Embedded Method</h3>
-<div class="outline-text-3" id="text-def-method-etab">
-<p>
-Instead of a single <code>b</code> and <code>p</code> argument, we have <code>b1</code>, <code>p1</code>, <code>b2</code>, and <code>p2</code>.
-</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" align="center">
 
-<ul class="org-ul">
-<li><code>a</code>  &#x2013; The \(\mathbf{a}\) matrix.</li>
-<li><code>c</code>  &#x2013; The \(\mathbf{c}\) vector.</li>
-<li><code>b1</code> &#x2013; The \(\mathbf{\check{b}}\) vector.</li>
-<li><code>p1</code> &#x2013; The order of the <code>b1</code> method, \(\check{p}\).</li>
-<li><code>b2</code> &#x2013; The \(\mathbf{\hat{b}}\) vector (only for embedded methods).</li>
-<li><code>p2</code> &#x2013; The order of the <code>b2</code> method, \(\hat{p}\).</li>
-</ul>
 
-<p>
-Wherever arguments <code>a</code>, <code>c</code>, or <code>b</code> appear together, they must have consistent sizes, and the values of <code>p1</code> and <code>p2</code> must be a positive integers.
-</p>
-</div>
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Parameter</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-left">Type</th>
+<th scope="col" class="org-left">Shape</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>a</code></td>
+<td class="org-left">The \(\mathbf{a}\) matrix.</td>
+<td class="org-left">Real</td>
+<td class="org-left">rank 2</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>b</code></td>
+<td class="org-left">The \(\mathbf{b}\) matrix.</td>
+<td class="org-left">Real</td>
+<td class="org-left">rank 2</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>c</code></td>
+<td class="org-left">The \(\mathbf{c}\) vector.</td>
+<td class="org-left">Real</td>
+<td class="org-left">rank 2</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>p</code></td>
+<td class="org-left">The order of each embedded method</td>
+<td class="org-left">Integer</td>
+<td class="org-left">rank 1</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>se</code></td>
+<td class="org-left">Number of steps for each embedded method</td>
+<td class="org-left">Integer</td>
+<td class="org-left">rank 1</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>s</code></td>
+<td class="org-left">Overall number of steps for the entire tableau</td>
+<td class="org-left">Integer</td>
+<td class="org-left">scalar</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>m</code></td>
+<td class="org-left">The number of embedded methods</td>
+<td class="org-left">Integer</td>
+<td class="org-left">scalar</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="outline-container-predefinedrk" class="outline-2">
@@ -675,19 +780,7 @@ Wherever arguments <code>a</code>, <code>c</code>, or <code>b</code> appear toge
 <p>
 <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides several predefined methods in modules found in the
 "<a href="https://github.com/richmit/MRKISS/blob/master/lib"><code>MRKISS/lib/</code></a>" directory.  Each module defines a single tableau via parameters with names mirroring
-the Butcher Tableau arguments documented in the <a href="#def-method">previous section</a>.  In addition, these modules also have a parameter containing the number of
-stages for the overall method and the number of stages for any embedded method that differs from the overall method.
-</p>
-
-<ul class="org-ul">
-<li><code>s</code>   &#x2013; The number of stages for the entire method, \(s\)</li>
-<li><code>s1</code>  &#x2013; The number of stages for the <code>b1</code> method, \(\check{s}\), is provided when \(s\neq\check{s}\).</li>
-<li><code>s2</code>  &#x2013; The number of stages for the <code>b2</code> method, \(\hat{s}\), is provided when \(s\neq\hat{s}\).</li>
-</ul>
-
-<p>
-In some special cases an EERK may have more than two methods embedded.  If so you may find variables for these additional methods following the same naming
-conventions.  See <a href="https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_eerk_cash_karp_5_4.f90"><code>mrkiss_eerk_cash_karp_5_4.f90</code></a> for an example.
+the Butcher Tableau arguments documented in the <a href="#def-method">previous section</a>.  
 </p>
 
 <p>
@@ -695,7 +788,7 @@ The modules follow a simple naming conventions:
 </p>
 <ul class="org-ul">
 <li>They have one of two prefixes.  <b><code>mrkiss_eerk_</code></b> for <i>embedded</i> and <b><code>mrkiss_erk_</code></b> for non-embedded.</li>
-<li>The names end with underscore separated integers indicating the orders of the \(\mathbf{\check{b}}\) and \(\mathbf{\hat{b}}\) methods.</li>
+<li>The names end with underscore separated integers indicating the orders of the first two methods.</li>
 </ul>
 
 <p>
@@ -718,7 +811,13 @@ To make all this concrete, here is what one of these modules looks like (<code>m
 <span style="color: #ffa500;">!!</span>
 <span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">Known Aliases: 'RK4' (OrdinaryDiffEq.jl), 'RK41' (Butcher), &amp; 'The Runge-Kutta Method'.</span>
 <span style="color: #ffa500;">!!</span>
-<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">@image html erk_kutta_4-stab.gif</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">@image html erk_kutta_4-stab.png</span>
+<span style="color: #ffa500;">!!</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">@par Stability Image Links</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">&lt;a href="erk_kutta_4-stab.png"&gt;  &lt;img src="erk_kutta_4-stab.png"  width="256px"&gt; &lt;/a&gt;</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">&lt;a href="erk_kutta_4-astab.png"&gt; &lt;img src="erk_kutta_4-astab.png" width="256px"&gt; &lt;/a&gt;</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">&lt;a href="erk_kutta_4-star1.png"&gt; &lt;img src="erk_kutta_4-star1.png" width="256px"&gt; &lt;/a&gt;</span>
+<span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">&lt;a href="erk_kutta_4-star2.png"&gt; &lt;img src="erk_kutta_4-star2.png" width="256px"&gt; &lt;/a&gt;</span>
 <span style="color: #ffa500;">!!</span>
 <span style="color: #ffa500;">!! </span><span style="color: #ff7f24;">@par References:</span>
 <span style="color: #ffa500;">!!  </span><span style="color: #ff7f24;">- Kutta (1901); Beitrag Zur N\"herungsweisen Integration Totaler Differentialgleichungen; Z. Math. Phys. 46; p435-53</span>
@@ -732,17 +831,21 @@ To make all this concrete, here is what one of these modules looks like (<code>m
   <span style="color: #00ffff;">public</span>
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The order of the overall method</span>
   <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> s      = 4</span>
+  <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; Number of methods</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> m      = 1</span>
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The @f$\mathbf{a}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> a(s,s) = reshape([ 0.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
-<span style="color: #7fffd4;">                                                    1.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
-<span style="color: #7fffd4;">                                                    0.0_rk, 1.0_rk, 0.0_rk, 0.0_rk,  </span><span style="color: #00ffff;">&amp;</span>
-<span style="color: #7fffd4;">                                                    0.0_rk, 0.0_rk, 2.0_rk, 0.0_rk], [s, s]) / 2.0_rk</span>
+<span style="color: #7fffd4;">       </span>&amp;                                            1.0_rk, 0.0_rk, 0.0_rk, 0.0_rk,  <span style="color: #00ffff;">&amp;</span>
+       &amp;                                            0.0_rk, 1.0_rk, 0.0_rk, 0.0_rk,  <span style="color: #00ffff;">&amp;</span>
+       &amp;                                            0.0_rk, 0.0_rk, 2.0_rk, 0.0_rk], [s, s]) / 2.0_rk
+  <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource</span>
+  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> b(s,m) = reshape([ 1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk], [s, m]) / 6.0_rk</span>
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The @f$\mathbf{c}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource</span>
   <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> c(s)   = [         0.0_rk, 1.0_rk, 1.0_rk, 2.0_rk]          / 2.0_rk</span>
-  <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The order of the method</span>
-  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> p      = 4</span>
-  <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The @f$\mathbf{b}@f$ matrix for the Butcher Tableau. @hideinitializer @showinlinesource</span>
-  <span style="color: #63b8ff;">real</span>(kind=rk),    <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> b(s)   = [         1.0_rk, 2.0_rk, 2.0_rk, 1.0_rk]          / 6.0_rk</span>
+  <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; The method orders</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> p(m)   = [4]</span>
+  <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">&gt; Number of stages for each method</span>
+  <span style="color: #63b8ff;">integer</span>,          <span style="color: #00ffff;">parameter</span> ::<span style="color: #7fffd4;"> se(m)  = [4]</span>
 <span style="color: #00ffff;">end module</span> <span style="color: #00fa9a; font-weight: bold;">mrkiss_erk_kutta_4</span>
 </pre>
 </div>
@@ -753,17 +856,16 @@ Also note all the zeros.  KISS!  Seriously, it takes up a tiny bit of extra spac
 </p>
 
 <p>
-Each embedded method defines two Runge-Kutta methods.  Normally these two methods are used in conjunction to simultaneously estimate the solution and the
-error.  In this library, the <code>p1</code> &amp; <code>b1</code> method is recommended for approximating the solution while the <code>p2</code> &amp; <code>b2</code> method should be used to estimate error.
-This is a recommendation, and is in no way enforced by the library.  When the higher order method is used for the solution, we say we are using <i>local
-extrapolation</i>.  Note that each of the methods in an embedded Butcher tableau may be used individually as a non-embedded method.
+Each embedded method defines at least two Runge-Kutta methods.  Normally the first two methods are used in conjunction to simultaneously estimate the solution
+and the error.  In this library, first method is recommended for approximating the solution while the second method should be used to estimate error.  This is
+a recommendation, and is in no way enforced by the library.  When the higher order method is used for the solution, we say we are using <i>local extrapolation</i>.
+Note that each of the methods in an embedded Butcher tableau may be used individually as a non-embedded method.
 </p>
 
 <p>
-In addition to the module files, several maple worksheets may be found in the
-"<a href="https://github.com/richmit/MRKISS/blob/master/rk_methods_maple"><code>MRKISS/rk_methods_maple/</code></a>" directory.  The filenames mirror the names of the modules.
-These worksheets contain the coefficients for the method's Butcher tableau, code to convert the coefficients into floating point values, and a plot of the
-method's stability region.
+In addition to the module files, each tableau may be found in the
+"<a href="https://github.com/richmit/MRKISS/blob/master/rk_methods_maple"><code>MRKISS/rk_methods_maple/</code></a>" directory along with several Maple worksheets to manipulate
+them.  The filenames mirror the names of the modules.
 </p>
 
 <p>
@@ -1028,7 +1130,7 @@ i.e. it may well become a future <b>BOO</b>.  Not the contents of the <b>Status<
 <h2 id="ode-func"><span class="section-number-2">6.</span> Providing ODE Equations For Solvers</h2>
 <div class="outline-text-2" id="text-ode-func">
 <p>
-The equation to be solved is implimented in a user provided subroutine with one of the following two signatures:
+The equation to be solved is implemented in a user provided subroutine with one of the following two signatures:
 </p>
 
 <p>
@@ -1080,37 +1182,36 @@ of higher level routines to indicate an error condition.
 <h2 id="hi-solvers"><span class="section-number-2">7.</span> High Level Solvers</h2>
 <div class="outline-text-2" id="text-hi-solvers">
 <dl class="org-dl">
-<dt><code>steps_adapt_etab()</code> uses traditional adaptive step size</dt><dd><ul class="org-ul">
+<dt><code>adaptive_steps()</code> uses traditional adaptive step size</dt><dd><ul class="org-ul">
 <li>This solver is similar to solvers found in other ODE packages.</li>
 <li>It provides somewhat finer control over step size adjustment than is typical.</li>
 <li>Programmable step processing is used to steer the algorithm instead of directly providing solution points.</li>
 <li>A programmable bisection option to solve for interesting \(\Delta{t}\) values.</li>
 <li>End precisely on a \(t\) value or when a maximum \(t\) is exceeded.</li>
 </ul></dd>
-<dt><code>steps_fixed_stab()</code> uses fixed \(\Delta{t}\) steps</dt><dd><ul class="org-ul">
+<dt><code>fixed_t_steps()</code> uses fixed \(\Delta{t}\) steps</dt><dd><ul class="org-ul">
 <li>With most modern ODE packages, this would be done with a "dense output" mode using embedded interpolation.</li>
 <li>This is a good place to start when writing a custom solver.</li>
-<li>This routine has the option to use Richardson extrapolation.</li>
 <li>Common use cases: 
 <ul class="org-ul">
 <li>Curve evolution animations that naturally display velocity.</li>
 </ul></li>
 </ul></dd>
-<dt><code>steps_condy_stab()</code> uses fixed \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
+<dt><code>fixed_y_steps()</code> uses fixed \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
 <li>Produce solution points separated by fixed distance in \(\Delta{\mathbf{y}}\)-space.</li>
 <li>The components of \(\Delta{\mathbf{y}}\) used for length computations may be specified.</li>
 <li>Overall curve length is computed allowing exit options based on total solution length.</li>
 <li>This is a good place to start when writing a custom solver with a bisection step.</li>
 <li>With most modern ODE packages, this would be done with interpolation.  Usually in combination with a step processing routine.</li>
-<li>This could be achieved in <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>  with the programmable step processing and bisection features of <code>steps_adapt_etab()</code>.</li>
+<li>This could be achieved in <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>  with the programmable step processing and bisection features of <code>adaptive_steps()</code>.</li>
 <li>Common use cases: 
 <ul class="org-ul">
 <li>Parametric line/dot plots</li>
 <li>Tube plots and sphere sweeps.</li>
 </ul></li>
 </ul></dd>
-<dt><code>steps_sloppy_condy_stab()</code> adjusts \(\Delta{t}\) to <b>approximate</b> \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
-<li>Much like <code>steps_condy_stab()</code> in practice but faster and less precise.</li>
+<dt><code>sloppy_fixed_y_steps()</code> adjusts \(\Delta{t}\) to <b>approximate</b> \(\Delta{\mathbf{y}}\)-space steps</dt><dd><ul class="org-ul">
+<li>Much like <code>fixed_y_steps()</code> in practice but faster and less precise.</li>
 <li>Computes a test step and then adjusts \(\Delta{t}\) in proportion to the ratio of the desired length vs test length.</li>
 <li>This method has no guarantee for correctness, but generally works well in practice.</li>
 <li>Can operate on every step or just steps that are too long.  This allows for two handy behaviors:
@@ -1120,11 +1221,11 @@ of higher level routines to indicate an error condition.
 </ul></li>
 <li>Common use cases: 
 <ul class="org-ul">
-<li><code>steps_fixed_stab()</code> results have a few steps that are "too long"</li>
+<li><code>fixed_t_steps()</code> results have a few steps that are "too long"</li>
 <li>Additional error control for systems with one or two "hot" coordinates.</li>
 </ul></li>
 </ul></dd>
-<dt><code>steps_points_stab()</code> takes a set of \(t\) values at which to find solutions</dt><dd><ul class="org-ul">
+<dt><code>fixed_t_steps_between()</code> takes a set of \(t\) values at which to find solutions</dt><dd><ul class="org-ul">
 <li>Uses several fixed Runge-Kutta steps to go from each \(t\) value to the next.</li>
 <li>Common use cases: 
 <ul class="org-ul">
@@ -1166,18 +1267,71 @@ The first two arguments of all high level solvers are:
 <li>The documentation for each routine details possible positive status return values.</li>
 <li>See: <code>status_to_origin()</code>  &amp; <code>status_to_message()</code> in the <a href="#utils">Utilities section</a></li>
 </ul></dd>
-<dt><code>istats</code></dt><dd>Statistics regarding the solver run.                
-<ul class="org-ul">
-<li><code>istats(1)</code>: number of computed solution points</li>
-<li><code>istats(2)</code>: number of one_step_* calls not triggerd by an event</li>
-<li><code>istats(3)</code>: number of one_step_* calls triggered by \(\Delta{\mathbf{y}}\) length constraint</li>
-<li><code>istats(4)</code>: number of one_step_* calls triggered by \(\Delta{\mathbf{y}}\) error constraint</li>
-<li><code>istats(5)</code>: number of one_step_* calls triggered by step processing with new \(\Delta{t}\)</li>
-<li><code>istats(6)</code>: number of one_step_* calls triggered by SDF bisection</li>
-<li><code>istats(7)</code>: number of times bisection failed because of max_bisect_o</li>
-<li><code>istats(8)</code>: number of times bisection failed because target was not contained</li>
-</ul></dd>
+<dt><code>istats</code></dt><dd>Statistics regarding the solver run.</dd>
 </dl>
+<div class="org" id="org292c323">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Computed solution points</td>
+<td class="org-left">istats( 1)</td>
+</tr>
+
+<tr>
+<td class="org-left">step_one call count not caused by an event</td>
+<td class="org-left">istats( 2)</td>
+</tr>
+
+<tr>
+<td class="org-left">step_all call count not caused by an event</td>
+<td class="org-left">istats( 3)</td>
+</tr>
+
+<tr>
+<td class="org-left">step_one call count caused by y_delta error constraint</td>
+<td class="org-left">istats( 4)</td>
+</tr>
+
+<tr>
+<td class="org-left">step_all call count caused by y_delta error constraint</td>
+<td class="org-left">istats( 5)</td>
+</tr>
+
+<tr>
+<td class="org-left">step_one call count caused by y_delta length constraint</td>
+<td class="org-left">istats( 6)</td>
+</tr>
+
+<tr>
+<td class="org-left">step_one call count caused by step processing with new t_delta</td>
+<td class="org-left">istats( 7)</td>
+</tr>
+
+<tr>
+<td class="org-left">step_one call count caused by SDF bisection</td>
+<td class="org-left">istats( 8)</td>
+</tr>
+
+<tr>
+<td class="org-left">Bisection failures due to max_bisect_o</td>
+<td class="org-left">istats( 9)</td>
+</tr>
+
+<tr>
+<td class="org-left">Bisection failures due to target containment</td>
+<td class="org-left">istats(10)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
 </div>
 </div>
 <div id="outline-container-hi-solvers-args-sol" class="outline-4">
@@ -1193,7 +1347,7 @@ The third argument of all high level solvers.
 <li>Each <b>column</b> is a solution containing \(t\), \(\mathbf{y}\), and \(\mathbf{y'}\).</li>
 <li>The first column contains \(t\).</li>
 <li>The coordinates of \(\mathbf{y}\) start in column <code>2</code>.</li>
-<li>The coordinates \(\mathbf{y'}\) begin immediatly after the coordinates of \(\mathbf{y}\).</li>
+<li>The coordinates \(\mathbf{y'}\) begin immediately after the coordinates of \(\mathbf{y}\).</li>
 </ul></dd>
 </dl>
 </div>
@@ -1252,11 +1406,17 @@ Behind all of the above high level solvers are single step routines to carry out
 </p>
 
 <ul class="org-ul">
-<li><code>one_step_stab()</code>  non-embedded RK methods</li>
-<li><code>one_richardson_step_stab()</code> uses Richardson extrapolation with non-embedded RK methods</li>
-<li><code>one_step_etab()</code> embedded RK methods</li>
-<li><code>one_step_rk4()</code> hardwired RK4 for unit tests</li>
-<li><code>one_step_rkf45()</code> hardwired RKF45 for unit tests</li>
+<li>Generic RK methods: 
+<ul class="org-ul">
+<li><code>step_one()</code> &#x2013; Use the <b>first</b> RK method in a tableau, returning \(\Delta{\mathbf{y}}\) as a <b>vector</b>.</li>
+<li><code>step_all()</code> &#x2013; Use <b>every</b> RK method in a tableau, returning \(\Delta{\mathbf{y}}\) values as columns in a <b>matrix</b> .</li>
+</ul></li>
+<li>Hardwired RK methods (used mostly for unit tests):
+<ul class="org-ul">
+<li><code>step_one_rk4()</code>: Corresponds to <code>mrkiss_erk_kutta_4</code>. Returns a single \(\Delta{\mathbf{y}}\) as a <b>vector</b>.</li>
+<li><code>step_one_rkf45()</code>: Corresponds to <code>mrkiss_eerk_fehlberg_4_5</code>, Returns a two \(\Delta{\mathbf{y}}\) values as columns of a <b>matrix</b>.</li>
+<li><code>step_one_dp54()</code>: Corresponds to <code>mrkiss_eerk_dormand_prince_5_4</code>. Returns a two \(\Delta{\mathbf{y}}\) values as columns of a <b>matrix</b>.</li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -1270,12 +1430,13 @@ Behind all of the above high level solvers are single step routines to carry out
 <ul class="org-ul">
 <li>Output
 <ul class="org-ul">
-<li><code>print_solution()</code> Print a solution to a file or STDOUT</li>
+<li><code>print_solution()</code> Print a solution to a file or STDOUT.</li>
+<li><code>print_istats()</code> Print an <code>istats</code> array to a file or STDOUT.</li>
 </ul></li>
-<li>Miscilanious
+<li>Miscellaneous
 <ul class="org-ul">
-<li><code>analyze_solution()</code> Compute statstics related to the solution</li>
-<li><code>seq()</code> Compute a fixed delta sequence of values in the same way steps are comptued in <code>steps_fixed_stab()</code></li>
+<li><code>analyze_solution()</code> Compute statistics related to the solution and print the results to STDOUT.</li>
+<li><code>seq()</code> Compute a fixed delta sequence of values in the same way steps are computed in <code>fixed_t_steps()</code></li>
 </ul></li>
 <li>Status Codes
 <ul class="org-ul">
@@ -1296,7 +1457,7 @@ If you are interested playing around with <b><a href="https://github.com/richmit
 <h3 id="qs-min-download"><span class="section-number-3">10.1.</span> Getting <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></h3>
 <div class="outline-text-3" id="text-qs-min-download">
 <p>
-The first step is to download <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  The easiest way is to clone them with git:
+The first step is to download <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b>.  The easiest way is to clone it with git:
 </p>
 
 <div class="org-src-container">
@@ -1305,7 +1466,7 @@ The first step is to download <b><a href="https://github.com/richmit/MRKISS"><co
 </div>
 
 <p>
-Alternatly, you could download the zip file: <a href="https://github.com/richmit/MRKISS/archive/refs/heads/master.zip">MRKISS</a>
+Alternately, you could download the zip file: <a href="https://github.com/richmit/MRKISS/archive/refs/heads/master.zip">MRKISS</a>
 </p>
 </div>
 </div>
@@ -1323,11 +1484,15 @@ Change into the <a href="https://github.com/richmit/MRKISS/blob/master/examples"
 </div>
 </div>
 <div id="outline-container-qs-min-makefile" class="outline-4">
-<h4 id="qs-min-makefile"><span class="section-number-4">10.2.1.</span> Using something other than <code>gfortran</code></h4>
+<h4 id="qs-min-makefile"><span class="section-number-4">10.2.1.</span> Setting up make to build an example</h4>
 <div class="outline-text-4" id="text-qs-min-makefile">
 <p>
-This directory contains a <code>makefile</code> used to build all the examples.  This <code>makefile</code> may require modification if you are not using <code>gfortran</code>.  At the top of
-each makefile you will find something like this:
+<b>Note:</b> You can probably skip this entire section if you are are using <code>gfprtran</code> on linux, a mac, or MSYS2 in Windows.
+</p>
+
+<p>
+The <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> directory contains a <code>makefile</code> used to build all the examples.  At the top
+of the makefile you will find something like this:
 </p>
 
 <div class="org-src-container">
@@ -1398,7 +1563,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org76f057c" class="figure">
+<div id="org7d07af4" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1585,7 +1750,7 @@ the test suite.  These targets are documented in the subsections below.
 </p>
 </div>
 <div id="outline-container-test-mrkiss-ref-one-step" class="outline-3">
-<h3 id="test-mrkiss-ref-one-step"><span class="section-number-3">12.1.</span> Refrence One Step Solvers</h3>
+<h3 id="test-mrkiss-ref-one-step"><span class="section-number-3">12.1.</span> Reference One Step Solvers</h3>
 <div class="outline-text-3" id="text-test-mrkiss-ref-one-step">
 <p>
 The production solvers in <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> all consume Butcher tableaux in the <code>mrkiss_erk*</code> and <code>mrkiss_eerk*</code> modules.
@@ -1594,48 +1759,46 @@ Therefore the accuracy of these tableaux are critical to the proper operation of
 
 <p>
 I don't have a way to automatically test that the data in <i>every</i> tableau is correct.  That said, I can check some of the most important ones by comparing
-output of <code>one_step*()</code> solvers using them with hand coded solvers implemented using alternate reference sources.
+output of <code>step_one*()</code> solvers using them with hand coded solvers implemented using alternate reference sources.
 </p>
 
 <p>
 Some of the most used RKs in history are the classical O(4) method (<code>mrkiss_erk_kutta_4</code>), Fehlberg's embedded O(4,5) method (<code>mrkiss_eerk_fehlberg_4_5</code>), and
 Dormand &amp; Prince's embedded O(5,4) method (<code>mrkiss_eerk_dormand_prince_5_4</code>).  To this end the <code>mrkiss_solvers_wt</code> module contains hand written versions of
-these solvers (<code>one_step_rk4_wt()</code>, <code>one_step_rkf45_wt()</code>, &amp; <code>one_step_dp54_wt()</code>). The <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> test suite contains
-three tests corresponding to these hand written solvers:
+these solvers (<code>step_one_rk4_wt()</code>, <code>step_one_rkf45_wt()</code>, &amp; <code>step_one_dp54_wt()</code>). The <a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a> test suite contains
+several tests related to these hand written solvers:
 </p>
 
 <ul class="org-ul">
-<li><code>test_dp54</code> Runs the following tests
+<li><code>test_dp54</code> 
 <ul class="org-ul">
-<li><code>test_dp54_ref_vs_stab_5</code> Test tableau data of the O(5) method vs hand coded results.</li>
-<li><code>test_dp54_ref_vs_stab_4</code> Test tableau data of the O(4) method vs hand coded results.</li>
-<li><code>test_dp54_stab_vs_etab_5</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
-<li><code>test_dp54_stab_vs_etab_4</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
-<li><code>test_dp54_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
+<li>Make sure the hand coded results are identical with:
+<ul class="org-ul">
+<li>Results from <code>step_one()</code> based on the tableau in <code>lib/mrkiss_eerk_dormand_prince_5_4.f90</code>.</li>
+<li>Results from <code>step_all()</code> based on the tableau in <code>lib/mrkiss_eerk_dormand_prince_5_4.f90</code>.</li>
 </ul></li>
-<li><code>test_rkf45</code> Runs the following tests
+<li>Make sure results have not changed from last release.</li>
+</ul></li>
+<li><code>test_rkf45</code> 
 <ul class="org-ul">
-<li><code>test_rkf45_ref_vs_stab_5</code> Test tableau data of the O(5) method vs hand coded results.</li>
-<li><code>test_rkf45_ref_vs_stab_4</code> Test tableau data of the O(4) method vs hand coded results.</li>
-<li><code>test_rkf45_stab_vs_etab_5</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
-<li><code>test_rkf45_stab_vs_etab_4</code> Test consistency of <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> on O(5) method.</li>
-<li><code>test_rkf45_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
+<li>Make sure the hand coded results are identical with:
+<ul class="org-ul">
+<li>Results from <code>step_one()</code> based on the tableau in <code>lib/mrkiss_eerk_fehlberg_4_5.f90</code>.</li>
+<li>Results from <code>step_all()</code> based on the tableau in <code>lib/mrkiss_eerk_fehlberg_4_5.f90</code>.</li>
+</ul></li>
+<li>Make sure results have not changed from last release.</li>
 </ul></li>
 <li><code>test_rk4</code> Runs the following tests
 <ul class="org-ul">
-<li><code>test_rk4_stab_vs_steps</code> Test consistency of <code>steps_fixed_stab_wt()</code> vs hand coded loop.</li>
-<li><code>test_rk4_ref_vs_stab</code> Test tableau data of the method vs hand coded results.</li>
-<li><code>test_rk4_ref_vs_hnd</code> Test hand coded method vs hand computed results.</li>
-<li><code>test_rk4_archive</code> Test new output with archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
+<li>Make sure the hand coded results are identical with:
+<ul class="org-ul">
+<li>Results from <code>step_one()</code> based on the tableau in <code>lib/mrkiss_erk_kutta_4.f90</code>.</li>
 </ul></li>
+<li>Make sure the hand coded results are <i>consistent</i> with computations done by hand (with a pocket calculator).</li>
+<li>Make sure results have not changed from last release.</li>
+</ul></li>
+<li><code>test_ref</code> Make sure the hand coded results from all three solvers are consistent.</li>
 </ul>
-
-<p>
-A note about the tests for consistency between <code>one_step_stab_wt()</code> and <code>one_step_etab_wt()</code> is probably in order.  The subroutine <code>one_step_stab_wt()</code> is
-<i>generated</i> from <code>one_step_etab_wt()</code> &#x2013; see the comment above <code>one_step_etab_wt()</code> in
-<a href="https://github.com/richmit/MRKISS/blob/master/lib/mrkiss_solvers_wt.f90"><code>mrkiss_solvers_wt.f90</code></a> for details.  These tests make sure my code generation is
-working and produces correct results.
-</p>
 </div>
 </div>
 <div id="outline-container-test-mrkiss-tab-ok" class="outline-3">
@@ -1678,7 +1841,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org7ad3358" class="figure">
+<div id="org32ba9ec" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1727,41 +1890,17 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org95ef3e0" class="figure">
+<div id="orged16279" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-test-mrkiss-rich" class="outline-3">
-<h3 id="test-mrkiss-rich"><span class="section-number-3">12.4.</span> Richardson Extrapolation</h3>
-<div class="outline-text-3" id="text-test-mrkiss-rich">
-<p>
-This is another plausibility and change detection test.  This test compares <code>one_step_stab_wt()</code> and <code>one_richardson_step_stab_wt()</code> using <code>mrkiss_erk_euler_1</code>
-as the method.
-</p>
-
-<ul class="org-ul">
-<li><code>test_rich</code> Runs the code and compares the output to archived output in <a href="https://github.com/richmit/MRKISS/blob/master/tests/data"><code>MRKISS/tests/data/</code></a>.</li>
-<li><code>rich_png</code> Produces diagnostic plots for human to verify the behavior is plausible.</li>
-</ul>
-
-<p>
-The primary diagnostic plot is of global error:
-</p>
-
-
-<div id="org61b28a2" class="figure">
-<p><a href="pics/rich_error.png" width="90%" align="center"><img src="pics/rich_error.png" alt="rich_error.png" width="90%" align="center" /></a>
-</p>
-</div>
-</div>
-</div>
 <div id="outline-container-test-mrkiss-short" class="outline-3">
-<h3 id="test-mrkiss-short"><span class="section-number-3">12.5.</span> Short Stages</h3>
+<h3 id="test-mrkiss-short"><span class="section-number-3">12.4.</span> Short Stages</h3>
 <div class="outline-text-3" id="text-test-mrkiss-short">
 <p>
-The <code>one_step_stab*()</code>, <code>steps_fixed*()</code>, <code>steps_condy*()</code>, and <code>steps_sloppy_condy*()</code> solvers all use the <code>b</code> vector to determine the number of stages &#x2013;
+The <code>step_one*()</code>, <code>fixed_t_steps*()</code>, <code>steps_condy*()</code>, and <code>steps_sloppy_condy*()</code> solvers all use the <code>b</code> vector to determine the number of stages &#x2013;
 not the size of <code>a</code>.  This allows us to use a shorter <code>b</code> vector cutting off trailing zero entries.  This test makes sure this functionality works.
 </p>
 
@@ -1775,24 +1914,19 @@ not the size of <code>a</code>.  This allows us to use a shorter <code>b</code> 
 </div>
 </div>
 <div id="outline-container-test-mrkiss-examples" class="outline-3">
-<h3 id="test-mrkiss-examples"><span class="section-number-3">12.6.</span> Examples Are Tests Too</h3>
+<h3 id="test-mrkiss-examples"><span class="section-number-3">12.5.</span> Examples Are Tests Too</h3>
 <div class="outline-text-3" id="text-test-mrkiss-examples">
 <p>
 The <a href="https://github.com/richmit/MRKISS/blob/master/examples/tdata"><code>MRKISS/examples/tdata/</code></a> directory in
 <a href="https://github.com/richmit/MRKISS/blob/master/examples"><code>MRKISS/examples/</code></a> is used to archive old output files generated from running the examples.  The
 <a href="https://github.com/richmit/MRKISS/blob/master/examples/makefile"><code>makefile</code></a> contains tests to run the examples and compare the results to what was
-archived.  These tests serve as "change detection" helping me to identify the introduction of bugs.
+archived.  These tests serve as "change detection" helping me to identify the introduction of bugs. All of these tests may be run with the <code>tests</code> target:
 </p>
 
-<ul class="org-ul">
-<li><code>tests</code> Runs the following tests
-<ul class="org-ul">
-<li><code>minimal_test</code> Creates and checks minimal.csv.</li>
-<li><code>brusselator_test</code> Creates and checks brusselator.csv.</li>
-<li><code>lorenz_test</code> Creates and checks the CSV files created by <code>lorenz</code>.</li>
-<li><code>three_body_test</code> Creates and checks the CSV files created by <code>three_body</code>.</li>
-</ul></li>
-</ul>
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #00fa9a; font-weight: bold;">tests</span> : test_minimal test_brusselator test_lorenz test_three_body test_step_order_vs_error
+</pre>
+</div>
 </div>
 </div>
 </div>
@@ -1812,7 +1946,7 @@ MRKISS =&gt; MR RK KISS =&gt; Mitch Richling's Runge-Kutta Keep It Super Simple
 </p>
 
 <p>
-It amuses me, perhaps more than it should, having such a complex name for a super simple library.
+Having such a complex name for a super simple library amuses me&#x2026; Perhaps more than it should&#x2026;
 </p>
 </div>
 </div>
@@ -1839,8 +1973,8 @@ For a long time I have had a few annoyances related available packages:
 </ul>
 
 <p>
-The "last straw" was the frustration of spending four hours trying to get my normal technical computing environment deployed to a new supercomputer with
-insufficient user privilege and a broken user space package manager.
+Then one day I spent four hours trying to get my normal technical computing environment deployed to a new supercomputer with insufficient user privilege and a
+broken user space package manager.  I wrote this library over the following weekend. ;)
 </p>
 
 <p>
@@ -1940,11 +2074,11 @@ graphs.  None of these tools are required to compile and use the package because
 
 <dl class="org-dl">
 <dt>POSIX shell (<code>sh</code>)</dt><dd><ul class="org-ul">
-<li>Generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Generate <code>step_one_wt</code> from <code>step_one_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
 <li>Some makefile constructs for code generation, plotting, testing, etc&#x2026;</li>
 </ul></dd>
 <dt>sed</dt><dd><ul class="org-ul">
-<li>Generate <code>one_step_stab_wt</code> from <code>one_step_etab_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Generate <code>step_one_wt</code> from <code>step_one_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
 <li>Generate <code>mrkiss_solvers_nt.f90</code> from <code>mrkiss_solvers_wt.f90</code>.</li>
 </ul></dd>
 <dt>ruby</dt><dd><ul class="org-ul">
@@ -1991,10 +2125,10 @@ differ from other commits in terms of quality control.  Release commits:
 <ul class="org-ul">
 <li>Unit tests are all successful.  For information on platforms tested, see <a href="#faq-rel-platforms">What platforms are known to work?</a>.</li>
 <li>Development documentation (changelog &amp; roadmap) are both up to date.</li>
-<li>Example documentation is newer than the corrisponding example soruce.</li>
+<li>Example documentation is newer than the corresponding example source.</li>
 <li>Doxygen documentation
 <ul class="org-ul">
-<li>Has been generated after the most reciently modified source code file.</li>
+<li>Has been generated after the most recently modified source code file.</li>
 <li>Has a version number that matches the tag.</li>
 <li>Has been deployed to by web site.</li>
 </ul></li>

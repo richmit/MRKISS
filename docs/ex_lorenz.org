@@ -71,7 +71,7 @@ with the spacing of the solution points.  This example uses the [[https://www.mi
 :END:
 
 For animations of the evolution of the curve we normally use a fixed \(\Delta{t}\) because this preserves time in the animation. That is to say we can see the
-point tracing the curve speed up and slow down as the derivative changes.  We can produce such a solution with the ~steps_fixed_stab~ solvers. Here is an
+point tracing the curve speed up and slow down as the derivative changes.  We can produce such a solution with the ~fixed_t_steps~ solvers. Here is an
 example of such a curve:
 
 #+ATTR_HTML: :width 90% :align center
@@ -95,7 +95,7 @@ The solutions used in the images above were created by this snippet of [[https:/
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  call fixed_t_steps(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
@@ -116,11 +116,11 @@ Solutions with constant \(\mathbf{\Delta{y}}\) steps are also used for /constant
 with groups of stream lines.
 
 *[[https://github.com/richmit/MRKISS][~MRKISS~]]* provides two solvers for this situation:
-  - ~steps_condy_stab~ ::
+  - ~fixed_y_steps~ ::
     This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
     minimum and maximum bounds for \(\Delta{t}\) which will bracket the correct value.  The resulting curves are perfect for high quality sphere sweep
     renders.
-  - ~steps_sloppy_condy_stab~ ::
+  - ~sloppy_fixed_y_steps~ ::
     This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is /much/ faster than the previous option.  The
     resulting solutions frequently good enough for a sphere sweep.
 
@@ -140,15 +140,15 @@ These images were created by the following snippet of [[https://github.com/richm
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  call sloppy_fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
 
   ! This solution will have y-delta approximately equal to 1.0 for all steps.
   print '(a)', repeat('*', 120)
-  print '(a)', "steps_sloppy_condy_stab short"
-  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
+  print '(a)', "sloppy_fixed_y_steps short"
+  call sloppy_fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
                                   adj_short_o=1)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
@@ -167,8 +167,8 @@ When rendering curves as tubes most tools render a sphere at each point and a cy
 appear smooth, and so we wish to avoid large values for \(\mathbf{\Delta{y}}\).  When rendering tubes we /are/ more sensitive to excessive numbers of short
 intervals because every point impacts rendering speed.  In addition, with some tools, very short intervals can introduce rendering glitches.
 
-Of course we can use ~steps_condy_stab~ and ~steps_sloppy_condy_stab(..., adj_short_o=1)~ as we did in the [[#fixed-y][previous section]]; however,
-~steps_sloppy_condy_stab~ without the ~adj_short_o=1~ argument that may be more useful.  Without this option only steps longer than the target are adjusted.
+Of course we can use ~fixed_y_steps~ and ~sloppy_fixed_y_steps(..., adj_short_o=1)~ as we did in the [[#fixed-y][previous section]]; however,
+~sloppy_fixed_y_steps~ without the ~adj_short_o=1~ argument that may be more useful.  Without this option only steps longer than the target are adjusted.
 
 Here is the result:
 
@@ -183,7 +183,7 @@ The solution used in the image above was created by this snippet of [[https://gi
 
 #+RESULTS:
 #+begin_src f90 :eval never :tangle no
-  call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  call fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
@@ -207,7 +207,7 @@ The solution used in the image above was created by this snippet of [[https://gi
 #+begin_src f90 :eval never :tangle no
 program lorenz
   use :: mrkiss_config,      only: rk, istats_size
-  use :: mrkiss_solvers_nt,  only: steps_fixed_stab, steps_sloppy_condy_stab, steps_condy_stab
+  use :: mrkiss_solvers_nt,  only: fixed_t_steps, sloppy_fixed_y_steps, fixed_y_steps
   use :: mrkiss_utils,       only: print_solution, print_istats, status_to_message
   use :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -226,23 +226,23 @@ program lorenz
   ! This solution will have fixed t-delta, but no control over y-delta.
   print '(a)', repeat('*', 120)
   print '(a)', "Fixed t_delta run"
-  call steps_fixed_stab(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  call fixed_t_steps(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_fixed.csv", end_o=istats(1), t_min_o=50.0_rk)
 
   ! This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.
   print '(a)', repeat('*', 120)
-  print '(a)', "steps_sloppy_condy_stab"
-  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  print '(a)', "sloppy_fixed_y_steps"
+  call sloppy_fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_sloppy_condy.csv", end_o=istats(1), t_min_o=50.0_rk)
 
   ! This solution will have y-delta approximately equal to 1.0 for all steps.
   print '(a)', repeat('*', 120)
-  print '(a)', "steps_sloppy_condy_stab short"
-  call steps_sloppy_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
+  print '(a)', "sloppy_fixed_y_steps short"
+  call sloppy_fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, &
                                   adj_short_o=1)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
@@ -250,8 +250,8 @@ program lorenz
 
   ! This solution will have y-delta equal to 1.0 for all steps.
   print '(a)', repeat('*', 120)
-  print '(a)', "steps_condy_stab"
-  call steps_condy_stab(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  print '(a)', "fixed_y_steps"
+  call fixed_y_steps(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   print '(a)', status_to_message(status)
   call print_istats(status, istats)
   call print_solution(status, solution, filename_o="lorenz_condy.csv", end_o=istats(1), t_min_o=50.0_rk)

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-20 Wed 13:32 -->
+<!-- 2025-09-05 Fri 17:00 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>The Langford Attractor</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-20 13:32:51</i></td>
+<td class="org-left"><i>2025-09-05 17:00:28</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-20 13:32:52</i></td>
+<td class="org-left"><i>2025-09-05 17:00:29</i></td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +302,7 @@ The code for this example is found in <a href="https://github.com/richmit/MRKISS
 Additionally the code may be found at the end of this document in the section <a href="#full-code">Full Code Listing</a>.
 </p>
 
-<div class="org" id="org3c21583">
+<div class="org" id="org1b6116c">
 <p>
 The Langford attractor is governed by the following equations:
 </p>
@@ -367,7 +367,7 @@ We can solve and output the solution to a CSV file like this:
 
 <div class="org-src-container">
 <pre class="src src-f90">y_iv = [0.1_rk, 0.0_rk, 0.0_rk]
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"langford_fixed.csv"</span>, end_o=istats(1))
 </pre>
 </div>
@@ -377,7 +377,7 @@ If we then load the data into Paraview, we get something like this:
 </p>
 
 
-<div id="orgc5f0601" class="figure">
+<div id="orge8e9168" class="figure">
 <p><img src="pics/langford_pv_fixed.png" alt="langford_pv_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -387,7 +387,7 @@ We could also graph it with GNUplot:
 </p>
 
 
-<div id="org70f7f76" class="figure">
+<div id="org7569d94" class="figure">
 <p><img src="pics/langford_fixed.png" alt="langford_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -403,7 +403,7 @@ structure.  We can do that, in parallel, with this little bit of code:
    y_iv(1) = <span style="color: #00ffff;">cos</span>(i * 2 * pi / num_lines) * 0.15_rk + 0.2_rk
    y_iv(2) = <span style="color: #00ffff;">sin</span>(i * 2 * pi / num_lines) * 0.15_rk
    y_iv(3) = 0.05_rk
-   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
+   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
    <span style="color: #00ffff;">write</span> (filename, <span style="color: #fa8072;">'("langford_",i2.2,".csv")'</span>) i
    <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #00ffff;">trim</span>(filename), end_o=istats(1), tag_o=i)
    <span style="color: #00ffff;">print</span> *, <span style="color: #fa8072;">'Line Complete: '</span>, i
@@ -417,7 +417,7 @@ We can take the resulting 20 CSV files, load them up into Paraview, and animate 
 </p>
 
 
-<div id="org7cc684b" class="figure">
+<div id="orgc234ba6" class="figure">
 <p><img src="pics/langford_mov_050.gif" alt="langford_mov_050.gif" align="center" />
 </p>
 </div>
@@ -433,7 +433,7 @@ We can take the resulting 20 CSV files, load them up into Paraview, and animate 
 <div class="org-src-container">
 <pre class="src src-f90"><span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">langford</span>
   <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, istats_size
-  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab
+  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: fixed_t_steps
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
   <span style="color: #00ffff;">use</span> :: omp_lib
@@ -452,7 +452,7 @@ We can take the resulting 20 CSV files, load them up into Paraview, and animate 
   <span style="color: #63b8ff;">character</span>(len=512)        ::<span style="color: #7fffd4;"> filename</span>
 
   y_iv = [0.1_rk, 0.0_rk, 0.0_rk]
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=15000)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"langford_fixed.csv"</span>, end_o=istats(1))
 
   <span style="color: #ffa500;">!</span><span style="color: #ff7f24;">$OMP PARALLEL DO private(solution, status, istats, filename, i, y_iv)</span>
@@ -460,7 +460,7 @@ We can take the resulting 20 CSV files, load them up into Paraview, and animate 
      y_iv(1) = <span style="color: #00ffff;">cos</span>(i * 2 * pi / num_lines) * 0.15_rk + 0.2_rk
      y_iv(2) = <span style="color: #00ffff;">sin</span>(i * 2 * pi / num_lines) * 0.15_rk
      y_iv(3) = 0.05_rk
-     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
+     <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, max_pts_o=350)
      <span style="color: #00ffff;">write</span> (filename, <span style="color: #fa8072;">'("langford_",i2.2,".csv")'</span>) i
      <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #00ffff;">trim</span>(filename), end_o=istats(1), tag_o=i)
      <span style="color: #00ffff;">print</span> *, <span style="color: #fa8072;">'Line Complete: '</span>, i

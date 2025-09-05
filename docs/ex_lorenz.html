@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-21 Thu 13:29 -->
+<!-- 2025-09-05 Fri 17:00 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>The Lorenz Attractor</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-21 13:29:44</i></td>
+<td class="org-left"><i>2025-09-04 13:34:20</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-21 13:29:45</i></td>
+<td class="org-left"><i>2025-09-05 17:00:44</i></td>
 </tr>
 </tbody>
 </table>
@@ -317,12 +317,12 @@ with the spacing of the solution points.  This example uses the <a href="https:/
 <div class="outline-text-2" id="text-fixed-t">
 <p>
 For animations of the evolution of the curve we normally use a fixed \(\Delta{t}\) because this preserves time in the animation. That is to say we can see the
-point tracing the curve speed up and slow down as the derivative changes.  We can produce such a solution with the <code>steps_fixed_stab</code> solvers. Here is an
+point tracing the curve speed up and slow down as the derivative changes.  We can produce such a solution with the <code>fixed_t_steps</code> solvers. Here is an
 example of such a curve:
 </p>
 
 
-<div id="orgaf48d47" class="figure">
+<div id="org02fe543" class="figure">
 <p><img src="pics/lorenz_fixed.png" alt="lorenz_fixed.png" width="90%" align="center" />
 </p>
 </div>
@@ -332,7 +332,7 @@ Notice the way some of the steps are much longer than others.  This is especiall
 </p>
 
 
-<div id="orgfed4928" class="figure">
+<div id="org9f80a16" class="figure">
 <p><img src="pics/lorenz_fixed-c.png" alt="lorenz_fixed-c.png" width="90%" align="center" />
 </p>
 </div>
@@ -349,7 +349,7 @@ The solutions used in the images above were created by this snippet of <a href="
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+<pre class="src src-f90"><span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_fixed.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
@@ -377,10 +377,10 @@ with groups of stream lines.
 <b><a href="https://github.com/richmit/MRKISS"><code>MRKISS</code></a></b> provides two solvers for this situation:
 </p>
 <dl class="org-dl">
-<dt><code>steps_condy_stab</code></dt><dd>This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
+<dt><code>fixed_y_steps</code></dt><dd>This solver uses considerable compute resources to insure that every step is the same length to a user provided tolerance.  It requires the user provide
 minimum and maximum bounds for \(\Delta{t}\) which will bracket the correct value.  The resulting curves are perfect for high quality sphere sweep
 renders.</dd>
-<dt><code>steps_sloppy_condy_stab</code></dt><dd>This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is <i>much</i> faster than the previous option.  The
+<dt><code>sloppy_fixed_y_steps</code></dt><dd>This solver only approximates optimal \(\Delta{t}\).  In exchange for this inaccuracy, this routine is <i>much</i> faster than the previous option.  The
 resulting solutions frequently good enough for a sphere sweep.</dd>
 </dl>
 
@@ -389,13 +389,13 @@ Here are some representative samples:
 </p>
 
 
-<div id="org2f402f9" class="figure">
+<div id="org3f2545e" class="figure">
 <p><img src="pics/lorenz_condy.png" alt="lorenz_condy.png" width="90%" align="center" />
 </p>
 </div>
 
 
-<div id="org0f1cabc" class="figure">
+<div id="org8a84606" class="figure">
 <p><img src="pics/lorenz_sloppy_condy_short.png" alt="lorenz_sloppy_condy_short.png" width="90%" align="center" />
 </p>
 </div>
@@ -405,15 +405,15 @@ These images were created by the following snippet of <a href="https://github.co
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+<pre class="src src-f90"><span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">sloppy_fixed_y_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 
 <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately equal to 1.0 for all steps.</span>
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
-<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_sloppy_condy_stab short"</span>
-<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
+<span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"sloppy_fixed_y_steps short"</span>
+<span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">sloppy_fixed_y_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
                                 adj_short_o=1)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
@@ -437,8 +437,8 @@ intervals because every point impacts rendering speed.  In addition, with some t
 </p>
 
 <p>
-Of course we can use <code>steps_condy_stab</code> and <code>steps_sloppy_condy_stab(..., adj_short_o=1)</code> as we did in the <a href="#fixed-y">previous section</a>; however,
-<code>steps_sloppy_condy_stab</code> without the <code>adj_short_o=1</code> argument that may be more useful.  Without this option only steps longer than the target are adjusted.
+Of course we can use <code>fixed_y_steps</code> and <code>sloppy_fixed_y_steps(..., adj_short_o=1)</code> as we did in the <a href="#fixed-y">previous section</a>; however,
+<code>sloppy_fixed_y_steps</code> without the <code>adj_short_o=1</code> argument that may be more useful.  Without this option only steps longer than the target are adjusted.
 </p>
 
 <p>
@@ -446,7 +446,7 @@ Here is the result:
 </p>
 
 
-<div id="orgabfe89d" class="figure">
+<div id="orgae5d189" class="figure">
 <p><img src="pics/lorenz_sloppy_condy.png" alt="lorenz_sloppy_condy.png" width="90%" align="center" />
 </p>
 </div>
@@ -456,7 +456,7 @@ The solution used in the image above was created by this snippet of <a href="htt
 </p>
 
 <div class="org-src-container">
-<pre class="src src-f90"><span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+<pre class="src src-f90"><span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_y_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
 <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
 <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
@@ -474,7 +474,7 @@ The solution used in the image above was created by this snippet of <a href="htt
 <div class="org-src-container">
 <pre class="src src-f90"><span style="color: #00ffff;">program</span> <span style="color: #00fa9a; font-weight: bold;">lorenz</span>
   <span style="color: #00ffff;">use</span> :: mrkiss_config,      <span style="color: #00ffff;">only</span>: rk, istats_size
-  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: steps_fixed_stab, steps_sloppy_condy_stab, steps_condy_stab
+  <span style="color: #00ffff;">use</span> :: mrkiss_solvers_nt,  <span style="color: #00ffff;">only</span>: fixed_t_steps, sloppy_fixed_y_steps, fixed_y_steps
   <span style="color: #00ffff;">use</span> :: mrkiss_utils,       <span style="color: #00ffff;">only</span>: print_solution, print_istats, status_to_message
   <span style="color: #00ffff;">use</span> :: mrkiss_erk_kutta_4, <span style="color: #00ffff;">only</span>: a, b, c
 
@@ -493,23 +493,23 @@ The solution used in the image above was created by this snippet of <a href="htt
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have fixed t-delta, but no control over y-delta.</span>
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"Fixed t_delta run"</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_fixed_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_t_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, t_delta_o=t_delta, t_max_o=t_max)
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_fixed.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately capped to a maximum of 1.0 for all steps.</span>
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_sloppy_condy_stab"</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"sloppy_fixed_y_steps"</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">sloppy_fixed_y_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max)
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_sloppy_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
 
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta approximately equal to 1.0 for all steps.</span>
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_sloppy_condy_stab short"</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_sloppy_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"sloppy_fixed_y_steps short"</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">sloppy_fixed_y_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta, t_max_o=t_max, <span style="color: #00ffff;">&amp;</span>
                                   adj_short_o=1)
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
@@ -517,8 +517,8 @@ The solution used in the image above was created by this snippet of <a href="htt
 
   <span style="color: #ffa500;">! </span><span style="color: #ff7f24;">This solution will have y-delta equal to 1.0 for all steps.</span>
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #00ffff;">repeat</span>(<span style="color: #fa8072;">'*'</span>, 120)
-  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"steps_condy_stab"</span>
-  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">steps_condy_stab</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
+  <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, <span style="color: #fa8072;">"fixed_y_steps"</span>
+  <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">fixed_y_steps</span>(status, istats, solution, eq, y_iv, param, a, b, c, 1.0_rk, t_delta*7, t_max_o=t_max)
   <span style="color: #00ffff;">print</span> <span style="color: #fa8072;">'(a)'</span>, status_to_message(status)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_istats</span>(status, istats)
   <span style="color: #00ffff;">call</span> <span style="color: #00fa9a; font-weight: bold;">print_solution</span>(status, solution, filename_o=<span style="color: #fa8072;">"lorenz_condy.csv"</span>, end_o=istats(1), t_min_o=50.0_rk)
