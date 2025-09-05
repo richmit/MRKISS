@@ -7,8 +7,8 @@
          status message: seq: Inconsistant sequence values: step_v_o * (size(t)-1) /= to_v - from_v                                                      
 
             status code: 1248
-          status origin: one_step_one_*t                 
-         status message: one_step_one_*t: UNKNOWN ERROR                                                                                                  
+          status origin: step_one_*t                     
+         status message: step_one_*t: UNKNOWN ERROR                                                                                                      
 
             status code: 10000
           status origin: UNKNOWN SOURCE                  

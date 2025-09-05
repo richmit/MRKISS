@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program rkf45
   use :: mrkiss_config,                  only: rk
-  use :: mrkiss_solvers_wt,              only: one_step_rkf45, one_step_one, one_step_all
+  use :: mrkiss_solvers_wt,              only: step_rkf45, step_one, step_all
   use :: mrkiss_utils,                   only: print_solution
   use :: mrkiss_eerk_fehlberg_4_5,       only: a, b, c
 
@@ -55,7 +55,7 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_rkf45(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     call step_rkf45(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,1) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -64,7 +64,7 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_rkf45(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     call step_rkf45(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,2) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -73,7 +73,7 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_all(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     call step_all(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,1) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -82,7 +82,7 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_all(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     call step_all(status, y_deltas, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_deltas(:,2) ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -91,7 +91,7 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_one(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b(:,1:1), c, t_delta)
+     call step_one(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b(:,1:1), c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -100,7 +100,7 @@ program rkf45
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_step
-     call one_step_one(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b(:,2:2), c, t_delta)
+     call step_one(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b(:,2:2), c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)

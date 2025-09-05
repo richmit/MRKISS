@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program tc1_dormand_prince_5_4_b1
   use :: mrkiss_config,                      only: rk
-  use :: mrkiss_solvers_wt,                  only: one_step_one
+  use :: mrkiss_solvers_wt,                  only: step_one
   use :: mrkiss_eerk_dormand_prince_5_4,     only: a, b, c   ! TCASE_COM: dormand_prince_5_4_b1
 
   implicit none
@@ -61,7 +61,7 @@ program tc1_dormand_prince_5_4_b1
   do step=1,max_steps
      call ysol(status, y_tmp, t_cv, param)
      write (out_io_unit, fmt=fmt) "dormand_prince_5_4_b1", step, t_cv, y_cv, y_tmp, abs(y_tmp-y_cv)
-     call one_step_one(status, y_delta, dy, eq, t_cv, y_cv, param, a, b(:,n:n), c, t_delta)
+     call step_one(status, y_delta, dy, eq, t_cv, y_cv, param, a, b(:,n:n), c, t_delta)
      t_cv = t_cv + t_delta
      y_cv = y_cv + y_delta
   end do

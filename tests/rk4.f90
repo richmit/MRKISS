@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program rk4
   use            :: mrkiss_config,      only: rk, istats_size
-  use            :: mrkiss_solvers_wt,  only: one_step_rk4, one_step_one, fixed_t_steps, fixed_t_steps_between
+  use            :: mrkiss_solvers_wt,  only: step_rk4, step_one, fixed_t_steps, fixed_t_steps_between
   use            :: mrkiss_utils,       only: print_solution
   use            :: mrkiss_erk_kutta_4, only: a, b, c
 
@@ -66,7 +66,7 @@ program rk4
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_pts
-     call one_step_rk4(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
+     call step_rk4(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)
@@ -75,7 +75,7 @@ program rk4
   sol = 0
   sol(1:2,1) = [ t_iv, y_iv ]
   do step=2,max_pts
-     call one_step_one(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
+     call step_one(status, y_delta, sol(3:3,step-1), eq, sol(1,step-1), sol(2:2,step-1), param, a, b, c, t_delta)
      sol(1:2,step) = sol(1:2,step-1) + [ t_delta, y_delta ]
   end do
   call eq(status, sol(3:3,step-1), sol(1,step-1), sol(2:2,step-1), param)

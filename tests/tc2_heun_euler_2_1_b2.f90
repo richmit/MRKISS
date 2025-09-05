@@ -35,7 +35,7 @@
 !----------------------------------------------------------------------------------------------------------------------------------
 program tc2_heun_euler_2_1_b2
   use :: mrkiss_config,                      only: rk
-  use :: mrkiss_solvers_nt,                  only: one_step_all
+  use :: mrkiss_solvers_nt,                  only: step_all
   use :: mrkiss_eerk_heun_euler_2_1,         only: a, b, c   ! TCASE_COM: heun_euler_2_1_b2
 
   implicit none
@@ -61,7 +61,7 @@ program tc2_heun_euler_2_1_b2
   do step=1,max_steps
      call ysol(status, y_tmp, t_cv, param)
      write (out_io_unit, fmt=fmt) "heun_euler_2_1_b2", step, t_cv, y_cv, y_tmp, abs(y_tmp-y_cv)
-     call one_step_all(status, y_deltas, yd, eq, y_cv, param, a, b(:,n:n), c, t_delta)
+     call step_all(status, y_deltas, yd, eq, y_cv, param, a, b(:,n:n), c, t_delta)
      t_cv = t_cv + t_delta
      y_cv = y_cv + y_deltas(:,1)
   end do
