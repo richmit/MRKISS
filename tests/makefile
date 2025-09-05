@@ -74,6 +74,28 @@ $(UTILS_OUTS) &: utils
 test_utils: $(UTILS_OUTS)
 	$(foreach fil,$^,$(FD) -Zdqn -g :[0-9]:X: $(fil) data/$(fil); )
 
+
+####################################################################################################
+rich : rich.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
+	$(FC) $(FFLAGS) rich.f90 $(MRKISS_OBJ_FILES) -o $@
+
+rich.out : rich
+	./rich$(EXE_SUFFIX)
+
+.PHONY: test_rich
+test_rich : rich.out 
+	$(FD) -Zdqn -e 1e-10 rich.out data/rich.out
+REF_OUTS = rk4_ref.out dp54_ref_4.out rkf45_ref_4.out
+
+rich_sol.png rich_error.png &: rich.R rich.out
+	R --no-save --no-echo -q -f rich.R
+.PHONY: test_ref
+test_ref : $(REF_OUTS)
+
+.PHONY: rich_png
+rich_png: rich_sol.png rich_error.png
+	$(IMG_VIEWER) rich_sol.png rich_error.png
+
 ####################################################################################################
 short_b : short_b.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
 	$(FC) $(FFLAGS) short_b.f90 $(MRKISS_OBJ_FILES) -o $@
