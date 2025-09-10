@@ -155,7 +155,7 @@ program three_body
   ! SS-END:adaptive_steps-std:
 
   print '(a)', repeat('*', 120)
-  print '(a)', "Adaptive hermite interpolation run"
+  print '(a)', "Hermite interpolation run"
   sol2 = 0
   ! SS-BEGIN:steps_adapt_int_hermite:
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);                                     ! Create new t values
@@ -165,7 +165,7 @@ program three_body
   ! SS-END:steps_adapt_int_hermite:
 
   print '(a)', repeat('*', 120)
-  print '(a)', "Adaptive linear interpolation run"
+  print '(a)', "Linear interpolation run"
   sol2 = 0
   ! SS-BEGIN:steps_adapt_int_linear:
   call seq(status, sol2(1,:), from_o=0.0_rk, to_o=t_end);
