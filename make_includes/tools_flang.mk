@@ -35,11 +35,11 @@
 ifeq ($(OS),Windows_NT)
   AR := ar
   FC := flang
-  FFLAGS := -pedantic -std=f2018
+  FFLAGS := -pedantic -std=f2018 -O3
   FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
 else
   AR := ar
   FC := flang
-  FFLAGS := -pedantic -std=f2018 -Wl,-z,execstack
+  FFLAGS := -pedantic -std=f2018 -O3 -Wl,-z,execstack
   FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
 endif
