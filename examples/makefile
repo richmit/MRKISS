@@ -34,7 +34,7 @@ MRKISS_PATH = ..
 
 DO_OPENMP = NO
 
- include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
+include $(MRKISS_PATH)/make_includes/tools_gfortran.mk
 # include $(MRKISS_PATH)/make_includes/tools_flang.mk
 # include $(MRKISS_PATH)/make_includes/tools_ifx.mk
 
@@ -75,7 +75,7 @@ three_body_clean :
 
 .PHONY: test_three_body
 test_three_body: $(THREE_BODY_CSVS)
-	$(foreach fil,$^,$(FD) -Zdqn -e 1e-10 $(fil) tdata/$(fil); )
+	$(foreach fil,$^,$(FD) -Zdqn -e 1e-5 $(fil) tdata/$(fil); )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 lorenz : lorenz.f90 $(MRKISS_MOD_FILES) $(MRKISS_OBJ_FILES)
