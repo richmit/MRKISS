@@ -1258,6 +1258,15 @@ I have used *[[https://github.com/richmit/MRKISS][~MRKISS~]]* on a variety of pl
 
 When performing a release I test on my primary development system which changes over time.  Below are the platforms I tested for each release:
 
+ - ~2025-09-10~
+   - Microsoft Windows 11 Pro 10.0.26100 Build 26100 running MSYS2
+     - GNU Fortran (Rev6, Built by MSYS2 project) 15.1.0
+     - Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2024.1.0 Build 20240308
+     - flang version 20.1.7 x86_64-w64-windows-gnu posix
+   - Debian 13.0
+     - GNU Fortran (Debian 14.2.0-19) 14.2.0
+     - ifx (IFX) 2025.0.4 20241205 (lorenz_test fails, but it's OK.)
+     - Debian flang-new version 19.1.7 (3) x86_64-pc-linux-gnu posix (lorenz_test fails, but it's OK.)
  - ~2025-08-12~
    - Microsoft Windows 11 Pro 10.0.26100 Build 26100 running MSYS2
      - GNU Fortran (Rev6, Built by MSYS2 project) 15.1.0

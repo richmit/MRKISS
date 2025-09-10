@@ -1,49 +1,51 @@
 
-mrkiss_solvers_nt.f90,608
-     subroutine deq_iface(75,4033
-     subroutine stepp_iface(102,5416
-     subroutine sdf_iface(128,6775
-  subroutine one_step_etab(164,8738
-  subroutine one_step_stab(223,11868
-  subroutine one_richardson_step_stab(288,15359
-  subroutine one_step_rk4(337,17916
-  subroutine one_step_rkf45(377,20007
-  subroutine one_step_dp54(424,22935
-  subroutine steps_fixed_stab(496,27700
-  subroutine steps_condy_stab(638,35989
-  subroutine steps_sloppy_condy_stab(841,47418
-  subroutine steps_adapt_etab(1018,58143
-  subroutine steps_points_stab(1272,71637
-  subroutine interpolate_solution(1372,77876
+mrkiss_solvers_nt.f90,570
+     subroutine deq_iface(75,3965
+     subroutine stepp_iface(102,5348
+     subroutine sdf_iface(128,6707
+  subroutine step_all(162,8454
+  subroutine step_one(215,11113
+  subroutine step_richardson(280,14647
+  subroutine step_rk4(329,17179
+  subroutine step_rkf45(368,19055
+  subroutine step_dp54(414,21853
+  subroutine fixed_t_steps(486,26699
+  subroutine fixed_y_steps(627,34916
+  subroutine sloppy_fixed_y_steps(829,46216
+  subroutine adaptive_steps(1005,56851
+  subroutine fixed_t_steps_between(1264,70486
+  subroutine interpolate_solution(1364,76752
 
-mrkiss_solvers_wt.f90,607
-     subroutine deq_iface(62,3434
-     subroutine stepp_iface(90,4862
-     subroutine sdf_iface(117,6263
-  subroutine one_step_etab(154,8297
-  subroutine one_step_stab(215,11559
-  subroutine one_richardson_step_stab(282,15182
-  subroutine one_step_rk4(333,17863
-  subroutine one_step_rkf45(375,20141
-  subroutine one_step_dp54(424,23308
-  subroutine steps_fixed_stab(498,28308
-  subroutine steps_condy_stab(642,36738
-  subroutine steps_sloppy_condy_stab(847,48319
-  subroutine steps_adapt_etab(1026,59189
-  subroutine steps_points_stab(1281,72775
-  subroutine interpolate_solution(1383,79169
+mrkiss_solvers_wt.f90,569
+     subroutine deq_iface(62,3366
+     subroutine stepp_iface(90,4794
+     subroutine sdf_iface(117,6195
+  subroutine step_all(152,8013
+  subroutine step_one(207,10823
+  subroutine step_richardson(274,14489
+  subroutine step_rk4(325,17145
+  subroutine step_rkf45(366,19208
+  subroutine step_dp54(414,22245
+  subroutine fixed_t_steps(488,27326
+  subroutine fixed_y_steps(631,35684
+  subroutine sloppy_fixed_y_steps(835,47136
+  subroutine adaptive_steps(1013,57916
+  subroutine fixed_t_steps_between(1273,71643
+  subroutine interpolate_solution(1375,78065
 
 mrkiss_utils.f90,143
-  subroutine print_solution(89,5267
-  subroutine print_istats(251,11713
-  subroutine analyze_solution(329,15776
-  subroutine seq(472,23134
+  subroutine print_solution(89,5237
+  subroutine print_istats(252,11721
+  subroutine analyze_solution(330,15784
+  subroutine seq(474,23242
 
 mrkiss_erk_ralston_4.f90,0
 
 mrkiss_erk_ralston_3.f90,0
 
 mrkiss_erk_ralston_2.f90,0
+
+mrkiss_erk_nystrom_5.f90,0
 
 mrkiss_erk_midpoint_2.f90,0
 

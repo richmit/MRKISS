@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-09-05 Fri 16:54 -->
+<!-- 2025-09-10 Wed 16:45 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Library</title>
@@ -267,12 +267,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-09-05 16:54:09</i></td>
+<td class="org-left"><i>2025-09-10 16:45:07</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-09-05 16:54:09</i></td>
+<td class="org-left"><i>2025-09-10 16:45:13</i></td>
 </tr>
 </tbody>
 </table>
@@ -1269,7 +1269,7 @@ The first two arguments of all high level solvers are:
 </ul></dd>
 <dt><code>istats</code></dt><dd>Statistics regarding the solver run.</dd>
 </dl>
-<div class="org" id="org292c323">
+<div class="org" id="org32ec552">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1563,7 +1563,7 @@ curve.  If you have GNU Plot, you can graph it with something like this:
 </div>
 
 
-<div id="org7d07af4" class="figure">
+<div id="org44bfcf8" class="figure">
 <p><a href="pics/lorenz.png" width="90%" align="center"><img src="pics/lorenz.png" alt="lorenz.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1841,7 +1841,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="org32ba9ec" class="figure">
+<div id="org36d27b5" class="figure">
 <p><a href="pics/tc1_plot_error.png" width="90%" align="center"><img src="pics/tc1_plot_error.png" alt="tc1_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -1890,7 +1890,7 @@ The primary diagnostic plot is of global error:
 </p>
 
 
-<div id="orged16279" class="figure">
+<div id="orgdf10e7e" class="figure">
 <p><a href="pics/tc2_plot_error.png" width="90%" align="center"><img src="pics/tc2_plot_error.png" alt="tc2_plot_error.png" width="90%" align="center" /></a>
 </p>
 </div>
@@ -2074,11 +2074,11 @@ graphs.  None of these tools are required to compile and use the package because
 
 <dl class="org-dl">
 <dt>POSIX shell (<code>sh</code>)</dt><dd><ul class="org-ul">
-<li>Generate <code>step_one_wt</code> from <code>step_one_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Generate <code>step_one</code> from <code>step_all</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
 <li>Some makefile constructs for code generation, plotting, testing, etc&#x2026;</li>
 </ul></dd>
 <dt>sed</dt><dd><ul class="org-ul">
-<li>Generate <code>step_one_wt</code> from <code>step_one_wt</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
+<li>Generate <code>step_one</code> from <code>step_all</code> in <code>mrkiss_solvers_wt.f90</code>.</li>
 <li>Generate <code>mrkiss_solvers_nt.f90</code> from <code>mrkiss_solvers_wt.f90</code>.</li>
 </ul></dd>
 <dt>ruby</dt><dd><ul class="org-ul">
@@ -2163,6 +2163,21 @@ When performing a release I test on my primary development system which changes 
 </p>
 
 <ul class="org-ul">
+<li><code>2025-09-10</code>
+<ul class="org-ul">
+<li>Microsoft Windows 11 Pro 10.0.26100 Build 26100 running MSYS2
+<ul class="org-ul">
+<li>GNU Fortran (Rev6, Built by MSYS2 project) 15.1.0</li>
+<li>Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2024.1.0 Build 20240308</li>
+<li>flang version 20.1.7 x86_64-w64-windows-gnu posix</li>
+</ul></li>
+<li>Debian 13.0
+<ul class="org-ul">
+<li>GNU Fortran (Debian 14.2.0-19) 14.2.0</li>
+<li>ifx (IFX) 2025.0.4 20241205 (lorenz_test fails, but it's OK.)</li>
+<li>Debian flang-new version 19.1.7 (3) x86_64-pc-linux-gnu posix (lorenz_test fails, but it's OK.)</li>
+</ul></li>
+</ul></li>
 <li><code>2025-08-12</code>
 <ul class="org-ul">
 <li>Microsoft Windows 11 Pro 10.0.26100 Build 26100 running MSYS2

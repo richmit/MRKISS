@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-12 Tue 16:24 -->
+<!-- 2025-09-10 Wed 16:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS Roadmap</title>
@@ -232,27 +232,27 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-08-12 16:24:51</i></td>
+<td class="org-left"><i>2025-09-05 13:22:11</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-08-12 16:24:52</i></td>
+<td class="org-left"><i>2025-09-10 16:55:01</i></td>
 </tr>
 </tbody>
 </table>
 <p align="center">
 Copyright &copy; 2025 Mitch Richling. All rights reserved.
 </p>
-<div id="outline-container-orgaf2d052" class="outline-2">
-<h2 id="orgaf2d052"><span class="section-number-2">1.</span> Summary</h2>
+<div id="outline-container-org17cd4ec" class="outline-2">
+<h2 id="org17cd4ec"><span class="section-number-2">1.</span> Summary</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 I don't have any specific plans for refactoring, cleanup, or new functionality.  I do have a few examples I would like to add.
 </p>
 
 <ul class="org-ul">
-<li><del>Finalize step-size and error computation in <code>steps_adapt_etab_*t()</code></del> <b>DONE</b></li>
+<li><del>Finalize step-size and error computation in <code>adaptive_steps_*t()</code></del> <b>DONE</b></li>
 <li><del>Add tests for high level solvers</del> <b>CANCELED</b></li>
 <li><del>Add dy to a solution without it already</del> <b>CANCELED</b></li>
 <li><del>Add status -&gt; message function in mrkiss_utils</del> <b>DONE</b></li>
@@ -262,8 +262,8 @@ I don't have any specific plans for refactoring, cleanup, or new functionality. 
 <li><del>Example showing error vs. order</del> <b>CANCELED</b></li>
 <li><del>Multi-solver</del> <b>CANCELED</b>
 <ul class="org-ul">
-<li><del>Give it multiple IVs and produce a steps_fixed_* multi-solution</del> <b>CANCELED</b></li>
-<li><del>Give it multiple PARAMs and produce a steps_fixed_* multi-solution</del> <b>CANCELED</b></li>
+<li><del>Give it multiple IVs and produce a fixed_t_steps_* multi-solution</del> <b>CANCELED</b></li>
+<li><del>Give it multiple PARAMs and produce a fixed_t_steps_* multi-solution</del> <b>CANCELED</b></li>
 <li><del>Run parallel across cores using OpenMP</del> <b>CANCELED</b></li>
 </ul></li>
 <li><del>Message table</del>
@@ -296,7 +296,7 @@ I don't have any specific plans for refactoring, cleanup, or new functionality. 
 <li><del>Compute t-vec with fixed steps.  Given vector for storage, and two of: from, to, t_delta</del> <b>DONE</b></li>
 <li><del>Solver that takes an t_end and n. Computes single solution at t_end using n fixed sized steps</del> <b>DONE</b>
 <ul class="org-ul">
-<li><del>Add single point mode to steps_fixed_*</del> <b>DONE</b></li>
+<li><del>Add single point mode to fixed_t_steps_*</del> <b>DONE</b></li>
 <li><del>Flesh out tests for this feature*</del> <b>DONE</b></li>
 </ul></li>
 <li><del>Consider how to use examples as consistency tests</del> <b>DONE</b></li>
@@ -311,7 +311,7 @@ I don't have any specific plans for refactoring, cleanup, or new functionality. 
 <li><del>BT: <a href="https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7">https://sundials.readthedocs.io/en/v7.4.0/arkode/Butcher_link.html#c.ARKODE_VERNER_10_6_7</a></del> <b>DONE</b></li>
 <li><del>Added ref for Verner's site.</del> <b>DONE</b></li>
 </ul></li>
-<li><del>Create <i>sloppy</i> version of <code>steps_condy_stab_*t</code> called <code>steps_sloppy_condy_stab_*t</code></del> <b>DONE</b></li>
+<li><del>Create <i>sloppy</i> version of <code>fixed_y_steps_*t</code> called <code>sloppy_fixed_y_steps_*t</code></del> <b>DONE</b></li>
 <li><del>Update comments on <code>steps_*</code> solvers to reflect all options and algorithm.</del> <b>DONE</b></li>
 <li><del>Add <code>t_min_o</code> and <code>t_max_o</code> options to <code>print_solution()</code></del> <b>DONE</b></li>
 <li><del>Add example documentation pages</del> <b>DONE</b>
@@ -319,17 +319,17 @@ I don't have any specific plans for refactoring, cleanup, or new functionality. 
 <li><del><code>three_body</code></del> <b>DONE</b></li>
 <li><del><code>lorenz</code></del> <b>DONE</b></li>
 </ul></li>
-<li><del>Add aspect ratio argument to <code>steps_condy_stab_*t()</code></del> <b>CANCELED*</b></li>
-<li><del>Add "sloppy" option to <code>steps_condy_stab_*t</code></del> <b>CANCELED*</b></li>
-<li><del>Add option to not error out on bisection problems in <code>steps_condy_stab_*t()</code></del> <b>DONE</b></li>
-<li><del>Add option to not error out on bisection problems in <code>steps_adapt_etab_*t()</code></del> <b>DONE</b></li>
+<li><del>Add aspect ratio argument to <code>fixed_y_steps_*t()</code></del> <b>CANCELED*</b></li>
+<li><del>Add "sloppy" option to <code>fixed_y_steps_*t</code></del> <b>CANCELED*</b></li>
+<li><del>Add option to not error out on bisection problems in <code>fixed_y_steps_*t()</code></del> <b>DONE</b></li>
+<li><del>Add option to not error out on bisection problems in <code>adaptive_steps_*t()</code></del> <b>DONE</b></li>
 <li><del>Consider "verbosity" options for high level solvers.</del> <b>CANCELED</b></li>
-<li><del>Add option to print diagnostics to <code>steps_condy_stab_*t()</code></del> <b>CANCELED</b></li>
+<li><del>Add option to print diagnostics to <code>fixed_y_steps_*t()</code></del> <b>CANCELED</b></li>
 <li><del>Add <code>istats</code> docs to each solver with components used.</del> <b>DONE</b></li>
 <li><del>Make comment formatting uniform</del> <b>DONE</b></li>
 <li><del>Document all function arguments</del> <b>DONE</b></li>
-<li><del>Compare <code>steps_fixed_stab_wt()</code> to other files in <code>rk4.f90</code></del> <b>DONE</b></li>
-<li><del>Use <code>b1</code> for stage count in <code>one_step_etab_wt()</code>, and <code>b</code> in <code>in one_step_stab_wt()</code></del> <b>DONE</b></li>
+<li><del>Compare <code>fixed_t_steps_wt()</code> to other files in <code>rk4.f90</code></del> <b>DONE</b></li>
+<li><del>Use <code>b1</code> for stage count in <code>step_one_etab_wt()</code>, and <code>b</code> in <code>in step_one_stab_wt()</code></del> <b>DONE</b></li>
 <li><del>Think about how to document b vectors that require fewer stages than in b</del> <b>DONE</b>
 <ul class="org-ul">
 <li><del><code>mrkiss_eerk_bogacki_shampine_3_2.f90 ..... sd1 1</code></del> <b>DONE</b></li>
