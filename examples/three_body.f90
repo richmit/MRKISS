@@ -145,10 +145,11 @@ program three_body
 
   print '(a)', repeat('*', 120)
   print '(a)', "Adaptive run"
+  sol1 = 0
   ! SS-BEGIN:adaptive_steps-std:
   call adaptive_steps(status, istats1, sol1, eq, t_iv, y_iv, param, a, b, c, p, &
                            t_delta_max_o=t_delta*100, t_delta_ini_o=t_delta*20, error_tol_abs_o=[1.0e-9_rk], &
-                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end, t_end_o=t_end);
+                           error_tol_rel_o=[1.0e-6_rk], t_max_o=t_end);
   print '(a)', status_to_message(status)
   call print_istats(status, istats1)
   call print_solution(status, sol1, filename_o="three_body_adaptive_steps-std.csv", end_o=istats1(1))

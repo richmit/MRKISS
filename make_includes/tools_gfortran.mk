@@ -31,34 +31,37 @@
 #  @endparblock
 #########################################################################################################################################################.H.E.##
 
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 ifeq ($(OS),Windows_NT)
+  #FXTRA=-fcheck=all 
+  FXTRA=
   ifeq ($(DO_OPENMP),YES)
     AR := ar	
     FC := gfortran
-    FFLAGS := -fopenmp -O3 -Wsurprising -W -std=f2023
+    FFLAGS := $(FXTRA) -fopenmp -O3 -Wsurprising -W -std=f2023
     FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
   else
     AR := ar	
     FC := gfortran
-    FFLAGS := -O3 -Wsurprising -W -std=f2023
+    FFLAGS := $(FXTRA) -O3 -Wsurprising -W -std=f2023
     FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES)
   endif
 else
+  #FXTRA=-fcheck=all 
+  FXTRA=
   ifeq ($(DO_OPENMP),YES)
     AR := ar	
     FC := gfortran
-    FFLAGS := -fopenmp -O3 -Wsurprising -W -std=f2023 -fPIC
+    FFLAGS := $(FXTRA) -fopenmp -O3 -Wsurprising -W -std=f2023 -fPIC
     FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES) -fPIC
   else
     AR := ar	
     FC := gfortran
-    FFLAGS := -O3 -Wsurprising -W -std=f2023 -fPIC
+    FFLAGS := $(FXTRA) -O3 -Wsurprising -W -std=f2023 -fPIC
     FSHFLG = -o $(MRKISS_SHARED_LIB_FILE) -shared $(MRKISS_OBJ_FILES) -fPIC
   endif
 endif
-
-
 
 # -Wall -- Removed for bug in gfortran 15
 # Should work with: -fdefault-integer-8

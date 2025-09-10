@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-09-05 Fri 17:02 -->
+<!-- 2025-09-10 Wed 15:16 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=1024, initial-scale=1" />
 <title>MRKISS changelog</title>
@@ -232,12 +232,12 @@
 
 <tr>
 <td class="org-right"><b>Updated:</b></td>
-<td class="org-left"><i>2025-09-05 17:02:07</i></td>
+<td class="org-left"><i>2025-09-10 15:16:19</i></td>
 </tr>
 
 <tr>
 <td class="org-right"><b>Generated:</b></td>
-<td class="org-left"><i>2025-09-05 17:02:09</i></td>
+<td class="org-left"><i>2025-09-10 15:16:22</i></td>
 </tr>
 </tbody>
 </table>
@@ -306,6 +306,12 @@ This release is a major refactor:
 <li>Examples
 <ul class="org-ul">
 <li>Added step_too_small.f90</li>
+</ul></li>
+<li>Bugs
+<ul class="org-ul">
+<li>adaptive_steps: Error computation bug (bounds incorrect)</li>
+<li>adaptive_steps: Solution bound overflow (didn't check iteration count)</li>
+<li>adaptive_steps: Added note about ifx compile options and updated make files.</li>
 </ul></li>
 </ul>
 </div>

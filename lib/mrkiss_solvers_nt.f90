@@ -169,7 +169,7 @@ contains
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:,:), c(:), t_delta
     ! Variables
     integer                       :: i, stage
-    real(kind=rk)                 :: k(size(y, 1),size(b, 1)+1), stage_t_delta, y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
+    real(kind=rk)                 :: k(size(y, 1),size(b, 1)), stage_t_delta, y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
     ! Compute k vectors
     call deq(status, dy, y, param)
     if (status > 0) return
@@ -222,7 +222,7 @@ contains
     real(kind=rk),    intent(in)  :: y(:), param(:), a(:,:), b(:,:), c(:), t_delta
     ! Variables
     integer                       :: i, stage
-    real(kind=rk)                 :: k(size(y, 1),size(b, 1)+1), stage_t_delta, y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
+    real(kind=rk)                 :: k(size(y, 1),size(b, 1)), stage_t_delta, y_tmp(size(y, 1)), stage_y_delta(size(y, 1))
     ! Compute k vectors
     call deq(status, dy, y, param)
     if (status > 0) return
@@ -244,6 +244,7 @@ contains
     y_delta = matmul(k, b(:,1))
     status = 0
   end subroutine step_one
+
 
   !--------------------------------------------------------------------------------------------------------------------------------
   !> Compute one Richardson Extrapolation Step.
@@ -939,6 +940,8 @@ contains
   !!   - When @f$m<1@f$, the factor is adjusted by @p t_delta_fac_fdg_o
   !!   - The final value for @f$m@f$ is constrained by @p t_delta_fac_max_o & @p t_delta_fac_min_o.
   !!   - The final value for @f$\Delta{t}@f$ is always constrained by @p t_delta_min_o & @p t_delta_max_o.
+  !!   - This routine is sensitive to compiler optimizations.  For example, ifx requires -fp-model=precise in order to insure
+  !!     consistent results with other compilers -- the results without this option are not incorrect, just different.
   !!
   !! @param status             Exit status
   !!                             | Value     | Description
@@ -1103,7 +1106,7 @@ contains
           if (status > 0) return
           ! Compute new t_delta_nxt based on error estimate.
           y_delta_delta = abs(y1_delta-y2_delta)
-          comb_err_tol  = (error_tol_abs + max(abs(solution(2:, cur_pnt_idx-1)), abs(y_cv + y1_delta)) * error_tol_rel)
+          comb_err_tol  = (error_tol_abs + max(abs(solution(2:(y_dim+1), cur_pnt_idx-1)), abs(y_cv + y1_delta)) * error_tol_rel)
           comb_err_msk  = abs(comb_err_tol) > zero_epsilon
           comb_err_nzc  = count(comb_err_msk)
           if (comb_err_nzc == 0) then

@@ -77,6 +77,10 @@ Copyright \copy {{{time(%Y)}}} Mitch Richling. All rights reserved.
       - Updated the tableau tables in index.org
     - Examples
       - Added step_too_small.f90
+    - Bugs
+      - adaptive_steps: Error computation bug (bounds incorrect)
+      - adaptive_steps: Solution bound overflow (didn't check iteration count)
+      - adaptive_steps: Added note about ifx compile options and updated make files.
 
 * v2025-08-15: Documentation & Cleanup Release
 :PROPERTIES:

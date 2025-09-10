@@ -31,21 +31,26 @@
 #  @endparblock
 #########################################################################################################################################################.H.E.##
 
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 ifeq ($(OS),Windows_NT)
+    #FXTRA=-check:all
+    FXTRA=
 	FC := ifx
 	ifeq ($(DO_OPENMP),YES)
-      FFLAGS := -stand:f23 -Qdiag-disable:5268 -Qopenmp
+      FFLAGS := -stand:f23 $(FXTRA) -warn:all  -fp:precise -O3 -Qdiag-disable:7712 -Qdiag-disable:5268 -Qopenmp
     else	
-      FFLAGS := -stand:f23 -Qdiag-disable:5268
+      FFLAGS := -stand:f23 $(FXTRA) -warn:all -Qdiag-disable:7712 -Qdiag-disable:5268
     endif
 	FSHFLG = -dll -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 else
+    #FXTRA=-check all 
+    FXTRA=
 	FC := ifx
 	ifeq ($(DO_OPENMP),YES)
-      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack -qopenmp -fPIC
+      FFLAGS := -stand f23 $(FXTRA) -warn all -fp-model=precise -O3 -Xlinker -z -Xlinker execstack -qopenmp -fPIC
     else	
-      FFLAGS := -stand f23 -Xlinker -z -Xlinker execstack -fPIC
+      FFLAGS := -stand f23 $(FXTRA) -warn all -fp-model=precise -O3 -Xlinker -z -Xlinker execstack -fPIC
     endif
 	FSHFLG = -fPIC -shared  -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 endif
