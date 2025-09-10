@@ -1022,7 +1022,7 @@ contains
     integer                                          :: max_bisect, sp_end_run, sp_sdf_flags, bs_itr
     logical                                          :: no_bisect_error, t_delta_end_p, comb_err_msk(size(y, 1))
     real(kind=rk)                                    :: t_delta_fac, y_cv(size(y, 1)), y1_delta(size(y, 1)), dy(size(y, 1))
-    real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min, y_deltas(size(y, 1), 2)
+    real(kind=rk)                                    :: y2_delta(size(y, 1)), t_delta_ini, t_delta_min, y_deltas(size(y, 1), size(b, 2))
     real(kind=rk)                                    :: y_delta_delta(size(y, 1)), t_delta_fac_max, t_delta_fac_min
     real(kind=rk)                                    :: t_delta_fac_fdg, t_delta_nxt, sdf_tol, error_tol_abs(size(y, 1))
     real(kind=rk)                                    :: error_tol_rel(size(y, 1)), comb_err_tol(size(y, 1)), t_cv, t_delta
@@ -1077,6 +1077,10 @@ contains
     solution(1, cur_pnt_idx) = t_cv
     solution(2:(2+y_dim-1), cur_pnt_idx) = y_cv
     do
+       ! Finish if we are out of space for points
+       if (cur_pnt_idx >= max_pts) then
+          exit
+       end if
        cur_pnt_idx = cur_pnt_idx  + 1
        ! If close to the end, adjust t_delta to hit t_end_o
        t_delta_end_p = .false.
@@ -1107,7 +1111,7 @@ contains
           else
              t_delta_fac   = (1/sqrt(sum((y_delta_delta / comb_err_tol) ** 2, comb_err_msk) / (comb_err_nzc))) ** (1 + 1/min(p(1), p(2)))
              if (t_delta_fac < 1.0_rk)  t_delta_fac = t_delta_fac * t_delta_fac_fdg
-             if (cur_pnt_idx /= 2)      t_delta_fac = max(t_delta_fac_min, t_delta_fac)
+             if (cur_pnt_idx > 2)       t_delta_fac = max(t_delta_fac_min, t_delta_fac)  ! For all but first step, limit fac
              t_delta_fac = min(t_delta_fac_max, t_delta_fac)
           end if
           t_delta_nxt = t_delta * t_delta_fac
