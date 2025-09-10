@@ -469,6 +469,7 @@ contains
   !! @param to_o       Ending value for @f$t@f$
   !! @param step_o     Delta between valeus
   !! @param max_pts_o  Maximum number of points to produce.  Default: `size(t, 1)`
+  !!                   If max_pts_o < size(t, 1), then elements beyond max_pts_o will be untouched.
   !!
   subroutine seq(status, t, from_o, to_o, step_o, max_pts_o)
     use :: mrkiss_config, only: rk, zero_epsilon
@@ -523,7 +524,9 @@ contains
     end if
     ! Compute seqeunce
     if (status == 0) then
-       t = (/(from_v+i*step_v, i=0,n_v,1)/)
+       do i=0, n_v
+          t(i+1) = from_v+i*step_v
+       end do
     end if
   end subroutine seq
 

@@ -38,9 +38,9 @@ ifeq ($(OS),Windows_NT)
     FXTRA=
 	FC := ifx
 	ifeq ($(DO_OPENMP),YES)
-      FFLAGS := -stand:f23 $(FXTRA) -warn:all  -fp:precise -O3 -Qdiag-disable:7712 -Qdiag-disable:5268 -Qopenmp
+      FFLAGS := -stand:f23 $(FXTRA) -warn:all -fp:precise -O3 -Qdiag-disable:7712 -Qdiag-disable:5268 -Qopenmp
     else	
-      FFLAGS := -stand:f23 $(FXTRA) -warn:all -Qdiag-disable:7712 -Qdiag-disable:5268
+      FFLAGS := -stand:f23 $(FXTRA) -warn:all -fp:precise -O3 -Qdiag-disable:7712 -Qdiag-disable:5268
     endif
 	FSHFLG = -dll -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 else
