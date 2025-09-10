@@ -48,9 +48,9 @@ else
     FXTRA=
 	FC := ifx
 	ifeq ($(DO_OPENMP),YES)
-      FFLAGS := -stand f23 $(FXTRA) -warn all -fp-model=precise -O3 -Xlinker -z -Xlinker execstack -qopenmp -fPIC
+      FFLAGS := -stand f23 $(FXTRA) -warn all -fp-model=precise -O3 -diag-disable=7712 -diag-disable=5268 -Xlinker -z -Xlinker execstack -qopenmp -fPIC
     else	
-      FFLAGS := -stand f23 $(FXTRA) -warn all -fp-model=precise -O3 -Xlinker -z -Xlinker execstack -fPIC
+      FFLAGS := -stand f23 $(FXTRA) -warn all -fp-model=precise -O3 -diag-disable=7712 -diag-disable=5268 -Xlinker -z -Xlinker execstack -fPIC
     endif
 	FSHFLG = -fPIC -shared  -Fe:$(MRKISS_SHARED_LIB_FILE) $(MRKISS_OBJ_FILES)
 endif
